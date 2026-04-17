@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  frontend-tests:
+  frontend:
     name: Frontend (React/Vite)
     runs-on: ubuntu-latest
     defaults:
@@ -34,7 +34,7 @@ jobs:
       - name: Verify Build
         run: npm run build
 
-  backend-tests:
+  backend:
     name: Backend (NestJS)
     runs-on: ubuntu-latest
     defaults:
