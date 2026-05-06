@@ -1,0 +1,97 @@
+services:
+  db:
+    container_name: ft_db
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - ft_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    container_name: ft_redis
+    image: redis:7-alpine
+    restart: unless-stopped
+    volumes:
+      - redisdata:/data
+    networks:
+      - ft_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    container_name: ft_backend
+    build:
+      context: .
+      dockerfile: apps/backend/Dockerfile
+      target: final
+    secrets:
+      - my_env
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    volumes:
+      - backend_uploads:/app/uploads
+    networks:
+      - ft_network
+    restart: unless-stopped
+
+  frontend:
+    container_name: ft_frontend
+    build:
+      context: .
+      dockerfile: apps/frontend/Dockerfile
+      target: final
+    depends_on:
+      - backend
+    ports:
+      - "5173:5173"
+    networks:
+      - ft_network
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${SQL_DATA_PATH}
+
+  redisdata:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${REDIS_DATA_PATH}
+
+  backend_uploads:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${BACKEND_UPLOADS_PATH}
+
+networks:
+  ft_network:
+    driver: bridge
+
+secrets:
+  my_env:
+    file: .env
