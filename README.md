@@ -1,6 +1,6 @@
 # ft_transcendence: Mini-Game Hub Project Plan
 
-**Tech Stack:** React (TypeScript, Vite, Tailwind), NestJS (Monorepo via pnpm workspaces), PostgreSQL (TypeORM), Redis (Native Lists & Pub/Sub), Docker.
+**Tech Stack:** React (TypeScript, Vite, Tailwind), NestJS (Monorepo via npm workspaces), PostgreSQL (TypeORM), Redis (Native Lists & Pub/Sub), Docker.
 **Architecture:** Smart API Gateway (`backend`) with Native Redis Game Microservices (`apps/games/*`) and Event-Driven Websockets.
 
 **Directory Structure:**
@@ -18,7 +18,7 @@ _Goal: Establish the monorepo and containerized environment._
 
 | ID      | Task Name           | Technical Strategy                                                                                                  |
 | :------ | :------------------ | :------------------------------------------------------------------------------------------------------------------ |
-| **0.1** | Monorepo Setup      | Initialize `pnpm-workspace.yaml`. Move current code to `apps/backend` and `apps/frontend`.                          |
+| **0.1** | Monorepo Setup      | Initialize `npm workspaces`. Move current code to `apps/backend` and `apps/frontend`.                               |
 | **0.2** | Workspace Structure | Create `libs/` and `apps/games/` directories.                                                                       |
 | **0.3** | Dockerization       | Root `docker-compose.yml` (Postgres, Redis). **Mandatory: Persistent Docker Volume for `backend/uploads` avatars.** |
 | **0.4** | Root Makefile       | Single command `make up` to build and start the entire stack.                                                       |
