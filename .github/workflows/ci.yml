@@ -2,44 +2,13 @@ name: CI Pipeline
 
 on:
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
-  frontend:
-    name: Frontend (React/Vite)
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./frontend
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20.x'
-          cache: 'npm'
-          cache-dependency-path: './frontend/package-lock.json'
-
-      - name: Install Dependencies
-        run: npm ci
-
-      - name: Lint Code
-        run: npm run lint
-
-      - name: Run Unit Tests
-        run: npm run test
-
-      - name: Verify Build
-        run: npm run build
-
+  # Job for the Backend Gateway
   backend:
     name: Backend (NestJS)
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./backend
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -47,18 +16,91 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
-          cache: 'npm'
-          cache-dependency-path: './backend/package-lock.json'
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: "package-lock.json"
 
       - name: Install Dependencies
         run: npm ci
 
-      - name: Lint Code
-        run: npm run lint
+      - name: Lint
+        run: npm run lint -w backend
 
-      - name: Run Unit Tests
-        run: npm run test
+      - name: Test
+        run: npm run test -w backend
 
-      - name: Verify Build
-        run: npm run build
+      - name: Build
+        run: npm run build -w backend
+
+  # Job for the Frontend SPA
+  frontend:
+    name: Frontend (React/Vite)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: "package-lock.json"
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint -w frontend
+
+      - name: Test
+        run: npm run test -w frontend
+
+      - name: Build
+        run: npm run build -w frontend
+
+  # Job for Game Microservices (Dynamic Matrix)
+  # Detects subdirectories in apps/games/ that contain a package.json
+  games-discovery:
+    name: Discover Games
+    runs-on: ubuntu-latest
+    outputs:
+      games: ${{ steps.set-games.outputs.games }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - id: set-games
+        run: |
+          GAMES=$(find apps/games -mindepth 1 -maxdepth 1 -type d -exec test -e "{}/package.json" \; -print | xargs -n1 basename | jq -R -s -c 'split("\n")[:-1]')
+          echo "games=$GAMES" >> $GITHUB_OUTPUT
+
+  games:
+    name: Game (${{ matrix.game }})
+    needs: games-discovery
+    if: ${{ needs.games-discovery.outputs.games != '[]' && needs.games-discovery.outputs.games != '' }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        game: ${{ fromJson(needs.games-discovery.outputs.games) }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: "package-lock.json"
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint -w ${{ matrix.game }}
+
+      - name: Test
+        run: npm run test -w ${{ matrix.game }}
+
+      - name: Build
+        run: npm run build -w ${{ matrix.game }}
