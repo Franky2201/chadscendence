@@ -60,7 +60,6 @@ jobs:
         run: npm run build -w frontend
 
   # Job for Game Microservices (Dynamic Matrix)
-  # Detects subdirectories in apps/games/ that contain a package.json
   games-discovery:
     name: Discover Games
     runs-on: ubuntu-latest
@@ -104,3 +103,30 @@ jobs:
 
       - name: Build
         run: npm run build -w ${{ matrix.game }}
+
+  # Job for Docker Test
+  docker-test:
+    name: Docker Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Environment
+        run: cp .env.example .env
+
+      - name: Create Data Directories
+        run: mkdir -p data/postgres data/redis apps/backend/uploads
+
+      - name: Build and Start Stack
+        run: docker compose up -d --build --wait
+
+      - name: Check Container Status
+        run: docker compose ps
+
+      - name: Logs on Failure
+        if: failure()
+        run: docker compose logs
+
+      - name: Shutdown
+        run: docker compose down -v
