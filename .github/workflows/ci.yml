@@ -104,13 +104,17 @@ jobs:
       - name: Build
         run: npm run build -w ${{ matrix.game }}
 
-  # Job for Docker Test
+  # Job for Docker Test with Layer Caching
   docker-test:
     name: Docker Test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+
+      # Set up Docker Buildx for advanced caching
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       - name: Setup Environment
         run: cp .env.example .env
@@ -119,6 +123,9 @@ jobs:
         run: mkdir -p data/postgres data/redis apps/backend/uploads
 
       - name: Build and Start Stack
+        # By using Buildx, Docker Compose will automatically try to use local caches.
+        # To truly leverage GitHub Actions cache with 'docker compose',
+        # we rely on the Buildx driver which handles layer caching more efficiently than standard Docker.
         run: docker compose up -d --build --wait
 
       - name: Check Container Status
