@@ -104,9 +104,9 @@ jobs:
       - name: Build
         run: npm run build -w ${{ matrix.game }}
 
-  # Job for Docker Smoke Test with Layer Caching
+  # Job for Docker Test with Layer Caching
   docker-test:
-    name: Docker Smoke Test
+    name: Docker Test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
