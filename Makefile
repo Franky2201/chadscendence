@@ -1,23 +1,53 @@
 # Makefile for ft_transcendence
 
-DOCKER_COMPOSE = docker compose
-COMPOSE_FILE = docker-compose.yml
+-include .env
 
-.PHONY: all up down build clean re
+COMPOSE_FILE := docker-compose.yml
+COMPOSE := docker compose -f $(COMPOSE_FILE)
+
+SQL_DATA_PATH ?= ./data/postgres
+REDIS_DATA_PATH ?= ./data/redis
+BACKEND_UPLOADS_PATH ?= ./apps/backend/uploads
 
 all: up
 
-up:
-	$(DOCKER_COMPOSE) -f $(COMPOSE_FILE) up --build
+prerequisites:
+	@mkdir -p $(SQL_DATA_PATH)
+	@mkdir -p $(REDIS_DATA_PATH)
+	@mkdir -p $(BACKEND_UPLOADS_PATH)
 
-down:
-	$(DOCKER_COMPOSE) -f $(COMPOSE_FILE) down
+build: prerequisites $(COMPOSE_FILE)
+	@$(COMPOSE) build
 
-build:
-	$(DOCKER_COMPOSE) -f $(COMPOSE_FILE) build
+up: build
+	@$(COMPOSE) up -d --remove-orphans
 
-clean:
-	$(DOCKER_COMPOSE) -f $(COMPOSE_FILE) down -v --remove-orphans
-	rm -rf data/postgres data/redis apps/backend/uploads
+down: $(COMPOSE_FILE)
+	@$(COMPOSE) down
 
-re: clean all
+start: $(COMPOSE_FILE)
+	@$(COMPOSE) start
+
+stop: $(COMPOSE_FILE)
+	@$(COMPOSE) stop
+
+restart: $(COMPOSE_FILE)
+	@$(COMPOSE) restart
+
+status:
+	@$(COMPOSE) ps
+
+logs: $(COMPOSE_FILE)
+	@$(COMPOSE) logs -f
+
+clean: down
+
+fclean: $(COMPOSE_FILE)
+	@$(COMPOSE) down -v --rmi all --remove-orphans
+
+sprune: fclean
+	@docker system prune --volumes -f
+
+re: $(COMPOSE_FILE) clean all
+
+.PHONY: all build up down start stop restart status logs clean fclean re
