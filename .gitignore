@@ -1,22 +1,49 @@
 # Dependencies
 node_modules/
 **/node_modules/
+.npm
 
 # Build outputs
 dist/
 **/dist/
 *.tsbuildinfo
+out/
+.next/
 
 # Docker & Persistence
 data/
 .env
+.env.*.local
+.env.local
+
+# Ignore the specific uploads folder used by the backend
+apps/backend/uploads/
 
 # IDE & OS files
 .DS_Store
+Thumbs.db
 .vscode/
 .idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Logs
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
 
 # Test coverage
 coverage/
 **/coverage/
+.nyc_output
+
+# Temp/Cache
+.cache/
+.eslintcache
+.parcel-cache
+.stylelintcache

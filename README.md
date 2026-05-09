@@ -1,4 +1,4 @@
-# ft_transcendence: Mini-Game Hub Project Plan
+# ft_chadscendence: Mini-Game Hub Project Plan
 
 **Tech Stack:** React (TypeScript, Vite, Tailwind), NestJS (Monorepo via npm workspaces), PostgreSQL (TypeORM), Redis (Native Lists & Pub/Sub), Docker.
 **Architecture:** Smart API Gateway (`backend`) with Native Redis Game Microservices (`apps/games/*`) and Event-Driven Websockets.

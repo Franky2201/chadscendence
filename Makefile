@@ -1,4 +1,4 @@
-# Makefile for ft_transcendence
+# Makefile for ft_chadscendence
 
 -include .env
 

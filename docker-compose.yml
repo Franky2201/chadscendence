@@ -8,7 +8,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - postgresdata:/var/lib/postgresql/data
     networks:
       - ft_network
     healthcheck:
@@ -57,22 +57,25 @@ services:
     build:
       context: .
       dockerfile: apps/frontend/Dockerfile
-      target: final
+      #change target from development to final for production build
+      target: development
+      #target: final
     depends_on:
       - backend
     ports:
-      - "5173:5173"
+      - "80:80"
+      - "443:443"
     networks:
       - ft_network
     restart: unless-stopped
 
 volumes:
-  pgdata:
+  postgresdata:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: ${SQL_DATA_PATH}
+      device: ${POSTGRES_DATA_PATH}
 
   redisdata:
     driver: local
