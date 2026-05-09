@@ -18,9 +18,8 @@ RUN apk add --no-cache openssl
 COPY . .
 
 # Create directory for SSL certificates and generate a self-signed one
-RUN --mount=type=secret,id=my_env \
-	set -a && . /run/secrets/my_env && set +a && \
-	chmod +x ./apps/frontend/nginx/tls_setup.sh && \
+ARG DOMAIN_NAME
+RUN chmod +x ./apps/frontend/nginx/tls_setup.sh && \
 	./apps/frontend/nginx/tls_setup.sh
 
 RUN npm run build -w frontend

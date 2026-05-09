@@ -1,4 +1,21 @@
 server {
+    listen 5173;
+    server_name ${DOMAIN_NAME};
+
+    location / {
+        add_header Content-Type text/html;
+        return 200 "<html>
+<head><title>Production Mode</title></head>
+<body style='font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0;'>
+    <h1>Server is running in production mode</h1>
+    <p>Please use the official domain:</p>
+    <a href='https://${DOMAIN_NAME}' style='padding: 10px 20px; background: #007bff; color: white; text-decoration: none; rounded: 5px;'>Go to ${DOMAIN_NAME}</a>
+</body>
+</html>";
+    }
+}
+
+server {
     listen 80;
     server_name ${DOMAIN_NAME};
 
@@ -29,4 +46,9 @@ server {
     location = /50x.html {
         root /usr/share/nginx/html;
     }
+
+    location /health {
+		access_log off;
+		return 200 "healthy";
+	}
 }

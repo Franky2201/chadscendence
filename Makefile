@@ -17,7 +17,7 @@ prerequisites:
 	@mkdir -p $(BACKEND_UPLOADS_PATH)
 
 build: prerequisites $(COMPOSE_FILE)
-	@$(COMPOSE) build
+	@DOCKER_BUILDKIT=1 $(COMPOSE) build
 
 up: build
 	@$(COMPOSE) up -d --remove-orphans
