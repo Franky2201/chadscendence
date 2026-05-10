@@ -36,7 +36,9 @@ services:
     build:
       context: .
       dockerfile: apps/backend/Dockerfile
-      target: final
+      #change target from development to final for production build
+      target: development
+      #target: final
     env_file: .env
     depends_on:
       db:
@@ -45,7 +47,10 @@ services:
         condition: service_healthy
     ports:
       - "3000:3000"
+    #Bind mounts used for development to allow live code changes without rebuilding the image. In production, consider using named volumes or copying files into the image.
     volumes:
+      - .:/app
+      - /app/node_modules
       - backend_uploads:/app/uploads
     networks:
       - ft_network
@@ -60,7 +65,7 @@ services:
       target: development
       #target: final
       args:
-        - DOMAIN_NAME=${DOMAIN_NAME}
+        DOMAIN_NAME: ${DOMAIN_NAME}
     env_file: .env
     depends_on:
       - backend
@@ -68,6 +73,10 @@ services:
       - "80:80"
       - "443:443"
       - "5173:5173"
+    #Bind mounts used for development to allow live code changes without rebuilding the image. In production, consider using named volumes or copying files into the image.
+    volumes:
+      - .:/app
+      - /app/node_modules
     networks:
       - ft_network
     restart: unless-stopped
