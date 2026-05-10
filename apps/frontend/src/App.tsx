@@ -23,7 +23,7 @@ function App() {
         </div>
 
         <div className="space-y-4">
-          <h1 className="text-5xl font-black tracking-tight bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
+          <h1 className="text-5xl font-black tracking-tight bg-linear-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
             Get started
           </h1>
           <p className="text-slate-600">

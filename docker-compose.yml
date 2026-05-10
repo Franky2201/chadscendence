@@ -49,8 +49,8 @@ services:
       - "3000:3000"
     #Bind mounts used for development to allow live code changes without rebuilding the image. In production, consider using named volumes or copying files into the image.
     volumes:
-      - .:/app
-      - /app/node_modules
+      - .:/app # [DEV MODE ONLY]
+      - /app/node_modules # [DEV MODE ONLY]
       - backend_uploads:/app/uploads
     networks:
       - ft_network
@@ -75,8 +75,8 @@ services:
       - "5173:5173"
     #Bind mounts used for development to allow live code changes without rebuilding the image. In production, consider using named volumes or copying files into the image.
     volumes:
-      - .:/app
-      - /app/node_modules
+      - .:/app # [DEV MODE ONLY]
+      - /app/node_modules # [DEV MODE ONLY]
     networks:
       - ft_network
     restart: unless-stopped
