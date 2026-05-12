@@ -1,8 +1,15 @@
 # 1. Base stage for dependencies
 FROM node:22-alpine AS base
 WORKDIR /app
+
+# Copy root package files
 COPY package*.json ./
+
+# Copy all workspace package.json files (needed for monorepo npm ci)
 COPY apps/backend/package*.json ./apps/backend/
+COPY apps/frontend/package*.json ./apps/frontend/
+
+# Install all dependencies
 RUN npm ci
 
 # 2. Development stage (Stops here for dev)

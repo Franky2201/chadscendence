@@ -47,8 +47,8 @@ services:
         condition: service_healthy
     ports:
       - "3000:3000"
-    #Bind mounts used for development to allow live code changes without rebuilding the image. In production, consider using named volumes or copying files into the image.
     volumes:
+      #Bind mounts used for development to allow live code changes without rebuilding the image. In production, consider using named volumes or copying files into the image.
       - .:/app # [DEV MODE ONLY]
       - /app/node_modules # [DEV MODE ONLY]
       - backend_uploads:/app/uploads
@@ -73,8 +73,8 @@ services:
       - "80:80"
       - "443:443"
       - "5173:5173"
-    #Bind mounts used for development to allow live code changes without rebuilding the image. In production, consider using named volumes or copying files into the image.
     volumes:
+      #Bind mounts used for development to allow live code changes without rebuilding the image. In production, consider using named volumes or copying files into the image.
       - .:/app # [DEV MODE ONLY]
       - /app/node_modules # [DEV MODE ONLY]
     networks:

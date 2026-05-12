@@ -1,8 +1,15 @@
 # 1. Base stage
 FROM node:22-alpine AS base
 WORKDIR /app
+
+# Copy root package files
 COPY package*.json ./
+
+# Copy all workspace package.json files (needed for monorepo npm ci)
+COPY apps/backend/package*.json ./apps/backend/
 COPY apps/frontend/package*.json ./apps/frontend/
+
+# Install all dependencies
 RUN npm ci
 
 # 2. Development stage
@@ -19,6 +26,7 @@ COPY . .
 
 # Create directory for SSL certificates and generate a self-signed one
 ARG DOMAIN_NAME
+RUN if [ -z "$DOMAIN_NAME" ]; then echo "DOMAIN_NAME build arg is required"; exit 1; fi
 RUN chmod +x ./apps/frontend/nginx/tls_setup.sh && \
 	./apps/frontend/nginx/tls_setup.sh
 
