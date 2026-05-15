@@ -13,10 +13,19 @@ git checkout main
 git pull origin main
 ```
 
-### 2. Create a Feature Branch
-Create a new branch for your specific task. Use descriptive prefixes like `feature/` or `fix/`.
+### 2. Create a Working Branch
+Create a new branch for your specific task using the strict naming convention: `type/id-short-description`.
+
+**Allowed Branch Types:**
+*   `chore`: Technical tasks / Setup
+*   `feat`: New features
+*   `fix`: Bug fixes
+
+**Examples:**
 ```bash
-git checkout -b feature/your-feature-name
+git checkout -b feat/12-login-page
+git checkout -b chore/2-setup-docker-db
+git checkout -b fix/45-chat-websocket-crash
 ```
 
 ### 3. Development & Testing
@@ -26,24 +35,27 @@ npm test
 ```
 
 ### 4. Stage, Commit and Push
+When committing, use the strict commit naming convention: `type: short description (#id)`.
 ```bash
 git add .
-git commit -m "message"
-git push
+git commit -m "feat: add github button (#12)"
+git push origin feat/12-login-page
 ```
 
 ### 5. Open a Pull Request (PR)
 1. Go to the repository on **GitHub.com**.
 2. Click the green **"Compare & pull request"** button that appears at the top.
 3. Add a title and a brief description of your changes.
-4. This triggers the **CI pipeline**. The system will automatically install your code and run tests to ensure nothing is broken.
+    *   ⚠️ **Important:** In the description, you must write `Closes #ID` (e.g., `Closes #12`) to automatically close the associated issue when the PR is merged.
+4. **Assign a Reviewer:** You must select a reviewer for your PR. They will read the code, comment if necessary, and approve it.
+5. This triggers the **CI pipeline**. The system will automatically install your code and run tests to ensure nothing is broken.
 
 ### 6. Merge and Cleanup
-* **If CI fails (Red X):** Check the logs, fix the code locally, commit, and `git push` again. The PR updates automatically.
-* **If CI passes (Green Check):** Click **Merge Pull Request** on GitHub.
-* **Cleanup:** Delete the branch on GitHub and locally to keep your workspace tidy:
+* **If CI fails (Red X) or changes are requested:** Check the logs or reviewer comments, fix the code locally, commit, and `git push` again. The PR updates automatically.
+* **If CI passes (Green Check) and Reviewer Approves:** The reviewer (or you, once approved) can click **Merge Pull Request** on GitHub to merge the branch into `main`.
+* **Cleanup:** Delete the branch on GitHub and locally to keep your workspace tidy using the `-D` flag:
 ```bash
 git checkout main
 git pull origin main
-git branch -d feature/your-feature-name
+git branch -D feat/12-login-page
 ```
