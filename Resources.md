@@ -1,3 +1,15 @@
+# Tailwind Resources
+
+## Official Documentation
+
+- https://tailwindcss.com/docs/installation/using-vite
+
+# React Resources
+
+## Official Documentation
+
+- https://react.dev/
+
 # NestJS Resources
 
 ## Official Documentation
