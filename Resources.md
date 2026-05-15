@@ -2,13 +2,13 @@
 
 ## Official Documentation
 
-- https://tailwindcss.com/docs/installation/using-vite
+- [Tailwind Official Documentation](https://tailwindcss.com/docs/installation/using-vite)
 
 # React Resources
 
 ## Official Documentation
 
-- https://react.dev/
+- [React Official Documentation](https://react.dev/)
 
 # NestJS Resources
 
