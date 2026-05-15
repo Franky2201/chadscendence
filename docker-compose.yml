@@ -8,7 +8,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - postgresdata:/var/lib/postgresql/data
     networks:
       - ft_network
     healthcheck:
@@ -36,9 +36,10 @@ services:
     build:
       context: .
       dockerfile: apps/backend/Dockerfile
-      target: final
-    secrets:
-      - my_env
+      #change target from development to final for production build
+      target: development
+      #target: final
+    env_file: .env
     depends_on:
       db:
         condition: service_healthy
@@ -47,6 +48,9 @@ services:
     ports:
       - "3000:3000"
     volumes:
+      #Bind mounts used for development to allow live code changes without rebuilding the image. In production, consider using named volumes or copying files into the image.
+      - .:/app # [DEV MODE ONLY]
+      - /app/node_modules # [DEV MODE ONLY]
       - backend_uploads:/app/uploads
     networks:
       - ft_network
@@ -57,22 +61,33 @@ services:
     build:
       context: .
       dockerfile: apps/frontend/Dockerfile
-      target: final
+      #change target from development to final for production build
+      target: development
+      #target: final
+      args:
+        DOMAIN_NAME: ${DOMAIN_NAME}
+    env_file: .env
     depends_on:
       - backend
     ports:
+      - "80:80"
+      - "443:443"
       - "5173:5173"
+    volumes:
+      #Bind mounts used for development to allow live code changes without rebuilding the image. In production, consider using named volumes or copying files into the image.
+      - .:/app # [DEV MODE ONLY]
+      - /app/node_modules # [DEV MODE ONLY]
     networks:
       - ft_network
     restart: unless-stopped
 
 volumes:
-  pgdata:
+  postgresdata:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: ${SQL_DATA_PATH}
+      device: ${POSTGRES_DATA_PATH}
 
   redisdata:
     driver: local
@@ -91,7 +106,3 @@ volumes:
 networks:
   ft_network:
     driver: bridge
-
-secrets:
-  my_env:
-    file: .env
