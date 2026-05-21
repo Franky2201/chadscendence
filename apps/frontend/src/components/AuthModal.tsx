@@ -9,7 +9,7 @@ interface AuthModalProps {
 
 export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
     const { login } = useAuth();
-    const [email, setEmail] = useState('');
+    const [identifier, setIdentifier] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
 
@@ -20,7 +20,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
         setError('');
 
         try {
-            await api.post('/auth/login', { email, password });
+            await api.post('/auth/login', { identifier, password });
 
             const userResponse = await api.get('/users/me');
 
@@ -44,7 +44,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4 mb-6">
                     <input
-                        type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)}
+                        type="text" placeholder="Identifiant" value={identifier} onChange={e => setIdentifier(e.target.value)}
                         className="w-full bg-gray-100 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-pink-500" required
                     />
                     <input
