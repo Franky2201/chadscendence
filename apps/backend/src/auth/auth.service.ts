@@ -24,10 +24,10 @@ export class AuthService {
             .addSelect('user.password')
             .getOne();
 
-        if (!user || !user.password) throw new UnauthorizedException();
+        if (!user || !user.password) throw new UnauthorizedException("Account not found");
 
         const isValid = await bcrypt.compare(password, user.password);
-        if (!isValid) throw new UnauthorizedException();
+        if (!isValid) throw new UnauthorizedException("Invalid password");
 
         return this.generateTokens(user);
     }
@@ -58,7 +58,7 @@ export class AuthService {
         const { id, email, username, avatarUrl } = oauthProfile;
 
         if (!email) {
-            throw new UnauthorizedException('Un email est requis pour se connecter via 42.');
+            throw new UnauthorizedException("An email is required to login with 42.");
         }
 
         let user = await this.userRepository.findOne({ where: { intraId: id } });
@@ -83,7 +83,7 @@ export class AuthService {
             await this.userRepository.save(user);
         } catch (error) {
             if (error.code === '23505') {
-                throw new ConflictException(`Le pseudo "${username}" est déjà réservé par un autre compte.`);
+                throw new ConflictException(`The username "${username}" is already taken by another account.`);
             }
             throw error;
         }
