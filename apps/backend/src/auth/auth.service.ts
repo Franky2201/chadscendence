@@ -72,23 +72,30 @@ export class AuthService {
             return this.generateTokens(user);
         }
 
+        const finalUsername = await this.generateUniqueUsername(username);
+
         user = this.userRepository.create({
             intraId: id,
             email,
-            username,
-            avatarUrl
+            username: finalUsername,
+            avatarUrl,
         });
 
-        try {
-            await this.userRepository.save(user);
-        } catch (error) {
-            if (error.code === '23505') {
-                throw new ConflictException(`The username "${username}" is already taken by another account.`);
-            }
-            throw error;
-        }
+        await this.userRepository.save(user);
 
         return this.generateTokens(user);
+    }
+
+    private async generateUniqueUsername(base: string) {
+        let username = base;
+        let i = 0;
+
+        while (await this.userRepository.findOne({ where: { username } })) {
+            i++;
+            username = `${base}_${i}${Math.floor(Math.random() * 1000)}`;
+        }
+
+        return username;
     }
 
     private async generateTokens(user: User) {
