@@ -61,32 +61,31 @@ export class AuthService {
             throw new UnauthorizedException('Un email est requis pour se connecter via 42.');
         }
 
-        let user = await this.userRepository.findOne({
-            where: { intraId: id }
+        let user = await this.userRepository.findOne({ where: { intraId: id } });
+        if (user) return this.generateTokens(user);
+
+        user = await this.userRepository.findOne({ where: { email } });
+        if (user) {
+            user.intraId = id;
+            user.avatarUrl = user.avatarUrl || avatarUrl;
+            await this.userRepository.save(user);
+            return this.generateTokens(user);
+        }
+
+        user = this.userRepository.create({
+            intraId: id,
+            email,
+            username,
+            avatarUrl
         });
 
-        if (!user) {
-            user = await this.userRepository.findOne({ where: { email } });
-
-            if (user) {
-                user.intraId = id;
-                if (!user.avatarUrl && avatarUrl) user.avatarUrl = avatarUrl;
-                await this.userRepository.save(user);
-            } else {
-                let uniqueUsername = username;
-                const existingUsername = await this.userRepository.findOne({ where: { username } });
-                if (existingUsername) {
-                    uniqueUsername = `${username}_${id}`;
-                }
-
-                user = this.userRepository.create({
-                    intraId: id,
-                    email,
-                    username: uniqueUsername,
-                    avatarUrl
-                });
-                await this.userRepository.save(user);
+        try {
+            await this.userRepository.save(user);
+        } catch (error) {
+            if (error.code === '23505') {
+                throw new ConflictException(`Le pseudo "${username}" est déjà réservé par un autre compte.`);
             }
+            throw error;
         }
 
         return this.generateTokens(user);
