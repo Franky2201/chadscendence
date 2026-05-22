@@ -1,19 +1,19 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('grades')
 export class Grade {
-    @PrimaryGeneratedColumn('uuid')
-    id: string;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-    @Column({ unique: true })
-    name: string;
+  @Column({ unique: true })
+  name: string;
 
-    @Column({ name: 'min_score' })
-    minScore: number;
+  @Column({ name: 'min_score' })
+  minScore: number;
 
-    @Column({ name: 'max_score' })
-    maxScore: number;
+  @Column({ name: 'max_score' })
+  maxScore: number;
 
-    @Column({ nullable: true })
-    icon?: string;
+  @Column({ nullable: true })
+  icon?: string;
 }

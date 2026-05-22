@@ -7,58 +7,60 @@ import { UpdateUserDto } from 'src/common/dto/users.dto';
 
 @Injectable()
 export class UsersService {
-    constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) { }
+  constructor(
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
+  ) {}
 
-    async getUser(id: string) {
-        const user = await this.userRepository.findOne({ where: { id } });
+  async getUser(id: string) {
+    const user = await this.userRepository.findOne({ where: { id } });
 
-        if (!user) {
-            throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-        }
-
-        return user;
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
 
-    async updateUser(id: string, updateUserDto: UpdateUserDto) {
-        const { password, ...rest } = updateUserDto;
-        const dataToUpdate: Partial<User> = { ...rest };
+    return user;
+  }
 
-        if (password) {
-            dataToUpdate.password = await hash(password, 10);
-        }
+  async updateUser(id: string, updateUserDto: UpdateUserDto) {
+    const { password, ...rest } = updateUserDto;
+    const dataToUpdate: Partial<User> = { ...rest };
 
-        await this.userRepository.save({ id, ...dataToUpdate });
-
-        return this.getUser(id);
+    if (password) {
+      dataToUpdate.password = await hash(password, 10);
     }
 
-    async deleteUser(id: string) {
-        const user = await this.userRepository.findOne({ where: { id } });
+    await this.userRepository.save({ id, ...dataToUpdate });
 
-        if (!user) {
-            throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-        }
+    return this.getUser(id);
+  }
 
-        await this.userRepository.remove(user);
+  async deleteUser(id: string) {
+    const user = await this.userRepository.findOne({ where: { id } });
 
-        return { message: 'User deleted successfully.' };
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
 
-    async findById(id: string) {
-        return this.userRepository.findOne({ where: { id } });
-    }
+    await this.userRepository.remove(user);
 
-    async findByEmail(email: string) {
-        return this.userRepository.findOne({ where: { email } });
-    }
+    return { message: 'User deleted successfully.' };
+  }
 
-    async findByUsername(username: string) {
-        return this.userRepository.findOne({ where: { username } });
-    }
+  async findById(id: string) {
+    return this.userRepository.findOne({ where: { id } });
+  }
 
-    async findByEmailOrUsername(email: string, username: string) {
-        return this.userRepository.findOne({
-            where: [{ email }, { username }],
-        });
-    }
+  async findByEmail(email: string) {
+    return this.userRepository.findOne({ where: { email } });
+  }
+
+  async findByUsername(username: string) {
+    return this.userRepository.findOne({ where: { username } });
+  }
+
+  async findByEmailOrUsername(email: string, username: string) {
+    return this.userRepository.findOne({
+      where: [{ email }, { username }],
+    });
+  }
 }

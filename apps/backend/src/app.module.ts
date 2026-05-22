@@ -25,10 +25,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       retryDelay: 3000,
     }),
     UsersModule,
-    AuthModule
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-
-export class AppModule { }
+export class AppModule {}

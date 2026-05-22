@@ -8,61 +8,66 @@ import { IntraAuthGuard } from 'src/common/guards/intra.guard';
 
 @Controller('auth')
 export class AuthController {
-    constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService) {}
 
-    @Post('register')
-    async register(@Body() body: CreateUserDto, @Res({ passthrough: true }) res: Response) {
-        const token = await this.authService.register({ authregister: body });
+  @Post('register')
+  async register(
+    @Body() body: CreateUserDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const token = await this.authService.register({ authregister: body });
 
-        res.cookie('access_token', token.access_token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax',
-        });
+    res.cookie('access_token', token.access_token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    });
 
-        return { success: true };
-    }
+    return { success: true };
+  }
 
-    @Post('login')
-    async login(@Body() body: LoginUserDto, @Res({ passthrough: true }) res: Response) {
-        const token = await this.authService.login({ authlogin: body });
+  @Post('login')
+  async login(
+    @Body() body: LoginUserDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const token = await this.authService.login({ authlogin: body });
 
-        res.cookie('access_token', token.access_token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax',
-        });
+    res.cookie('access_token', token.access_token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    });
 
-        return { success: true };
-    }
+    return { success: true };
+  }
 
-    @Get('42')
-    @UseGuards(IntraAuthGuard)
-    async intraAuth() {
-    }
+  @Get('42')
+  @UseGuards(IntraAuthGuard)
+  async intraAuth() {}
 
-    @Get('42/callback')
-    @UseGuards(IntraAuthGuard)
-    async intraAuthCallback(@GetUser() user: User, @Res() res: Response) {
-        const token = await this.authService.registerOAuth(user);
+  @Get('42/callback')
+  @UseGuards(IntraAuthGuard)
+  async intraAuthCallback(@GetUser() user: User, @Res() res: Response) {
+    const token = await this.authService.registerOAuth(user);
 
-        res.cookie('access_token', token.access_token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax',
-        });
+    res.cookie('access_token', token.access_token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    });
 
-        return res.redirect('http://localhost:5173/');
-    }
+    return res.redirect('http://localhost:5173/');
+  }
 
-    @Post('logout')
-    logout(@Res({ passthrough: true }) res: Response) {
-        res.clearCookie('access_token', {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax',
-        });
+  @Post('logout')
+  logout(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie('access_token', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    });
 
-        return { success: true };
-    }
+    return { success: true };
+  }
 }

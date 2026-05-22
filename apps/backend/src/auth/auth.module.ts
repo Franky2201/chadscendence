@@ -10,20 +10,21 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/common/entities/user.entity';
 
 @Module({
-    imports: [
-        TypeOrmModule.forFeature([User]),
-        PassportModule,
-        JwtModule.registerAsync({
-            imports: [ConfigModule],
-            inject: [ConfigService],
-            useFactory: (configService: ConfigService) => ({
-                secret: configService.get<string>('JWT_SECRET') || 'super-secret-key-a-changer-en-prod',
-                signOptions: { expiresIn: '1d' },
-            }),
-        }),
-    ],
-    controllers: [AuthController],
-    providers: [AuthService, JwtStrategy, IntraStrategy],
+  imports: [
+    TypeOrmModule.forFeature([User]),
+    PassportModule,
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        secret:
+          configService.get<string>('JWT_SECRET') ||
+          'super-secret-key-a-changer-en-prod',
+        signOptions: { expiresIn: '1d' },
+      }),
+    }),
+  ],
+  controllers: [AuthController],
+  providers: [AuthService, JwtStrategy, IntraStrategy],
 })
-
-export class AuthModule { }
+export class AuthModule {}
