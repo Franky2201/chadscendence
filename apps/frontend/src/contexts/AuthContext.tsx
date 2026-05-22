@@ -6,7 +6,14 @@ interface User {
   id: string;
   username: string;
   email: string;
-  avatarUrl?: string;
+  avatarUrl: string;
+  score: number;
+  rank: {
+    id: string;
+    name: string;
+    minScore: number;
+    icon?: string;
+  };
 }
 
 interface AuthContextType {
