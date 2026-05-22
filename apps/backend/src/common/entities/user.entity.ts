@@ -14,6 +14,11 @@ export enum UserStatus {
   OFFLINE = 'offline',
 }
 
+export enum UserRole {
+  USER = 'user',
+  ADMIN = 'admin',
+}
+
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn('uuid')
@@ -40,6 +45,13 @@ export class User {
     default: UserStatus.OFFLINE,
   })
   status: UserStatus;
+
+  @Column({
+    type: 'enum',
+    enum: UserRole,
+    default: UserRole.USER,
+  })
+  role: UserRole;
 
   @Column({ type: 'int', default: 0 })
   score: number;
