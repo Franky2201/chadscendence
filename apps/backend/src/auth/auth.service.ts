@@ -28,12 +28,11 @@ export class AuthService {
   ) {}
 
   async login({ authlogin }: { authlogin: LoginUserDto }) {
-    const { identifier, password } = authlogin;
+    const { email, password } = authlogin;
 
     const user = await this.userRepository
       .createQueryBuilder('user')
-      .where('user.email = :identifier', { identifier })
-      .orWhere('user.username = :identifier', { identifier })
+      .where('user.email = :email', { email })
       .addSelect('user.password')
       .getOne();
 
@@ -129,6 +128,7 @@ export class AuthService {
       sub: user.id,
       email: user.email,
       username: user.username,
+      role: user.role,
     };
 
     const access_token = this.jwtService.sign(payload, {
