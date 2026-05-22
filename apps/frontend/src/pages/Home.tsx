@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import AuthModal from '../components/AuthModal';
+import { Button } from '../components/ui';
 
 export default function HomePage() {
     const { user, isLoading, logout } = useAuth();
@@ -51,17 +52,13 @@ export default function HomePage() {
                 <div className="flex w-1/2 flex-col items-end gap-10 pr-10 pt-10">
                     {user ? (
                         <div className="flex flex-col items-center gap-4">
-                            <p className="text-xl">Bienvenue, <span className="font-bold text-pink-500">{user.username}</span> !</p>
-                            <img src={user.avatarUrl} alt="avatar" className="w-20 h-20 rounded-full" />
-                            <button onClick={logout} className="px-6 py-3 bg-slate-700 rounded-full font-bold hover:bg-slate-600 transition">Se déconnecter</button>
+                            <img src={user.avatarUrl} onClick={logout} alt="avatar" className="w-40 h-40 rounded-full hover:cursor-pointer transition-transform hover:scale-110" />
+                            <h2 className="text-3xl">{user.username}</h2>
                         </div>
                     ) : (
-                        <button
-                            onClick={() => setIsModalOpen(true)}
-                            className="flex items-center gap-2 rounded-full border-2 border-white/20 bg-[#E43A70] px-5 py-2 text-sm font-bold text-white shadow-lg transition-transform hover:scale-105"
-                        >
+                        <Button onClick={() => setIsModalOpen(true)} size='large'>
                             Se connecter
-                        </button>
+                        </Button>
                     )}
                 </div>
             </div>
