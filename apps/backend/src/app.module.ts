@@ -21,7 +21,7 @@ import { RanksModule } from './ranks/ranks.module';
       database: process.env.POSTGRES_DB,
       autoLoadEntities: true,
       synchronize: true,
-      //dropSchema: true,
+      dropSchema: true, // disable if you don't want to lose your data
       retryAttempts: 10,
       retryDelay: 3000,
     }),
