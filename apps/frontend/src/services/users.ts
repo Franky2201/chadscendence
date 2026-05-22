@@ -1,5 +1,20 @@
 import api from './api';
 
+export interface User {
+  id: string;
+  username: string;
+  email: string;
+  avatarUrl: string;
+  role: 'user' | 'admin';
+  score: number;
+  rank: {
+    id: string;
+    name: string;
+    minScore: number;
+    icon?: string;
+  };
+}
+
 interface UpdateMe {
   username?: string;
   password?: string;
