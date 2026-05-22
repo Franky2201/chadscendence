@@ -32,5 +32,4 @@ import { RanksModule } from './ranks/ranks.module';
   controllers: [AppController],
   providers: [AppService],
 })
-
-export class AppModule { }
+export class AppModule {}

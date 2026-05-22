@@ -3,7 +3,7 @@ import { RanksService } from './ranks.service';
 
 @Controller('ranks')
 export class RanksController {
-  constructor(private readonly ranksService: RanksService) { }
+  constructor(private readonly ranksService: RanksService) {}
 
   @Get('')
   getRanks() {

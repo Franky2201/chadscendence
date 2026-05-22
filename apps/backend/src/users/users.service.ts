@@ -9,7 +9,7 @@ import { hash } from 'bcrypt';
 export class UsersService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
-  ) { }
+  ) {}
 
   async getUser(id: string) {
     const user = await this.userRepository.findOne({

@@ -29,5 +29,4 @@ import { RanksModule } from 'src/ranks/ranks.module';
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy, IntraStrategy],
 })
-
-export class AuthModule { }
+export class AuthModule {}

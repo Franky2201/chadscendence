@@ -10,5 +10,4 @@ import { Rank } from 'src/common/entities/rank.entity';
   providers: [RanksService],
   exports: [RanksService],
 })
-
-export class RanksModule { }
+export class RanksModule {}

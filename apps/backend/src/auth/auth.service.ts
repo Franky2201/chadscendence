@@ -1,9 +1,17 @@
-import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { User } from '../common/entities/user.entity';
-import { CreateUserDto, JwtPayload, LoginUserDto } from 'src/common/dto/auth.dto';
+import {
+  CreateUserDto,
+  JwtPayload,
+  LoginUserDto,
+} from 'src/common/dto/auth.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { RanksService } from 'src/ranks/ranks.service';
@@ -17,7 +25,7 @@ export class AuthService {
     private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
     private readonly ranksService: RanksService,
-  ) { }
+  ) {}
 
   async login({ authlogin }: { authlogin: LoginUserDto }) {
     const { identifier, password } = authlogin;
@@ -49,7 +57,8 @@ export class AuthService {
     const existingUsername = await this.userRepository.findOne({
       where: { username },
     });
-    if (existingUsername) throw new ConflictException('Username already exists');
+    if (existingUsername)
+      throw new ConflictException('Username already exists');
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const defaultRank = await this.ranksService.getRankForScore(0);

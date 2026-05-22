@@ -1,4 +1,8 @@
-import { NotFoundException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  NotFoundException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Rank } from 'src/common/entities/rank.entity';
@@ -9,7 +13,7 @@ export class RanksService implements OnModuleInit {
   constructor(
     @InjectRepository(Rank)
     private readonly rankRepository: Repository<Rank>,
-  ) { }
+  ) {}
 
   async onModuleInit() {
     await this.seedRanks();
@@ -40,7 +44,9 @@ export class RanksService implements OnModuleInit {
       .getOne();
 
     if (!rank) {
-      throw new InternalServerErrorException('Critical: No applicable rank found in database. Is the table seeded?');
+      throw new InternalServerErrorException(
+        'Critical: No applicable rank found in database. Is the table seeded?',
+      );
     }
 
     return rank;

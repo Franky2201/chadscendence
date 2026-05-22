@@ -1,4 +1,11 @@
-import { Controller, Get, Patch, Delete, Body, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Patch,
+  Delete,
+  Body,
+  UseGuards,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from 'src/common/guards/jwt.guard';
 import { UpdateUserDto } from 'src/common/dto/users.dto';
@@ -8,7 +15,7 @@ import type { JwtPayload } from 'src/common/dto/auth.dto';
 @UseGuards(JwtAuthGuard)
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) { }
+  constructor(private readonly usersService: UsersService) {}
 
   @Get('me')
   getCurrentUser(@GetUser() payload: JwtPayload) {
@@ -16,7 +23,10 @@ export class UsersController {
   }
 
   @Patch('me')
-  updateUser(@GetUser() payload: JwtPayload, @Body() updateUserDto: UpdateUserDto) {
+  updateUser(
+    @GetUser() payload: JwtPayload,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
     return this.usersService.updateUser(payload.sub, updateUserDto);
   }
 
