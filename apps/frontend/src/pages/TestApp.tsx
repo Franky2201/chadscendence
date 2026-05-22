@@ -1,4 +1,11 @@
-import { Button, Card, Checkbox, Input, Select, Window } from './components';
+import {
+  Button,
+  Card,
+  Checkbox,
+  Input,
+  Select,
+  Window,
+} from '../components/ui';
 
 function App() {
   return (

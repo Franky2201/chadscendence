@@ -1,5 +1,5 @@
 import type { SelectHTMLAttributes } from 'react';
-import { type ThemeName, useTheme } from '../themeContext';
+import { type ThemeName, useTheme } from '../../themeContext';
 
 type SelectSize = 'small' | 'medium' | 'large';
 

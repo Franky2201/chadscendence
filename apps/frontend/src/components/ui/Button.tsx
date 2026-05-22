@@ -1,5 +1,5 @@
 import type { ButtonHTMLAttributes } from 'react';
-import { type ThemeName, useTheme } from '../themeContext';
+import { type ThemeName, useTheme } from '../../themeContext';
 
 type ButtonSize = 'small' | 'medium' | 'large';
 
