@@ -1,13 +1,7 @@
 import type { ReactNode } from 'react';
 import { createContext, useContext, useState, useEffect } from 'react';
+import { type User } from '../services/users';
 import api from '../services/api';
-
-interface User {
-  id: string;
-  username: string;
-  email: string;
-  avatarUrl?: string;
-}
 
 interface AuthContextType {
   user: User | null;

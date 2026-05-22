@@ -8,11 +8,13 @@ import { JwtStrategy } from 'src/common/strategies/jwt.strategy';
 import { IntraStrategy } from 'src/common/strategies/intra.strategy';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/common/entities/user.entity';
+import { RanksModule } from 'src/ranks/ranks.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
     PassportModule,
+    RanksModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

@@ -14,6 +14,7 @@ import {
 } from 'src/common/dto/auth.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { RanksService } from 'src/ranks/ranks.service';
 
 const DEFAULT_AVATAR = 'http://localhost:5173/public/avatar.jpg';
 
@@ -21,17 +22,17 @@ const DEFAULT_AVATAR = 'http://localhost:5173/public/avatar.jpg';
 export class AuthService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
-    private configService: ConfigService,
-    private jwtService: JwtService,
+    private readonly configService: ConfigService,
+    private readonly jwtService: JwtService,
+    private readonly ranksService: RanksService,
   ) {}
 
   async login({ authlogin }: { authlogin: LoginUserDto }) {
-    const { identifier, password } = authlogin;
+    const { email, password } = authlogin;
 
     const user = await this.userRepository
       .createQueryBuilder('user')
-      .where('user.email = :identifier', { identifier })
-      .orWhere('user.username = :identifier', { identifier })
+      .where('user.email = :email', { email })
       .addSelect('user.password')
       .getOne();
 
@@ -59,12 +60,15 @@ export class AuthService {
       throw new ConflictException('Username already exists');
 
     const hashedPassword = await bcrypt.hash(password, 10);
+    const defaultRank = await this.ranksService.getRankForScore(0);
 
     const user = this.userRepository.create({
       email,
       username,
       password: hashedPassword,
       avatarUrl: DEFAULT_AVATAR,
+      score: 0,
+      rankId: defaultRank.id,
     });
 
     await this.userRepository.save(user);
@@ -91,12 +95,15 @@ export class AuthService {
     }
 
     const finalUsername = await this.generateUniqueUsername(username);
+    const defaultRank = await this.ranksService.getRankForScore(0);
 
     user = this.userRepository.create({
       intraId: id,
       email,
       username: finalUsername,
       avatarUrl,
+      score: 0,
+      rankId: defaultRank.id,
     });
 
     await this.userRepository.save(user);
@@ -121,6 +128,7 @@ export class AuthService {
       sub: user.id,
       email: user.email,
       username: user.username,
+      role: user.role,
     };
 
     const access_token = this.jwtService.sign(payload, {

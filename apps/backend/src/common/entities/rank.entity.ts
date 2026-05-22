@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('grades')
-export class Grade {
+@Entity('ranks')
+export class Rank {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -10,9 +10,6 @@ export class Grade {
 
   @Column({ name: 'min_score' })
   minScore: number;
-
-  @Column({ name: 'max_score' })
-  maxScore: number;
 
   @Column({ nullable: true })
   icon?: string;

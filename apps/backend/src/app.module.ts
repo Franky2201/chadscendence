@@ -5,6 +5,7 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { RanksModule } from './ranks/ranks.module';
 
 @Module({
   imports: [
@@ -20,12 +21,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       database: process.env.POSTGRES_DB,
       autoLoadEntities: true,
       synchronize: true,
-      //dropSchema: true,
+      dropSchema: true, // disable if you don't want to lose your data
       retryAttempts: 10,
       retryDelay: 3000,
     }),
     UsersModule,
     AuthModule,
+    RanksModule,
   ],
   controllers: [AppController],
   providers: [AppService],

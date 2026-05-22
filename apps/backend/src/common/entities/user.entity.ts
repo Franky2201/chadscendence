@@ -7,11 +7,16 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { Grade } from 'src/common/entities/grade.entity';
+import { Rank } from 'src/common/entities/rank.entity';
 
 export enum UserStatus {
   ONLINE = 'online',
   OFFLINE = 'offline',
+}
+
+export enum UserRole {
+  USER = 'user',
+  ADMIN = 'admin',
 }
 
 @Entity('users')
@@ -41,15 +46,22 @@ export class User {
   })
   status: UserStatus;
 
+  @Column({
+    type: 'enum',
+    enum: UserRole,
+    default: UserRole.USER,
+  })
+  role: UserRole;
+
   @Column({ type: 'int', default: 0 })
   score: number;
 
-  @Column({ name: 'grade_id', nullable: true })
-  gradeId?: string;
+  @Column({ name: 'rank_id', nullable: true })
+  rankId?: string;
 
-  @ManyToOne(() => Grade, { nullable: true, onDelete: 'SET NULL' })
-  @JoinColumn({ name: 'grade_id' })
-  grade?: Grade;
+  @ManyToOne(() => Rank, { nullable: true, onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'rank_id' })
+  rank?: Rank;
 
   @Column({ name: 'intra_id', nullable: true, unique: true })
   intraId?: string;
