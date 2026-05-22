@@ -44,7 +44,7 @@ export class AuthController {
     @Get('42/callback')
     @UseGuards(IntraAuthGuard)
     async intraAuthCallback(@GetUser() user: User, @Res() res: Response) {
-        const token = await this.authService.validateOAuthLogin(user);
+        const token = await this.authService.registerOAuth(user);
 
         res.cookie('access_token', token.access_token, {
             httpOnly: true,

@@ -7,6 +7,8 @@ import { CreateUserDto, JwtPayload, LoginUserDto } from 'src/common/dto/auth.dto
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
+const DEFAULT_AVATAR = 'http://localhost:5173/public/avatar.jpg';
+
 @Injectable()
 export class AuthService {
     constructor(
@@ -46,7 +48,8 @@ export class AuthService {
         const user = this.userRepository.create({
             email,
             username,
-            password: hashedPassword
+            password: hashedPassword,
+            avatarUrl: DEFAULT_AVATAR
         });
 
         await this.userRepository.save(user);
@@ -54,7 +57,7 @@ export class AuthService {
         return this.generateTokens(user);
     }
 
-    async validateOAuthLogin(oauthProfile: any) {
+    async registerOAuth(oauthProfile: any) {
         const { id, email, username, avatarUrl } = oauthProfile;
 
         if (!email) {
