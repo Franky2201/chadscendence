@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import api from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
+import { extractErrorMessage } from '../services/error';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -27,10 +28,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
       login(userResponse.data);
       onClose();
     } catch (err) {
-      if (err instanceof Error) {
-        console.log(err.message);
-      }
-      setError(err.response?.data?.message || 'Erreur de connexion');
+      setError(extractErrorMessage(err));
     }
   };
 
