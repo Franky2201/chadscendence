@@ -93,6 +93,7 @@ export default function HomePage() {
                 className="w-40 h-40 rounded-full hover:cursor-pointer transition-transform hover:scale-110"
               />
               <h2 className="text-3xl">{user.username}</h2>
+              <h2 className="text-3xl">{user.rank.icon} {user.rank.name} - {user.score}</h2>
             </div>
           )}
         </div>
