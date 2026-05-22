@@ -57,7 +57,7 @@ export class AuthService {
         return this.generateTokens(user);
     }
 
-    async registerOAuth(oauthProfile: any) {
+    async registerOAuth(oauthProfile: User) {
         const { id, email, username, avatarUrl } = oauthProfile;
 
         if (!email) {
@@ -101,7 +101,7 @@ export class AuthService {
         return username;
     }
 
-    private async generateTokens(user: User) {
+    private generateTokens(user: User) {
         const payload: JwtPayload = {
             sub: user.id,
             email: user.email,

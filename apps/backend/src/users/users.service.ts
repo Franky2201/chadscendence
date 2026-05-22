@@ -20,7 +20,7 @@ export class UsersService {
     }
 
     async updateUser(id: string, updateUserDto: UpdateUserDto) {
-        const { password, ...rest } = updateUserDto as any;
+        const { password, ...rest } = updateUserDto;
         const dataToUpdate: Partial<User> = { ...rest };
 
         if (password) {
