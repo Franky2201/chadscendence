@@ -1,13 +1,5 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-  UpdateDateColumn,
-  ManyToOne,
-  JoinColumn,
-} from 'typeorm';
-import { Grade } from 'src/common/entities/grade.entity';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Rank } from 'src/common/entities/rank.entity';
 
 export enum UserStatus {
   ONLINE = 'online',
@@ -44,12 +36,12 @@ export class User {
   @Column({ type: 'int', default: 0 })
   score: number;
 
-  @Column({ name: 'grade_id', nullable: true })
-  gradeId?: string;
+  @Column({ name: 'rank_id', nullable: true })
+  rankId?: string;
 
-  @ManyToOne(() => Grade, { nullable: true, onDelete: 'SET NULL' })
-  @JoinColumn({ name: 'grade_id' })
-  grade?: Grade;
+  @ManyToOne(() => Rank, { nullable: true, onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'rank_id' })
+  rank?: Rank;
 
   @Column({ name: 'intra_id', nullable: true, unique: true })
   intraId?: string;
