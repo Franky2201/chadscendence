@@ -27,6 +27,9 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
       login(userResponse.data);
       onClose();
     } catch (err) {
+      if (err instanceof Error) {
+        console.log(err.message);
+      }
       setError(err.response?.data?.message || 'Erreur de connexion');
     }
   };
