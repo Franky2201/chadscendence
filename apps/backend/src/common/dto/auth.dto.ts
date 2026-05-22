@@ -6,16 +6,18 @@ import {
   Matches,
   IsOptional,
 } from 'class-validator';
+import { UserRole } from '../entities/user.entity';
 
 export interface JwtPayload {
   sub: string;
   email: string;
   username: string;
+  role: UserRole;
 }
 
 export class LoginUserDto {
-  @IsString()
-  identifier: string;
+  @IsEmail()
+  email: string;
 
   @IsString()
   @MinLength(8)
