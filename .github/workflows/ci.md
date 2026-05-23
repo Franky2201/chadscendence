@@ -29,9 +29,9 @@ git checkout -b fix/45-chat-websocket-crash
 ```
 
 ### 3. Development & Testing
-Work on your code. Write tests using Jest. Before committing, run tests locally to catch errors early.
+Work on your code. Write tests using Jest and Vitest (**OPTIONAL**). Before committing, run ci commands locally to catch errors early.
 ```bash
-npm test
+make ci
 ```
 
 ### 4. Stage, Commit and Push
