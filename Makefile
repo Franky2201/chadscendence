@@ -6,11 +6,16 @@ COMPOSE := docker compose -f $(COMPOSE_FILE)
 
 BACKEND_UPLOADS_PATH ?= ./apps/backend/uploads
 
+# Colors
+GREEN := \033[0;32m
+RED := \033[0;31m
+NO_COLOR := \033[0m
+
 all: up
 
 prerequisites:
-	@test -f $(ENV_FILE) || (echo "Missing $(ENV_FILE) file"; exit 1)
-	@test -f $(COMPOSE_FILE) || (echo "Missing $(COMPOSE_FILE) file"; exit 1)
+	@test -f $(ENV_FILE) || (cp .env.example $(ENV_FILE))
+	@test -f $(COMPOSE_FILE) || (printf "$(RED)Missing $(COMPOSE_FILE) file$(NO_COLOR)\n"; exit 1)
 	@mkdir -p $(BACKEND_UPLOADS_PATH)
 
 build: prerequisites
@@ -47,4 +52,26 @@ sprune: fclean
 
 re: prerequisites clean all
 
-.PHONY: all build up down start stop restart status logs clean fclean re
+ci: prerequisites
+	@printf "$(GREEN)--- Local CI Mimic ---$(NO_COLOR)\n"
+	@if [ ! -f $(ENV_FILE) ]; then \
+		printf "Copying .env.example to .env...\n"; \
+		cp .env.example $(ENV_FILE); \
+	fi
+	@mkdir -p $(BACKEND_UPLOADS_PATH)
+	@printf "$(GREEN)Step 1: Install Dependencies$(NO_COLOR)\n"
+	@npm install --silent --no-progress --no-audit --no-fund > /dev/null 2>&1
+	@printf "$(GREEN)Step 2: Lint$(NO_COLOR)\n"
+	@npm run lint --silent > /dev/null 2>&1
+	@printf "$(GREEN)Step 3: Test$(NO_COLOR)\n"
+	@npm run test --silent > /dev/null 2>&1
+	@printf "$(GREEN)Step 4: Build$(NO_COLOR)\n"
+	@npm run build --silent > /dev/null 2>&1
+	@printf "$(GREEN)Step 5: Docker Integration Test$(NO_COLOR)\n"
+	@$(COMPOSE) up -d --build --wait --quiet-pull > /dev/null 2>&1 || (printf "$(RED)Docker test failed. Logs:$(NO_COLOR)\n"; $(COMPOSE) logs; $(COMPOSE) down -v; exit 1)
+	@$(COMPOSE) ps
+	@$(COMPOSE) down -v > /dev/null 2>&1
+	@printf "$(GREEN)--- Local CI Success ---$(NO_COLOR)\n"
+
+
+.PHONY: all build up down start stop restart status logs clean fclean re ci

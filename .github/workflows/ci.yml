@@ -120,7 +120,7 @@ jobs:
         run: cp .env.example .env
 
       - name: Create Data Directories
-        run: mkdir -p data/postgres data/redis apps/backend/uploads
+        run: mkdir -p apps/backend/uploads
 
       - name: Build and Start Stack
         # By using Buildx, Docker Compose will automatically try to use local caches.
