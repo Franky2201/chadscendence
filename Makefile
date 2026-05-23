@@ -20,7 +20,7 @@ up: build
 	@$(COMPOSE) up -d --remove-orphans
 
 down: prerequisites
-	@$(COMPOSE) down
+	@$(COMPOSE) down --remove-orphans
 
 start: prerequisites
 	@$(COMPOSE) start
