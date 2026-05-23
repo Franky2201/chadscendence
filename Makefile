@@ -1,53 +1,50 @@
 # Makefile for ft_chadscendence
 
--include .env
-
+ENV_FILE := .env
 COMPOSE_FILE := docker-compose.yml
 COMPOSE := docker compose -f $(COMPOSE_FILE)
 
-SQL_DATA_PATH ?= ./data/postgres
-REDIS_DATA_PATH ?= ./data/redis
 BACKEND_UPLOADS_PATH ?= ./apps/backend/uploads
 
 all: up
 
 prerequisites:
-	@mkdir -p $(SQL_DATA_PATH)
-	@mkdir -p $(REDIS_DATA_PATH)
+	@test -f $(ENV_FILE) || (echo "Missing $(ENV_FILE) file"; exit 1)
+	@test -f $(COMPOSE_FILE) || (echo "Missing $(COMPOSE_FILE) file"; exit 1)
 	@mkdir -p $(BACKEND_UPLOADS_PATH)
 
-build: prerequisites $(COMPOSE_FILE)
+build: prerequisites
 	@DOCKER_BUILDKIT=1 $(COMPOSE) build
 
 up: build
 	@$(COMPOSE) up -d --remove-orphans
 
-down: $(COMPOSE_FILE)
-	@$(COMPOSE) down
+down: prerequisites
+	@$(COMPOSE) down --remove-orphans
 
-start: $(COMPOSE_FILE)
+start: prerequisites
 	@$(COMPOSE) start
 
-stop: $(COMPOSE_FILE)
+stop: prerequisites
 	@$(COMPOSE) stop
 
-restart: $(COMPOSE_FILE)
+restart: prerequisites
 	@$(COMPOSE) restart
 
 status:
 	@$(COMPOSE) ps
 
-logs: $(COMPOSE_FILE)
+logs: prerequisites
 	@$(COMPOSE) logs -f
 
 clean: down
 
-fclean: $(COMPOSE_FILE)
+fclean: prerequisites
 	@$(COMPOSE) down -v --rmi all --remove-orphans
 
 sprune: fclean
 	@docker system prune --volumes -f
 
-re: $(COMPOSE_FILE) clean all
+re: prerequisites clean all
 
 .PHONY: all build up down start stop restart status logs clean fclean re

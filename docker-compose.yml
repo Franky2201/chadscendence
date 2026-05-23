@@ -70,8 +70,9 @@ services:
     depends_on:
       - backend
     ports:
-      - "80:80"
-      - "443:443"
+      #sudo is necessary to bind to those ports on linux
+      #      - "80:80"
+      #     - "443:443"
       - "5173:5173"
     volumes:
       #Bind mounts used for development to allow live code changes without rebuilding the image. In production, consider using named volumes or copying files into the image.
@@ -83,18 +84,7 @@ services:
 
 volumes:
   postgresdata:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ${POSTGRES_DATA_PATH}
-
   redisdata:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ${REDIS_DATA_PATH}
 
   backend_uploads:
     driver: local
