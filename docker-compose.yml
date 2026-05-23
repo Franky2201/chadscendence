@@ -70,8 +70,8 @@ services:
     depends_on:
       - backend
     ports:
-      - "80:80"
-      - "443:443"
+#      - "80:80"
+#     - "443:443"
       - "5173:5173"
     volumes:
       #Bind mounts used for development to allow live code changes without rebuilding the image. In production, consider using named volumes or copying files into the image.
