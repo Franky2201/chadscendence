@@ -95,10 +95,16 @@ At first we used a Slack group, which felt not versatile enough to organize ours
 | **Database**  | <a href="https://www.postgresql.org/" title="PostgreSQL"><img src="https://skillicons.dev/icons?i=postgres"></a> <a href="https://typeorm.io/" title="TypeORM"><img src="doc/readme/typeorm.png" width="50" height="50" alt="TypeORM"></a> |
 | **Other**     | <a href="https://www.markdownguide.org/" title="Markdown"><img src="https://skillicons.dev/icons?i=markdown"></a> <a href="https://www.docker.com/" title="Docker"><img src="https://skillicons.dev/icons?i=docker"></a> <a href="https://nodejs.org/en" title="NodeJS"><img src="https://skillicons.dev/icons?i=nodejs"></a> <a href="https://www.npmjs.com/" title="NPM"><img src="https://skillicons.dev/icons?i=npm"></a> <a href="https://eslint.org/" title="ESLint"><img src="doc/readme/eslint.png" width=50 height=50></a> <a href="https://krita.org/en/" title="Krita"><img src="doc/readme/krita.png" width=50 height=50></a> |
 
-<!-- TODO : Frontend technologies and frameworks used -->
-<!-- TODO : Backend technologies and frameworks used -->
-<!-- TODO : Database system, explain the choice -->
-<!-- TODO : Any other technology or library, justification -->
+- **TypeScript** on both frontend and backend enables shared types, safer refactors, and fewer runtime errors.
+- **React** + **Vite** provide a fast development loop with component-driven UI and instant feedback.
+- **Tailwind CSS** accelerates UI iteration while keeping the design system consistent.
+- **NestJS** offers a modular, test-friendly architecture with dependency injection and clear separation of concerns.
+- **PostgreSQL** + **TypeORM** give a reliable relational model with migrations and strong data integrity.
+- **Docker** ensures reproducible environments across local development, CI, and production.
+- **Node.js** + **npm** keep tooling consistent and unlock a large ecosystem of libraries.
+- **ESLint** enforces code quality and consistency accross contributors while helping to catch issues early.
+- **Markdown** support clear documentation.
+- **Krita** allows custom-made visual assets, while being a free software, so anyone can easily open `.kra` files.
 
 ## Database schema
 <!-- TODO : Visual diagram (ER diagram) of the database stucture -->
