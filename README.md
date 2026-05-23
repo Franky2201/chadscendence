@@ -23,9 +23,9 @@
 	- [`sdemey`](#sdemey)
 
 ## Description
-<img src="doc/game/game_banner.png" width=512/>
+<p align="center"><img src="doc/game/game_banner.png" /></p>
 
-**Who's the Chad ?** is a platform that provide primitive minigames, around knowledge and reflection.
+**Who's the Chad ?** is a website that provides primitive minigames, around knowledge and reflection.
 The objective of this project is to provide a fun way to learn things, train your brain or have fun with your friends.
 <!-- TODO : Brief overview -->
 <!-- TODO : Key features -->
