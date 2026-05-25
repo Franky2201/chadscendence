@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { login as loginAuth, withIntra } from '../../services/auth';
+import { login as loginAuth, withIntra, withGithub } from '../../services/auth';
 import { getMe } from '../../services/users';
 import { useAuth } from '../../contexts/AuthContext';
 import { useModal } from '../../contexts/ModalContext';
@@ -98,6 +98,12 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
             className="w-full bg-gray-900 text-white rounded-xl py-3 font-bold hover:bg-gray-800 transition"
           >
             Continuer avec 42
+          </button>
+          <button
+            onClick={withGithub}
+            className="w-full bg-gray-900 text-white rounded-xl py-3 font-bold hover:bg-gray-800 transition"
+          >
+            Continuer avec GitHub
           </button>
         </div>
       </div>

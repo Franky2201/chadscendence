@@ -6,6 +6,7 @@ import { AuthController } from 'src/auth/auth.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from 'src/common/strategies/jwt.strategy';
 import { IntraStrategy } from 'src/common/strategies/intra.strategy';
+import { GithubStrategy } from 'src/common/strategies/github.strategy';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/common/entities/user.entity';
 import { RanksModule } from 'src/ranks/ranks.module';
@@ -27,6 +28,6 @@ import { RanksModule } from 'src/ranks/ranks.module';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, IntraStrategy],
+  providers: [AuthService, JwtStrategy, IntraStrategy, GithubStrategy],
 })
 export class AuthModule {}

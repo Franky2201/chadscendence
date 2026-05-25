@@ -13,7 +13,7 @@ export class UsersService implements OnModuleInit {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     private readonly configService: ConfigService,
     private readonly ranksService: RanksService,
-  ) { }
+  ) {}
 
   async onModuleInit() {
     await this.seedAdmin();
