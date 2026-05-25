@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import Strategy from 'passport-42';
 import type { Profile } from 'passport';
-import { AuthService } from 'src/auth/auth.service';
+import { OAuthProfile } from '../dto/auth.dto';
 
 type IntraProfile = Profile & {
   _json?: {
@@ -17,10 +17,7 @@ type IntraProfile = Profile & {
 
 @Injectable()
 export class IntraStrategy extends PassportStrategy(Strategy as any, '42') {
-  constructor(
-    private authService: AuthService,
-    private configService: ConfigService,
-  ) {
+  constructor(private configService: ConfigService) {
     super({
       clientID: configService.get<string>('INTRA_CLIENT_ID'),
       clientSecret: configService.get<string>('INTRA_CLIENT_SECRET'),
@@ -29,14 +26,17 @@ export class IntraStrategy extends PassportStrategy(Strategy as any, '42') {
     });
   }
 
-  validate(accessToken: string, refreshToken: string, profile: IntraProfile) {
-    const oauthProfile = {
-      id: String(profile.id),
+  validate(
+    accessToken: string,
+    refreshToken: string,
+    profile: IntraProfile,
+  ): OAuthProfile {
+    return {
+      provider: '42',
+      providerId: String(profile.id),
       username: profile._json?.login ?? profile.username ?? null,
       email: profile._json?.email ?? profile.emails?.[0]?.value ?? null,
       avatarUrl: profile._json?.image?.link ?? null,
     };
-
-    return oauthProfile;
   }
 }

@@ -33,3 +33,7 @@ export const logout = async (): Promise<AuthResponse> => {
 export const withIntra = (): void => {
   window.location.href = 'http://localhost:3000/auth/42';
 };
+
+export const withGithub = (): void => {
+  window.location.href = 'http://localhost:3000/auth/github';
+};
