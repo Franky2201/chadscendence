@@ -22,19 +22,33 @@ interface UpdateMe {
   bio?: string;
 }
 
-const getMe = async () => {
-  const res = await api.get('/users/me');
+export type LeaderboardType = {
+  id: string | number;
+  username: string;
+  avatarUrl: string;
+  score: number;
+}[];
+
+export const getMe = async (): Promise<User> => {
+  const res = await api.get<User>('/users/me');
   return res.data;
 };
 
-const updateMe = async (data: UpdateMe) => {
-  const res = await api.patch('/users/me', data);
+export const updateMe = async (data: UpdateMe): Promise<User> => {
+  const res = await api.patch<User>('/users/me', data);
   return res.data;
 };
 
-const deleteMe = async () => {
-  const res = await api.delete('/users/me');
+export const deleteMe = async (): Promise<{ message: string }> => {
+  const res = await api.delete<{ message: string }>('/users/me');
   return res.data;
 };
 
-export default { getMe, updateMe, deleteMe };
+export const getLeaderboard = async (
+  count: number,
+): Promise<LeaderboardType> => {
+  const res = await api.get<LeaderboardType>(
+    `/users/leaderboard?count=${count}`,
+  );
+  return res.data;
+};

@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { createContext, useContext, useState, useEffect } from 'react';
-import { type User } from '../services/users';
-import api from '../services/api';
+import { logout as logoutAuth } from '../services/auth';
+import { type User, getMe } from '../services/users';
 
 interface AuthContextType {
   user: User | null;
@@ -19,8 +19,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await api.get('/users/me');
-        setUser(response.data);
+        const userData = await getMe();
+        setUser(userData);
       } catch (error) {
         console.error("Erreur lors de la récupération de l'utilisateur", error);
         setUser(null);
@@ -35,7 +35,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = async () => {
     try {
-      await api.post('/auth/logout');
+      await logoutAuth();
       setUser(null);
     } catch (error) {
       console.error('Erreur lors de la déconnexion', error);

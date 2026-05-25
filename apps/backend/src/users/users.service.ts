@@ -13,7 +13,7 @@ export class UsersService implements OnModuleInit {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     private readonly configService: ConfigService,
     private readonly ranksService: RanksService,
-  ) {}
+  ) { }
 
   async onModuleInit() {
     await this.seedAdmin();
@@ -87,6 +87,21 @@ export class UsersService implements OnModuleInit {
     await this.userRepository.remove(user);
 
     return { message: 'User deleted successfully.' };
+  }
+
+  async getGlobalLeaderboard(count: number) {
+    const users = await this.userRepository.find({
+      select: { id: true, username: true, avatarUrl: true, score: true },
+      order: { score: 'DESC', username: 'ASC' },
+      take: count,
+    });
+
+    return users.map((u) => ({
+      id: u.id,
+      username: u.username,
+      avatarUrl: u.avatarUrl,
+      score: u.score,
+    }));
   }
 
   async findById(id: string) {

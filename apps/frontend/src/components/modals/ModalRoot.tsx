@@ -1,4 +1,4 @@
-import { useModal } from '../contexts/ModalContext';
+import { useModal } from '../../contexts/ModalContext';
 import LoginModal from './LoginModal';
 import RegisterModal from './RegisterModal';
 import GameModal from './GameModal';
