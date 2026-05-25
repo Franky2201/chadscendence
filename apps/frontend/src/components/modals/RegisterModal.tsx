@@ -44,11 +44,11 @@ export default function RegisterModal({
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
-      onClick={onClose}
+      onMouseDown={onClose}
     >
       <div
         className="bg-white rounded-3xl p-10 max-w-md w-full"
-        onClick={(e) => e.stopPropagation()}
+        onMouseDown={(e) => e.stopPropagation()}
       >
         <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">
           Bienvenue !
