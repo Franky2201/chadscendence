@@ -1,6 +1,29 @@
-import { useCallback, useMemo, useState, type ReactNode } from 'react';
+import {
+  useCallback,
+  useMemo,
+  useState,
+  type ReactNode,
+  createContext,
+  useContext,
+} from 'react';
 
-import { ThemeContext, type ThemeName } from './themeContext';
+export type ThemeName = 'light' | 'dark';
+
+type ThemeContextValue = {
+  theme: ThemeName;
+  setTheme: (theme: ThemeName) => void;
+  toggleTheme: () => void;
+};
+
+export const ThemeContext = createContext<ThemeContextValue | null>(null);
+
+export function useTheme() {
+  const context = useContext(ThemeContext);
+  if (!context) {
+    throw new Error('useTheme must be used within ThemeProvider');
+  }
+  return context;
+}
 
 const themeOrder: ThemeName[] = ['light', 'dark'];
 
@@ -18,7 +41,7 @@ type ThemeProviderProps = {
 
 export function ThemeProvider({
   children,
-  defaultTheme = 'dark',
+  defaultTheme = 'light',
 }: ThemeProviderProps) {
   const [theme, setTheme] = useState<ThemeName>(defaultTheme);
   const toggleTheme = useCallback(() => {
