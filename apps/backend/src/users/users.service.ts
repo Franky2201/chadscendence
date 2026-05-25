@@ -13,7 +13,7 @@ export class UsersService implements OnModuleInit {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     private readonly configService: ConfigService,
     private readonly ranksService: RanksService,
-  ) {}
+  ) { }
 
   async onModuleInit() {
     await this.seedAdmin();
@@ -92,7 +92,7 @@ export class UsersService implements OnModuleInit {
   async getGlobalLeaderboard(count: number) {
     const users = await this.userRepository.find({
       select: { id: true, username: true, avatarUrl: true, score: true },
-      order: { score: 'DESC' },
+      order: { score: 'DESC', username: 'ASC' },
       take: count,
     });
 
