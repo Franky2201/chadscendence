@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import axios from 'axios';
-import api from '../services/api';
-import { useAuth } from '../contexts/AuthContext';
-import { useModal } from '../contexts/ModalContext';
-import { extractErrorMessage } from '../services/error';
+import { login as loginAuth, withIntra } from '../../services/auth';
+import { getMe } from '../../services/users';
+import { useAuth } from '../../contexts/AuthContext';
+import { useModal } from '../../contexts/ModalContext';
+import { extractErrorMessage } from '../../services/error';
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -24,9 +25,9 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
     setError('');
 
     try {
-      await api.post('/auth/login', { email, password });
-      const userResponse = await api.get('/users/me');
-      login(userResponse.data);
+      await loginAuth({ email, password });
+      const userResponse = await getMe();
+      login(userResponse);
       onClose();
     } catch (err) {
       const errorMessage = extractErrorMessage(err);
@@ -93,9 +94,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
             Créer un compte
           </button>
           <button
-            onClick={() =>
-              (window.location.href = 'http://localhost:3000/auth/42')
-            }
+            onClick={withIntra}
             className="w-full bg-gray-900 text-white rounded-xl py-3 font-bold hover:bg-gray-800 transition"
           >
             Continuer avec 42

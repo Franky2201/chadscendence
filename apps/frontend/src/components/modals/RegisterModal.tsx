@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import api from '../services/api';
-import { useAuth } from '../contexts/AuthContext';
-import { useModal } from '../contexts/ModalContext';
-import { extractErrorMessage } from '../services/error';
+import { register } from '../../services/auth';
+import { getMe } from '../../services/users';
+import { useAuth } from '../../contexts/AuthContext';
+import { useModal } from '../../contexts/ModalContext';
+import { extractErrorMessage } from '../../services/error';
 
 interface RegisterModalProps {
   isOpen: boolean;
@@ -30,11 +31,10 @@ export default function RegisterModal({
     setError('');
 
     try {
-      await api.post('/auth/register', { email, username, password });
+      await register({ email, username, password });
 
-      const userResponse = await api.get('/users/me');
-
-      login(userResponse.data);
+      const userResponse = await getMe();
+      login(userResponse);
       onClose();
     } catch (err) {
       setError(extractErrorMessage(err));
