@@ -3,6 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { Button } from '../components/ui';
 import { useModal } from '../contexts/ModalContext';
 import Leaderboard from '../components/home/Leaderboard';
+import Friends from '../components/friends/Friends';
 
 export default function HomePage() {
   const { user, isLoading, logout } = useAuth();
@@ -102,6 +103,10 @@ export default function HomePage() {
           )}
 
           <Leaderboard count={5} />
+
+          {user && (
+            <Friends />
+          )}
         </div>
       </div>
     </div>
