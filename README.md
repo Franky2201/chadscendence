@@ -10,6 +10,8 @@
 	- [Usage of AI](#usage-of-ai)
 - [Team information](#team-information)
 - [Project management](#project-management)
+	- [Development](#development)
+	- [Tools and infrastructure](#tools-and-infrastructure)
 	- [Communication channels](#communication-channels)
 - [Technical stack](#technical-stack)
 - [Database schema](#database-schema)
@@ -21,6 +23,8 @@
 	- [`juhanse`](#juhanse)
 	- [`mmichele`](#mmichele)
 	- [`sdemey`](#sdemey)
+- [Public API Endpoints](#public-api-endpoints)
+- [Credits](#credits)
 
 ## Description
 <p align="center"><img src="apps/frontend/public/game_banner.png"/></p>
@@ -89,8 +93,9 @@ At first we used a Slack group, which felt not versatile enough to organize ours
 
 ## Technical stack
 <!-- TEMPLATE : <a href="" title=""><img src=""></a> -->
-| **Frontend**  | <a href="https://www.typescriptlang.org/" title="TypeScript"><img src="https://skillicons.dev/icons?i=ts"></a> <a href="https://react.dev/" title="React"><img src="https://skillicons.dev/icons?i=react"></a> <a href="https://vite.dev/" title="Vite"><img src="https://skillicons.dev/icons?i=vite"></a> <a href="https://tailwindcss.com/" title="Tailwind"><img src="https://skillicons.dev/icons?i=tailwind"></a> |
+| | Framworks / Technologies |
 | :-:           | -                                                                                                                         |
+| **Frontend**  | <a href="https://www.typescriptlang.org/" title="TypeScript"><img src="https://skillicons.dev/icons?i=ts"></a> <a href="https://react.dev/" title="React"><img src="https://skillicons.dev/icons?i=react"></a> <a href="https://vite.dev/" title="Vite"><img src="https://skillicons.dev/icons?i=vite"></a> <a href="https://tailwindcss.com/" title="Tailwind"><img src="https://skillicons.dev/icons?i=tailwind"></a> |
 | **Backend**   |<a href="https://www.typescriptlang.org/" title="TypeScript"><img src="https://skillicons.dev/icons?i=ts"></a> <a href="https://nestjs.com/" title="NestJS"><img src="https://skillicons.dev/icons?i=nest"></a> |
 | **Database**  | <a href="https://www.postgresql.org/" title="PostgreSQL"><img src="https://skillicons.dev/icons?i=postgres"></a> <a href="https://typeorm.io/" title="TypeORM"><img src="doc/readme/typeorm.png" width="50" height="50" alt="TypeORM"></a> |
 | **Other**     | <a href="https://www.markdownguide.org/" title="Markdown"><img src="https://skillicons.dev/icons?i=markdown"></a> <a href="https://www.docker.com/" title="Docker"><img src="https://skillicons.dev/icons?i=docker"></a> <a href="https://nodejs.org/en" title="NodeJS"><img src="https://skillicons.dev/icons?i=nodejs"></a> <a href="https://www.npmjs.com/" title="NPM"><img src="https://skillicons.dev/icons?i=npm"></a> <a href="https://eslint.org/" title="ESLint"><img src="doc/readme/eslint.png" width=50 height=50></a> <a href="https://krita.org/en/" title="Krita"><img src="doc/readme/krita.png" width=50 height=50></a> |
@@ -116,9 +121,9 @@ At first we used a Slack group, which felt not versatile enough to organize ours
 | Module | Points | Contributors |
 | - | - | - |
 | Use a framework for both the frontend and backend.                                                            | Major | [ade-woel](#ade-woel), [gde-win](#gde-win), [juhanse](#juhanse), [mmichele](#mmichele), [sdemey](#sdemey) |
-| Use an ORM for the database.                                                                                  | Minor | [juhanse](#juhanse)                      |
-| Remote authentication with OAuth 2.0                                                                          | Minor | [juhanse](#juhanse)                      |
-| Custom-made design system with reusable component (at least 10), proper color palette, typography, and icons. | Minor | [mmichele](#mmichele)                    |
+| Use an ORM for the database.                                                                                  | Minor | [ade-woel](#ade-woel), [juhanse](#juhanse), [sdemey](#sdemey)                                             |
+| Remote authentication with OAuth 2.0                                                                          | Minor | [juhanse](#juhanse)                                                                                       |
+| Custom-made design system with reusable component (at least 10), proper color palette, typography, and icons. | Minor | [mmichele](#mmichele)                                                                                     |
 |||
 | **TOTAL** | 5 / 14 (*19) |
 
@@ -156,17 +161,30 @@ At first we used a Slack group, which felt not versatile enough to organize ours
 <!-- TODO : Detailed breakdown to what each member contributed to. Specific modules, or components. (Reference the subsection from #modules section) -->
 <!-- TODO : Any challenge faced and how they were overcome -->
 ### `ade-woel`
+- Created the `/profile` page.
+
 ### `gde-win`
 - Maintaining the project structure and all the frameworks / technologies used.
-- Maintaining continuous integration and delivery pipelines in GitHub, executing various tests before each branch merge.
+- Maintaining continuous integration and delivery pipelines in GitHub, executing various tests before each branch merge with main.
 
 ### `juhanse`
 - Maintaining the user stories, via GitHub issues.
 - Authentification via email and password.
 - Remote authentification with Oauth2.0 for 42 members.
+- Created the `/` page.
 
 ### `mmichele`
 - Maintaining the README.md file.
 - Creating frontend reusable components.
 
 ### `sdemey`
+- Created the `/about` page.
+
+## Public API Endpoints
+| Method | Location                |
+| -      | -                       |
+| `GET`  | `api/ranks`             |
+| `GET`  | `api/users/leaderboard` |
+
+## Credits
+<!-- TODO : Add credits to the ENERGY font -->
