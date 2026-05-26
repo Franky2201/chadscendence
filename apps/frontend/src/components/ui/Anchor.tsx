@@ -19,12 +19,12 @@ type AnchorProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
-  small: 'text-lg',
-  medium: 'text-xl',
-  large: 'text-2xl',
+  small: 'text-2xl',
+  medium: 'text-3xl',
+  large: 'text-4xl',
 };
 
-const colorHoverClasses: Record<ButtonColor, string> = {
+const colorClasses: Record<ButtonColor, string> = {
   grey: 'text-[#bfbfbf]',
   red: 'text-[#ff9191]',
   orange: 'text-[#ffc780]',
@@ -44,29 +44,68 @@ export function Anchor({
   className = '',
   ...props
 }: AnchorProps) {
-  const anchorClasses = [
-    '\
-    select-none \
-    cursor-pointer \
-    font-bold \
-    transition-colors \
-    transition-transform \
-    duration-100 \
-    ease-in-out \
-	hover:scale-130 \
-    text-shadow-md/100 \
-	hover:text-shadow-lg/100 \
-    active:translate-y-[+3px] \
-	active:select-none',
+  const textClasses = [
+    'font-energy font-bold leading-none group-active:translate-y-0 \
+	transition-transform duration-100 ease-in-out',
     sizeClasses[size],
-    colorHoverClasses[color],
+    colorClasses[color],
+  ]
+    .filter(Boolean)
+    .join(' ');
+  const anchorClasses = [
+    'group relative inline-block select-none cursor-pointer',
+    'transition-transform duration-100 ease-in-out hover:scale-120',
     className,
   ]
     .filter(Boolean)
     .join(' ');
+  const shadowClasses = [
+    'absolute left-0 top-0 pointer-events-none',
+    textClasses,
+  ]
+    .filter(Boolean)
+    .join(' ');
+  const topTextClasses = ['relative inline-block ease-in-out', textClasses]
+    .filter(Boolean)
+    .join(' ');
   return (
     <a className={anchorClasses} {...props}>
-      {children}
+      <span
+        className={`${shadowClasses}`}
+        style={{ filter: 'brightness(0.8)' }}
+        aria-hidden="true"
+      >
+        {children}
+      </span>
+      <span
+        className={`translate-y-[-1px] ${shadowClasses}`}
+        style={{ filter: 'brightness(0.8)' }}
+        aria-hidden="true"
+      >
+        {children}
+      </span>
+      <span
+        className={`translate-y-[-2px] ${shadowClasses}`}
+        style={{ filter: 'brightness(0.8)' }}
+        aria-hidden="true"
+      >
+        {children}
+      </span>
+      <span
+        className={`translate-y-[-3px] ${shadowClasses}`}
+        style={{ filter: 'brightness(0.8)' }}
+        aria-hidden="true"
+      >
+        {children}
+      </span>
+      <span
+        className={`translate-y-[-4px] ${shadowClasses}`}
+        style={{ filter: 'brightness(0.8)' }}
+        aria-hidden="true"
+      >
+        {children}
+      </span>
+      <span className={`translate-y-[-5px] ${topTextClasses}`}>{children}</span>
     </a>
   );
 }

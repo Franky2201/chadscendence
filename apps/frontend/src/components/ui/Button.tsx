@@ -110,7 +110,7 @@ export function Button({
     .join(' ');
   return (
     <button type="button" className={buttonClasses} {...props}>
-      <span className={spanTopClasses} style={{ filter: 'brightness(0.85)' }} />
+      <span className={spanTopClasses} style={{ filter: 'brightness(0.8)' }} />
       <span className={spanBotClasses}>{children}</span>
     </button>
   );
