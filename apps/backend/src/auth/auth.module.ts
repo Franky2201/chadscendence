@@ -10,12 +10,14 @@ import { GithubStrategy } from 'src/common/strategies/github.strategy';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/common/entities/user.entity';
 import { RanksModule } from 'src/ranks/ranks.module';
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
     PassportModule,
     RanksModule,
+    UsersModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -30,4 +32,4 @@ import { RanksModule } from 'src/ranks/ranks.module';
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy, IntraStrategy, GithubStrategy],
 })
-export class AuthModule {}
+export class AuthModule { }
