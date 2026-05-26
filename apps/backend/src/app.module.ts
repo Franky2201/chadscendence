@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RanksModule } from './ranks/ranks.module';
 import { FriendsModule } from './friends/friends.module';
+import { PresenceModule } from './presence/presence.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { FriendsModule } from './friends/friends.module';
     }),
     UsersModule,
     AuthModule,
+    PresenceModule,
     RanksModule,
     FriendsModule,
   ],

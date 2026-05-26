@@ -9,11 +9,6 @@ import {
 } from 'typeorm';
 import { Rank } from 'src/common/entities/rank.entity';
 
-export enum UserStatus {
-  ONLINE = 'online',
-  OFFLINE = 'offline',
-}
-
 export enum UserRole {
   USER = 'user',
   ADMIN = 'admin',
@@ -38,13 +33,6 @@ export class User {
 
   @Column({ type: 'text', nullable: true })
   bio?: string;
-
-  @Column({
-    type: 'enum',
-    enum: UserStatus,
-    default: UserStatus.OFFLINE,
-  })
-  status: UserStatus;
 
   @Column({
     type: 'enum',
