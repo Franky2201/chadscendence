@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { type ThemeName, useTheme } from '../../contexts/ThemeContext';
+import { type ThemeName, useTheme } from '../../contexts/theme-context';
 
 type CardProps = {
   children: ReactNode;

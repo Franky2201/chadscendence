@@ -3,36 +3,12 @@ import {
   useMemo,
   useState,
   type ReactNode,
-  createContext,
-  useContext,
 } from 'react';
-
-export type ThemeName = 'light' | 'dark';
-
-type ThemeContextValue = {
-  theme: ThemeName;
-  setTheme: (theme: ThemeName) => void;
-  toggleTheme: () => void;
-};
-
-export const ThemeContext = createContext<ThemeContextValue | null>(null);
-
-export function useTheme() {
-  const context = useContext(ThemeContext);
-  if (!context) {
-    throw new Error('useTheme must be used within ThemeProvider');
-  }
-  return context;
-}
-
-const themeOrder: ThemeName[] = ['light', 'dark'];
-
-function getNextTheme(theme: ThemeName) {
-  const currentIndex = themeOrder.indexOf(theme);
-  const nextIndex =
-    currentIndex === -1 ? 0 : (currentIndex + 1) % themeOrder.length;
-  return themeOrder[nextIndex];
-}
+import {
+  ThemeContext,
+  getNextTheme,
+  type ThemeName,
+} from './theme-context';
 
 type ThemeProviderProps = {
   children: ReactNode;
