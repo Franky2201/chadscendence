@@ -14,6 +14,9 @@ NO_COLOR := \033[0m
 all: up
 
 prerequisites:
+	@command -v node >/dev/null 2>&1 || (printf "$(RED)Node.js is not installed.$(NO_COLOR)\n"; exit 1)
+	@command -v npm >/dev/null 2>&1 || (printf "$(RED)npm is not installed.$(NO_COLOR)\n"; exit 1)
+	@command -v docker >/dev/null 2>&1 || (printf "$(RED)Docker is not installed.$(NO_COLOR)\n"; exit 1)
 	@test -f $(ENV_FILE) || (cp .env.example $(ENV_FILE))
 	@test -f $(COMPOSE_FILE) || (printf "$(RED)Missing $(COMPOSE_FILE) file$(NO_COLOR)\n"; exit 1)
 	@mkdir -p $(BACKEND_UPLOADS_PATH)
@@ -54,11 +57,6 @@ re: prerequisites clean all
 
 ci: prerequisites
 	@printf "$(GREEN)--- Local CI Mimic ---$(NO_COLOR)\n"
-	@if [ ! -f $(ENV_FILE) ]; then \
-		printf "Copying .env.example to .env...\n"; \
-		cp .env.example $(ENV_FILE); \
-	fi
-	@mkdir -p $(BACKEND_UPLOADS_PATH)
 	@printf "$(GREEN)Step 1: Install Dependencies$(NO_COLOR)\n"
 	@npm install --silent --no-progress --no-audit --no-fund > /dev/null 2>&1
 	@printf "$(GREEN)Step 2: Lint$(NO_COLOR)\n"
