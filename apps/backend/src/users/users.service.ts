@@ -108,7 +108,7 @@ export class UsersService implements OnModuleInit {
     return this.userRepository
       .createQueryBuilder('user')
       .where('user.username ILIKE :query', { query: `%${query}%` })
-      .select(['user.id', 'user.username', 'user.avatarUrl', 'user.status'])
+      .select(['user.id', 'user.username', 'user.avatarUrl'])
       .take(10)
       .getMany();
   }

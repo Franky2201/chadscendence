@@ -2,6 +2,7 @@ import {
   Injectable,
   NotFoundException,
   BadRequestException,
+  Inject,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -10,6 +11,7 @@ import {
   FriendshipStatus,
 } from 'src/common/entities/friendship.entity';
 import { User } from 'src/common/entities/user.entity';
+import { PresenceService } from 'src/presence/presence.service';
 
 @Injectable()
 export class FriendsService {
@@ -18,6 +20,8 @@ export class FriendsService {
     private readonly friendshipRepository: Repository<Friendship>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @Inject()
+    private readonly presenceService: PresenceService,
   ) {}
 
   async getFriends(userId: string) {
@@ -36,7 +40,9 @@ export class FriendsService {
         id: friend.id,
         username: friend.username,
         avatarUrl: friend.avatarUrl,
-        status: friend.status,
+        status: this.presenceService.isUserOnline(friend.id)
+          ? 'online'
+          : 'offline',
       };
     });
   }
