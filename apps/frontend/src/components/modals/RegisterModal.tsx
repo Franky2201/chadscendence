@@ -1,19 +1,26 @@
 import { useState } from 'react';
-import axios from 'axios';
-import api from '../services/api';
-import { useAuth } from '../contexts/AuthContext';
-import { useModal } from '../contexts/ModalContext';
-import { extractErrorMessage } from '../services/error';
+import { register } from '../../services/auth';
+import { getMe } from '../../services/users';
+import { useAuth } from '../../contexts/AuthContext';
+import { useModal } from '../../contexts/ModalContext';
+import { extractErrorMessage } from '../../services/error';
 
-interface LoginModalProps {
+interface RegisterModalProps {
   isOpen: boolean;
   onClose: () => void;
+  prefilledEmail?: string;
 }
 
-export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
+export default function RegisterModal({
+  isOpen,
+  onClose,
+  prefilledEmail = '',
+}: RegisterModalProps) {
   const { login } = useAuth();
   const { openModal } = useModal();
-  const [email, setEmail] = useState('');
+
+  const [email, setEmail] = useState(prefilledEmail);
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
@@ -24,36 +31,27 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
     setError('');
 
     try {
-      await api.post('/auth/login', { email, password });
-      const userResponse = await api.get('/users/me');
-      login(userResponse.data);
+      await register({ email, username, password });
+
+      const userResponse = await getMe();
+      login(userResponse);
       onClose();
     } catch (err) {
-      const errorMessage = extractErrorMessage(err);
-
-      if (
-        axios.isAxiosError(err) &&
-        (err.response?.status === 404 ||
-          errorMessage.includes('Account not found'))
-      ) {
-        openModal('REGISTER', { prefilledEmail: email });
-      } else {
-        setError(errorMessage);
-      }
+      setError(extractErrorMessage(err));
     }
   };
 
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
-      onClick={onClose}
+      onMouseDown={onClose}
     >
       <div
         className="bg-white rounded-3xl p-10 max-w-md w-full"
-        onClick={(e) => e.stopPropagation()}
+        onMouseDown={(e) => e.stopPropagation()}
       >
         <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">
-          Se connecter
+          Bienvenue !
         </h2>
 
         {error && (
@@ -62,10 +60,18 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 mb-6">
           <input
-            type="text"
+            type="email"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            className="w-full bg-gray-100 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-pink-500"
+            required
+          />
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             className="w-full bg-gray-100 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-pink-500"
             required
           />
@@ -81,24 +87,16 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
             type="submit"
             className="w-full bg-pink-600 text-white rounded-xl py-3 font-bold hover:bg-pink-700 transition"
           >
-            Se connecter
+            Créer un compte
           </button>
         </form>
 
         <div className="flex flex-col gap-3">
           <button
-            onClick={() => openModal('REGISTER', { prefilledEmail: email })}
-            className="w-full bg-gray-200 text-gray-900 rounded-xl py-3 font-bold hover:bg-gray-300 transition"
-          >
-            Créer un compte
-          </button>
-          <button
-            onClick={() =>
-              (window.location.href = 'http://localhost:3000/auth/42')
-            }
+            onClick={() => openModal('LOGIN')}
             className="w-full bg-gray-900 text-white rounded-xl py-3 font-bold hover:bg-gray-800 transition"
           >
-            Continuer avec 42
+            Retour
           </button>
         </div>
       </div>

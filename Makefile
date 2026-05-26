@@ -14,9 +14,9 @@ NO_COLOR := \033[0m
 all: up
 
 prerequisites:
-	@command -v node >/dev/null 2>&1 || (printf "$(RED)Node.js is not installed.$(NO_COLOR)\n"; exit 1)
-	@command -v npm >/dev/null 2>&1 || (printf "$(RED)npm is not installed.$(NO_COLOR)\n"; exit 1)
-	@command -v docker >/dev/null 2>&1 || (printf "$(RED)Docker is not installed.$(NO_COLOR)\n"; exit 1)
+	@command -v node > /dev/null 2>&1 || (printf "$(RED)Node.js is not installed.$(NO_COLOR)\n"; exit 1)
+	@command -v npm > /dev/null 2>&1 || (printf "$(RED)npm is not installed.$(NO_COLOR)\n"; exit 1)
+	@command -v docker > /dev/null 2>&1 || (printf "$(RED)Docker is not installed.$(NO_COLOR)\n"; exit 1)
 	@test -f $(ENV_FILE) || (cp .env.example $(ENV_FILE))
 	@test -f $(COMPOSE_FILE) || (printf "$(RED)Missing $(COMPOSE_FILE) file$(NO_COLOR)\n"; exit 1)
 	@mkdir -p $(BACKEND_UPLOADS_PATH)
@@ -67,7 +67,7 @@ ci: prerequisites
 	@npm run build --silent > /dev/null 2>&1
 	@printf "$(GREEN)Step 5: Docker Integration Test$(NO_COLOR)\n"
 	@$(COMPOSE) up -d --build --wait --quiet-pull > /dev/null 2>&1 || (printf "$(RED)Docker test failed. Logs:$(NO_COLOR)\n"; $(COMPOSE) logs; $(COMPOSE) down -v; exit 1)
-	@$(COMPOSE) ps
+	@$(COMPOSE) ps > /dev/null 2>&1 || (printf "$(RED)Docker containers failed to start.$(NO_COLOR)\n"; $(COMPOSE) logs; $(COMPOSE) down -v; exit 1)
 	@$(COMPOSE) down -v > /dev/null 2>&1
 	@printf "$(GREEN)--- Local CI Success ---$(NO_COLOR)\n"
 
