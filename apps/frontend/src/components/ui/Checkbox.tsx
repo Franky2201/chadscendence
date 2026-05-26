@@ -80,7 +80,7 @@ const iconCheckedColorClasses: Record<ThemeName, string> = {
 const checkboxThemeClasses: Record<ThemeName, string> = {
   light:
     'bg-zinc-200 text-zinc-900 border-zinc-300 \
-    hover:text-zinc-900 ring-zinc-300 peer-checked:bg-zinc-900 \
+    ring-zinc-300 peer-checked:bg-zinc-900 \
     peer-checked:text-zinc-50 peer-checked:border-zinc-900 \
     peer-checked:ring-zinc-500',
   dark: 'bg-zinc-800 text-zinc-100 border-zinc-700 \
