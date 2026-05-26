@@ -32,4 +32,4 @@ import { UsersModule } from 'src/users/users.module';
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy, IntraStrategy, GithubStrategy],
 })
-export class AuthModule { }
+export class AuthModule {}

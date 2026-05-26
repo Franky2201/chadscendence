@@ -31,7 +31,7 @@ export default function FriendsPage() {
       style={{ backgroundImage: "url('/background.png')" }}
     >
       <div className="absolute inset-0 bg-linear-to-r from-slate-900/90 via-slate-900/50 to-slate-900/90" />
-      
+
       <div className="relative z-10 flex flex-col h-full min-h-screen">
         <div className="flex w-full justify-between items-center p-10">
           <Link to="/">
@@ -42,7 +42,9 @@ export default function FriendsPage() {
             />
           </Link>
           <div className="flex items-center gap-6">
-            <h1 className="text-4xl font-black tracking-wide drop-shadow-xl">Mes Amis</h1>
+            <h1 className="text-4xl font-black tracking-wide drop-shadow-xl">
+              Mes Amis
+            </h1>
             <Link to="/">
               <Button>Retour</Button>
             </Link>

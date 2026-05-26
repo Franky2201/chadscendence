@@ -13,7 +13,7 @@ export class UsersService implements OnModuleInit {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     private readonly configService: ConfigService,
     private readonly ranksService: RanksService,
-  ) { }
+  ) {}
 
   async onModuleInit() {
     await this.seedAdmin();
@@ -105,7 +105,8 @@ export class UsersService implements OnModuleInit {
   }
 
   async searchUsers(query: string) {
-    return this.userRepository.createQueryBuilder('user')
+    return this.userRepository
+      .createQueryBuilder('user')
       .where('user.username ILIKE :query', { query: `%${query}%` })
       .select(['user.id', 'user.username', 'user.avatarUrl', 'user.status'])
       .take(10)

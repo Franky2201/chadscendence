@@ -60,7 +60,9 @@ export const getLeaderboard = async (
   return res.data;
 };
 
-export const searchUsers = async (query: string): Promise<UserSearchResult[]> => {
+export const searchUsers = async (
+  query: string,
+): Promise<UserSearchResult[]> => {
   if (!query) return [];
   const res = await api.get<UserSearchResult[]>(`/users/search?q=${query}`);
   return res.data;
