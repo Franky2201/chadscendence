@@ -1,6 +1,6 @@
 import type { InputHTMLAttributes, ReactNode } from 'react';
 import { useId } from 'react';
-import { type ThemeName, useTheme } from '../../themeContext';
+import { type ThemeName, useTheme } from '../../contexts/theme-context';
 
 type InputSize = 'small' | 'medium' | 'large';
 
@@ -20,7 +20,7 @@ const baseClasses =
 	items-center \
 	justify-center \
 	gap-2 \
-	rounded-full \
+	rounded-xl \
 	border \
 	px-4 \
 	py-2 \
@@ -67,21 +67,26 @@ const iconToggleClasses =
 
 const iconImageClasses = 'h-full w-full scale-150 transition';
 
-const iconColorClasses: Record<ThemeName, string> = {
-  light: 'filter brightness-0 invert group-hover:invert-0',
-  dark: 'filter brightness-0 group-hover:invert',
+const iconUncheckedColorClasses: Record<ThemeName, string> = {
+  light: 'filter brightness-0',
+  dark: 'filter brightness-0 invert',
+};
+
+const iconCheckedColorClasses: Record<ThemeName, string> = {
+  light: 'filter brightness-0 invert',
+  dark: 'filter brightness-0',
 };
 
 const checkboxThemeClasses: Record<ThemeName, string> = {
   light:
-    'bg-rose-600 text-white border-rose-700 \
-  		hover:text-slate-900 ring-rose-300 peer-checked:bg-emerald-500 \
-		peer-checked:text-white peer-checked:border-emerald-600 \
-		peer-checked:ring-emerald-400',
-  dark: 'bg-rose-600 text-slate-900 border-rose-700 \
-		hover:text-white ring-rose-300 peer-checked:bg-emerald-500 \
-		peer-checked:text-slate-900 peer-checked:border-emerald-600 \
-		peer-checked:ring-emerald-400',
+    'bg-zinc-200 text-zinc-900 border-zinc-300 \
+    ring-zinc-300 peer-checked:bg-zinc-900 \
+    peer-checked:text-zinc-50 peer-checked:border-zinc-900 \
+    peer-checked:ring-zinc-500',
+  dark: 'bg-zinc-800 text-zinc-100 border-zinc-700 \
+    hover:text-white ring-zinc-500 peer-checked:bg-zinc-100 \
+    peer-checked:text-zinc-900 peer-checked:border-zinc-200 \
+    peer-checked:ring-zinc-400',
 };
 
 export function Checkbox({
@@ -121,7 +126,8 @@ export function Checkbox({
   const resolvedLabelClasses = ['flex-1 text-center', labelClassName]
     .filter(Boolean)
     .join(' ');
-  const iconClasses = `${iconImageClasses} ${iconColorClasses[theme]}`;
+  const iconUncheckedClasses = `${iconImageClasses} ${iconUncheckedColorClasses[theme]}`;
+  const iconCheckedClasses = `${iconImageClasses} ${iconCheckedColorClasses[theme]}`;
 
   return (
     <label htmlFor={resolvedId} className={containerClasses}>
@@ -137,7 +143,7 @@ export function Checkbox({
             src="/check.svg"
             alt=""
             aria-hidden="true"
-            className={iconClasses}
+            className={iconUncheckedClasses}
           />
         </span>
         <span className={iconWrapperClasses} data-icon="checked">
@@ -145,7 +151,7 @@ export function Checkbox({
             src="/checked.svg"
             alt=""
             aria-hidden="true"
-            className={iconClasses}
+            className={iconCheckedClasses}
           />
         </span>
         {label ? <span className={resolvedLabelClasses}>{label}</span> : null}

@@ -1,20 +1,40 @@
 import type { ReactNode } from 'react';
-import { type ThemeName, useTheme } from '../../themeContext';
+import { type ThemeName, useTheme } from '../../contexts/theme-context';
 
 type WindowProps = {
   children: ReactNode;
   className?: string;
 };
 
-const baseClasses = 'min-h-screen font-sans p-8';
-
 const themeClasses: Record<ThemeName, string> = {
-  light: 'bg-slate-50 text-slate-900',
-  dark: 'bg-slate-950 text-slate-100',
+  light: 'text-neutral-900',
+  dark: 'text-neutral-100',
 };
 
-const themeButtonBaseClasses =
-  '\
+const themeButtonClasses: Record<ThemeName, string> = {
+  light:
+    'bg-zinc-900 text-zinc-50 border-zinc-800 hover:bg-zinc-800 \
+		focus-visible:ring-zinc-400 focus-visible:ring-offset-zinc-100',
+  dark: 'bg-zinc-100 text-zinc-900 border-zinc-200 hover:bg-white \
+		focus-visible:ring-zinc-500 focus-visible:ring-offset-zinc-950',
+};
+
+export function Window({ children, className = '' }: WindowProps) {
+  const { theme, toggleTheme } = useTheme();
+  const classes = [
+    '\
+	min-h-screen \
+	bg-linear-110 \
+	from-neutral-100 \
+	to-neutral-900 \
+	font-sans p-8',
+    themeClasses[theme],
+    className,
+  ]
+    .filter(Boolean)
+    .join(' ');
+  const buttonClasses = [
+    '\
 	fixed \
 	bottom-6 \
 	right-6 \
@@ -31,22 +51,10 @@ const themeButtonBaseClasses =
 	focus-visible:ring-2 \
 	focus-visible:ring-offset-2 \
 	active:scale-95 \
-	cursor-pointer';
-
-const themeButtonClasses: Record<ThemeName, string> = {
-  light:
-    'bg-slate-900 text-white border-slate-800 hover:bg-slate-800 \
-		focus-visible:ring-slate-400 focus-visible:ring-offset-slate-50',
-  dark: 'bg-slate-100 text-slate-900 border-slate-200 hover:bg-white \
-		focus-visible:ring-slate-500 focus-visible:ring-offset-slate-950',
-};
-
-export function Window({ children, className = '' }: WindowProps) {
-  const { theme, toggleTheme } = useTheme();
-  const classes = [baseClasses, themeClasses[theme], className]
-    .filter(Boolean)
-    .join(' ');
-  const buttonClasses = [themeButtonBaseClasses, themeButtonClasses[theme]]
+	cursor-pointer \
+	select-none',
+    themeButtonClasses[theme],
+  ]
     .filter(Boolean)
     .join(' ');
   const isDark = theme === 'dark';
