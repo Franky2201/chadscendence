@@ -6,13 +6,16 @@ import { RouterProvider } from 'react-router-dom';
 import { router } from './router';
 import './index.css';
 import { ModalProvider } from './contexts/ModalContext';
+import { FriendsProvider } from './contexts/FriendsContext';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ThemeProvider>
       <AuthProvider>
         <ModalProvider>
-          <RouterProvider router={router} />
+          <FriendsProvider>
+            <RouterProvider router={router} />
+          </FriendsProvider>
         </ModalProvider>
       </AuthProvider>
     </ThemeProvider>
