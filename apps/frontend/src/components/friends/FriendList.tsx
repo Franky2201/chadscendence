@@ -1,4 +1,5 @@
 import { useFriends } from '../../contexts/FriendsContext';
+import { Button } from '../ui';
 
 export default function FriendList() {
 	const { friends, requests, isLoading, acceptRequest, declineRequest, removeFriend } = useFriends();
@@ -17,12 +18,12 @@ export default function FriendList() {
 								<span className="text-white font-medium">{req.username}</span>
 							</div>
 							<div className="flex gap-2">
-								<button onClick={() => acceptRequest(req.friendshipId)} className="bg-green-500/20 text-green-400 hover:bg-green-500/30 p-2 rounded-lg transition-colors">
+								<Button size="small" onClick={() => acceptRequest(req.friendshipId)} className="!bg-green-500/20 !text-green-400 hover:!bg-green-500/30 !p-2 !rounded-lg transition-colors">
 									✓
-								</button>
-								<button onClick={() => declineRequest(req.friendshipId)} className="bg-red-500/20 text-red-400 hover:bg-red-500/30 p-2 rounded-lg transition-colors">
+								</Button>
+								<Button size="small" onClick={() => declineRequest(req.friendshipId)} className="!bg-red-500/20 !text-red-400 hover:!bg-red-500/30 !p-2 !rounded-lg transition-colors">
 									✕
-								</button>
+								</Button>
 							</div>
 						</div>
 					))}

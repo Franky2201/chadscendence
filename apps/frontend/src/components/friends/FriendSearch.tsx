@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { searchUsers, type UserSearchResult } from '../../services/users';
 import { useFriends } from '../../contexts/FriendsContext';
+import { Input, Button } from '../ui';
 
 interface FriendSearchProps {
 	onSearchActive: (isActive: boolean) => void;
@@ -45,12 +46,12 @@ export default function FriendSearch({ onSearchActive }: FriendSearchProps) {
 
 	return (
 		<div className="flex flex-col gap-4 w-full">
-			<input
+			<Input
 				type="text"
 				placeholder="Rechercher un joueur..."
 				value={query}
 				onChange={(e) => setQuery(e.target.value)}
-				className="w-full bg-white/10 border border-white/20 text-white rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-pink-500 transition-all placeholder:text-white/40"
+				className="w-full !bg-white/10 !border-white/20 !text-white !rounded-xl !px-4 !py-3 focus:!outline-none focus-visible:!ring-2 focus-visible:!ring-pink-500 placeholder:!text-white/40"
 			/>
 
 			{query.length > 0 && (
@@ -70,20 +71,21 @@ export default function FriendSearch({ onSearchActive }: FriendSearchProps) {
 									</div>
 
 									{isAlreadyFriend ? (
-										<button disabled className="bg-white/5 border border-white/10 text-white/40 text-sm font-bold py-1.5 px-3 rounded-lg cursor-not-allowed">
+										<Button disabled size="small" className="!bg-white/5 !border-white/10 !text-white/40 !rounded-lg">
 											Ami
-										</button>
+										</Button>
 									) : isRequestSent ? (
-										<button disabled className="bg-slate-700 text-slate-300 text-sm font-bold py-1.5 px-3 rounded-lg cursor-not-allowed">
+										<Button disabled size="small" className="!bg-slate-700 !text-slate-300 !rounded-lg">
 											Attente
-										</button>
+										</Button>
 									) : (
-										<button
+										<Button
 											onClick={() => handleSendRequest(user.id)}
-											className="bg-pink-600 hover:bg-pink-700 text-white text-sm font-bold py-1.5 px-3 rounded-lg transition-colors"
+											size="small"
+											className="!bg-pink-600 hover:!bg-pink-700 !text-white !rounded-lg"
 										>
 											Ajouter
-										</button>
+										</Button>
 									)}
 								</div>
 							);
