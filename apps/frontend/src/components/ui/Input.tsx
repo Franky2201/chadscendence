@@ -1,5 +1,5 @@
 import type { InputHTMLAttributes } from 'react';
-import { type ThemeName, useTheme } from '../../themeContext';
+import { type ThemeName, useTheme } from '../../contexts/theme-context';
 
 type InputSize = 'small' | 'medium' | 'large';
 
@@ -12,7 +12,7 @@ const baseClasses =
 	inline-flex \
 	items-center \
 	justify-center \
-	rounded-full \
+	rounded-xl \
 	font-bold \
 	transition-all \
 	shadow-lg \
@@ -32,8 +32,8 @@ const sizeClasses: Record<InputSize, string> = {
 
 const themeClasses: Record<ThemeName, string> = {
   light:
-    'bg-white text-slate-900 border-slate-200 placeholder:text-slate-400 focus-visible:ring-slate-300',
-  dark: 'bg-slate-950 text-slate-50 border-slate-500 placeholder:text-slate-400 focus-visible:ring-slate-400',
+    'bg-zinc-50 text-zinc-900 border-zinc-200 placeholder:text-zinc-400 focus-visible:ring-zinc-300 focus-visible:ring-offset-zinc-50',
+  dark: 'bg-zinc-900 text-zinc-100 border-zinc-700 placeholder:text-zinc-500 focus-visible:ring-zinc-500 focus-visible:ring-offset-zinc-950',
 };
 
 export function Input({

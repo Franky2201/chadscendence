@@ -47,3 +47,7 @@ coverage/
 .eslintcache
 .parcel-cache
 .stylelintcache
+
+# Krita
+*.kra-autosave.kra
+*.*~
