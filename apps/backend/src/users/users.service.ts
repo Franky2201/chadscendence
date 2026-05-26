@@ -89,6 +89,21 @@ export class UsersService implements OnModuleInit {
     return { message: 'User deleted successfully.' };
   }
 
+  async getGlobalLeaderboard(count: number) {
+    const users = await this.userRepository.find({
+      select: { id: true, username: true, avatarUrl: true, score: true },
+      order: { score: 'DESC', username: 'ASC' },
+      take: count,
+    });
+
+    return users.map((u) => ({
+      id: u.id,
+      username: u.username,
+      avatarUrl: u.avatarUrl,
+      score: u.score,
+    }));
+  }
+
   async findById(id: string) {
     return this.userRepository.findOne({
       where: { id },

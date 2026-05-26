@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Button } from '../components/ui';
 import { useModal } from '../contexts/ModalContext';
+import Leaderboard from '../components/home/Leaderboard';
 
 export default function HomePage() {
   const { user, isLoading, logout } = useAuth();
@@ -99,6 +100,8 @@ export default function HomePage() {
               </h2>
             </div>
           )}
+
+          <Leaderboard count={5} />
         </div>
       </div>
     </div>
