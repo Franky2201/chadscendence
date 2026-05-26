@@ -15,7 +15,7 @@ import type { JwtPayload } from 'src/common/dto/auth.dto';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
   @Get('me')
   @UseGuards(JwtAuthGuard)
@@ -36,6 +36,13 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   deleteUser(@GetUser() payload: JwtPayload) {
     return this.usersService.deleteUser(payload.sub);
+  }
+
+  @Get('search')
+  @UseGuards(JwtAuthGuard)
+  searchUsers(@Query('q') query: string) {
+    if (!query) return [];
+    return this.usersService.searchUsers(query);
   }
 
   @Get('leaderboard')
