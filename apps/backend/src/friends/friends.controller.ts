@@ -19,6 +19,11 @@ export class FriendsController {
 		return this.friendsService.getPendingRequests(payload.sub);
 	}
 
+	@Get('requests/sent')
+	getSentRequests(@GetUser() payload: JwtPayload) {
+		return this.friendsService.getSentRequests(payload.sub);
+	}
+
 	@Post('request/:addresseeId')
 	sendFriendRequest(@GetUser() payload: JwtPayload, @Param('addresseeId') addresseeId: string) {
 		return this.friendsService.sendFriendRequest(payload.sub, addresseeId);

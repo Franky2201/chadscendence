@@ -48,6 +48,18 @@ export class FriendsService {
 		}));
 	}
 
+	async getSentRequests(userId: string) {
+		const requests = await this.friendshipRepository.find({
+			where: { requester: { id: userId }, status: FriendshipStatus.PENDING },
+			relations: { 'addressee': true },
+		});
+
+		return requests.map(f => ({
+			friendshipId: f.id,
+			addresseeId: f.addressee.id,
+		}));
+	}
+
 	async sendFriendRequest(requesterId: string, addresseeId: string) {
 		if (requesterId === addresseeId) {
 			throw new BadRequestException('You cannot send a friend request to yourself');
