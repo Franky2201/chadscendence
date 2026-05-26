@@ -45,7 +45,7 @@ export default function HomePage() {
           <div className="flex flex-1 flex-col justify-between mt-10">
             <nav className="flex flex-col gap-5 text-xl font-bold">
               <Link
-                to="/faq"
+                to="/games"
                 className="w-fit text-2xl hover:text-[#E43A70] transition-colors hover:scale-105"
               >
                 Les jeux
