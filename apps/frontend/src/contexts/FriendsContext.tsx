@@ -18,6 +18,7 @@ import {
   sendFriendRequest,
 } from '../services/friends';
 import { useAuth } from './AuthContext';
+import { socket } from '../services/socket';
 
 interface FriendsContextType {
   friends: Friend[];
@@ -71,6 +72,36 @@ export function FriendsProvider({ children }: { children: ReactNode }) {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     refreshFriends();
   }, [refreshFriends]);
+
+  useEffect(() => {
+    if (!user) {
+      socket.disconnect();
+      return;
+    }
+
+    socket.connect();
+
+    socket.on(
+      'user_status',
+      ({
+        userId,
+        status,
+      }: {
+        userId: string;
+        status: 'online' | 'offline';
+      }) => {
+        setFriends((prevFriends) =>
+          prevFriends.map((friend) =>
+            friend.id === userId ? { ...friend, status } : friend,
+          ),
+        );
+      },
+    );
+
+    return () => {
+      socket.off('user_status');
+    };
+  }, [user]);
 
   const acceptRequest = async (friendshipId: string) => {
     await acceptFriendRequest(friendshipId);
