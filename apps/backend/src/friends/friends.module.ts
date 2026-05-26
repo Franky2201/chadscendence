@@ -11,4 +11,4 @@ import { User } from 'src/common/entities/user.entity';
   providers: [FriendsService],
   exports: [FriendsService],
 })
-export class FriendsModule {}
+export class FriendsModule { }
