@@ -1,30 +1,18 @@
 import type { AnchorHTMLAttributes } from 'react';
-
-type ButtonSize = 'small' | 'medium' | 'large';
-type ButtonColor =
-  | 'grey'
-  | 'red'
-  | 'orange'
-  | 'yellow'
-  | 'green'
-  | 'blue'
-  | 'purple'
-  | 'pink'
-  | 'violet'
-  | 'white';
+import type { ItemColor, ItemSize } from './unified';
 
 type AnchorProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
-  size?: ButtonSize;
-  color?: ButtonColor;
+  size?: ItemSize;
+  color?: ItemColor;
 };
 
-const sizeClasses: Record<ButtonSize, string> = {
+const sizeClasses: Record<ItemSize, string> = {
   small: 'text-2xl',
   medium: 'text-3xl',
   large: 'text-4xl',
 };
 
-const colorClasses: Record<ButtonColor, string> = {
+const colorClasses: Record<ItemColor, string> = {
   grey: 'text-[#bfbfbf]',
   red: 'text-[#ff9191]',
   orange: 'text-[#ffc780]',
@@ -47,8 +35,8 @@ export function Anchor({
   const textClasses = [
     'font-energy font-bold leading-none group-active:translate-y-0 \
 	transition-transform duration-100 ease-in-out',
-    sizeClasses[size],
-    colorClasses[color],
+    sizeClasses[size as ItemSize],
+    colorClasses[color as ItemColor],
   ]
     .filter(Boolean)
     .join(' ');

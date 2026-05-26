@@ -1,38 +1,26 @@
 import type { ButtonHTMLAttributes } from 'react';
-
-type ButtonSize = 'small' | 'medium' | 'large';
-type ButtonColor =
-  | 'grey'
-  | 'red'
-  | 'orange'
-  | 'yellow'
-  | 'green'
-  | 'blue'
-  | 'purple'
-  | 'pink'
-  | 'violet'
-  | 'white';
+import type { ItemColor, ItemSize } from './unified';
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-  size?: ButtonSize;
-  color?: ButtonColor;
+  size?: ItemSize;
+  color?: ItemColor;
   borderRadius?: string;
   buttonClassName?: string;
 };
 
-const sizeClasses: Record<ButtonSize, string> = {
+const sizeClasses: Record<ItemSize, string> = {
   small: 'px-2 py-1 text-md',
   medium: 'px-4 py-2 text-lg',
   large: 'px-6 py-3 text-xl',
 };
 
-const baseOffsetClasses: Record<ButtonSize, string> = {
+const baseOffsetClasses: Record<ItemSize, string> = {
   small: 'translate-y-[3px]',
   medium: 'translate-y-[4px]',
   large: 'translate-y-[5px]',
 };
 
-const topOffsetClasses: Record<ButtonSize, string> = {
+const topOffsetClasses: Record<ItemSize, string> = {
   small:
     'translate-y-[-1px] group-hover:translate-y-[-3px] group-active:translate-y-[+3px]',
   medium:
@@ -41,7 +29,7 @@ const topOffsetClasses: Record<ButtonSize, string> = {
     'translate-y-[-3px] group-hover:translate-y-[-5px] group-active:translate-y-[+5px]',
 };
 
-const colorClasses: Record<ButtonColor, string> = {
+const colorClasses: Record<ItemColor, string> = {
   grey: 'bg-[#bfbfbf]',
   red: 'bg-[#ff9191]',
   orange: 'bg-[#ffc780]',
@@ -84,8 +72,8 @@ export function Button({
 	inset-0 \
 	pointer-events-none',
     borderRadius,
-    colorClasses[color],
-    baseOffsetClasses[size],
+    colorClasses[color as ItemColor],
+    baseOffsetClasses[size as ItemSize],
   ]
     .filter(Boolean)
     .join(' ');
@@ -101,9 +89,9 @@ export function Button({
     ease-in-out \
   	select-none',
     borderRadius,
-    colorClasses[color],
-    sizeClasses[size],
-    topOffsetClasses[size],
+    colorClasses[color as ItemColor],
+    sizeClasses[size as ItemSize],
+    topOffsetClasses[size as ItemSize],
     className,
   ]
     .filter(Boolean)
