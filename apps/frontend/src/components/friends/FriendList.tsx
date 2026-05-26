@@ -72,10 +72,11 @@ export default function FriendList() {
                   <img
                     src={friend.avatarUrl}
                     alt={friend.username}
-                    className={`w-[50px] h-[50px] rounded-full object-cover border-2 transition-colors ${friend.status === 'online'
+                    className={`w-[50px] h-[50px] rounded-full object-cover border-2 transition-colors ${
+                      friend.status === 'online'
                         ? 'border-green-500'
                         : 'border-transparent'
-                      }`}
+                    }`}
                   />
                   {friend.status === 'online' && (
                     <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-[#1E1E1E] rounded-full"></span>
