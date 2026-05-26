@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RanksModule } from './ranks/ranks.module';
+import { FriendsModule } from './friends/friends.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { RanksModule } from './ranks/ranks.module';
     UsersModule,
     AuthModule,
     RanksModule,
+    FriendsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
