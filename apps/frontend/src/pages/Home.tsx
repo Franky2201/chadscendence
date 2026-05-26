@@ -3,7 +3,6 @@ import { useAuth } from '../contexts/AuthContext';
 import { Button } from '../components/ui';
 import { useModal } from '../contexts/ModalContext';
 import Leaderboard from '../components/home/Leaderboard';
-import Friends from '../components/friends/Friends';
 
 export default function HomePage() {
   const { user, isLoading, logout } = useAuth();
@@ -60,10 +59,10 @@ export default function HomePage() {
                     Mes amis
                   </Link>
                   <Link
-                    to="/history"
+                    to="/profile"
                     className="w-fit text-2xl hover:text-[#E43A70] transition-colors hover:scale-105"
                   >
-                    Historique
+                    Profile
                   </Link>
                 </>
               )}
@@ -103,10 +102,6 @@ export default function HomePage() {
           )}
 
           <Leaderboard count={5} />
-
-          {user && (
-            <Friends />
-          )}
         </div>
       </div>
     </div>
