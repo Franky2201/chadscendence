@@ -140,7 +140,7 @@ export function Checkbox({
       <span className={buttonClasses}>
         <span className={iconWrapperClasses} data-icon="unchecked">
           <img
-            src="/check.svg"
+            src="/unchecked.svg"
             alt=""
             aria-hidden="true"
             className={iconUncheckedClasses}

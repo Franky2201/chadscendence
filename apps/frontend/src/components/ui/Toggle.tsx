@@ -8,28 +8,34 @@ type CheckboxProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> & {
 };
 
 const sizeClasses: Record<ItemSize, string> = {
-  small: 'h-4 w-8 after:h-3 after:w-3 peer-checked:after:translate-x-4',
-  medium: 'h-5 w-10 after:h-4 after:w-4 peer-checked:after:translate-x-5',
-  large: 'h-6 w-12 after:h-5 after:w-5 peer-checked:after:translate-x-6',
+  small: 'h-6 w-12 after:h-4 after:w-4 peer-checked:after:translate-x-6',
+  medium: 'h-7 w-14 after:h-5 after:w-5 peer-checked:after:translate-x-7',
+  large: 'h-8 w-16 after:h-6 after:w-6 peer-checked:after:translate-x-8',
 };
 
 const activeColorClasses: Record<ItemColor, string> = {
-  grey: `peer-checked:bg-[color:var(--color-grey)]`,
-  red: `peer-checked:bg-[color:var(--color-red)]`,
-  orange: `peer-checked:bg-[color:var(--color-orange)]`,
-  yellow: `peer-checked:bg-[color:var(--color-yellow)]`,
-  green: `peer-checked:bg-[color:var(--color-green)]`,
-  blue: `peer-checked:bg-[color:var(--color-blue)]`,
-  purple: `peer-checked:bg-[color:var(--color-purple)]`,
-  pink: `peer-checked:bg-[color:var(--color-pink)]`,
-  violet: `peer-checked:bg-[color:var(--color-violet)]`,
-  white: `peer-checked:bg-[color:var(--color-white)]`,
+  grey: 'peer-checked:bg-[color:var(--color-grey)] ring-[color:var(--color-grey)]',
+  red: 'peer-checked:bg-[color:var(--color-red)] ring-[color:var(--color-red)]',
+  orange:
+    'peer-checked:bg-[color:var(--color-orange)] ring-[color:var(--color-orange)]',
+  yellow:
+    'peer-checked:bg-[color:var(--color-yellow)] ring-[color:var(--color-yellow)]',
+  green:
+    'peer-checked:bg-[color:var(--color-green)] ring-[color:var(--color-green)]',
+  blue: 'peer-checked:bg-[color:var(--color-blue)] ring-[color:var(--color-blue)]',
+  purple:
+    'peer-checked:bg-[color:var(--color-purple)] ring-[color:var(--color-purple)]',
+  pink: 'peer-checked:bg-[color:var(--color-pink)] ring-[color:var(--color-pink)]',
+  violet:
+    'peer-checked:bg-[color:var(--color-violet)] ring-[color:var(--color-violet)]',
+  white:
+    'peer-checked:bg-[color:var(--color-white)] ring-[color:var(--color-white)]',
 };
 
-const topOffset: Record<ItemSize, string> = {
-  small: 'translate-y-[-3px] peer-hover:translate-y-[-5px]',
-  medium: 'translate-y-[-4px] peer-hover:translate-y-[-6px]',
-  large: 'translate-y-[-5px] peer-hover:translate-y-[-7px]',
+const spanSizeClasses: Record<ItemSize, string> = {
+  small: 'text-sm',
+  medium: 'text-md',
+  large: 'text-lg',
 };
 
 export function Toggle({
@@ -39,26 +45,13 @@ export function Toggle({
   label = '',
   ...props
 }: CheckboxProps) {
-  const commonClasses = [
-    'bg-[#bfbfbf]  transition-transform duration-100 \
-	rounded-full peer-active:translate-y-[0px]',
-  ];
   const topClass = [
     className,
-    commonClasses,
     'relative peer peer-checked:after:border-buffer after:content-[""] \
 	after:absolute after:bg-white after:rounded-full after:top-[2px] \
-	after:start-[2px] after:transition-all ',
-    sizeClasses[size],
-    activeColorClasses[color],
-    topOffset[size],
-  ]
-    .filter(Boolean)
-    .join(' ');
-  const botClass = [
-    className,
-    commonClasses,
-    'absolute',
+	after:start-[2px] after:transition-all transition-transform duration-100 \
+	bg-[#bfbfbf] rounded-full peer-hover:ring-1 peer-hover:ring-offset-1 \
+	after:translate-y-[2px] after:translate-x-[2px]',
     sizeClasses[size],
     activeColorClasses[color],
   ]
@@ -72,16 +65,10 @@ export function Toggle({
         className={`sr-only peer group ${className}`}
         {...props}
       />
-      <div
-        className={`${botClass}`}
-        style={{ filter: 'brightness(0.8)' }}
-      ></div>
-      <div
-        className={`translate-y-[-2px] ${botClass}`}
-        style={{ filter: 'brightness(0.8)' }}
-      ></div>
       <div className={`${topClass}`}></div>
-      <span className={`${className} select-none ms-3 text-md font-bold`}>
+      <span
+        className={`${className} ${spanSizeClasses[size]} select-none ms-3 font-bold`}
+      >
         {label}
       </span>
     </label>

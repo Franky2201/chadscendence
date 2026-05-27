@@ -131,7 +131,7 @@ function App() {
             </div>
           </div>
         </Card>
-        <Card className="flex w-full items-center gap-4">
+        <Card className="flex w-full justify-center items-center gap-4">
           <Button
             size="large"
             color="blue"
