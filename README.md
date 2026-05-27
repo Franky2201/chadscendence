@@ -178,6 +178,7 @@ At first we used a Slack group, which felt not versatile enough to organize ours
 - Creating frontend reusable components.
 
 ### `sdemey`
+- Remote authentification with Oauth2.0 for GitHub users.
 - Created the `/about` page.
 
 ## Public API Endpoints
