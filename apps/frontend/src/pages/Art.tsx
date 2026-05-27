@@ -47,9 +47,7 @@ function App() {
               #f8f8f8
             </Button>
           </div>
-          <Button buttonClassName="mt-4" className="w-66">
-            Default
-          </Button>
+          <Button className="w-66 mt-4">Default</Button>
         </Card>
         <Card className="flex w-full flex-col items-center text-center">
           <nav className="flex flex-col items-center gap-10">
@@ -71,41 +69,34 @@ function App() {
           <Button className="w-20 h-20" borderRadius="rounded-full">
             <img src="../public/game_icon.png" className="scale-120" />
           </Button>
-          <Button buttonClassName="mt-4" className="">
+          <Button className="mt-4">
             <img src="../public/game_icon.png" className="w-16 h-16" />
             Default
           </Button>
         </Card>
         <Card className="flex w-full flex-col items-center text-center">
           <div className="flex">
-            <div className="flex-col mr-2">
+            <div className="flex-col">
               <Input
                 placeholder="nickname"
                 className="w-30"
                 size="small"
               ></Input>
-              <Input placeholder="username" className="mt-4 w-30"></Input>
+              <Input placeholder="username" className="mt-2 w-30"></Input>
               <Input
                 type="password"
                 placeholder="password"
-                className="mt-4 w-30"
+                className="mt-2 w-30"
                 size="large"
                 color="red"
               ></Input>
             </div>
-            <div className="flex-col ml-2">
-              <Button buttonClassName="mt-4" className="w-30" size="small">
+            <div className="flex-col">
+              <Button className="w-30 mt-2" size="small">
                 Login
               </Button>
-              <Button buttonClassName="mt-4" className="w-30">
-                Register
-              </Button>
-              <Button
-                buttonClassName="mt-4"
-                className="w-30"
-                color="red"
-                size="large"
-              >
+              <Button className="w-30 mt-2">Register</Button>
+              <Button className="w-30 mt-2" color="red" size="large">
                 Refuse
               </Button>
             </div>
@@ -126,6 +117,16 @@ function App() {
             <Button color="violet">+ Inviter</Button>
             <Button color="grey">Share link</Button>
           </div>
+        </Card>
+        <Card className="flex w-full flex-col items-center text-center">
+          <Button
+            size="large"
+            color="green"
+            disabled={false}
+            className="w-64 mt-4"
+          >
+            Disable button
+          </Button>
         </Card>
       </div>
     </Window>

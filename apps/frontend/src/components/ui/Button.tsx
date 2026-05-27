@@ -32,48 +32,44 @@ export function Button({
   color = 'grey',
   borderRadius = 'rounded-xl',
   children,
-  buttonClassName = '',
   className = '',
   ...props
 }: ButtonProps) {
-  const buttonClasses = [
-    '\
-    group \
-    relative \
-    overflow-visible \
-    font-bold \
-    border-none \
-	select-none \
-    cursor-pointer',
+  const divClasses = [
+    'group relative overflow-visible border-none select-none',
     borderRadius,
-    buttonClassName,
-    className,
   ]
     .filter(Boolean)
     .join(' ');
-  const spanTopClasses = [
-    'relative inline-flex items-center justify-center text-black \
+  const buttonClasses = [
+    'inline-flex items-center justify-center text-black \
 	transition-transform duration-100 ease-in-out select-none \
-	translate-y-[-5px] group-hover:translate-y-[-7px] \
-	group-active:translate-y-0',
+	group-active:translate-y-0 font-bold ',
     borderRadius,
-    colorClasses[color],
+    props.disabled ? 'bg-[color:var(--color-grey)]' : colorClasses[color],
     sizeClasses[size],
     className,
+    props.disabled
+      ? 'translate-y-0 cursor-not-allowed'
+      : 'translate-y-[-5px] group-hover:translate-y-[-7px] cursor-pointer',
   ]
     .filter(Boolean)
     .join(' ');
   const spanBotClasses = [
     'absolute inset-0 pointer-events-none',
     borderRadius,
-    colorClasses[color],
+    props.disabled ? 'bg-[color:var(--color-grey)]' : colorClasses[color],
+    sizeClasses[size],
+    className,
   ]
     .filter(Boolean)
     .join(' ');
   return (
-    <button type="button" className={buttonClasses} {...props}>
+    <div className={divClasses}>
       <span className={spanBotClasses} style={{ filter: 'brightness(0.8)' }} />
-      <span className={spanTopClasses}>{children}</span>
-    </button>
+      <button type="button" className={`${buttonClasses}`} {...props}>
+        {children}
+      </button>
+    </div>
   );
 }
