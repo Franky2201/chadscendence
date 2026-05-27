@@ -77,8 +77,8 @@ function App() {
           </Button>
         </Card>
         <Card className="flex w-full flex-col items-center text-center">
-          <div className="inline-flex items-center justify-center">
-            <div className="flex flex-col mr-2">
+          <div className="flex">
+            <div className="flex-col mr-2">
               <Input
                 placeholder="nickname"
                 className="w-30"
@@ -93,7 +93,7 @@ function App() {
                 color="red"
               ></Input>
             </div>
-            <div className="flex flex-col ml-2">
+            <div className="flex-col ml-2">
               <Button buttonClassName="mt-4" className="w-30" size="small">
                 Login
               </Button>
@@ -119,6 +119,13 @@ function App() {
             <option value="Hello2">Hello2</option>
             <option value="Hello3">Hello3</option>
           </Select>
+        </Card>
+        <Card className="flex w-full flex-col items-center text-center">
+          <div className="flex gap-2 mb-4">
+            <Input type="text" placeholder="Username ..." />
+            <Button color="violet">+ Inviter</Button>
+            <Button color="grey">Share link</Button>
+          </div>
         </Card>
       </div>
     </Window>

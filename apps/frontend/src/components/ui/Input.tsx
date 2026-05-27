@@ -56,7 +56,7 @@ export function Input({
   const inputClasses = [
     commonClasses,
     'relative inline-flex items-center justify-center bg-[color:var(--color-red)\
-	ring-1 focus-visible:ring-offset-3 focus-visible:ring-2 \
+	ring-1 focus-visible:ring-offset-3 focus-visible:ring-2 translate-y-[-3px]\
 	active:scale-95 transition-transform duration-100 ease-in-out select-none',
     colorClasses[color],
     sizeClasses[size],
