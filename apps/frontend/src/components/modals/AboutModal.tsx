@@ -1,7 +1,6 @@
 import { Card } from '../ui';
-
 import { Link } from 'react-router-dom';
-import { developers } from '../../pages/About';
+import { developers } from '../../contexts/AboutContext';
 
 interface AboutModalProps {
   isOpen: boolean;
