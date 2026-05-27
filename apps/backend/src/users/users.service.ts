@@ -1,9 +1,15 @@
-import { OnModuleInit, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  OnModuleInit,
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User, UserRole } from 'src/common/entities/user.entity';
 import { UpdateUserDto } from 'src/common/dto/users.dto';
-import { hash } from 'bcrypt';
+import { hash, compare } from 'bcrypt';
 import { RanksService } from 'src/ranks/ranks.service';
 import { ConfigService } from '@nestjs/config';
 
@@ -51,6 +57,20 @@ export class UsersService implements OnModuleInit {
     console.log('Admin user created successfully!');
   }
 
+  async getMyProfile(id: string) {
+    const user = await this.userRepository
+      .createQueryBuilder('user')
+      .where('user.id = :id', { id })
+      .addSelect('user.password')
+      .leftJoinAndSelect('user.rank', 'rank')
+      .getOne();
+
+    if (!user) throw new NotFoundException('User not found');
+
+    const { password, ...rest } = user;
+    return { ...rest, hasPassword: !!password };
+  }
+
   async getUser(id: string) {
     const user = await this.userRepository.findOne({
       where: { id },
@@ -65,10 +85,32 @@ export class UsersService implements OnModuleInit {
   }
 
   async updateUser(id: string, updateUserDto: UpdateUserDto) {
-    const { password, ...rest } = updateUserDto;
+    const { password, oldPassword, ...rest } = updateUserDto;
     const dataToUpdate: Partial<User> = { ...rest };
 
     if (password) {
+      const userWithPassword = await this.userRepository
+        .createQueryBuilder('user')
+        .where('user.id = :id', { id })
+        .addSelect('user.password')
+        .getOne();
+
+      if (!userWithPassword) throw new NotFoundException('User not found');
+
+      if (!userWithPassword.password)
+        throw new BadRequestException(
+          'Les comptes OAuth ne peuvent pas définir de mot de passe ici.',
+        );
+
+      if (!oldPassword)
+        throw new BadRequestException(
+          "L'ancien mot de passe est requis pour en définir un nouveau.",
+        );
+
+      const isValid = await compare(oldPassword, userWithPassword.password);
+      if (!isValid)
+        throw new UnauthorizedException("L'ancien mot de passe est incorrect.");
+
       dataToUpdate.password = await hash(password, 10);
     }
 

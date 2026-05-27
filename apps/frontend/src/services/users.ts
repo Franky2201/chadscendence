@@ -6,6 +6,7 @@ export interface User {
   email: string;
   avatarUrl: string;
   bio?: string;
+  hasPassword: boolean;
   role: 'user' | 'admin';
   score: number;
   rank: {
@@ -18,6 +19,7 @@ export interface User {
 
 interface UpdateMe {
   username?: string;
+  oldPassword?: string;
   password?: string;
   avatarUrl?: string;
   bio?: string;

@@ -11,7 +11,9 @@ export default function ProfilePage() {
   const [username, setUsername] = useState('');
   const [avatarUrl, setAvatarUrl] = useState('');
   const [bio, setBio] = useState('');
-  const [password, setPassword] = useState('');
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -30,14 +32,21 @@ export default function ProfilePage() {
 
   const handleEdit = () => {
     setUsername(user.username);
-    setAvatarUrl(user.avatarUrl);
+    setAvatarUrl(user.avatarUrl ?? '');
     setBio(user.bio ?? '');
-    setPassword('');
+    setOldPassword('');
+    setNewPassword('');
+    setConfirmPassword('');
     setError(null);
     setEditing(true);
   };
 
   const handleSave = async () => {
+    if (newPassword && newPassword !== confirmPassword) {
+      setError('Les deux mots de passe ne correspondent pas.');
+      return;
+    }
+
     setSaving(true);
     setError(null);
     try {
@@ -45,12 +54,18 @@ export default function ProfilePage() {
         username: username || undefined,
         avatarUrl: avatarUrl || undefined,
         bio: bio || undefined,
-        password: password || undefined,
+        oldPassword: newPassword ? oldPassword : undefined,
+        password: newPassword || undefined,
       });
       login(updated);
       setEditing(false);
-    } catch {
-      setError('Erreur lors de la mise à jour.');
+    } catch (err: unknown) {
+      if (err && typeof err === 'object' && 'response' in err) {
+        const res = (err as { response: { data?: { message?: string } } }).response;
+        setError(res.data?.message ?? 'Erreur lors de la mise à jour.');
+      } else {
+        setError('Erreur lors de la mise à jour.');
+      }
     } finally {
       setSaving(false);
     }
@@ -147,13 +162,37 @@ export default function ProfilePage() {
                   rows={3}
                   className="w-full rounded-2xl px-6 py-3 text-base font-bold bg-slate-950 text-slate-50 border border-slate-500 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 resize-none"
                 />
-                <Input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Nouveau mot de passe (optionnel)"
-                  className="w-full"
-                />
+
+                {user.hasPassword && (
+                  <>
+                    <hr className="border-white/20" />
+                    <p className="text-white/50 text-sm">
+                      Changer le mot de passe (optionnel)
+                    </p>
+                    <Input
+                      type="password"
+                      value={oldPassword}
+                      onChange={(e) => setOldPassword(e.target.value)}
+                      placeholder="Ancien mot de passe"
+                      className="w-full"
+                    />
+                    <Input
+                      type="password"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      placeholder="Nouveau mot de passe"
+                      className="w-full"
+                    />
+                    <Input
+                      type="password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      placeholder="Confirmer le nouveau mot de passe"
+                      className="w-full"
+                    />
+                  </>
+                )}
+
                 {error && <p className="text-red-400 text-sm">{error}</p>}
               </div>
 
