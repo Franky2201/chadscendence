@@ -38,13 +38,14 @@ export function Button({
   const divClasses = [
     'group relative overflow-visible border-none select-none',
     borderRadius,
+    className,
   ]
     .filter(Boolean)
     .join(' ');
   const buttonClasses = [
     'inline-flex items-center justify-center text-black \
 	transition-transform duration-100 ease-in-out select-none \
-	group-active:translate-y-0 font-bold ',
+	group-active:translate-y-0 font-bold',
     borderRadius,
     props.disabled ? 'bg-[color:var(--color-grey)]' : colorClasses[color],
     sizeClasses[size],
