@@ -5,6 +5,7 @@ import {
   Checkbox,
   Input,
   Select,
+  Toggle,
   Window,
 } from '../components/ui';
 
@@ -52,18 +53,18 @@ function App() {
         </Card>
         <Card className="flex w-full flex-col items-center text-center">
           <nav className="flex flex-col items-center gap-10">
-            <Anchor size="small">#bfbfbf</Anchor>
-            <Anchor color="red">#ff9191</Anchor>
+            <Anchor size="small">grey</Anchor>
+            <Anchor color="red">red</Anchor>
             <Anchor color="orange" size="large">
-              #ffc780
+              orange
             </Anchor>
-            <Anchor color="yellow">#fff190</Anchor>
-            <Anchor color="green">#a9ffb3</Anchor>
-            <Anchor color="blue">#6dd8fe</Anchor>
-            <Anchor color="purple">#d791ff</Anchor>
-            <Anchor color="pink">#ffbfff</Anchor>
-            <Anchor color="violet">#a9a3ff</Anchor>
-            <Anchor color="white">#f8f8f8</Anchor>
+            <Anchor color="yellow">yellow</Anchor>
+            <Anchor color="green">green</Anchor>
+            <Anchor color="blue">blue</Anchor>
+            <Anchor color="purple">purple</Anchor>
+            <Anchor color="pink">pink</Anchor>
+            <Anchor color="violet">violet</Anchor>
+            <Anchor color="white">white</Anchor>
           </nav>
         </Card>
         <Card className="flex w-full flex-col items-center text-center">
@@ -96,7 +97,10 @@ function App() {
           >
             Refuse
           </Button>
-          <Checkbox label="CheckBox" className="mt-4 w-64" />
+          <Checkbox label="CheckBox" className="w-64 mt-4" />
+          <Toggle label="Toggle" color="red" className="mt-4" size="small" />
+          <Toggle label="Toggle" color="green" className="mt-4" />
+          <Toggle label="Toggle" color="purple" className="mt-4" size="large" />
           <Select className="mt-4 w-64">
             <option value="Hello1">Hello1</option>
             <option value="Hello2">Hello2</option>
