@@ -57,20 +57,6 @@ export class UsersService implements OnModuleInit {
     console.log('Admin user created successfully!');
   }
 
-  async getMyProfile(id: string) {
-    const user = await this.userRepository
-      .createQueryBuilder('user')
-      .where('user.id = :id', { id })
-      .addSelect('user.password')
-      .leftJoinAndSelect('user.rank', 'rank')
-      .getOne();
-
-    if (!user) throw new NotFoundException('User not found');
-
-    const { password, ...rest } = user;
-    return { ...rest, hasPassword: !!password };
-  }
-
   async getUser(id: string) {
     const user = await this.userRepository.findOne({
       where: { id },

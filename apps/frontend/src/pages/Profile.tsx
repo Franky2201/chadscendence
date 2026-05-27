@@ -163,7 +163,7 @@ export default function ProfilePage() {
                   className="w-full rounded-2xl px-6 py-3 text-base font-bold bg-slate-950 text-slate-50 border border-slate-500 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 resize-none"
                 />
 
-                {user.hasPassword && (
+                {(!user.intraId && !user.githubId) && (
                   <>
                     <hr className="border-white/20" />
                     <p className="text-white/50 text-sm">

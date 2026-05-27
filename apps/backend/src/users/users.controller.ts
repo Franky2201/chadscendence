@@ -20,7 +20,7 @@ export class UsersController {
   @Get('me')
   @UseGuards(JwtAuthGuard)
   getCurrentUser(@GetUser() payload: JwtPayload) {
-    return this.usersService.getMyProfile(payload.sub);
+    return this.usersService.getUser(payload.sub);
   }
 
   @Patch('me')

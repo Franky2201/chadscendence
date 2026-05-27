@@ -6,7 +6,8 @@ export interface User {
   email: string;
   avatarUrl: string;
   bio?: string;
-  hasPassword: boolean;
+  githubId?: string;
+  intraId?: string;
   role: 'user' | 'admin';
   score: number;
   rank: {
@@ -34,6 +35,7 @@ export type LeaderboardType = {
 
 export const getMe = async (): Promise<User> => {
   const res = await api.get<User>('/users/me');
+  console.log(res.data);
   return res.data;
 };
 
