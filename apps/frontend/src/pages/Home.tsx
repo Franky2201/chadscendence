@@ -59,10 +59,10 @@ export default function HomePage() {
                     Mes amis
                   </Link>
                   <Link
-                    to="/history"
+                    to="/profile"
                     className="w-fit text-2xl hover:text-[#E43A70] transition-colors hover:scale-105"
                   >
-                    Historique
+                    Profile
                   </Link>
                 </>
               )}
@@ -74,12 +74,12 @@ export default function HomePage() {
               >
                 Subject
               </a>
-              <Link
-                to="/about"
+              <button
+                onClick={() => openModal('ABOUT')}
                 className="w-fit text-2xl hover:text-[#E43A70] transition-colors hover:scale-105"
               >
                 Credits
-              </Link>
+              </button>
             </nav>
           </div>
         </div>

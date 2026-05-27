@@ -38,6 +38,13 @@ export class UsersController {
     return this.usersService.deleteUser(payload.sub);
   }
 
+  @Get('search')
+  @UseGuards(JwtAuthGuard)
+  searchUsers(@Query('q') query: string) {
+    if (!query) return [];
+    return this.usersService.searchUsers(query);
+  }
+
   @Get('leaderboard')
   getGlobalLeaderboard(@Query('count') count: string = '10') {
     return this.usersService.getGlobalLeaderboard(Number(count));
