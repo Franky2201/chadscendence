@@ -9,24 +9,9 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 const sizeClasses: Record<ItemSize, string> = {
-  small: 'px-2 py-1 text-md',
-  medium: 'px-4 py-2 text-lg',
-  large: 'px-6 py-3 text-xl',
-};
-
-const baseOffsetClasses: Record<ItemSize, string> = {
-  small: 'translate-y-[3px]',
-  medium: 'translate-y-[4px]',
-  large: 'translate-y-[5px]',
-};
-
-const topOffsetClasses: Record<ItemSize, string> = {
-  small:
-    'translate-y-[-1px] group-hover:translate-y-[-3px] group-active:translate-y-[+3px]',
-  medium:
-    'translate-y-[-2px] group-hover:translate-y-[-4px] group-active:translate-y-[+4px]',
-  large:
-    'translate-y-[-3px] group-hover:translate-y-[-5px] group-active:translate-y-[+5px]',
+  small: 'py-2 text-sm',
+  medium: 'py-3 text-md',
+  large: 'py-4 text-lg',
 };
 
 const colorClasses: Record<ItemColor, string> = {
@@ -67,39 +52,28 @@ export function Button({
     .filter(Boolean)
     .join(' ');
   const spanTopClasses = [
-    '\
-	absolute \
-	inset-0 \
-	pointer-events-none',
+    'relative inline-flex items-center justify-center text-black \
+	transition-transform duration-100 ease-in-out select-none \
+	translate-y-[-5px] group-hover:translate-y-[-7px] \
+	group-active:translate-y-0',
     borderRadius,
-    colorClasses[color as ItemColor],
-    baseOffsetClasses[size as ItemSize],
+    colorClasses[color],
+    sizeClasses[size],
+    className,
   ]
     .filter(Boolean)
     .join(' ');
   const spanBotClasses = [
-    '\
-    relative \
-    inline-flex \
-    items-center \
-    justify-center \
-    text-black \
-    transition-transform \
-    duration-100 \
-    ease-in-out \
-  	select-none',
+    'absolute inset-0 pointer-events-none',
     borderRadius,
-    colorClasses[color as ItemColor],
-    sizeClasses[size as ItemSize],
-    topOffsetClasses[size as ItemSize],
-    className,
+    colorClasses[color],
   ]
     .filter(Boolean)
     .join(' ');
   return (
     <button type="button" className={buttonClasses} {...props}>
-      <span className={spanTopClasses} style={{ filter: 'brightness(0.8)' }} />
-      <span className={spanBotClasses}>{children}</span>
+      <span className={spanBotClasses} style={{ filter: 'brightness(0.8)' }} />
+      <span className={spanTopClasses}>{children}</span>
     </button>
   );
 }

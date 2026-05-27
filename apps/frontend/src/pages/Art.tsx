@@ -77,26 +77,39 @@ function App() {
           </Button>
         </Card>
         <Card className="flex w-full flex-col items-center text-center">
-          <Input placeholder="username" className="w-64"></Input>
-          <Input
-            type="password"
-            placeholder="password"
-            className="mt-4 w-64"
-          ></Input>
-          <Button buttonClassName="mt-4" className="w-64" size="small">
-            Login
-          </Button>
-          <Button buttonClassName="mt-4" className="w-64">
-            Register
-          </Button>
-          <Button
-            buttonClassName="mt-4"
-            className="w-64"
-            color="red"
-            size="small"
-          >
-            Refuse
-          </Button>
+          <div className="inline-flex items-center justify-center">
+            <div className="flex flex-col mr-2">
+              <Input
+                placeholder="nickname"
+                className="w-30"
+                size="small"
+              ></Input>
+              <Input placeholder="username" className="mt-4 w-30"></Input>
+              <Input
+                type="password"
+                placeholder="password"
+                className="mt-4 w-30"
+                size="large"
+                color="red"
+              ></Input>
+            </div>
+            <div className="flex flex-col ml-2">
+              <Button buttonClassName="mt-4" className="w-30" size="small">
+                Login
+              </Button>
+              <Button buttonClassName="mt-4" className="w-30">
+                Register
+              </Button>
+              <Button
+                buttonClassName="mt-4"
+                className="w-30"
+                color="red"
+                size="large"
+              >
+                Refuse
+              </Button>
+            </div>
+          </div>
           <Checkbox label="CheckBox" className="w-64 mt-4" />
           <Toggle label="Toggle" color="red" className="mt-4" size="small" />
           <Toggle label="Toggle" color="green" className="mt-4" />
