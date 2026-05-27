@@ -3,10 +3,12 @@ import { useAuth } from '../contexts/AuthContext';
 import { Button } from '../components/ui';
 import { useModal } from '../contexts/ModalContext';
 import Leaderboard from '../components/home/Leaderboard';
+import { useNavigate } from 'react-router-dom';
 
 export default function HomePage() {
   const { user, isLoading, logout } = useAuth();
   const { openModal } = useModal();
+  const navigate = useNavigate();
 
   if (isLoading)
     return (
@@ -89,7 +91,7 @@ export default function HomePage() {
             <div className="flex flex-col items-center gap-4">
               <img
                 src={user.avatarUrl}
-                onClick={logout}
+                onClick={() => navigate('/profile')}
                 alt="avatar"
                 className="w-40 h-40 rounded-full hover:cursor-pointer transition-transform hover:scale-110"
               />
