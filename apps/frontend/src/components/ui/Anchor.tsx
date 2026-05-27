@@ -13,16 +13,16 @@ const sizeClasses: Record<ItemSize, string> = {
 };
 
 const colorClasses: Record<ItemColor, string> = {
-  grey: 'text-[#bfbfbf]',
-  red: 'text-[#ff9191]',
-  orange: 'text-[#ffc780]',
-  yellow: 'text-[#fff190]',
-  green: 'text-[#daffb6]',
-  blue: 'text-[#6dd8fe]',
-  purple: 'text-[#d791ff]',
-  pink: 'text-[#ffbfff]',
-  violet: 'text-[#a9a3ff]',
-  white: 'text-[#f8f8f8]',
+  grey: `text-[color:var(--color-grey)]`,
+  red: `text-[color:var(--color-red)]`,
+  orange: `text-[color:var(--color-orange)]`,
+  yellow: `text-[color:var(--color-yellow)]`,
+  green: `text-[color:var(--color-green)]`,
+  blue: `text-[color:var(--color-blue)]`,
+  purple: `text-[color:var(--color-purple)]`,
+  pink: `text-[color:var(--color-pink)]`,
+  violet: `text-[color:var(--color-violet)]`,
+  white: `text-[color:var(--color-white)]`,
 };
 
 export function Anchor({

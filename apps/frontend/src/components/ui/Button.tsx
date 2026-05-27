@@ -30,16 +30,16 @@ const topOffsetClasses: Record<ItemSize, string> = {
 };
 
 const colorClasses: Record<ItemColor, string> = {
-  grey: 'bg-[#bfbfbf]',
-  red: 'bg-[#ff9191]',
-  orange: 'bg-[#ffc780]',
-  yellow: 'bg-[#fff190]',
-  green: 'bg-[#daffb6]',
-  blue: 'bg-[#6dd8fe]',
-  purple: 'bg-[#d791ff]',
-  pink: 'bg-[#ffbfff]',
-  violet: 'bg-[#a9a3ff]',
-  white: 'bg-[#f8f8f8]',
+  grey: `bg-[color:var(--color-grey)]`,
+  red: `bg-[color:var(--color-red)]`,
+  orange: `bg-[color:var(--color-orange)]`,
+  yellow: `bg-[color:var(--color-yellow)]`,
+  green: `bg-[color:var(--color-green)]`,
+  blue: `bg-[color:var(--color-blue)]`,
+  purple: `bg-[color:var(--color-purple)]`,
+  pink: `bg-[color:var(--color-pink)]`,
+  violet: `bg-[color:var(--color-violet)]`,
+  white: `bg-[color:var(--color-white)]`,
 };
 
 export function Button({

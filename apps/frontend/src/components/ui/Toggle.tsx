@@ -14,16 +14,16 @@ const sizeClasses: Record<ItemSize, string> = {
 };
 
 const activeColorClasses: Record<ItemColor, string> = {
-  grey: 'peer-checked:bg-[#bfbfbf]',
-  red: 'peer-checked:bg-[#ff9191]',
-  orange: 'peer-checked:bg-[#ffc780]',
-  yellow: 'peer-checked:bg-[#fff190]',
-  green: 'peer-checked:bg-[#daffb6]',
-  blue: 'peer-checked:bg-[#6dd8fe]',
-  purple: 'peer-checked:bg-[#d791ff]',
-  pink: 'peer-checked:bg-[#ffbfff]',
-  violet: 'peer-checked:bg-[#a9a3ff]',
-  white: 'peer-checked:bg-[#f8f8f8]',
+  grey: `peer-checked:bg-[color:var(--color-grey)]`,
+  red: `peer-checked:bg-[color:var(--color-red)]`,
+  orange: `peer-checked:bg-[color:var(--color-orange)]`,
+  yellow: `peer-checked:bg-[color:var(--color-yellow)]`,
+  green: `peer-checked:bg-[color:var(--color-green)]`,
+  blue: `peer-checked:bg-[color:var(--color-blue)]`,
+  purple: `peer-checked:bg-[color:var(--color-purple)]`,
+  pink: `peer-checked:bg-[color:var(--color-pink)]`,
+  violet: `peer-checked:bg-[color:var(--color-violet)]`,
+  white: `peer-checked:bg-[color:var(--color-white)]`,
 };
 
 const topOffset: Record<ItemSize, string> = {

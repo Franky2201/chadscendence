@@ -11,3 +11,16 @@
 .font-energy {
 	font-family: "Energy", sans-serif;
 }
+
+:root {
+	--color-grey: #bfbfbf;
+    --color-red: #ff9191;
+    --color-orange: #ffc780;
+    --color-yellow: #fff190;
+    --color-green: #daffb6;
+    --color-blue: #6dd8fe;
+    --color-purple: #d791ff;
+    --color-pink: #ffbfff;
+    --color-violet: #a9a3ff;
+    --color-white: #f8f8f8;
+}
