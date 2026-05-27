@@ -132,6 +132,15 @@ export class UsersService implements OnModuleInit {
     }));
   }
 
+  async searchUsers(query: string) {
+    return this.userRepository
+      .createQueryBuilder('user')
+      .where('user.username ILIKE :query', { query: `%${query}%` })
+      .select(['user.id', 'user.username', 'user.avatarUrl'])
+      .take(10)
+      .getMany();
+  }
+
   async findById(id: string) {
     return this.userRepository.findOne({
       where: { id },

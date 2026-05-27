@@ -33,6 +33,13 @@ export type LeaderboardType = {
   score: number;
 }[];
 
+export interface UserSearchResult {
+  id: string;
+  username: string;
+  avatarUrl: string;
+  status: 'online' | 'offline';
+}
+
 export const getMe = async (): Promise<User> => {
   const res = await api.get<User>('/users/me');
   console.log(res.data);
@@ -55,5 +62,13 @@ export const getLeaderboard = async (
   const res = await api.get<LeaderboardType>(
     `/users/leaderboard?count=${count}`,
   );
+  return res.data;
+};
+
+export const searchUsers = async (
+  query: string,
+): Promise<UserSearchResult[]> => {
+  if (!query) return [];
+  const res = await api.get<UserSearchResult[]>(`/users/search?q=${query}`);
   return res.data;
 };
