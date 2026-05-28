@@ -27,12 +27,26 @@ const colorClasses: Record<ItemColor, string> = {
   white: `bg-[color:var(--color-white)]`,
 };
 
+const textColorStyles: Record<ItemColor, string> = {
+  grey: 'color-mix(in srgb, var(--color-grey) 65%, black)',
+  red: 'color-mix(in srgb, var(--color-red) 65%, black)',
+  orange: 'color-mix(in srgb, var(--color-orange) 65%, black)',
+  yellow: 'color-mix(in srgb, var(--color-yellow) 65%, black)',
+  green: 'color-mix(in srgb, var(--color-green) 65%, black)',
+  blue: 'color-mix(in srgb, var(--color-blue) 65%, black)',
+  purple: 'color-mix(in srgb, var(--color-purple) 65%, black)',
+  pink: 'color-mix(in srgb, var(--color-pink) 65%, black)',
+  violet: 'color-mix(in srgb, var(--color-violet) 65%, black)',
+  white: 'color-mix(in srgb, var(--color-white) 65%, black)',
+};
+
 export function Button({
   size = 'medium',
   color = 'grey',
   borderRadius = 'rounded-xl',
   children,
   className = '',
+  style,
   ...props
 }: ButtonProps) {
   const divClasses = [
@@ -43,7 +57,7 @@ export function Button({
     .filter(Boolean)
     .join(' ');
   const buttonClasses = [
-    'inline-flex items-center justify-center text-black \
+    'inline-flex items-center justify-center \
 	transition-transform duration-100 ease-in-out select-none \
 	group-active:translate-y-0 font-bold',
     borderRadius,
@@ -65,10 +79,19 @@ export function Button({
   ]
     .filter(Boolean)
     .join(' ');
+  const buttonStyle = {
+    ...style,
+    color: textColorStyles[color],
+  };
   return (
     <div className={divClasses}>
       <span className={spanBotClasses} style={{ filter: 'brightness(0.8)' }} />
-      <button type="button" className={`${buttonClasses}`} {...props}>
+      <button
+        type="button"
+        className={`${buttonClasses}`}
+        style={buttonStyle}
+        {...props}
+      >
         {children}
       </button>
     </div>
