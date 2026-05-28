@@ -12,11 +12,12 @@ import { GamesModule } from './games/games.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: '../../.env',
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'db',
-      port: 5432,
+      host: process.env.POSTGRES_HOST ?? 'localhost',
+      port: parseInt(process.env.POSTGRES_PORT ?? '5432', 10),
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,

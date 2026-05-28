@@ -6,14 +6,10 @@ import {
   Matches,
   IsOptional,
 } from 'class-validator';
-import { UserRole } from '../entities/user.entity';
+import { UserRole, JwtPayload, OAuthProfile } from '@chad/types';
 
-export interface JwtPayload {
-  sub: string;
-  email: string;
-  username: string;
-  role: UserRole;
-}
+export { UserRole };
+export type { JwtPayload, OAuthProfile };
 
 export class LoginUserDto {
   @IsEmail()
@@ -56,12 +52,4 @@ export class CreateOAuthUserDto {
   @IsString()
   @IsOptional()
   avatarUrl?: string;
-}
-
-export interface OAuthProfile {
-  provider: '42' | 'github';
-  providerId: string;
-  username: string | null;
-  email: string | null;
-  avatarUrl: string | null;
 }

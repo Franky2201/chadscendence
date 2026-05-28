@@ -8,6 +8,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { GameController } from './game.controller';
 import Redis from 'ioredis';
+import { Game } from '@chad/types';
 
 @Module({
   imports: [],
@@ -28,14 +29,13 @@ export class AppModule
   }
 
   async onApplicationBootstrap() {
-    const gameData = {
+    const gameData: Game = {
       id: 'template',
       name: 'Pong',
       description: 'Le classique indémodable.',
-      port: process.env.PORT ?? 3001,
+      port: Number(process.env.PORT ?? 3001),
       status: 'online',
     };
-
     await this.redis.hset(
       'games:registry',
       'template',

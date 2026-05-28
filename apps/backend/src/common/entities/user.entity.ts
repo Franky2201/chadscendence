@@ -7,17 +7,11 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { Rank } from 'src/common/entities/rank.entity';
+import { UserStatus, UserRole } from '@chad/types';
+import type { Rank as IRank } from '@chad/types';
+import { Rank } from './rank.entity';
 
-export enum UserStatus {
-  ONLINE = 'online',
-  OFFLINE = 'offline',
-}
-
-export enum UserRole {
-  USER = 'user',
-  ADMIN = 'admin',
-}
+export { UserStatus, UserRole };
 
 @Entity('users')
 export class User {
@@ -61,7 +55,7 @@ export class User {
 
   @ManyToOne(() => Rank, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn({ name: 'rank_id' })
-  rank?: Rank;
+  rank?: IRank;
 
   @Column({ name: 'intra_id', nullable: true, unique: true })
   intraId?: string;

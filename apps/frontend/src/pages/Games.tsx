@@ -43,9 +43,6 @@ export default function GamesPage() {
                 <h2 className="text-2xl font-bold mb-4">{game.name}</h2>
                 <p className="text-slate-300 mb-6">{game.description}</p>
                 <div className="flex items-center gap-3">
-                  <span className="bg-green-600 px-4 py-2 rounded-full text-sm font-bold uppercase">
-                    {game.status}
-                  </span>
                   <button className="bg-pink-600 px-6 py-2 rounded-xl font-bold hover:bg-pink-700 transition">
                     Jouer
                   </button>
@@ -60,17 +57,6 @@ export default function GamesPage() {
               Les serveurs de jeu sont actuellement hors ligne. Revenez plus
               tard !
             </p>
-          </div>
-        )}
-
-        {games.length > 0 && (
-          <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-white/10 backdrop-blur-md p-8 rounded-3xl border border-white/20 opacity-50 cursor-not-allowed">
-              <h2 className="text-2xl font-bold mb-4">D'autres jeux...</h2>
-              <p className="text-slate-300 mb-6">
-                De nouveaux défis arrivent bientôt sur Chadscendence.
-              </p>
-            </div>
           </div>
         )}
       </div>

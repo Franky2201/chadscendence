@@ -96,7 +96,7 @@ export default function HomePage() {
               <h2 className="text-3xl">{user.username}</h2>
               <h2 className="text-3xl">
                 {user.role}
-                {user.rank.icon} {user.rank.name} - {user.score}
+                {user.rank?.icon} {user.rank?.name} - {user.score}
               </h2>
             </div>
           )}

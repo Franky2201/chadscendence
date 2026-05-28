@@ -19,9 +19,14 @@ type IntraProfile = Profile & {
 export class IntraStrategy extends PassportStrategy(Strategy as any, '42') {
   constructor(private configService: ConfigService) {
     super({
-      clientID: configService.get<string>('INTRA_CLIENT_ID') || 'MISSING_CLIENT_ID',
-      clientSecret: configService.get<string>('INTRA_CLIENT_SECRET') || 'MISSING_CLIENT_SECRET',
-      callbackURL: configService.get<string>('INTRA_CALLBACK_URL') || 'http://localhost:3000/auth/42/callback',
+      clientID:
+        configService.get<string>('INTRA_CLIENT_ID') || 'MISSING_CLIENT_ID',
+      clientSecret:
+        configService.get<string>('INTRA_CLIENT_SECRET') ||
+        'MISSING_CLIENT_SECRET',
+      callbackURL:
+        configService.get<string>('INTRA_CALLBACK_URL') ||
+        'http://localhost:3000/auth/42/callback',
       scope: ['public'],
     });
   }

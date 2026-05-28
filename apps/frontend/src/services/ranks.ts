@@ -1,11 +1,7 @@
 import api from './api';
+import type { Rank } from '@chad/types';
 
-export interface Rank {
-  id: string;
-  name: string;
-  minScore: number;
-  icon?: string;
-}
+export type { Rank };
 
 interface CreateRank {
   name: string;

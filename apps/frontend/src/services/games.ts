@@ -1,12 +1,7 @@
 import api from './api';
+import type { Game } from '@chad/types';
 
-export interface Game {
-  id: string;
-  name: string;
-  description: string;
-  port: number;
-  status: string;
-}
+export type { Game };
 
 export const getGames = async (): Promise<Game[]> => {
   const response = await api.get<Game[]>('/games');

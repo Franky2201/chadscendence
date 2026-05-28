@@ -1,19 +1,9 @@
 import api from './api';
+import { UserStatus, UserRole } from '@chad/types';
+import type { User } from '@chad/types';
 
-export interface User {
-  id: string;
-  username: string;
-  email: string;
-  avatarUrl: string;
-  role: 'user' | 'admin';
-  score: number;
-  rank: {
-    id: string;
-    name: string;
-    minScore: number;
-    icon?: string;
-  };
-}
+export type { User };
+export { UserStatus, UserRole };
 
 interface UpdateMe {
   username?: string;

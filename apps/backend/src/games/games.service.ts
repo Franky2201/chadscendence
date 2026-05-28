@@ -1,13 +1,6 @@
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import Redis from 'ioredis';
-
-export interface Game {
-  id: string;
-  name: string;
-  description: string;
-  port: number;
-  status: string;
-}
+import { Game } from '@chad/types';
 
 @Injectable()
 export class GamesService implements OnModuleInit, OnModuleDestroy {
@@ -26,8 +19,9 @@ export class GamesService implements OnModuleInit, OnModuleDestroy {
 
   async getActiveGames(): Promise<Game[]> {
     const rawGames = await this.redis.hgetall('games:registry');
-    return Object.values(rawGames).map(
-      (gameStr) => JSON.parse(gameStr) as Game,
-    );
+    return Object.values(rawGames).map((gameStr): Game => {
+      const parsed: unknown = JSON.parse(gameStr);
+      return parsed as Game;
+    });
   }
 }
