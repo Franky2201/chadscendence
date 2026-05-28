@@ -14,7 +14,9 @@
   "private": true,
   "scripts": {
     "build": "tsc",
-    "dev": "tsc -w"
+    "dev": "tsc -w",
+    "lint": "eslint . --fix",
+    "test": "echo 'No tests for types library'"
   },
   "devDependencies": {
     "typescript": "^5.0.0"
