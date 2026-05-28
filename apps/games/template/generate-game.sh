@@ -64,6 +64,7 @@ while IFS= read -r file; do
         -e "s/template-game/$GAME_ID-game/g" \
         -e "s/template-id/$GAME_ID/g" \
         -e "s/GAME_NAME/$SAFE_NAME/g" \
+        -e "s/Template/$SAFE_NAME/g" \
         -e "s|apps/games/template|apps/games/$GAME_ID|g" \
         "$file"
 done < <(find "$TARGET_DIR" -type f)
