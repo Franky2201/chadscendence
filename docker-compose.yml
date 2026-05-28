@@ -1,3 +1,6 @@
+include:
+  - path: apps/games/docker-compose.yml
+
 services:
   db:
     container_name: ft_db

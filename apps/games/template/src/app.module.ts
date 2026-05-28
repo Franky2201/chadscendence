@@ -1,11 +1,52 @@
-import { Module } from '@nestjs/common';
+import {
+  Module,
+  OnApplicationBootstrap,
+  OnApplicationShutdown,
+  Logger,
+} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { GameController } from './game.controller';
+import Redis from 'ioredis';
 
 @Module({
   imports: [],
   controllers: [AppController, GameController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule
+  implements OnApplicationBootstrap, OnApplicationShutdown
+{
+  private readonly logger = new Logger(AppModule.name);
+  private redis: Redis;
+
+  constructor() {
+    this.redis = new Redis({
+      host: process.env.REDIS_HOST ?? 'localhost',
+      port: parseInt(process.env.REDIS_PORT ?? '6379', 10),
+    });
+  }
+
+  async onApplicationBootstrap() {
+    const gameData = {
+      id: 'template',
+      name: 'Pong',
+      description: 'Le classique indémodable.',
+      port: process.env.PORT ?? 3001,
+      status: 'online',
+    };
+
+    await this.redis.hset(
+      'games:registry',
+      'template',
+      JSON.stringify(gameData),
+    );
+    this.logger.log('Game registered in Redis');
+  }
+
+  async onApplicationShutdown() {
+    await this.redis.hdel('games:registry', 'template');
+    this.logger.log('Game deregistered from Redis');
+    await this.redis.quit();
+  }
+}
