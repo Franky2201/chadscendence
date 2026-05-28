@@ -18,4 +18,20 @@ export class GameController {
             timestamp: new Date().toISOString(),
         };
     }
+
+    @MessagePattern({ cmd: "get_problem" })
+    handleGetProblem() {
+        return {
+            question: "CLICK THE BUTTON",
+        };
+    }
+
+    @MessagePattern({ cmd: "submit_answer" })
+    handleSubmitAnswer(@Payload() data: Record<string, unknown>) {
+        return {
+            success: true,
+            message: "Hello from your game microservice!",
+            received: data,
+        };
+    }
 }

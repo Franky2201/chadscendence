@@ -196,6 +196,76 @@ fi
 echo "Running npm install..."
 (cd "$ROOT_DIR" && npm install)
 
+# 9. Register game in Backend (GamesModule & GamesService)
+BACKEND_GAMES_DIR="$ROOT_DIR/apps/backend/src/games"
+GAMES_MODULE="$BACKEND_GAMES_DIR/games.module.ts"
+GAMES_SERVICE="$BACKEND_GAMES_DIR/games.service.ts"
+
+if [ -f "$GAMES_MODULE" ] && [ -f "$GAMES_SERVICE" ]; then
+    echo "Registering game in Backend..."
+
+    # Update GamesModule to add the microservice client
+    GAME_ID="$GAME_ID" COMPONENT_NAME="$COMPONENT_NAME" node -e "
+      const fs = require('fs');
+      let content = fs.readFileSync(process.env.GAMES_MODULE, 'utf8');
+      const serviceName = \`\${process.env.COMPONENT_NAME.toUpperCase()}_SERVICE\`;
+
+      if (!content.includes(serviceName)) {
+          const clientBlock = \`            {
+                name: \"\${serviceName}\",
+                imports: [ConfigModule],
+                inject: [ConfigService],
+                useFactory: (configService: ConfigService) => ({
+                    transport: Transport.REDIS,
+                    options: {
+                        host: configService.get<string>(
+                            \"REDIS_HOST\",
+                            \"localhost\",
+                        ),
+                        port: configService.get<number>(\"REDIS_PORT\", 6379),
+                    },
+                }),
+            },\`;
+
+          // Insert into ClientsModule.registerAsync array
+          const marker = 'ClientsModule.registerAsync([';
+          const index = content.indexOf(marker) + marker.length;
+          content = content.slice(0, index) + '\n' + clientBlock + content.slice(index);
+          fs.writeFileSync(process.env.GAMES_MODULE, content);
+      }
+    " GAMES_MODULE="$GAMES_MODULE"
+
+    # Update GamesService to use the new client
+    GAME_ID="$GAME_ID" COMPONENT_NAME="$COMPONENT_NAME" node -e "
+      const fs = require('fs');
+      let content = fs.readFileSync(process.env.GAMES_SERVICE, 'utf8');
+      const serviceName = \`\${process.env.COMPONENT_NAME.toUpperCase()}_SERVICE\`;
+      const clientVar = \`\${process.env.COMPONENT_NAME.toLowerCase()}Client\`;
+
+      if (!content.includes(serviceName)) {
+          // Add to constructor
+          const constructorMarker = 'constructor(';
+          const injectLine = \`@Inject(\"\${serviceName}\") private readonly \${clientVar}: ClientProxy, \`;
+          const index = content.indexOf(constructorMarker) + constructorMarker.length;
+          content = content.slice(0, index) + '\n        ' + injectLine + content.slice(index);
+
+          // Update sendCommand to handle the new gameId
+          const switchStart = 'if (gameId === \"math\") {';
+          const newCase = \`if (gameId === \"\${process.env.GAME_ID}\") {
+            return firstValueFrom(
+                this.\${clientVar}.send<R, T>({ cmd }, payload ?? ({} as T)),
+            );
+        }\n        \`;
+          const switchIndex = content.indexOf(switchStart);
+          if (switchIndex !== -1) {
+              content = content.slice(0, switchIndex) + newCase + content.slice(switchIndex);
+          }
+
+          fs.writeFileSync(process.env.GAMES_SERVICE, content);
+      }
+    " GAMES_SERVICE="$GAMES_SERVICE"
+fi
+
 echo "Done! New game created and registered."
 echo "Port assigned: $NEW_PORT"
 echo ""

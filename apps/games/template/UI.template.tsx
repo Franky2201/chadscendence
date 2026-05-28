@@ -12,7 +12,7 @@ export default function TemplateUI() {
             renderGame={(
                 problem: Record<string, unknown> & { question?: string },
                 status: "playing" | "correct" | "wrong",
-                _lastResult: unknown,
+                lastResult: any,
                 submitAnswer: (
                     answer: Record<string, unknown>,
                 ) => Promise<void>,
@@ -25,18 +25,18 @@ export default function TemplateUI() {
                     <div className="flex flex-col gap-4">
                         <button
                             onClick={() => {
-                                void submitAnswer({ answer: true });
+                                void submitAnswer({ action: "click" });
                             }}
                             disabled={status !== "playing"}
                             className="w-full bg-pink-600 hover:bg-pink-700 disabled:opacity-50 text-white rounded-2xl py-4 text-xl font-black transition-all shadow-lg shadow-pink-600/20"
                         >
-                            TEST ACTION
+                            {status === "playing" ? "CLICK ME" : "WAITING..."}
                         </button>
                     </div>
 
-                    {status === "correct" && (
-                        <div className="mt-4 text-green-400 font-bold text-lg animate-bounce">
-                            AWESOME!
+                    {lastResult?.message && (
+                        <div className="mt-6 p-4 bg-white/5 rounded-xl border border-white/10 text-pink-300 font-mono text-sm animate-in fade-in slide-in-from-top-2">
+                            {lastResult.message}
                         </div>
                     )}
                 </div>
