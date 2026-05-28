@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import FriendSearch from './FriendSearch';
 import FriendList from './FriendList';
+import BlockedList from './BlockedList';
 import { Card } from '../ui';
 
 export default function Friends() {
@@ -19,6 +20,8 @@ export default function Friends() {
       {!isSearching && <div className="w-full h-px bg-white/10 my-2"></div>}
 
       {!isSearching && <FriendList />}
+
+      {!isSearching && <BlockedList />}
     </Card>
   );
 }
