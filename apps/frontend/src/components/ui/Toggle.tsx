@@ -1,5 +1,6 @@
 import type { InputHTMLAttributes } from 'react';
 import type { ItemColor, ItemSize } from './unified';
+import { getItemColorStyle } from './unified';
 
 type CheckboxProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> & {
   size?: ItemSize;
@@ -13,25 +14,6 @@ const sizeClasses: Record<ItemSize, string> = {
   large: 'h-8 w-16 after:h-6 after:w-6 peer-checked:after:translate-x-8',
 };
 
-const activeColorClasses: Record<ItemColor, string> = {
-  grey: 'peer-checked:bg-[color:var(--color-grey)] ring-[color:var(--color-grey)]',
-  red: 'peer-checked:bg-[color:var(--color-red)] ring-[color:var(--color-red)]',
-  orange:
-    'peer-checked:bg-[color:var(--color-orange)] ring-[color:var(--color-orange)]',
-  yellow:
-    'peer-checked:bg-[color:var(--color-yellow)] ring-[color:var(--color-yellow)]',
-  green:
-    'peer-checked:bg-[color:var(--color-green)] ring-[color:var(--color-green)]',
-  blue: 'peer-checked:bg-[color:var(--color-blue)] ring-[color:var(--color-blue)]',
-  purple:
-    'peer-checked:bg-[color:var(--color-purple)] ring-[color:var(--color-purple)]',
-  pink: 'peer-checked:bg-[color:var(--color-pink)] ring-[color:var(--color-pink)]',
-  violet:
-    'peer-checked:bg-[color:var(--color-violet)] ring-[color:var(--color-violet)]',
-  white:
-    'peer-checked:bg-[color:var(--color-white)] ring-[color:var(--color-white)]',
-};
-
 const spanSizeClasses: Record<ItemSize, string> = {
   small: 'text-sm',
   medium: 'text-md',
@@ -43,6 +25,7 @@ export function Toggle({
   color = 'grey',
   className = '',
   label = '',
+  style,
   ...props
 }: CheckboxProps) {
   const topClass = [
@@ -53,19 +36,22 @@ export function Toggle({
 	bg-[#bfbfbf] rounded-full peer-hover:ring-1 peer-hover:ring-offset-1 \
 	after:translate-y-[2px] after:translate-x-[2px]',
     sizeClasses[size],
-    activeColorClasses[color],
+    'ring-[color:var(--ui-color)]',
+    'peer-checked:bg-[color:var(--ui-color)]',
   ]
     .filter(Boolean)
     .join(' ');
+  const colorStyle = getItemColorStyle(color);
   return (
     <label className="inline-flex items-center cursor-pointer">
       <input
         type="checkbox"
         value=""
         className={`sr-only peer group ${className}`}
+        style={{ ...style, ...colorStyle }}
         {...props}
       />
-      <div className={`${topClass}`}></div>
+      <div className={`${topClass}`} style={{ ...style, ...colorStyle }}></div>
       <span
         className={`${className} ${spanSizeClasses[size]} select-none ms-3 font-bold`}
       >

@@ -13,7 +13,7 @@
 }
 
 :root {
-	--color-grey: #bfbfbf;
+	--color-grey: #cbcbcb;
     --color-red: #ff9191;
     --color-orange: #ffc780;
     --color-yellow: #f7f08c;
@@ -22,5 +22,5 @@
     --color-purple: #d791ff;
     --color-pink: #ffbfff;
     --color-violet: #a9a3ff;
-    --color-white: #f8f8f8;
+    --color-white: #f0f0f0;
 }

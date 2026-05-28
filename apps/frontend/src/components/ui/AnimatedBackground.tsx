@@ -1,24 +1,15 @@
 import { type CSSProperties } from 'react';
-import { type ItemColor } from './unified';
+import {
+  type ItemColor,
+  getItemColorMix,
+  getItemColorVariable,
+} from './unified';
 
 type AnimatedBackground = {
   speed?: number;
   angle?: number;
   size?: number;
   color?: ItemColor;
-};
-
-const colorVariables: Record<ItemColor, string> = {
-  grey: 'var(--color-grey)',
-  red: 'var(--color-red)',
-  orange: 'var(--color-orange)',
-  yellow: 'var(--color-yellow)',
-  green: 'var(--color-green)',
-  blue: 'var(--color-blue)',
-  purple: 'var(--color-purple)',
-  pink: 'var(--color-pink)',
-  violet: 'var(--color-violet)',
-  white: 'var(--color-white)',
 };
 
 export default function AnimatedBackground({
@@ -38,8 +29,8 @@ export default function AnimatedBackground({
     '--ab-angle': `${angle}deg`,
     '--ab-size': `${stripeSize}px`,
     '--ab-speed': `${Math.max(speed, 0.2)}s`,
-    '--ab-base': colorVariables[color],
-    '--ab-stripe': `color-mix(in srgb, ${colorVariables[color]} 80%, black)`,
+    '--ab-base': getItemColorVariable(color),
+    '--ab-stripe': getItemColorMix(color, 80),
   };
 
   return (
