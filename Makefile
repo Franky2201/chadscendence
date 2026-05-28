@@ -58,7 +58,7 @@ status: prerequisites
 logs: prerequisites
 	@$(COMPOSE) logs -f
 
-clean: down
+clean: prerequisites down
 
 fclean: prerequisites
 	@$(COMPOSE) down -v --rmi all --remove-orphans
@@ -83,4 +83,4 @@ ci: prerequisites
 	@$(COMPOSE) down -v > /dev/null 2>&1
 	@printf "$(GREEN)--- Local CI Success ---$(NO_COLOR)\n"
 
-.PHONY: all help build up down start stop restart status logs clean fclean re ci prerequisites
+.PHONY: all help prerequisites build up down start stop restart status logs clean fclean sprune re ci

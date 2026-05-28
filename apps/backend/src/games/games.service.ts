@@ -1,15 +1,28 @@
-import { Injectable, OnModuleInit, OnModuleDestroy } from "@nestjs/common";
+import {
+    Injectable,
+    OnModuleInit,
+    OnModuleDestroy,
+    Inject,
+} from "@nestjs/common";
 import Redis from "ioredis";
 import { Game } from "@chad/types";
+import { ClientProxy } from "@nestjs/microservices";
+import { firstValueFrom } from "rxjs";
+import { ConfigService } from "@nestjs/config";
 
 @Injectable()
 export class GamesService implements OnModuleInit, OnModuleDestroy {
     private redis: Redis;
 
+    constructor(
+        @Inject("MATH_SERVICE") private readonly mathClient: ClientProxy,
+        private readonly configService: ConfigService,
+    ) {}
+
     onModuleInit() {
         this.redis = new Redis({
-            host: process.env.REDIS_HOST ?? "localhost",
-            port: parseInt(process.env.REDIS_PORT ?? "6379", 10),
+            host: this.configService.get<string>("REDIS_HOST", "localhost"),
+            port: this.configService.get<number>("REDIS_PORT", 6379),
         });
     }
 
@@ -23,5 +36,18 @@ export class GamesService implements OnModuleInit, OnModuleDestroy {
             const parsed: unknown = JSON.parse(gameStr);
             return parsed as Game;
         });
+    }
+
+    async sendCommand<T = unknown, R = unknown>(
+        gameId: string,
+        cmd: string,
+        payload?: T,
+    ): Promise<R> {
+        if (gameId === "math") {
+            return firstValueFrom(
+                this.mathClient.send<R, T>({ cmd }, payload ?? ({} as T)),
+            );
+        }
+        throw new Error(`Game ${gameId} not found or not supported`);
     }
 }

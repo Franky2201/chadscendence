@@ -41,7 +41,16 @@ Work on your code. Write tests using Jest and Vitest (**OPTIONAL**). Before comm
 make ci
 ```
 
-### 4. Stage, Commit and Push
+### 4. Stay Synced
+
+Before pushing your changes, merge the latest code from `main` into your branch. This prevents merge conflicts and ensures your tests run against the current state of the project.
+
+```bash
+git fetch origin main
+git merge origin/main
+```
+
+### 5. Stage, Commit and Push
 
 When committing, use the strict commit naming convention: `type: short description (#id)`.
 
@@ -51,7 +60,7 @@ git commit -m "feat: add github button (#12)"
 git push origin feat/12-login-page
 ```
 
-### 5. Open a Pull Request (PR)
+### 6. Open a Pull Request (PR)
 
 1. Go to the repository on **GitHub.com**.
 2. Click the green **"Compare & pull request"** button that appears at the top.
@@ -59,7 +68,7 @@ git push origin feat/12-login-page
     - ⚠️ **Important:** In the description, you must write `Closes #ID` (e.g., `Closes #12`) to automatically close the associated issue when the PR is merged.
 4. This triggers the **CI pipeline**. The system will automatically install your code and run tests to ensure nothing is broken.
 
-### 6. Merge and Cleanup
+### 7. Merge and Cleanup
 
 - **If CI fails (Red X) or changes are requested:** Check the logs, fix the code locally, commit, and `git push` again. The PR updates automatically.
 - **If CI passes (Green Check):** You can click **Merge Pull Request** on GitHub to merge the branch into `main`.

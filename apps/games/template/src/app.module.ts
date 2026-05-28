@@ -20,7 +20,7 @@ export class AppModule
 {
     private readonly logger = new Logger(AppModule.name);
 
-    constructor(private readonly redisService: RedisService) {}
+    constructor(private readonly _redisService: RedisService) {}
 
     async onApplicationBootstrap() {
         const gameData: Game = {
@@ -29,14 +29,14 @@ export class AppModule
             description: "C'est du calcul mental frangin",
             port: Number(process.env.PORT ?? 3001),
         };
-        await this.redisService
+        await this._redisService
             .getClient()
             .hset("games:registry", "math", JSON.stringify(gameData));
         this.logger.log("Game registered in Redis as 'math'");
     }
 
     async onApplicationShutdown() {
-        await this.redisService.getClient().hdel("games:registry", "math");
+        await this._redisService.getClient().hdel("games:registry", "math");
         this.logger.log("Game deregistered from Redis");
     }
 }

@@ -6,7 +6,6 @@ import { RedisService } from "./redis.service";
 describe("GameController", () => {
     let controller: GameController;
     let appService: AppService;
-    let redisService: RedisService;
 
     const mockRedis = {
         set: jest.fn().mockResolvedValue("OK"),
@@ -30,7 +29,6 @@ describe("GameController", () => {
 
         controller = module.get<GameController>(GameController);
         appService = module.get<AppService>(AppService);
-        redisService = module.get<RedisService>(RedisService);
     });
 
     it("should be defined", () => {
