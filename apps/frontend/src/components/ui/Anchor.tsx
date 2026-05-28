@@ -51,35 +51,35 @@ export function Anchor({
     <a className={anchorClasses} style={{ ...style, ...colorStyle }} {...props}>
       <span
         className={`${shadowClasses}`}
-        style={{ ...colorStyle, filter: 'brightness(0.8)' }}
+        style={{ ...colorStyle }}
         aria-hidden="true"
       >
         {children}
       </span>
       <span
         className={`translate-y-[-1px] ${shadowClasses}`}
-        style={{ ...colorStyle, filter: 'brightness(0.8)' }}
+        style={{ ...colorStyle }}
         aria-hidden="true"
       >
         {children}
       </span>
       <span
         className={`translate-y-[-2px] ${shadowClasses}`}
-        style={{ ...colorStyle, filter: 'brightness(0.8)' }}
+        style={{ ...colorStyle }}
         aria-hidden="true"
       >
         {children}
       </span>
       <span
         className={`translate-y-[-3px] ${shadowClasses}`}
-        style={{ ...colorStyle, filter: 'brightness(0.8)' }}
+        style={{ ...colorStyle }}
         aria-hidden="true"
       >
         {children}
       </span>
       <span
         className={`translate-y-[-4px] ${shadowClasses}`}
-        style={{ ...colorStyle, filter: 'brightness(0.8)' }}
+        style={{ ...colorStyle }}
         aria-hidden="true"
       >
         {children}

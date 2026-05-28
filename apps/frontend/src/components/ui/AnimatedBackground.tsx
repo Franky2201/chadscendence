@@ -15,10 +15,9 @@ type AnimatedBackground = {
 export default function AnimatedBackground({
   speed = 3,
   angle = 45,
-  size = 30,
+  size = 20,
   color = 'grey',
 }: AnimatedBackground) {
-  const stripeSize = Math.max(4, size);
   const backgroundVars: CSSProperties & {
     '--ab-angle': string;
     '--ab-size': string;
@@ -27,7 +26,7 @@ export default function AnimatedBackground({
     '--ab-stripe': string;
   } = {
     '--ab-angle': `${angle}deg`,
-    '--ab-size': `${stripeSize}px`,
+    '--ab-size': `${Math.max(size, 10)}px`,
     '--ab-speed': `${Math.max(speed, 0.2)}s`,
     '--ab-base': getItemColorVariable(color),
     '--ab-stripe': getItemColorMix(color, 80),
