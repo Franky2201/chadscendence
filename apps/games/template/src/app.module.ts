@@ -36,7 +36,9 @@ export class AppModule
     }
 
     async onApplicationShutdown() {
-        await this._redisService.getClient().hdel("games:registry", "game-template");
+        await this._redisService
+            .getClient()
+            .hdel("games:registry", "game-template");
         this.logger.log("Game deregistered from Redis");
     }
 }

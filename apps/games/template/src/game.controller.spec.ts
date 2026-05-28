@@ -68,7 +68,9 @@ describe("GameController", () => {
             });
 
             expect(result.success).toBe(true);
-            expect(mockRedis.del).toHaveBeenCalledWith("game-template:answer:test-id");
+            expect(mockRedis.del).toHaveBeenCalledWith(
+                "game-template:answer:test-id",
+            );
         });
 
         it("should return failure for incorrect answer", async () => {

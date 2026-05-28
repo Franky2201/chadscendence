@@ -24,10 +24,10 @@ async function bootstrap() {
     await app.listen(httpPort);
 
     logger.log(
-        `GAME_NAME Game HTTP server running on: http://localhost:${httpPort}`,
+        `Math Game HTTP server running on: http://localhost:${httpPort}`,
     );
     logger.log(
-        `GAME_NAME Game Redis microservice is connected to: ${process.env.REDIS_HOST ?? "localhost"}:${process.env.REDIS_PORT ?? "6379"}`,
+        `Math Game Redis microservice is connected to: ${process.env.REDIS_HOST ?? "localhost"}:${process.env.REDIS_PORT ?? "6379"}`,
     );
 }
 void bootstrap();

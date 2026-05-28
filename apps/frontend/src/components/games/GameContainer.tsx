@@ -1,28 +1,32 @@
-import { useState, useEffect, useCallback, ReactNode } from "react";
+import { useState, useEffect, useCallback, type ReactNode } from "react";
 import { sendGameCommand } from "../../services/games";
 
-interface GameContainerProps<TProblem, TResult> {
+interface GameContainerProps<TProblem, TResult, TSubmission = unknown> {
     gameId: string;
     renderGame: (
         problem: TProblem,
         status: "playing" | "correct" | "wrong",
         lastResult: TResult | null,
-        submitAnswer: (answer: any) => Promise<void>,
+        submitAnswer: (answer: TSubmission) => Promise<void>,
     ) => ReactNode;
     score: number;
     setScore: React.Dispatch<React.SetStateAction<number>>;
     onSuccess?: (result: TResult) => void;
-    onError?: (error: any) => void;
+    onError?: (error: unknown) => void;
 }
 
-export default function GameContainer<TProblem = any, TResult = any>({
+export default function GameContainer<
+    TProblem = unknown,
+    TResult = { success: boolean },
+    TSubmission = unknown,
+>({
     gameId,
     renderGame,
     score,
     setScore,
     onSuccess,
     onError,
-}: GameContainerProps<TProblem, TResult>) {
+}: GameContainerProps<TProblem, TResult, TSubmission>) {
     const [problem, setProblem] = useState<TProblem | null>(null);
     const [status, setStatus] = useState<
         "loading" | "playing" | "correct" | "wrong" | "error"
@@ -42,10 +46,12 @@ export default function GameContainer<TProblem = any, TResult = any>({
                 if (!data) throw new Error("No data received from server");
                 setProblem(data);
                 setStatus("playing");
-            } catch (err: any) {
+            } catch (err: unknown) {
                 console.error(`Failed to fetch ${gameId} problem:`, err);
                 setStatus("error");
-                setErrorMsg(err.message || "Failed to load game");
+                const message =
+                    err instanceof Error ? err.message : "Failed to load game";
+                setErrorMsg(message);
                 if (onError) onError(err);
             }
         },
@@ -57,18 +63,18 @@ export default function GameContainer<TProblem = any, TResult = any>({
         return () => clearTimeout(timer);
     }, [fetchProblem]);
 
-    const submitAnswer = async (answer: any) => {
+    const submitAnswer = async (answer: TSubmission) => {
         if (!problem || status !== "playing") return;
 
         try {
-            const result = await sendGameCommand<any, any>(
+            const result = await sendGameCommand<TSubmission, TResult>(
                 gameId,
                 "submit_answer",
                 answer,
             );
 
             setLastResult(result);
-            if (result.success) {
+            if ((result as { success: boolean }).success) {
                 setStatus("correct");
                 setScore((s) => s + 1);
                 if (onSuccess) onSuccess(result);
@@ -77,10 +83,12 @@ export default function GameContainer<TProblem = any, TResult = any>({
                 setStatus("wrong");
                 setTimeout(() => void fetchProblem(true), 2000);
             }
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error(`Failed to submit ${gameId} answer:`, err);
             setStatus("error");
-            setErrorMsg(err.message || "Submission failed");
+            const message =
+                err instanceof Error ? err.message : "Submission failed";
+            setErrorMsg(message);
             if (onError) onError(err);
         }
     };

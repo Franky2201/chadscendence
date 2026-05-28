@@ -1,6 +1,6 @@
-# GAME_NAME Game Microservice (Redis)
+# Math Game Microservice (Redis)
 
-This is the GAME_NAME Game microservice for the Chadscendence project. It handles random game-template problem generation and validation.
+This is the Math Game microservice for the Chadscendence project. It handles random game-template problem generation and validation.
 
 ## Features
 

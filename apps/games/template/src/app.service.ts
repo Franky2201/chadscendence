@@ -6,26 +6,26 @@ export class AppService {
         return "Hello World!";
     }
 
-    generateProblem() {
+    generateProblem(): { problem: string; answer: number } {
         const operators = ["+", "-", "*"];
         const operator =
-            operators[GAME_NAME.floor(GAME_NAME.random() * operators.length)];
-        let a, b, answer;
+            operators[Math.floor(Math.random() * operators.length)];
+        let a: number, b: number, answer: number;
 
         switch (operator) {
             case "+":
-                a = GAME_NAME.floor(GAME_NAME.random() * 50) + 1;
-                b = GAME_NAME.floor(GAME_NAME.random() * 50) + 1;
+                a = Math.floor(Math.random() * 50) + 1;
+                b = Math.floor(Math.random() * 50) + 1;
                 answer = a + b;
                 break;
             case "-":
-                a = GAME_NAME.floor(GAME_NAME.random() * 50) + 25;
-                b = GAME_NAME.floor(GAME_NAME.random() * 25) + 1;
+                a = Math.floor(Math.random() * 50) + 25;
+                b = Math.floor(Math.random() * 25) + 1;
                 answer = a - b;
                 break;
             case "*":
-                a = GAME_NAME.floor(GAME_NAME.random() * 12) + 1;
-                b = GAME_NAME.floor(GAME_NAME.random() * 12) + 1;
+                a = Math.floor(Math.random() * 12) + 1;
+                b = Math.floor(Math.random() * 12) + 1;
                 answer = a * b;
                 break;
             default:

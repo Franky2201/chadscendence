@@ -43,7 +43,9 @@ export class GameController {
         const isCorrect = parseInt(storedAnswer, 10) === data.answer;
 
         if (isCorrect) {
-            await this.redisService.getClient().del(`game-template:answer:${data.id}`);
+            await this.redisService
+                .getClient()
+                .del(`game-template:answer:${data.id}`);
         }
 
         return {
@@ -55,7 +57,7 @@ export class GameController {
     @MessagePattern({ cmd: "ping" })
     handlePing(@Payload() data: Record<string, unknown>) {
         return {
-            message: "Hello from GAME_NAME Game (Redis)",
+            message: "Hello from Math Game (Redis)",
             received: data,
             timestamp: new Date().toISOString(),
         };

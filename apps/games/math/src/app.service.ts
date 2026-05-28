@@ -6,11 +6,11 @@ export class AppService {
         return "Hello World!";
     }
 
-    generateProblem() {
+    generateProblem(): { problem: string; answer: number } {
         const operators = ["+", "-", "*"];
         const operator =
             operators[Math.floor(Math.random() * operators.length)];
-        let a, b, answer;
+        let a: number, b: number, answer: number;
 
         switch (operator) {
             case "+":
