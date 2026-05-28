@@ -1,14 +1,17 @@
-import type { ReactNode } from 'react';
+import { useMemo, type ReactNode } from 'react';
 import { type ThemeName, useTheme } from '../../contexts/theme-context';
+import { type ItemColor, resolveItemColor } from './unified';
+import FlickeringGrid from '../download/flickering-pattern';
 
 type WindowProps = {
   children: ReactNode;
   className?: string;
+  gridColor?: ItemColor;
 };
 
-const themeClasses: Record<ThemeName, string> = {
-  light: 'text-neutral-900',
-  dark: 'text-neutral-100',
+const themeBackgroundClasses: Record<ThemeName, string> = {
+  light: 'bg-neutral-100',
+  dark: 'bg-neutral-900',
 };
 
 const themeButtonClasses: Record<ThemeName, string> = {
@@ -19,39 +22,25 @@ const themeButtonClasses: Record<ThemeName, string> = {
 		focus-visible:ring-zinc-500 focus-visible:ring-offset-zinc-950',
 };
 
-export function Window({ children, className = '' }: WindowProps) {
+export function Window({
+  children,
+  className = '',
+  gridColor = 'grey',
+}: WindowProps) {
   const { theme, toggleTheme } = useTheme();
+  const resolvedGridColor = useMemo(() => resolveItemColor(gridColor), [gridColor]);
   const classes = [
-    '\
-	min-h-screen \
-	bg-linear-110 \
-	from-neutral-100 \
-	to-neutral-900 \
-	font-sans p-8',
-    themeClasses[theme],
+    'min-h-screen relative overflow-hidden font-sans p-8',
+	themeBackgroundClasses[theme],
     className,
   ]
     .filter(Boolean)
     .join(' ');
   const buttonClasses = [
-    '\
-	fixed \
-	bottom-6 \
-	right-6 \
-	inline-flex \
-	h-12 \
-	w-12 \
-	items-center \
-	justify-center \
-	rounded-full \
-	border \
-	shadow-lg \
-	transition-all \
-	focus-visible:outline-none \
-	focus-visible:ring-2 \
-	focus-visible:ring-offset-2 \
-	active:scale-95 \
-	cursor-pointer \
+    'z-10 fixed bottom-6 right-6 inline-flex h-12 w-12 items-center \
+	justify-center rounded-full border shadow-lg transition-all \
+	focus-visible:outline-none focus-visible:ring-2 \
+	focus-visible:ring-offset-2 active:scale-95 cursor-pointer \
 	select-none',
     themeButtonClasses[theme],
   ]
@@ -65,7 +54,15 @@ export function Window({ children, className = '' }: WindowProps) {
     : `${iconSizeClasses} filter brightness-0 invert`;
   return (
     <div className={classes}>
-      {children}
+	  <FlickeringGrid
+        className="pointer-events-none absolute inset-0 z-0 size-full"
+        squareSize={4}
+        gridGap={6}
+        color={resolvedGridColor}
+        maxOpacity={0.5}
+        flickerChance={1}
+      />
+	  <div className="relative z-10">{children}</div>
       <button
         type="button"
         className={buttonClasses}

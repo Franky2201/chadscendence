@@ -9,16 +9,18 @@ import {
   Window,
 } from '../components/ui';
 import { useState } from 'react';
+import type { ItemColor } from '../components/ui/unified';
 
 function App() {
   const [isDisabled, setIsDisabled] = useState(false);
+  const [gridColor, setGridColor] = useState<ItemColor>('grey');
 
   function toggleBoolean() {
     setIsDisabled((previousValue) => !previousValue);
   }
 
   return (
-    <Window>
+    <Window gridColor={gridColor}>
       <div className="mx-auto flex w-full max-w-5xl flex-col items-center gap-6">
         <img
           src="../public/game_banner.png"
@@ -26,35 +28,73 @@ function App() {
         ></img>
         <Card className="flex w-full flex-col items-center text-center">
           <div className="grid grid-cols-3 gap-3 place-items-center">
-            <Button className="h-20 w-20" color="red">
-              #ff9191
+            <Button
+              className="h-20 w-20"
+              color="red"
+              onClick={() => setGridColor('red')}
+            >
+              Red
             </Button>
-            <Button className="h-20 w-20" color="orange">
-              #ffc780
+            <Button
+              className="h-20 w-20"
+              color="orange"
+              onClick={() => setGridColor('orange')}
+            >
+              Orange
             </Button>
-            <Button className="h-20 w-20" color="yellow">
-              #fff190
+            <Button
+              className="h-20 w-20"
+              color="yellow"
+              onClick={() => setGridColor('yellow')}
+            >
+              Yellow
             </Button>
-            <Button className="h-20 w-20" color="green">
-              #a9ffb3
+            <Button
+              className="h-20 w-20"
+              color="green"
+              onClick={() => setGridColor('green')}
+            >
+              Green
             </Button>
-            <Button className="h-20 w-20" color="blue">
-              #6dd8fe
+            <Button
+              className="h-20 w-20"
+              color="blue"
+              onClick={() => setGridColor('blue')}
+            >
+              Blue
             </Button>
-            <Button className="h-20 w-20" color="purple">
-              #d791ff
+            <Button
+              className="h-20 w-20"
+              color="purple"
+              onClick={() => setGridColor('purple')}
+            >
+              Purple
             </Button>
-            <Button className="h-20 w-20" color="pink">
-              #ffbfff
+            <Button
+              className="h-20 w-20"
+              color="pink"
+              onClick={() => setGridColor('pink')}
+            >
+              Pink
             </Button>
-            <Button className="h-20 w-20" color="violet">
-              #a9a3ff
+            <Button
+              className="h-20 w-20"
+              color="violet"
+              onClick={() => setGridColor('violet')}
+            >
+              Violet
             </Button>
-            <Button className="h-20 w-20" color="white">
-              #f8f8f8
+            <Button
+              className="h-20 w-20"
+              color="white"
+              onClick={() => setGridColor('white')}
+            >
+              White
             </Button>
           </div>
-          <Button className="w-66 mt-4">Default</Button>
+          <Button className="w-66 mt-4" onClick={() => setGridColor('grey')}>
+            Default
+          </Button>
         </Card>
         <Card className="flex w-full flex-col items-center text-center">
           <nav className="flex flex-col items-center gap-4">
