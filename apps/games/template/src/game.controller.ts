@@ -13,7 +13,7 @@ export class GameController {
     @MessagePattern({ cmd: "ping" })
     handlePing(@Payload() data: Record<string, unknown>) {
         return {
-            message: "Hello from Game Template (Redis)",
+            message: "Hello from Template Game (Redis)",
             received: data,
             timestamp: new Date().toISOString(),
         };
