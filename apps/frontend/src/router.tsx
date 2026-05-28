@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import Art from './pages/Art';
 import Friends from './pages/Friends';
 import About from './pages/About';
+import Room from './pages/Room';
 
 export const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ export const router = createBrowserRouter([
       {
         path: 'about',
         element: <About />,
+      },
+      {
+        path: 'room',
+        element: <Room />,
       },
     ],
   },
