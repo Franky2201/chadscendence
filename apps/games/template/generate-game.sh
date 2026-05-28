@@ -253,7 +253,7 @@ if [ -f "$GAMES_MODULE" ] && [ -f "$GAMES_SERVICE" ]; then
           const switchStart = 'if (gameId === \"math\") {';
           const newCase = \`if (gameId === \"\${process.env.GAME_ID}\") {
             return firstValueFrom(
-                this.\${clientVar}.send<R, T>({ cmd }, payload ?? ({} as T)),
+                this.\${clientVar}.send<R, T>({ game: \"\${process.env.GAME_ID}\", cmd }, payload ?? ({} as T)),
             );
         }\n        \`;
           const switchIndex = content.indexOf(switchStart);

@@ -1,4 +1,4 @@
-import { Controller } from "@nestjs/common";
+0import { Controller } from "@nestjs/common";
 import { MessagePattern, Payload } from "@nestjs/microservices";
 import { AppService } from "./app.service";
 import { RedisService } from "./redis.service";
@@ -11,7 +11,7 @@ export class GameController {
         private readonly redisService: RedisService,
     ) {}
 
-    @MessagePattern({ cmd: "get_problem" })
+    @MessagePattern({ game: "math", cmd: "get_problem" })
     async handleGetProblem() {
         const { problem, answer } = this.appService.generateProblem();
         const id = randomUUID();
@@ -27,7 +27,7 @@ export class GameController {
         };
     }
 
-    @MessagePattern({ cmd: "submit_answer" })
+    @MessagePattern({ game: "math", cmd: "submit_answer" })
     async handleSubmitAnswer(@Payload() data: { id: string; answer: number }) {
         const storedAnswer = await this.redisService
             .getClient()
@@ -52,7 +52,7 @@ export class GameController {
         };
     }
 
-    @MessagePattern({ cmd: "ping" })
+    @MessagePattern({ game: "math", cmd: "ping" })
     handlePing(@Payload() data: Record<string, unknown>) {
         return {
             message: "Hello from Math Game (Redis)",

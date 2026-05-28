@@ -10,7 +10,7 @@ export class GameController {
         private readonly redisService: RedisService,
     ) {}
 
-    @MessagePattern({ cmd: "ping" })
+    @MessagePattern({ game: "template-id", cmd: "ping" })
     handlePing(@Payload() data: Record<string, unknown>) {
         return {
             message: "Hello from Template Game (Redis)",
@@ -19,14 +19,14 @@ export class GameController {
         };
     }
 
-    @MessagePattern({ cmd: "get_problem" })
+    @MessagePattern({ game: "template-id", cmd: "get_problem" })
     handleGetProblem() {
         return {
             question: "CLICK THE BUTTON",
         };
     }
 
-    @MessagePattern({ cmd: "submit_answer" })
+    @MessagePattern({ game: "template-id", cmd: "submit_answer" })
     handleSubmitAnswer(@Payload() data: Record<string, unknown>) {
         return {
             success: true,
