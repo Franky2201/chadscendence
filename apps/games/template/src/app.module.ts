@@ -24,21 +24,21 @@ export class AppModule
 
     async onApplicationBootstrap() {
         const gameData: Game = {
-            id: "game-template",
+            id: "template-id",
             name: "GAME_NAME",
-            description: "C'est du calcul mental frangin",
+            description: "description",
             port: Number(process.env.PORT ?? 3001),
         };
         await this._redisService
             .getClient()
-            .hset("games:registry", "game-template", JSON.stringify(gameData));
-        this.logger.log("Game registered in Redis as 'game-template'");
+            .hset("games:registry", "template-id", JSON.stringify(gameData));
+        this.logger.log("Game registered in Redis as 'template-id'");
     }
 
     async onApplicationShutdown() {
         await this._redisService
             .getClient()
-            .hdel("games:registry", "game-template");
+            .hdel("games:registry", "template-id");
         this.logger.log("Game deregistered from Redis");
     }
 }

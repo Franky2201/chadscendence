@@ -8,7 +8,7 @@ GAME_NAME=$2
 
 # 6. Validation on GAME_ID format
 if [[ ! "$GAME_ID" =~ ^[a-z0-9-]+$ ]]; then
-    echo "Error: GAME_ID must be lowercase alphanumeric with hyphens only (e.g., 'math-quiz')."
+    echo "Error: GAME_ID must be lowercase alphanumeric with hyphens only (e.g., 'pong-game')."
     exit 1
 fi
 
@@ -58,8 +58,8 @@ echo "Applying template replacements..."
 find "$TARGET_DIR" -type f | while IFS= read -r file; do
     # Skip binary files or other exclusions if necessary, but for a template it's usually safe
     "${SED_CMD[@]}" \
-        -e "s/game-template-game/$GAME_ID-game/g" \
-        -e "s/game-template/$GAME_ID/g" \
+        -e "s/template-game/$GAME_ID-game/g" \
+        -e "s/template-id/$GAME_ID/g" \
         -e "s/GAME_NAME/$SAFE_NAME/g" \
         -e "s|apps/games/template|apps/games/$GAME_ID|g" \
         "$file"
@@ -124,5 +124,6 @@ echo ""
 echo "Next steps:"
 echo "1. Run 'npm install' from the project root to link the new workspace."
 echo "2. Implement your game logic in apps/games/$GAME_ID/src/."
-echo "3. Create a UI component in apps/frontend/src/components/games/ using <GameContainer />."
-echo "4. Register your component in apps/frontend/src/pages/Games.tsx."
+echo "3. Add your unit tests in apps/games/$GAME_ID/test/."
+echo "4. Create a UI component in apps/frontend/src/components/games/ using <GameContainer />."
+echo "5. Register your component in apps/frontend/src/pages/Games.tsx."

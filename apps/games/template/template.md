@@ -71,12 +71,12 @@ export class AppModule implements OnApplicationBootstrap, OnApplicationShutdown 
     constructor(private readonly redisService: RedisService) {}
 
     async onApplicationBootstrap() {
-        const gameData = { id: "my-game", name: "My Game", ... };
-        await this.redisService.getClient().hset("games:registry", "my-game", JSON.stringify(gameData));
+        const gameData = { id: "template-id", name: "GAME_NAME", ... };
+        await this.redisService.getClient().hset("games:registry", "template-id", JSON.stringify(gameData));
     }
 
     async onApplicationShutdown() {
-        await this.redisService.getClient().hdel("games:registry", "my-game");
+        await this.redisService.getClient().hdel("games:registry", "template-id");
     }
 }
 ```
@@ -97,7 +97,27 @@ export class GameController {
 }
 ```
 
-## 5. Backend Integration (API Gateway)
+## 5. Testing
+
+Unit tests are located in the `test/` directory.
+
+**File:** `apps/games/<service-name>/test/game.controller.spec.ts`
+
+```typescript
+describe("GameController", () => {
+    it("should handle start_game command", () => {
+        // ... test logic
+    });
+});
+```
+
+Run tests using:
+
+```bash
+npm test -w <service-name>
+```
+
+## 6. Backend Integration (API Gateway)
 
 ### A. Register Client
 
@@ -130,14 +150,14 @@ Update the `sendCommand` method to handle the new game ID.
 
 ```typescript
 async sendCommand(gameId: string, cmd: string, payload: any) {
-    if (gameId === "my-game") {
+    if (gameId === "template-id") {
         return firstValueFrom(this.myGameClient.send({ cmd }, payload));
     }
     ...
 }
 ```
 
-## 6. Frontend Integration
+## 7. Frontend Integration
 
 ### A. Create UI Component
 
@@ -147,7 +167,7 @@ Create a dedicated component for your game.
 
 ```typescript
 import { sendGameCommand } from "../../services/games";
-// Implement game UI and call sendGameCommand("my-game", "cmd", payload)
+// Implement game UI and call sendGameCommand("template-id", "cmd", payload)
 ```
 
 ### B. Register in Games Page
@@ -159,13 +179,13 @@ Add the game to the renderer switcher.
 ```typescript
 const renderActiveGame = () => {
     switch (activeGameId) {
-        case "my-game": return <MyGameUI />;
+        case "template-id": return <MyGameUI />;
         ...
     }
 };
 ```
 
-## 7. Dockerization
+## 8. Dockerization
 
 ### A. Dockerfile
 
@@ -178,22 +198,22 @@ Add your service to the games orchestration.
 **File:** `apps/games/docker-compose.yml`
 
 ```yaml
-my-game:
+template-id:
   build:
     context: ../../
-    dockerfile: apps/games/my-game/Dockerfile
+    dockerfile: apps/games/template-id/Dockerfile
   environment:
     - PORT=3002
     - REDIS_HOST=redis
   ...
 ```
 
-## 8. Workspace Scripts
+## 9. Workspace Scripts
 
 Add a shortcut to the root `package.json`.
 
 ```json
 "scripts": {
-  "my-game:dev": "npm run start:dev -w my-game"
+  "template-id:dev": "npm run start:dev -w template-id"
 }
 ```

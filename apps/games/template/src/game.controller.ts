@@ -2,7 +2,6 @@ import { Controller } from "@nestjs/common";
 import { MessagePattern, Payload } from "@nestjs/microservices";
 import { AppService } from "./app.service";
 import { RedisService } from "./redis.service";
-import { randomUUID } from "node:crypto";
 
 @Controller()
 export class GameController {
@@ -11,53 +10,10 @@ export class GameController {
         private readonly redisService: RedisService,
     ) {}
 
-    @MessagePattern({ cmd: "get_problem" })
-    async handleGetProblem() {
-        const { problem, answer } = this.appService.generateProblem();
-        const id = randomUUID();
-
-        // Store answer in Redis for 60 seconds
-        await this.redisService
-            .getClient()
-            .set(`game-template:answer:${id}`, answer, "EX", 60);
-
-        return {
-            id,
-            problem,
-        };
-    }
-
-    @MessagePattern({ cmd: "submit_answer" })
-    async handleSubmitAnswer(@Payload() data: { id: string; answer: number }) {
-        const storedAnswer = await this.redisService
-            .getClient()
-            .get(`game-template:answer:${data.id}`);
-
-        if (storedAnswer === null) {
-            return {
-                success: false,
-                message: "Problem expired or not found",
-            };
-        }
-
-        const isCorrect = parseInt(storedAnswer, 10) === data.answer;
-
-        if (isCorrect) {
-            await this.redisService
-                .getClient()
-                .del(`game-template:answer:${data.id}`);
-        }
-
-        return {
-            success: isCorrect,
-            correctAnswer: isCorrect ? undefined : parseInt(storedAnswer, 10),
-        };
-    }
-
     @MessagePattern({ cmd: "ping" })
     handlePing(@Payload() data: Record<string, unknown>) {
         return {
-            message: "Hello from Math Game (Redis)",
+            message: "Hello from Game Template (Redis)",
             received: data,
             timestamp: new Date().toISOString(),
         };

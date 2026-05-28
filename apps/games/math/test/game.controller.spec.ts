@@ -1,7 +1,7 @@
 import { Test, TestingModule } from "@nestjs/testing";
-import { GameController } from "./game.controller";
-import { AppService } from "./app.service";
-import { RedisService } from "./redis.service";
+import { GameController } from "../src/game.controller";
+import { AppService } from "../src/app.service";
+import { RedisService } from "../src/redis.service";
 
 describe("GameController", () => {
     let controller: GameController;
@@ -49,7 +49,7 @@ describe("GameController", () => {
             expect(result).toHaveProperty("id");
             expect(result.problem).toBe("2 + 2");
             expect(mockRedis.set).toHaveBeenCalledWith(
-                expect.stringContaining("game-template:answer:"),
+                expect.stringContaining("math:answer:"),
                 4,
                 "EX",
                 60,
@@ -68,9 +68,7 @@ describe("GameController", () => {
             });
 
             expect(result.success).toBe(true);
-            expect(mockRedis.del).toHaveBeenCalledWith(
-                "game-template:answer:test-id",
-            );
+            expect(mockRedis.del).toHaveBeenCalledWith("math:answer:test-id");
         });
 
         it("should return failure for incorrect answer", async () => {

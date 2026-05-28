@@ -13,7 +13,7 @@ export class AppController {
     @Get("info")
     getInfo() {
         return {
-            name: "Math Game",
+            name: "GAME_NAME",
             type: "microservice",
             version: "0.0.1",
             status: "active",

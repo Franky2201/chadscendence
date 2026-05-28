@@ -1,5 +1,5 @@
 import { Test, TestingModule } from "@nestjs/testing";
-import { AppService } from "./app.service";
+import { AppService } from "../src/app.service";
 
 describe("AppService", () => {
     let service: AppService;
@@ -25,7 +25,7 @@ describe("AppService", () => {
             expect(typeof result.answer).toBe("number");
         });
 
-        it("should generate a valid game-template problem", () => {
+        it("should generate a valid math problem", () => {
             for (let i = 0; i < 100; i++) {
                 const { problem, answer } = service.generateProblem();
                 const [a, op, b] = problem.split(" ");
@@ -38,6 +38,9 @@ describe("AppService", () => {
                     expect(numA - numB).toBe(answer);
                 } else if (op === "*") {
                     expect(numA * numB).toBe(answer);
+                } else if (op === "/") {
+                    expect(numB).not.toBe(0);
+                    expect(numA / numB).toBe(answer);
                 }
             }
         });
