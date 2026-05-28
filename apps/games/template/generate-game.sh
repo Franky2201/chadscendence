@@ -6,62 +6,123 @@
 GAME_ID=$1
 GAME_NAME=$2
 
-if [ -z "$GAME_ID" ] || [ -z "$GAME_NAME" ]; then
+# 6. Validation on GAME_ID format
+if [[ ! "$GAME_ID" =~ ^[a-z0-9-]+$ ]]; then
+    echo "Error: GAME_ID must be lowercase alphanumeric with hyphens only (e.g., 'math-quiz')."
+    exit 1
+fi
+
+if [ -z "$GAME_NAME" ]; then
     echo "Usage: ./generate-game.sh <game-id> <game-name>"
     echo "Example: ./generate-game.sh pong \"Retro Pong\""
     exit 1
 fi
 
-# Determine the directory where the script is located
+# 8. Robust ROOT_DIR resolution
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ROOT_DIR="$(cd "$SCRIPT_DIR/../../.." && pwd)"
+ROOT_DIR=$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel 2>/dev/null) \
+    || { echo "Error: script must be inside the git repository."; exit 1; }
 TARGET_DIR="$ROOT_DIR/apps/games/$GAME_ID"
+DOCKER_COMPOSE="$ROOT_DIR/apps/games/docker-compose.yml"
+ROOT_PACKAGE="$ROOT_DIR/package.json"
 
 if [ -d "$TARGET_DIR" ]; then
     echo "Error: Directory $TARGET_DIR already exists."
     exit 1
 fi
 
+# 7. Cleanup on error
+trap 'echo "Error occurred. Cleaning up..."; rm -rf "$TARGET_DIR"' ERR
+
 echo "Creating game '$GAME_NAME' ($GAME_ID)..."
 
 # Copy template content to target directory
 mkdir -p "$TARGET_DIR"
 cp -r "$SCRIPT_DIR/"* "$TARGET_DIR/"
-# Remove the script itself from the new game directory
-rm "$TARGET_DIR/generate-game.sh"
 
-# Cross-platform sed compatibility (macOS vs Linux)
+# 5. rm -f for silent success
+rm -f "$TARGET_DIR/generate-game.sh"
+
+# Cross-platform sed compatibility
 if [[ "$OSTYPE" == "darwin"* ]]; then
   SED_CMD=(sed -i '')
 else
   SED_CMD=(sed -i)
 fi
 
-# 1. Update package.json name
-"${SED_CMD[@]}" "s/game-template/$GAME_ID-game/g" "$TARGET_DIR/package.json"
+# 4. Escape GAME_NAME for sed
+SAFE_NAME=$(printf '%s' "$GAME_NAME" | sed 's/[\/&]/\\&/g')
 
-# 2. Update Dockerfile (workspace name and paths)
-"${SED_CMD[@]}" "s/game-template/$GAME_ID-game/g" "$TARGET_DIR/Dockerfile"
-"${SED_CMD[@]}" "s|apps/games/template|apps/games/$GAME_ID|g" "$TARGET_DIR/Dockerfile"
+# 9. Merge replacements into a single pass
+echo "Applying template replacements..."
+find "$TARGET_DIR" -type f | while IFS= read -r file; do
+    # Skip binary files or other exclusions if necessary, but for a template it's usually safe
+    "${SED_CMD[@]}" \
+        -e "s/game-template-game/$GAME_ID-game/g" \
+        -e "s/game-template/$GAME_ID/g" \
+        -e "s/GAME_NAME/$SAFE_NAME/g" \
+        -e "s|apps/games/template|apps/games/$GAME_ID|g" \
+        "$file"
+done
 
-# 3. Update application code and metadata
-# We replace the placeholders 'game-template' and 'GAME_NAME'
-find "$TARGET_DIR" -type f -exec "${SED_CMD[@]}" "s/game-template/$GAME_ID/g" {} +
-find "$TARGET_DIR" -type f -exec "${SED_CMD[@]}" "s/GAME_NAME/$GAME_NAME/g" {} +
+# 10. Automate docker-compose.yml update
+if [ -f "$DOCKER_COMPOSE" ]; then
+    echo "Updating apps/games/docker-compose.yml..."
+
+    # Find the last used port and increment it
+    LAST_PORT=$(grep "PORT=" "$DOCKER_COMPOSE" | awk -F'=' '{print $2}' | sort -n | tail -1)
+    NEW_PORT=$((LAST_PORT + 1))
+
+    # Create the service block
+    SERVICE_BLOCK="    $GAME_ID-game:
+        container_name: ft_$GAME_ID-game
+        build:
+            context: ../../
+            dockerfile: apps/games/$GAME_ID/Dockerfile
+            target: development
+        env_file: ../../.env
+        environment:
+            - PORT=$NEW_PORT
+            - REDIS_HOST=redis
+            - REDIS_PORT=6379
+        depends_on:
+            redis:
+                condition: service_healthy
+        volumes:
+            - ../../:/app
+            - /app/node_modules
+        networks:
+            - ft_network
+        restart: unless-stopped
+"
+    # Insert before 'networks:' line
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        sed -i '' "/networks:/i\\
+$SERVICE_BLOCK
+" "$DOCKER_COMPOSE"
+    else
+        sed -i "/networks:/i $SERVICE_BLOCK" "$DOCKER_COMPOSE"
+    fi
+fi
+
+# Automate root package.json update
+if [ -f "$ROOT_PACKAGE" ]; then
+    echo "Updating root package.json scripts..."
+    # Insert the new dev script after 'frontend:dev'
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        sed -i '' "/\"frontend:dev\":/a\\
+        \"$GAME_ID:dev\": \"npm run start:dev -w $GAME_ID-game\",
+" "$ROOT_PACKAGE"
+    else
+        sed -i "/\"frontend:dev\":/a \        \"$GAME_ID:dev\": \"npm run start:dev -w $GAME_ID-game\"," "$ROOT_PACKAGE"
+    fi
+fi
 
 echo "Done! New game created at apps/games/$GAME_ID"
+echo "Port assigned: $NEW_PORT"
 echo ""
 echo "Next steps:"
-echo "1. Add your service to apps/games/docker-compose.yml:"
-echo "   $GAME_ID-game:"
-echo "     container_name: ft_$GAME_ID-game"
-echo "     build:"
-echo "       context: ../../"
-echo "       dockerfile: apps/games/$GAME_ID/Dockerfile"
-echo "     environment:"
-echo "       - PORT=300X # Choose a unique port"
-echo "       - REDIS_HOST=redis"
-echo "2. Add a dev script to root package.json:"
-echo "   \"$GAME_ID:dev\": \"npm run start:dev -w $GAME_ID-game\""
-echo "3. Run 'npm install' from the project root to link the new workspace."
-echo "4. Integrate in apps/backend/src/games/ and apps/frontend/src/pages/Games.tsx."
+echo "1. Run 'npm install' from the project root to link the new workspace."
+echo "2. Implement your game logic in apps/games/$GAME_ID/src/."
+echo "3. Create a UI component in apps/frontend/src/components/games/ using <GameContainer />."
+echo "4. Register your component in apps/frontend/src/pages/Games.tsx."

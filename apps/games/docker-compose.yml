@@ -3,7 +3,7 @@ services:
         container_name: ft_math_game
         build:
             context: ../../
-            dockerfile: apps/games/template/Dockerfile
+            dockerfile: apps/games/math/Dockerfile
             #change target from development to final for production build
             target: development
             #target: final
