@@ -15,7 +15,7 @@ import type { JwtPayload } from 'src/common/dto/auth.dto';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
   @Get('me')
   @UseGuards(JwtAuthGuard)
@@ -40,9 +40,9 @@ export class UsersController {
 
   @Get('search')
   @UseGuards(JwtAuthGuard)
-  searchUsers(@Query('q') query: string) {
+  searchUsers(@Query('q') query: string, @GetUser() body: JwtPayload) {
     if (!query) return [];
-    return this.usersService.searchUsers(query);
+    return this.usersService.searchUsers(query, body.sub);
   }
 
   @Get('leaderboard')
