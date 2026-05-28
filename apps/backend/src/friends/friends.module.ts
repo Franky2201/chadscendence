@@ -12,4 +12,4 @@ import { Block } from 'src/common/entities/block.entity';
   providers: [FriendsService],
   exports: [FriendsService],
 })
-export class FriendsModule { }
+export class FriendsModule {}

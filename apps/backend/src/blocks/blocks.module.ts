@@ -6,9 +6,9 @@ import { Friendship } from 'src/common/entities/friendship.entity';
 import { Block } from 'src/common/entities/block.entity';
 
 @Module({
-	imports: [TypeOrmModule.forFeature([Friendship, Block])],
-	controllers: [BlocksController],
-	providers: [BlocksService],
-	exports: [BlocksService],
+  imports: [TypeOrmModule.forFeature([Friendship, Block])],
+  controllers: [BlocksController],
+  providers: [BlocksService],
+  exports: [BlocksService],
 })
-export class BlocksModule { }
+export class BlocksModule {}

@@ -14,10 +14,11 @@ export class UsersService implements OnModuleInit {
   constructor(
     private readonly configService: ConfigService,
     @InjectRepository(User) private readonly userRepository: Repository<User>,
-    @InjectRepository(Block) private readonly blockRepository: Repository<Block>,
+    @InjectRepository(Block)
+    private readonly blockRepository: Repository<Block>,
     private readonly presenceService: PresenceService,
     private readonly ranksService: RanksService,
-  ) { }
+  ) {}
 
   async onModuleInit() {
     await this.seedAdmin();
@@ -112,21 +113,24 @@ export class UsersService implements OnModuleInit {
     const blockedRelations = await this.blockRepository.find({
       where: [
         { blocker: { id: currentUserId } },
-        { blocked: { id: currentUserId } }
+        { blocked: { id: currentUserId } },
       ],
-      relations: { blocker: true, blocked: true }
+      relations: { blocker: true, blocked: true },
     });
 
-    const excludedIds = blockedRelations.map(b =>
-      b.blocker.id === currentUserId ? b.blocked.id : b.blocker.id
+    const excludedIds = blockedRelations.map((b) =>
+      b.blocker.id === currentUserId ? b.blocked.id : b.blocker.id,
     );
     excludedIds.push(currentUserId);
 
-    let queryBuilder = this.userRepository.createQueryBuilder('user')
+    let queryBuilder = this.userRepository
+      .createQueryBuilder('user')
       .where('user.username ILIKE :query', { query: `%${query}%` });
 
     if (excludedIds.length > 0) {
-      queryBuilder = queryBuilder.andWhere('user.id NOT IN (:...excludedIds)', { excludedIds });
+      queryBuilder = queryBuilder.andWhere('user.id NOT IN (:...excludedIds)', {
+        excludedIds,
+      });
     }
 
     const users = await queryBuilder
@@ -134,7 +138,7 @@ export class UsersService implements OnModuleInit {
       .take(10)
       .getMany();
 
-    return users.map(u => ({
+    return users.map((u) => ({
       id: u.id,
       username: u.username,
       avatarUrl: u.avatarUrl,

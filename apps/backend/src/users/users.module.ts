@@ -13,4 +13,4 @@ import { Block } from 'src/common/entities/block.entity';
   providers: [UsersService],
   exports: [UsersService],
 })
-export class UsersModule { }
+export class UsersModule {}

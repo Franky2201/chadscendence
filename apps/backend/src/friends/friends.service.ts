@@ -25,7 +25,7 @@ export class FriendsService {
     private readonly presenceService: PresenceService,
     @InjectRepository(Block)
     private readonly blockRepository: Repository<Block>,
-  ) { }
+  ) {}
 
   async getFriends(userId: string) {
     const friendships = await this.friendshipRepository.find({
@@ -111,7 +111,9 @@ export class FriendsService {
     });
 
     if (existingBlock) {
-      throw new BadRequestException('Vous ne pouvez pas interagir avec cet utilisateur.');
+      throw new BadRequestException(
+        'Vous ne pouvez pas interagir avec cet utilisateur.',
+      );
     }
 
     const friendship = this.friendshipRepository.create({
@@ -126,7 +128,11 @@ export class FriendsService {
 
   async acceptFriendRequest(userId: string, friendshipId: string) {
     const friendship = await this.friendshipRepository.findOne({
-      where: { id: friendshipId, addressee: { id: userId }, status: FriendshipStatus.PENDING },
+      where: {
+        id: friendshipId,
+        addressee: { id: userId },
+        status: FriendshipStatus.PENDING,
+      },
       relations: {
         requester: true,
       },
