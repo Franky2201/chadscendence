@@ -1,6 +1,6 @@
-# Math Game Microservice (Redis)
+# GAME_NAME Game Microservice (Redis)
 
-This is the Math Game microservice for the Chadscendence project. It handles random math problem generation and validation.
+This is the GAME_NAME Game microservice for the Chadscendence project. It handles random game-template problem generation and validation.
 
 ## Features
 
@@ -21,7 +21,7 @@ The service listens for Redis messages.
 #### `{ cmd: 'get_problem' }`
 
 - **Response**: `{ id: string, problem: string }`
-- **Logic**: Generates a random math problem and stores the answer in Redis for 60 seconds.
+- **Logic**: Generates a random game-template problem and stores the answer in Redis for 60 seconds.
 
 #### `{ cmd: 'submit_answer' }`
 

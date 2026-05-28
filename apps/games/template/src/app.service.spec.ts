@@ -25,7 +25,7 @@ describe("AppService", () => {
             expect(typeof result.answer).toBe("number");
         });
 
-        it("should generate a valid math problem", () => {
+        it("should generate a valid game-template problem", () => {
             for (let i = 0; i < 100; i++) {
                 const { problem, answer } = service.generateProblem();
                 const [a, op, b] = problem.split(" ");

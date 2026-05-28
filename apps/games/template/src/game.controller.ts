@@ -19,7 +19,7 @@ export class GameController {
         // Store answer in Redis for 60 seconds
         await this.redisService
             .getClient()
-            .set(`math:answer:${id}`, answer, "EX", 60);
+            .set(`game-template:answer:${id}`, answer, "EX", 60);
 
         return {
             id,
@@ -31,7 +31,7 @@ export class GameController {
     async handleSubmitAnswer(@Payload() data: { id: string; answer: number }) {
         const storedAnswer = await this.redisService
             .getClient()
-            .get(`math:answer:${data.id}`);
+            .get(`game-template:answer:${data.id}`);
 
         if (storedAnswer === null) {
             return {
@@ -43,7 +43,7 @@ export class GameController {
         const isCorrect = parseInt(storedAnswer, 10) === data.answer;
 
         if (isCorrect) {
-            await this.redisService.getClient().del(`math:answer:${data.id}`);
+            await this.redisService.getClient().del(`game-template:answer:${data.id}`);
         }
 
         return {
@@ -55,7 +55,7 @@ export class GameController {
     @MessagePattern({ cmd: "ping" })
     handlePing(@Payload() data: Record<string, unknown>) {
         return {
-            message: "Hello from Math Game (Redis)",
+            message: "Hello from GAME_NAME Game (Redis)",
             received: data,
             timestamp: new Date().toISOString(),
         };

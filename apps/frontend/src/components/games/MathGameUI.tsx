@@ -1,20 +1,22 @@
 import { useState } from "react";
 import GameContainer from "./GameContainer";
-import type {
-    MathProblem,
-    MathValidationResult,
-} from "@chad/types";
+import type { MathProblem, MathValidationResult } from "@chad/types";
 
 export default function MathGameUI() {
     const [score, setScore] = useState(0);
     const [answer, setAnswer] = useState("");
 
     return (
-        <GameContainer<MathProblem, MathValidationResult>
+        <GameContainer
             gameId="math"
             score={score}
             setScore={setScore}
-            renderGame={(problem, status, lastResult, submitAnswer) => (
+            renderGame={(
+                problem: MathProblem,
+                status,
+                lastResult: MathValidationResult | null,
+                submitAnswer,
+            ) => (
                 <div className="w-full max-w-xs text-center">
                     <div className="text-6xl font-black mb-8 tracking-tighter">
                         {problem.problem}
@@ -66,6 +68,6 @@ export default function MathGameUI() {
                     )}
                 </div>
             )}
-        </GameContainer>
+        />
     );
 }

@@ -24,19 +24,19 @@ export class AppModule
 
     async onApplicationBootstrap() {
         const gameData: Game = {
-            id: "math",
-            name: "Math",
+            id: "game-template",
+            name: "GAME_NAME",
             description: "C'est du calcul mental frangin",
             port: Number(process.env.PORT ?? 3001),
         };
         await this._redisService
             .getClient()
-            .hset("games:registry", "math", JSON.stringify(gameData));
-        this.logger.log("Game registered in Redis as 'math'");
+            .hset("games:registry", "game-template", JSON.stringify(gameData));
+        this.logger.log("Game registered in Redis as 'game-template'");
     }
 
     async onApplicationShutdown() {
-        await this._redisService.getClient().hdel("games:registry", "math");
+        await this._redisService.getClient().hdel("games:registry", "game-template");
         this.logger.log("Game deregistered from Redis");
     }
 }

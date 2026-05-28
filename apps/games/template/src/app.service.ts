@@ -9,23 +9,23 @@ export class AppService {
     generateProblem() {
         const operators = ["+", "-", "*"];
         const operator =
-            operators[Math.floor(Math.random() * operators.length)];
+            operators[GAME_NAME.floor(GAME_NAME.random() * operators.length)];
         let a, b, answer;
 
         switch (operator) {
             case "+":
-                a = Math.floor(Math.random() * 50) + 1;
-                b = Math.floor(Math.random() * 50) + 1;
+                a = GAME_NAME.floor(GAME_NAME.random() * 50) + 1;
+                b = GAME_NAME.floor(GAME_NAME.random() * 50) + 1;
                 answer = a + b;
                 break;
             case "-":
-                a = Math.floor(Math.random() * 50) + 25;
-                b = Math.floor(Math.random() * 25) + 1;
+                a = GAME_NAME.floor(GAME_NAME.random() * 50) + 25;
+                b = GAME_NAME.floor(GAME_NAME.random() * 25) + 1;
                 answer = a - b;
                 break;
             case "*":
-                a = Math.floor(Math.random() * 12) + 1;
-                b = Math.floor(Math.random() * 12) + 1;
+                a = GAME_NAME.floor(GAME_NAME.random() * 12) + 1;
+                b = GAME_NAME.floor(GAME_NAME.random() * 12) + 1;
                 answer = a * b;
                 break;
             default:

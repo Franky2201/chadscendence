@@ -37,17 +37,17 @@ else
   SED_CMD=(sed -i)
 fi
 
-# Update package.json
+# 1. Update package.json name
 "${SED_CMD[@]}" "s/game-template/$GAME_ID-game/g" "$TARGET_DIR/package.json"
 
-# Update Dockerfile
+# 2. Update Dockerfile (workspace name and paths)
 "${SED_CMD[@]}" "s/game-template/$GAME_ID-game/g" "$TARGET_DIR/Dockerfile"
 "${SED_CMD[@]}" "s|apps/games/template|apps/games/$GAME_ID|g" "$TARGET_DIR/Dockerfile"
 
-# Update registration in app.module.ts
-"${SED_CMD[@]}" "s/math/$GAME_ID/g" "$TARGET_DIR/src/app.module.ts"
-"${SED_CMD[@]}" "s/Math/$GAME_NAME/g" "$TARGET_DIR/src/app.module.ts"
-"${SED_CMD[@]}" "s/C'est du calcul mental frangin/Un nouveau défi t'attend !/g" "$TARGET_DIR/src/app.module.ts"
+# 3. Update application code and metadata
+# We replace the placeholders 'game-template' and 'GAME_NAME'
+find "$TARGET_DIR" -type f -exec "${SED_CMD[@]}" "s/game-template/$GAME_ID/g" {} +
+find "$TARGET_DIR" -type f -exec "${SED_CMD[@]}" "s/GAME_NAME/$GAME_NAME/g" {} +
 
 echo "Done! New game created at apps/games/$GAME_ID"
 echo ""

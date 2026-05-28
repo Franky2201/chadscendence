@@ -49,7 +49,7 @@ describe("GameController", () => {
             expect(result).toHaveProperty("id");
             expect(result.problem).toBe("2 + 2");
             expect(mockRedis.set).toHaveBeenCalledWith(
-                expect.stringContaining("math:answer:"),
+                expect.stringContaining("game-template:answer:"),
                 4,
                 "EX",
                 60,
@@ -68,7 +68,7 @@ describe("GameController", () => {
             });
 
             expect(result.success).toBe(true);
-            expect(mockRedis.del).toHaveBeenCalledWith("math:answer:test-id");
+            expect(mockRedis.del).toHaveBeenCalledWith("game-template:answer:test-id");
         });
 
         it("should return failure for incorrect answer", async () => {
