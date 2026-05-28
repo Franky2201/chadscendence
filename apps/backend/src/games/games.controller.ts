@@ -1,12 +1,12 @@
-import { Controller, Get } from '@nestjs/common';
-import { GamesService } from './games.service';
+import { Controller, Get } from "@nestjs/common";
+import { GamesService } from "./games.service";
 
-@Controller('games')
+@Controller("games")
 export class GamesController {
-  constructor(private readonly gamesService: GamesService) {}
+    constructor(private readonly gamesService: GamesService) {}
 
-  @Get()
-  async getGames() {
-    return this.gamesService.getActiveGames();
-  }
+    @Get()
+    async getGames() {
+        return this.gamesService.getActiveGames();
+    }
 }

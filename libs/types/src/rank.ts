@@ -1,6 +1,6 @@
 export interface Rank {
-  id: string;
-  name: string;
-  minScore: number;
-  icon?: string;
+    id: string;
+    name: string;
+    minScore: number;
+    icon?: string;
 }

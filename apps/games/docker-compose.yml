@@ -1,27 +1,27 @@
 services:
-  game-template:
-    container_name: ft_game_template
-    build:
-      context: ../../
-      dockerfile: apps/games/template/Dockerfile
-      #change target from development to final for production build
-      target: development
-      #target: final
-    env_file: ../../.env
-    environment:
-      - PORT=3001
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-    depends_on:
-      redis:
-        condition: service_healthy
-    volumes:
-      - ../../:/app
-      - /app/node_modules
-    networks:
-      - ft_network
-    restart: unless-stopped
+    game-template:
+        container_name: ft_game_template
+        build:
+            context: ../../
+            dockerfile: apps/games/template/Dockerfile
+            #change target from development to final for production build
+            target: development
+            #target: final
+        env_file: ../../.env
+        environment:
+            - PORT=3001
+            - REDIS_HOST=redis
+            - REDIS_PORT=6379
+        depends_on:
+            redis:
+                condition: service_healthy
+        volumes:
+            - ../../:/app
+            - /app/node_modules
+        networks:
+            - ft_network
+        restart: unless-stopped
 
 networks:
-  ft_network:
-    name: ft_network
+    ft_network:
+        name: ft_network

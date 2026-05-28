@@ -1,7 +1,6 @@
 export interface Game {
-  id: string;
-  name: string;
-  description: string;
-  port: number;
-  status: string;
+    id: string;
+    name: string;
+    description: string;
+    port: number;
 }

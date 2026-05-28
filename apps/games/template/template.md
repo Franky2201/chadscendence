@@ -13,13 +13,13 @@ npx nest new apps/games/<service-name> --package-manager npm --strict --skip-git
 **File:** `apps/games/<service-name>/package.json`
 
 - **Add Dependencies:**
-  ```json
-  "dependencies": {
-    ...
-    "@nestjs/microservices": "^11.0.1",
-    "ioredis": "^5.5.0"
-  }
-  ```
+    ```json
+    "dependencies": {
+      ...
+      "@nestjs/microservices": "^11.0.1",
+      "ioredis": "^5.5.0"
+    }
+    ```
 
 ## 3. Configure the Microservice (Main Entry)
 
@@ -28,23 +28,23 @@ Set up the app as a hybrid application that listens for Redis messages and HTTP 
 **File:** `apps/games/<service-name>/src/main.ts`
 
 ```typescript
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { NestFactory } from "@nestjs/core";
+import { AppModule } from "./app.module";
+import { MicroserviceOptions, Transport } from "@nestjs/microservices";
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+    const app = await NestFactory.create(AppModule);
 
-  app.connectMicroservice<MicroserviceOptions>({
-    transport: Transport.REDIS,
-    options: {
-      host: process.env.REDIS_HOST ?? 'localhost',
-      port: parseInt(process.env.REDIS_PORT ?? '6379', 10),
-    },
-  });
+    app.connectMicroservice<MicroserviceOptions>({
+        transport: Transport.REDIS,
+        options: {
+            host: process.env.REDIS_HOST ?? "localhost",
+            port: parseInt(process.env.REDIS_PORT ?? "6379", 10),
+        },
+    });
 
-  await app.startAllMicroservices();
-  await app.listen(process.env.PORT ?? 3001);
+    await app.startAllMicroservices();
+    await app.listen(process.env.PORT ?? 3001);
 }
 void bootstrap();
 ```
@@ -56,20 +56,20 @@ Use `@MessagePattern` for request-response and `@EventPattern` for fire-and-forg
 **File:** `apps/games/<service-name>/src/game.controller.ts`
 
 ```typescript
-import { Controller } from '@nestjs/common';
-import { MessagePattern, Payload, EventPattern } from '@nestjs/microservices';
+import { Controller } from "@nestjs/common";
+import { MessagePattern, Payload, EventPattern } from "@nestjs/microservices";
 
 @Controller()
 export class GameController {
-  @MessagePattern({ cmd: 'ping' })
-  handlePing(@Payload() data: any) {
-    return { message: 'pong', data };
-  }
+    @MessagePattern({ cmd: "ping" })
+    handlePing(@Payload() data: any) {
+        return { message: "pong", data };
+    }
 
-  @EventPattern('game_event')
-  handleEvent(@Payload() data: any) {
-    console.log('Received event:', data);
-  }
+    @EventPattern("game_event")
+    handleEvent(@Payload() data: any) {
+        console.log("Received event:", data);
+    }
 }
 ```
 

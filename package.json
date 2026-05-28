@@ -1,21 +1,21 @@
 {
-  "name": "chadscendence",
-  "private": true,
-  "workspaces": [
-    "apps/*",
-    "apps/games/*",
-    "libs/*"
-  ],
-  "scripts": {
-    "backend:dev": "npm run start:dev -w backend",
-    "frontend:dev": "npm run dev -w frontend",
-    "game-template:dev": "npm run start:dev -w game-template",
-    "build": "npm run build -ws",
-    "lint": "npm run lint -ws",
-    "test": "npm run test -ws"
-  },
-  "dependencies": {
-    "react": "^19.2.6",
-    "react-dom": "^19.2.6"
-  }
+    "name": "chadscendence",
+    "private": true,
+    "workspaces": [
+        "apps/*",
+        "apps/games/*",
+        "libs/*"
+    ],
+    "scripts": {
+        "backend:dev": "npm run start:dev -w backend",
+        "frontend:dev": "npm run dev -w frontend",
+        "game-template:dev": "npm run start:dev -w game-template",
+        "build": "npm run build -ws",
+        "lint": "npm run lint -ws",
+        "test": "npm run test -ws"
+    },
+    "dependencies": {
+        "react": "^19.2.6",
+        "react-dom": "^19.2.6"
+    }
 }

@@ -1,98 +1,102 @@
 include:
-  - path: apps/games/docker-compose.yml
+    - path: apps/games/docker-compose.yml
 
 services:
-  db:
-    container_name: ft_db
-    image: postgres:17-alpine
-    restart: unless-stopped
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
-    volumes:
-      - postgresdata:/var/lib/postgresql/data
-    networks:
-      - ft_network
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+    db:
+        container_name: ft_db
+        image: postgres:17-alpine
+        restart: unless-stopped
+        ports:
+            - "5432:5432"
+        environment:
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            POSTGRES_DB: ${POSTGRES_DB}
+        volumes:
+            - postgresdata:/var/lib/postgresql/data
+        networks:
+            - ft_network
+        healthcheck:
+            test:
+                [
+                    "CMD-SHELL",
+                    "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}",
+                ]
+            interval: 10s
+            timeout: 5s
+            retries: 5
 
-  redis:
-    container_name: ft_redis
-    image: redis:7-alpine
-    restart: unless-stopped
-    ports:
-      - "6379:6379"
-    volumes:
-      - redisdata:/data
-    networks:
-      - ft_network
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+    redis:
+        container_name: ft_redis
+        image: redis:7-alpine
+        restart: unless-stopped
+        ports:
+            - "6379:6379"
+        volumes:
+            - redisdata:/data
+        networks:
+            - ft_network
+        healthcheck:
+            test: ["CMD", "redis-cli", "ping"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
 
-  backend:
-    container_name: ft_backend
-    build:
-      context: .
-      dockerfile: apps/backend/Dockerfile
-      #change target from development to final for production build
-      target: development
-      #target: final
-    env_file: .env
-    depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    ports:
-      - "3000:3000"
-    volumes:
-      #Bind mounts used for development to allow live code changes without rebuilding the image. In production, consider using named volumes or copying files into the image.
-      - .:/app # [DEV MODE ONLY]
-      - /app/node_modules # [DEV MODE ONLY]
-      - ./apps/backend/uploads:/app/apps/backend/uploads
-    networks:
-      - ft_network
-    restart: unless-stopped
+    backend:
+        container_name: ft_backend
+        build:
+            context: .
+            dockerfile: apps/backend/Dockerfile
+            #change target from development to final for production build
+            target: development
+            #target: final
+        env_file: .env
+        depends_on:
+            db:
+                condition: service_healthy
+            redis:
+                condition: service_healthy
+        ports:
+            - "3000:3000"
+        volumes:
+            #Bind mounts used for development to allow live code changes without rebuilding the image. In production, consider using named volumes or copying files into the image.
+            - .:/app # [DEV MODE ONLY]
+            - /app/node_modules # [DEV MODE ONLY]
+            - ./apps/backend/uploads:/app/apps/backend/uploads
+        networks:
+            - ft_network
+        restart: unless-stopped
 
-  frontend:
-    container_name: ft_frontend
-    build:
-      context: .
-      dockerfile: apps/frontend/Dockerfile
-      #change target from development to final for production build
-      target: development
-      #target: final
-      args:
-        DOMAIN_NAME: ${DOMAIN_NAME}
-    env_file: .env
-    depends_on:
-      - backend
-    ports:
-      #sudo is necessary to bind to those ports on linux
-      #      - "80:80"
-      #     - "443:443"
-      - "5173:5173"
-    volumes:
-      #Bind mounts used for development to allow live code changes without rebuilding the image. In production, consider using named volumes or copying files into the image.
-      - .:/app # [DEV MODE ONLY]
-      - /app/node_modules # [DEV MODE ONLY]
-    networks:
-      - ft_network
-    restart: unless-stopped
+    frontend:
+        container_name: ft_frontend
+        build:
+            context: .
+            dockerfile: apps/frontend/Dockerfile
+            #change target from development to final for production build
+            target: development
+            #target: final
+            args:
+                DOMAIN_NAME: ${DOMAIN_NAME}
+        env_file: .env
+        depends_on:
+            - backend
+        ports:
+            #sudo is necessary to bind to those ports on linux
+            #      - "80:80"
+            #     - "443:443"
+            - "5173:5173"
+        volumes:
+            #Bind mounts used for development to allow live code changes without rebuilding the image. In production, consider using named volumes or copying files into the image.
+            - .:/app # [DEV MODE ONLY]
+            - /app/node_modules # [DEV MODE ONLY]
+        networks:
+            - ft_network
+        restart: unless-stopped
 
 volumes:
-  postgresdata:
-  redisdata:
+    postgresdata:
+    redisdata:
 
 networks:
-  ft_network:
-    driver: bridge
+    ft_network:
+        driver: bridge
