@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Card, Button, Input} from '../components/ui';
 import type { ItemColor } from '../components/ui/unified';
 import { useAuth } from '../contexts/AuthContext';
+import { removeFriend } from '../services/friends';
 
 
 const GAMES = [
@@ -23,6 +24,12 @@ const GAMES = [
   { id: '14', name: 'Game', type:'reflex' },
 ];
 
+interface Player {
+  name: string;
+  host: boolean;
+  status: 'online' | 'pending'
+}
+
 // const typeStyles: Record<string, string> = {
 //   memory: 'border-red-400 text-red-400 hover:border-red-700 hover:bg-red-50',
 //   reflex: 'border-blue-400 text-blue-400 hover:border-blue-700 hover:bg-blue-50',
@@ -41,6 +48,7 @@ const testStyles: Record<string, string> = {
 
 
 const maxRounds = 10;
+const maxPlayers = 10;
 
 function generateLobbyCode() {
   return Math.random().toString(36).substring(2, 8).toUpperCase();
@@ -49,7 +57,11 @@ function generateLobbyCode() {
 export default function LobbyCreator() {
   const [lobbyCode] = useState(generateLobbyCode);
   const [selected, setSelected] = useState<string[]>([]);
+  const [players, setPlayer] = useState<Player[]>([
+    { name: 'You', host:true, status:'online'}
+  ]);
   const { user, isLoading } = useAuth();
+  const [ inviteInput, setInviteInput ] = useState('');
 
   if (isLoading)
     return (
@@ -57,7 +69,6 @@ export default function LobbyCreator() {
         Chargement...
       </div>
     );
-
   if (!user) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-slate-900 text-white gap-4">
@@ -81,14 +92,17 @@ export default function LobbyCreator() {
   };
  
   const inviteFriend = () => {
-    // TODO
-    console.log('Invite player');
+    const name = inviteInput.trim();
+    if (!name) return;
+    if (players.length >= maxPlayers) return;
+    setPlayer((prev) => [...prev, { name:name, host:false, status:'pending'}]);
+    setInviteInput('')
   };
   
-  const getLink = () => {
-    // TODO
-    console.log('Get room link');
-  };
+  const removeFriend = (i: number) => {
+    if (i == 0) return;
+    setPlayer((prev) => prev.filter((_,a) => a !== i))
+  }
   
   const launch = () => {
     // TODO
@@ -121,7 +135,7 @@ export default function LobbyCreator() {
           </div>
         </div>
 
-        <Card className="relative max-w-4xl min-w-1/2 -mt-10 mx-auto">
+        <Card className="mb-20 relative max-w-4xl min-w-1/2 -mt-10 mx-auto">
     
           <div className="flex items-center justify-between mb-8">
             <h1 className="text-2xl font-bold text-gray-900">Create your game</h1>
@@ -183,14 +197,14 @@ export default function LobbyCreator() {
                 );
               })}
             </div>
-            <div className="flex justify-end">
+            <div className="mt-5 flex justify-end">
               <Button 
                   // className="mt-5 bg-pink-600 text-white rounded-xl px-4 py-2 text-sm font-semibold hover:bg-pink-700 transition whitespace-nowrap"
                   size="small"
                   color="red"
                   onClick={() => setSelected([])}
               >
-                Clear all
+                Clear games
               </Button>
             </div>
           </div>}
@@ -206,6 +220,8 @@ export default function LobbyCreator() {
               <Input
                 type="text"
                 placeholder="Username…"
+                value={inviteInput}
+                onChange={(e) => setInviteInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && inviteFriend()}
                 className="flex-1 bg-white border border-gray-200 rounded-xl px-4 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-pink-500"
               />
@@ -217,7 +233,9 @@ export default function LobbyCreator() {
                 + Inviter
               </Button>
               <Button
-                onClick={getLink}
+                onClick={() => {
+                  void navigator.clipboard?.writeText('invitation link');
+                }}
                 color="grey"
                 // className="bg-gray-600 text-white rounded-xl px-4 py-2 text-sm font-semibold hover:bg-pink-700 transition whitespace-nowrap"
               >
@@ -225,7 +243,46 @@ export default function LobbyCreator() {
               </Button>
             </div>
           </div>
-  
+
+          { players.length > 0 &&
+          <div className="my-5">
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">
+              Players{' '}
+            </p>
+            <span className="normal-case font-normal text-gray-400">
+              {players.length} / {maxPlayers}
+            </span>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {players.map((player, i) => (
+                <button 
+                  key={i}
+                  onClick={ () => removeFriend(i) }
+                  className="flex items-center gap-2 bg-pink-50 border border-pink-200 rounded-full px-3 py-1 text-sm text-pink-500 hover:bg-pink-100 transition">
+                  <span>
+                    {player.name}
+                  </span>
+                  {player.host && (
+                  <span className="text-xs">
+                    Host
+                    </span>
+                  )}
+                  <div className={`w-2 h-2 rounded-full ${player.status == 'online' ? 'bg-green-500' : 'bg-orange-500' }`}></div>
+                </button>
+              ))}
+            </div>
+            { players.length > 1 &&
+            <div className="mt-5 flex justify-end">
+              <Button 
+                  // className="mt-5 bg-pink-600 text-white rounded-xl px-4 py-2 text-sm font-semibold hover:bg-pink-700 transition whitespace-nowrap"
+                  size="small"
+                  color="red"
+                  onClick={() => setPlayer([{ name: 'You', host:true, status:'online'}])}
+              >
+                Clear players
+              </Button>
+            </div>}
+          </div>}
+
           <div className="flex items-center justify-end">
             <Button
               onClick={launch}
