@@ -9,7 +9,7 @@
     "scripts": {
         "backend:dev": "npm run start:dev -w backend",
         "frontend:dev": "npm run dev -w frontend",
-        "game-template:dev": "npm run start:dev -w game-template",
+        "math-game:dev": "npm run start:dev -w math-game",
         "build": "npm run build -ws",
         "lint": "npm run lint -ws",
         "test": "npm run test -ws"

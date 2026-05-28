@@ -7,45 +7,36 @@ import {
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { GameController } from "./game.controller";
-import Redis from "ioredis";
+import { RedisService } from "./redis.service";
 import { Game } from "@chad/types";
 
 @Module({
     imports: [],
     controllers: [AppController, GameController],
-    providers: [AppService],
+    providers: [AppService, RedisService],
 })
 export class AppModule
     implements OnApplicationBootstrap, OnApplicationShutdown
 {
     private readonly logger = new Logger(AppModule.name);
-    private redis: Redis;
 
-    constructor() {
-        this.redis = new Redis({
-            host: process.env.REDIS_HOST ?? "localhost",
-            port: parseInt(process.env.REDIS_PORT ?? "6379", 10),
-        });
-    }
+    constructor(private readonly redisService: RedisService) {}
 
     async onApplicationBootstrap() {
         const gameData: Game = {
-            id: "template",
+            id: "math",
             name: "Math",
             description: "C'est du calcul mental frangin",
             port: Number(process.env.PORT ?? 3001),
         };
-        await this.redis.hset(
-            "games:registry",
-            "template",
-            JSON.stringify(gameData),
-        );
-        this.logger.log("Game registered in Redis");
+        await this.redisService
+            .getClient()
+            .hset("games:registry", "math", JSON.stringify(gameData));
+        this.logger.log("Game registered in Redis as 'math'");
     }
 
     async onApplicationShutdown() {
-        await this.redis.hdel("games:registry", "template");
+        await this.redisService.getClient().hdel("games:registry", "math");
         this.logger.log("Game deregistered from Redis");
-        await this.redis.quit();
     }
 }

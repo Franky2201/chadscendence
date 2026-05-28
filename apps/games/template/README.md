@@ -1,19 +1,12 @@
-# Game Microservice Template (Redis)
+# Math Game Microservice (Redis)
 
-This is a template for creating new game microservices for the Chadscendence project using Redis transport.
+This is the Math Game microservice for the Chadscendence project. It handles random math problem generation and validation.
 
 ## Features
 
 - **NestJS Microservice**: Configured to use `Transport.REDIS` for inter-service communication.
+- **Stateless Validation**: Uses Redis to store answers temporarily for secure validation.
 - **Hybrid App**: Supports both Redis messaging and HTTP (for health checks).
-- **Event-Driven**: Includes examples for Request-Response (`@MessagePattern`) and Event-based (`@EventPattern`) communication.
-
-## Getting Started
-
-1.  Copy this directory to a new folder in `apps/games/`.
-2.  Update the `name` in `package.json`.
-3.  Ensure `REDIS_HOST` and `REDIS_PORT` are set in your environment (defaults to `localhost:6379`).
-4.  Run `npm install` at the root.
 
 ## Communication API
 
@@ -21,14 +14,20 @@ The service listens for Redis messages.
 
 ### Request-Response
 
-- **Pattern**: `{ cmd: 'ping' }`
-- **Response**: Returns a pong message with a timestamp.
+#### `{ cmd: 'ping' }`
 
-### Events
+- **Response**: Returns a greeting message with a timestamp.
 
-- **Pattern**: `game_started`
-- **Payload**: Any game data.
-- **Action**: Logs the event to the console.
+#### `{ cmd: 'get_problem' }`
+
+- **Response**: `{ id: string, problem: string }`
+- **Logic**: Generates a random math problem and stores the answer in Redis for 60 seconds.
+
+#### `{ cmd: 'submit_answer' }`
+
+- **Payload**: `{ id: string, answer: number }`
+- **Response**: `{ success: boolean, correctAnswer?: number }`
+- **Logic**: Validates the provided answer against the stored Redis value.
 
 ## REST API (Health Check)
 
