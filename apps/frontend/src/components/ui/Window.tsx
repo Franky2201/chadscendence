@@ -1,17 +1,15 @@
-import { useMemo, type ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import { type ThemeName, useTheme } from '../../contexts/theme-context';
-import { type ItemColor, resolveItemColor } from './unified';
-import FlickeringGrid from '../download/flickering-pattern';
+import { type ItemColor } from './unified';
+import AnimatedBackground from './AnimatedBackground';
 
 type WindowProps = {
   children: ReactNode;
   className?: string;
-  gridColor?: ItemColor;
-};
-
-const themeBackgroundClasses: Record<ThemeName, string> = {
-  light: 'bg-neutral-100',
-  dark: 'bg-neutral-900',
+  speed?: number;
+  angle?: number;
+  size?: number;
+  color?: ItemColor;
 };
 
 const themeButtonClasses: Record<ThemeName, string> = {
@@ -25,13 +23,14 @@ const themeButtonClasses: Record<ThemeName, string> = {
 export function Window({
   children,
   className = '',
-  gridColor = 'grey',
+  speed = 3,
+  angle = 45,
+  size = 30,
+  color = 'grey',
 }: WindowProps) {
   const { theme, toggleTheme } = useTheme();
-  const resolvedGridColor = useMemo(() => resolveItemColor(gridColor), [gridColor]);
   const classes = [
     'min-h-screen relative overflow-hidden font-sans p-8',
-	themeBackgroundClasses[theme],
     className,
   ]
     .filter(Boolean)
@@ -54,15 +53,13 @@ export function Window({
     : `${iconSizeClasses} filter brightness-0 invert`;
   return (
     <div className={classes}>
-	  <FlickeringGrid
-        className="pointer-events-none absolute inset-0 z-0 size-full"
-        squareSize={4}
-        gridGap={6}
-        color={resolvedGridColor}
-        maxOpacity={0.5}
-        flickerChance={1}
+      <AnimatedBackground
+        color={color}
+        speed={speed}
+        angle={angle}
+        size={size}
       />
-	  <div className="relative z-10">{children}</div>
+      <div className="relative z-10">{children}</div>
       <button
         type="button"
         className={buttonClasses}

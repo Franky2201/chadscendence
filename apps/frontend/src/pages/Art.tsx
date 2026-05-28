@@ -14,13 +14,21 @@ import type { ItemColor } from '../components/ui/unified';
 function App() {
   const [isDisabled, setIsDisabled] = useState(false);
   const [gridColor, setGridColor] = useState<ItemColor>('grey');
+  const [gridAngle, setGridAngle] = useState(45);
+  const [gridSize, setGridSize] = useState(20);
+  const [gridSpeed, setGridSpeed] = useState(4);
 
   function toggleBoolean() {
     setIsDisabled((previousValue) => !previousValue);
   }
 
   return (
-    <Window gridColor={gridColor}>
+    <Window
+      color={gridColor}
+      angle={gridAngle}
+      size={gridSize}
+      speed={gridSpeed}
+    >
       <div className="mx-auto flex w-full max-w-5xl flex-col items-center gap-6">
         <img
           src="../public/game_banner.png"
@@ -31,68 +39,121 @@ function App() {
             <Button
               className="h-20 w-20"
               color="red"
-              onClick={() => setGridColor('red')}
+              onClick={() => {
+                setGridColor('red');
+                setGridAngle(135);
+                setGridSize(30);
+                setGridSpeed(2);
+              }}
             >
               Red
             </Button>
             <Button
               className="h-20 w-20"
               color="orange"
-              onClick={() => setGridColor('orange')}
+              onClick={() => {
+                setGridColor('orange');
+                setGridAngle(90);
+                setGridSize(40);
+                setGridSpeed(1);
+              }}
             >
               Orange
             </Button>
             <Button
               className="h-20 w-20"
               color="yellow"
-              onClick={() => setGridColor('yellow')}
+              onClick={() => {
+                setGridColor('yellow');
+                setGridAngle(135);
+                setGridSize(30);
+                setGridSpeed(2);
+              }}
             >
               Yellow
             </Button>
             <Button
               className="h-20 w-20"
               color="green"
-              onClick={() => setGridColor('green')}
+              onClick={() => {
+                setGridColor('green');
+                setGridAngle(190);
+                setGridSize(10);
+                setGridSpeed(1);
+              }}
             >
               Green
             </Button>
             <Button
               className="h-20 w-20"
               color="blue"
-              onClick={() => setGridColor('blue')}
+              onClick={() => {
+                setGridColor('blue');
+                setGridAngle(135);
+                setGridSize(30);
+                setGridSpeed(2);
+              }}
             >
               Blue
             </Button>
             <Button
               className="h-20 w-20"
               color="purple"
-              onClick={() => setGridColor('purple')}
+              onClick={() => {
+                setGridColor('purple');
+                setGridAngle(135);
+                setGridSize(30);
+                setGridSpeed(2);
+              }}
             >
               Purple
             </Button>
             <Button
               className="h-20 w-20"
               color="pink"
-              onClick={() => setGridColor('pink')}
+              onClick={() => {
+                setGridColor('pink');
+                setGridAngle(135);
+                setGridSize(30);
+                setGridSpeed(2);
+              }}
             >
               Pink
             </Button>
             <Button
               className="h-20 w-20"
               color="violet"
-              onClick={() => setGridColor('violet')}
+              onClick={() => {
+                setGridColor('violet');
+                setGridAngle(135);
+                setGridSize(30);
+                setGridSpeed(2);
+              }}
             >
               Violet
             </Button>
             <Button
               className="h-20 w-20"
               color="white"
-              onClick={() => setGridColor('white')}
+              onClick={() => {
+                setGridColor('white');
+                setGridAngle(135);
+                setGridSize(30);
+                setGridSpeed(2);
+              }}
             >
               White
             </Button>
           </div>
-          <Button className="w-66 mt-4" onClick={() => setGridColor('grey')}>
+          <Button
+            className="w-66 mt-4"
+            onClick={() => {
+              setGridColor('grey');
+              setGridAngle(45);
+              setGridSize(20);
+              setGridSpeed(4);
+            }}
+          >
             Default
           </Button>
         </Card>
