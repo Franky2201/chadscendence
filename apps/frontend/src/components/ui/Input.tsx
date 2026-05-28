@@ -1,6 +1,10 @@
 import type { InputHTMLAttributes } from 'react';
-import type { ItemSize, ItemColor } from './unified';
-import { getItemColorStyle } from './unified';
+import {
+  getItemColorTextStyle,
+  getItemColorStyle,
+  type ItemSize,
+  type ItemColor,
+} from './unified';
 
 type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> & {
   size?: ItemSize;
@@ -23,12 +27,10 @@ export function Input({
 }: InputProps) {
   const inputClasses = [
     'relative inline-flex items-center justify-center rounded-xl font-bold \
-	text-center focus-visible:outline-none disabled:cursor-not-allowed ring-1 \
-	focus-visible:ring-offset-3 focus-visible:ring-2 translate-y-[-3px] \
-	active:scale-95 transition-transform duration-100 ease-in-out select-none',
-    'ring-[color:var(--ui-color)]',
-    'focus-visible:ring-[color:var(--ui-color)]',
-    'bg-[color:var(--ui-color)]/20',
+	text-center focus-visible:outline-none disabled:cursor-not-allowed \
+    focus-visible:ring-2 translate-y-[-2px] active:scale-95 \
+	transition-transform duration-100 ease-in-out select-none hover:ring-1 \
+    bg-[color:var(--ui-color)]/30',
     sizeClasses[size],
     className,
   ]
@@ -38,7 +40,11 @@ export function Input({
     <input
       type={type}
       className={inputClasses}
-      style={{ ...style, ...getItemColorStyle(color) }}
+      style={{
+        ...style,
+        ...getItemColorStyle(color),
+        ...getItemColorTextStyle(color, 80),
+      }}
       {...props}
     />
   );
