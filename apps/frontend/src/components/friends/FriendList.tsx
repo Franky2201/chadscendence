@@ -1,14 +1,15 @@
 import { useFriends } from '../../contexts/FriendsContext';
-import { Button } from '../ui';
 
 export default function FriendList() {
   const {
     friends,
     requests,
+    sentRequests,
     isLoading,
     acceptRequest,
     declineRequest,
     removeFriend,
+    blockUser,
   } = useFriends();
 
   if (isLoading)
@@ -16,7 +17,7 @@ export default function FriendList() {
 
   return (
     <div className="flex flex-col gap-6 w-full">
-      {requests.length > 0 && (
+      {(requests.length > 0 || sentRequests.length > 0) && (
         <div className="flex flex-col gap-3">
           <h3 className="text-white/60 text-sm uppercase font-bold tracking-wider">
             Demandes en attente
@@ -35,20 +36,38 @@ export default function FriendList() {
                 <span className="text-white font-medium">{req.username}</span>
               </div>
               <div className="flex gap-2">
-                <Button
-                  size="small"
+                <button
                   onClick={() => acceptRequest(req.friendshipId)}
-                  className="!bg-green-500/20 !text-green-400 hover:!bg-green-500/30 !p-2 !rounded-lg transition-colors"
+                  className="bg-green-500/20 text-green-400 hover:bg-green-500/30 p-2 rounded-lg transition-colors"
                 >
                   ✓
-                </Button>
-                <Button
-                  size="small"
+                </button>
+                <button
                   onClick={() => declineRequest(req.friendshipId)}
-                  className="!bg-red-500/20 !text-red-400 hover:!bg-red-500/30 !p-2 !rounded-lg transition-colors"
+                  className="bg-red-500/20 text-red-400 hover:bg-red-500/30 p-2 rounded-lg transition-colors"
                 >
                   ✕
-                </Button>
+                </button>
+              </div>
+            </div>
+          ))}
+          {sentRequests.map((req) => (
+            <div
+              key={req.friendshipId}
+              className="flex flex-row items-center justify-between bg-white/5 p-3 rounded-xl border border-white/10 border-dashed opacity-70"
+            >
+              <div className="flex items-center gap-3">
+                <img
+                  src={req.avatarUrl}
+                  alt={req.username}
+                  className="w-10 h-10 rounded-full object-cover grayscale"
+                />
+                <span className="text-white font-medium">{req.username}</span>
+              </div>
+              <div className="flex gap-2 pr-2">
+                <span className="text-white/50 text-sm italic">
+                  En attente...
+                </span>
               </div>
             </div>
           ))}
@@ -86,13 +105,22 @@ export default function FriendList() {
                   {friend.username}
                 </span>
               </div>
-              <button
-                onClick={() => removeFriend(friend.friendshipId)}
-                className="opacity-0 group-hover:opacity-100 text-red-400/70 hover:text-red-400 transition-all"
-                title="Retirer l'ami"
-              >
-                ✕
-              </button>
+              <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-all">
+                <button
+                  onClick={() => removeFriend(friend.friendshipId)}
+                  className="text-red-400/70 hover:text-red-400"
+                  title="Retirer l'ami"
+                >
+                  ✕
+                </button>
+                <button
+                  onClick={() => blockUser(friend.id)}
+                  className="text-slate-400/70 hover:text-red-600 font-bold"
+                  title="Bloquer"
+                >
+                  Ø
+                </button>
+              </div>
             </div>
           ))
         )}

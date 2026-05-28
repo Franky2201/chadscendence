@@ -8,6 +8,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { RanksModule } from './ranks/ranks.module';
 import { FriendsModule } from './friends/friends.module';
 import { PresenceModule } from './presence/presence.module';
+import { BlocksModule } from './blocks/blocks.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { PresenceModule } from './presence/presence.module';
     PresenceModule,
     RanksModule,
     FriendsModule,
+    BlocksModule,
   ],
   controllers: [AppController],
   providers: [AppService],
