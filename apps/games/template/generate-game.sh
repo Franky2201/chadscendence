@@ -205,7 +205,7 @@ if [ -f "$GAMES_MODULE" ] && [ -f "$GAMES_SERVICE" ]; then
     echo "Registering game in Backend..."
 
     # Update GamesModule to add the microservice client
-    GAME_ID="$GAME_ID" COMPONENT_NAME="$COMPONENT_NAME" node -e "
+    GAME_ID="$GAME_ID" COMPONENT_NAME="$COMPONENT_NAME" GAMES_MODULE="$GAMES_MODULE" node -e "
       const fs = require('fs');
       let content = fs.readFileSync(process.env.GAMES_MODULE, 'utf8');
       const serviceName = \`\${process.env.COMPONENT_NAME.toUpperCase()}_SERVICE\`;
@@ -233,10 +233,10 @@ if [ -f "$GAMES_MODULE" ] && [ -f "$GAMES_SERVICE" ]; then
           content = content.slice(0, index) + '\n' + clientBlock + content.slice(index);
           fs.writeFileSync(process.env.GAMES_MODULE, content);
       }
-    " GAMES_MODULE="$GAMES_MODULE"
+    "
 
     # Update GamesService to use the new client
-    GAME_ID="$GAME_ID" COMPONENT_NAME="$COMPONENT_NAME" node -e "
+    GAME_ID="$GAME_ID" COMPONENT_NAME="$COMPONENT_NAME" GAMES_SERVICE="$GAMES_SERVICE" node -e "
       const fs = require('fs');
       let content = fs.readFileSync(process.env.GAMES_SERVICE, 'utf8');
       const serviceName = \`\${process.env.COMPONENT_NAME.toUpperCase()}_SERVICE\`;
@@ -263,7 +263,7 @@ if [ -f "$GAMES_MODULE" ] && [ -f "$GAMES_SERVICE" ]; then
 
           fs.writeFileSync(process.env.GAMES_SERVICE, content);
       }
-    " GAMES_SERVICE="$GAMES_SERVICE"
+    "
 fi
 
 echo "Done! New game created and registered."
