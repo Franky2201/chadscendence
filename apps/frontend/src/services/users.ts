@@ -16,6 +16,8 @@ export interface User {
     minScore: number;
     icon?: string;
   };
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 interface UpdateMe {
@@ -48,6 +50,15 @@ export const getMe = async (): Promise<User> => {
 
 export const updateMe = async (data: UpdateMe): Promise<User> => {
   const res = await api.patch<User>('/users/me', data);
+  return res.data;
+};
+
+export const uploadAvatar = async (file: File): Promise<User> => {
+  const formData = new FormData();
+  formData.append('file', file);
+  const res = await api.post<User>('/users/me/avatar', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
   return res.data;
 };
 

@@ -73,6 +73,9 @@ export class UsersService implements OnModuleInit {
   async updateUser(id: string, updateUserDto: UpdateUserDto) {
     const { password, oldPassword, ...rest } = updateUserDto;
     const dataToUpdate: Partial<User> = { ...rest };
+    if ('bio' in updateUserDto) {
+      dataToUpdate.bio = updateUserDto.bio;
+    }
 
     if (password) {
       const userWithPassword = await this.userRepository
@@ -102,6 +105,11 @@ export class UsersService implements OnModuleInit {
 
     await this.userRepository.save({ id, ...dataToUpdate });
 
+    return this.getUser(id);
+  }
+
+  async uploadAvatar(id: string, filename: string) {
+    await this.userRepository.save({ id, avatarUrl: `http://localhost:3000/uploads/${filename}` });
     return this.getUser(id);
   }
 

@@ -1,21 +1,23 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Button, Input } from '../components/ui';
-import { updateMe } from '../services/users';
+import { updateMe, uploadAvatar } from '../services/users';
 
 export default function ProfilePage() {
   const { user, isLoading, logout, login } = useAuth();
   const navigate = useNavigate();
   const [editing, setEditing] = useState(false);
   const [username, setUsername] = useState('');
-  const [avatarUrl, setAvatarUrl] = useState('');
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const [bio, setBio] = useState('');
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!isLoading && !user) {
@@ -30,15 +32,29 @@ export default function ProfilePage() {
       </div>
     );
 
+  const isSSO = !!(user.intraId || user.githubId);
+
   const handleEdit = () => {
     setUsername(user.username);
-    setAvatarUrl(user.avatarUrl ?? '');
+    setAvatarFile(null);
+    setAvatarPreview(null);
     setBio(user.bio ?? '');
     setOldPassword('');
     setNewPassword('');
     setConfirmPassword('');
     setError(null);
     setEditing(true);
+  };
+
+  const handleAvatarClick = () => {
+    if (editing && !isSSO) fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setAvatarFile(file);
+    setAvatarPreview(URL.createObjectURL(file));
   };
 
   const handleSave = async () => {
@@ -50,13 +66,17 @@ export default function ProfilePage() {
     setSaving(true);
     setError(null);
     try {
-      const updated = await updateMe({
+      let updated = await updateMe({
         username: username || undefined,
-        avatarUrl: avatarUrl || undefined,
-        bio: bio || undefined,
+        bio: bio !== '' ? bio : null,
         oldPassword: newPassword ? oldPassword : undefined,
         password: newPassword || undefined,
       });
+
+      if (avatarFile) {
+        updated = await uploadAvatar(avatarFile);
+      }
+
       login(updated);
       setEditing(false);
     } catch (err: unknown) {
@@ -75,6 +95,13 @@ export default function ProfilePage() {
     await logout();
     navigate('/');
   };
+
+  const formatDate = (date: Date | string) =>
+    new Date(date).toLocaleDateString('fr-FR', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric',
+    });
 
   return (
     <div
@@ -102,11 +129,29 @@ export default function ProfilePage() {
             boxShadow: '0 8px 32px 0 rgba(0,0,0,0.2)',
           }}
         >
-          <img
-            src={editing && avatarUrl ? avatarUrl : user.avatarUrl}
-            alt="avatar"
-            className="w-36 h-36 rounded-full object-cover border-4 border-white/20 shadow-xl"
-          />
+          <div className="relative group">
+            <img
+              src={editing ? (avatarPreview ?? user.avatarUrl) : user.avatarUrl}
+              alt="avatar"
+              onClick={handleAvatarClick}
+              className={[
+                'w-36 h-36 rounded-full object-cover border-4 border-white/20 shadow-xl transition-opacity',
+                editing && !isSSO ? 'cursor-pointer group-hover:opacity-70' : '',
+              ].join(' ')}
+            />
+            {editing && !isSSO && (
+              <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-white opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                Changer
+              </span>
+            )}
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleFileChange}
+            />
+          </div>
 
           {!editing ? (
             <>
@@ -129,6 +174,10 @@ export default function ProfilePage() {
                     Admin
                   </span>
                 )}
+                <div className="mt-3 flex flex-col gap-1 text-white/40 text-xs">
+                  <span>Membre depuis le {formatDate(user.createdAt)}</span>
+                  <span>Profil mis à jour le {formatDate(user.updatedAt)}</span>
+                </div>
               </div>
 
               <div className="flex gap-4 mt-2 flex-wrap justify-center">
@@ -149,12 +198,11 @@ export default function ProfilePage() {
                   placeholder="Nom d'utilisateur"
                   className="w-full"
                 />
-                <Input
-                  value={avatarUrl}
-                  onChange={(e) => setAvatarUrl(e.target.value)}
-                  placeholder="URL de l'avatar"
-                  className="w-full"
-                />
+                {isSSO && (
+                  <p className="text-white/40 text-xs text-center">
+                    Avatar géré par {user.intraId ? '42 Intra' : 'GitHub'}
+                  </p>
+                )}
                 <textarea
                   value={bio}
                   onChange={(e) => setBio(e.target.value)}
@@ -163,7 +211,7 @@ export default function ProfilePage() {
                   className="w-full rounded-2xl px-6 py-3 text-base font-bold bg-slate-950 text-slate-50 border border-slate-500 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 resize-none"
                 />
 
-                {(!user.intraId && !user.githubId) && (
+                {!isSSO && (
                   <>
                     <hr className="border-white/20" />
                     <p className="text-white/50 text-sm">
@@ -200,7 +248,14 @@ export default function ProfilePage() {
                 <Button onClick={handleSave} disabled={saving} size="medium">
                   {saving ? 'Sauvegarde...' : 'Sauvegarder'}
                 </Button>
-                <Button onClick={() => setEditing(false)} size="medium">
+                <Button
+                  onClick={() => {
+                    setAvatarFile(null);
+                    setAvatarPreview(null);
+                    setEditing(false);
+                  }}
+                  size="medium"
+                >
                   Annuler
                 </Button>
               </div>
