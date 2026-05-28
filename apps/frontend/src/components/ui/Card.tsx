@@ -6,11 +6,11 @@ type CardProps = {
   className?: string;
 };
 
-const baseClasses = 'rounded-3xl shadow-2xl border px-8 py-12';
+const baseClasses = 'rounded-3xl border border-3 px-4 py-8';
 
 const themeClasses: Record<ThemeName, string> = {
-  light: 'bg-neutral-50 border-neutral-200 text-neutral-900',
-  dark: 'bg-neutral-950 border-neutral-800 text-neutral-100',
+  light: 'bg-neutral-200 border-neutral-300 text-neutral-900',
+  dark: 'bg-neutral-900 border-neutral-600 text-neutral-200',
 };
 
 export function Card({ children, className = '' }: CardProps) {
