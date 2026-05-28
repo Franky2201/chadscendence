@@ -8,7 +8,12 @@ import helmet from 'helmet';
 async function bootstrap() {
   const app: INestApplication = await NestFactory.create(AppModule);
 
-  app.use(helmet());
+  app.use(
+    helmet({
+      crossOriginResourcePolicy: { policy: 'cross-origin' },
+      contentSecurityPolicy: false, // Disable CSP for now as it can block localhost requests
+    }),
+  );
   app.use(cookieParser());
 
   app.useGlobalPipes(
@@ -20,8 +25,10 @@ async function bootstrap() {
   );
 
   app.enableCors({
-    origin: 'http://localhost:5173',
+    origin: true,
     credentials: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    allowedHeaders: 'Content-Type, Accept, Authorization',
   });
 
   await app.listen(process.env.PORT ?? 3000);
