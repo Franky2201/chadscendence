@@ -8,7 +8,7 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
     imports: [
         ClientsModule.registerAsync([
             {
-                name: "MATH_SERVICE",
+                name: "GAMES_CLIENT",
                 imports: [ConfigModule],
                 inject: [ConfigService],
                 useFactory: (configService: ConfigService) => ({

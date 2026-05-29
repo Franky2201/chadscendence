@@ -5,7 +5,7 @@ interface GameContainerProps<TProblem, TResult, TSubmission = unknown> {
     gameId: string;
     renderGame: (
         problem: TProblem,
-        status: "playing" | "correct" | "wrong",
+        status: "playing" | "correct" | "wrong" | "expired",
         lastResult: TResult | null,
         submitAnswer: (answer: TSubmission) => Promise<void>,
     ) => ReactNode;
@@ -17,7 +17,7 @@ interface GameContainerProps<TProblem, TResult, TSubmission = unknown> {
 
 export default function GameContainer<
     TProblem = unknown,
-    TResult = { success: boolean },
+    TResult = { success: boolean; message?: string },
     TSubmission = unknown,
 >({
     gameId,
@@ -29,7 +29,7 @@ export default function GameContainer<
 }: GameContainerProps<TProblem, TResult, TSubmission>) {
     const [problem, setProblem] = useState<TProblem | null>(null);
     const [status, setStatus] = useState<
-        "loading" | "playing" | "correct" | "wrong" | "error"
+        "loading" | "playing" | "correct" | "wrong" | "expired" | "error"
     >("loading");
     const [lastResult, setLastResult] = useState<TResult | null>(null);
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -74,11 +74,14 @@ export default function GameContainer<
             );
 
             setLastResult(result);
-            if ((result as { success: boolean }).success) {
+            if (result.success) {
                 setStatus("correct");
                 setScore((s) => s + 1);
                 if (onSuccess) onSuccess(result);
                 setTimeout(() => void fetchProblem(true), 1000);
+            } else if (result.message?.includes("expired")) {
+                setStatus("expired");
+                setTimeout(() => void fetchProblem(true), 2000);
             } else {
                 setStatus("wrong");
                 setTimeout(() => void fetchProblem(true), 2000);
@@ -121,7 +124,8 @@ export default function GameContainer<
 
             {(status === "playing" ||
                 status === "correct" ||
-                status === "wrong") &&
+                status === "wrong" ||
+                status === "expired") &&
                 problem &&
                 renderGame(problem, status, lastResult, submitAnswer)}
         </div>

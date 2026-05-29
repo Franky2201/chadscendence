@@ -15,7 +15,7 @@ export class GamesService implements OnModuleInit, OnModuleDestroy {
     private redis: Redis;
 
     constructor(
-        @Inject("MATH_SERVICE") private readonly mathClient: ClientProxy,
+        @Inject("GAMES_CLIENT") private readonly gamesClient: ClientProxy,
         private readonly configService: ConfigService,
     ) {}
 
@@ -43,11 +43,11 @@ export class GamesService implements OnModuleInit, OnModuleDestroy {
         cmd: string,
         payload?: T,
     ): Promise<R> {
-        if (gameId === "math") {
-            return firstValueFrom(
-                this.mathClient.send<R, T>({ cmd }, payload ?? ({} as T)),
-            );
-        }
-        throw new Error(`Game ${gameId} not found or not supported`);
+        return firstValueFrom(
+            this.gamesClient.send<R, T>(
+                { game: gameId, cmd },
+                payload ?? ({} as T),
+            ),
+        );
     }
 }

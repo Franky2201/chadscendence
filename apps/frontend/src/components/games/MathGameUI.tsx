@@ -41,7 +41,7 @@ export default function MathGameUI() {
                             className={`w-full bg-white/10 border-2 rounded-2xl px-6 py-4 text-3xl font-bold text-center transition-all outline-none ${
                                 status === "correct"
                                     ? "border-green-500 bg-green-500/20"
-                                    : status === "wrong"
+                                    : status === "wrong" || status === "expired"
                                       ? "border-red-500 bg-red-500/20"
                                       : "border-white/20 focus:border-pink-500"
                             }`}
@@ -59,6 +59,11 @@ export default function MathGameUI() {
                     {status === "wrong" && lastResult && (
                         <div className="mt-4 text-red-400 font-bold text-lg animate-bounce">
                             Dommage ! C'était {lastResult.correctAnswer}
+                        </div>
+                    )}
+                    {status === "expired" && (
+                        <div className="mt-4 text-orange-400 font-bold text-lg animate-bounce">
+                            TROP TARD ! Temps écoulé
                         </div>
                     )}
                     {status === "correct" && (
