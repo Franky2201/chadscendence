@@ -42,7 +42,11 @@ export class PresenceGateway
                 secret: this.configService.get<string>("JWT_SECRET"),
             });
 
-            if (typeof payload.sub !== "string") {
+            if (
+                typeof payload !== "object" ||
+                payload === null ||
+                typeof payload.sub !== "string"
+            ) {
                 throw new Error("Invalid token payload");
             }
 

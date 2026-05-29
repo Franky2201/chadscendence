@@ -134,7 +134,7 @@ export default function ProfilePage() {
                 </Link>
 
                 <div
-                    className="flex flex-col items-center gap-6 p-10 w-full max-w-lg rounded-[32px]"
+                    className="flex flex-col items-center gap-6 p-10 w-full max-w-lg rounded-4xl"
                     style={{
                         background:
                             "linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)",
