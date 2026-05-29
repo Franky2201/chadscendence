@@ -1,27 +1,11 @@
 import type { SelectHTMLAttributes } from "react";
-import { type ThemeName, useTheme } from "../../themeContext";
+import { type ThemeName, useTheme } from "../../contexts/theme-context";
 
 type SelectSize = "small" | "medium" | "large";
 
 type SelectProps = Omit<SelectHTMLAttributes<HTMLSelectElement>, "size"> & {
     size?: SelectSize;
 };
-
-const baseClasses =
-    "\
-	block \
-	rounded-full \
-	border \
-	appearance-none \
-	font-bold \
-	transition-all \
-	shadow-lg \
-	focus-visible:outline-none \
-	focus-visible:ring-2 \
-	focus-visible:ring-offset-2 \
-	disabled:cursor-not-allowed \
-	disabled:opacity-60\
-	active:scale-95";
 
 const sizeClasses: Record<SelectSize, string> = {
     small: "pl-4 pr-12 py-2 text-sm",
@@ -30,8 +14,8 @@ const sizeClasses: Record<SelectSize, string> = {
 };
 
 const themeClasses: Record<ThemeName, string> = {
-    light: "bg-white text-slate-900 border-slate-200 focus-visible:ring-slate-300",
-    dark: "bg-slate-900 text-slate-100 border-slate-700 focus-visible:ring-slate-600",
+    light: "bg-zinc-50 text-zinc-900 border-zinc-200 focus-visible:ring-zinc-300 focus-visible:ring-offset-zinc-50",
+    dark: "bg-zinc-900 text-zinc-100 border-zinc-700 focus-visible:ring-zinc-500 focus-visible:ring-offset-zinc-950",
 };
 
 const baseIconClass = "pointer-events-none absolute h-6 w-6 -translate-y-1/2";
@@ -43,7 +27,7 @@ const iconSizeClasses: Record<SelectSize, string> = {
 };
 
 const iconColorClasses: Record<ThemeName, string> = {
-    light: "",
+    light: "filter brightness-0",
     dark: "filter brightness-0 invert",
 };
 
@@ -54,7 +38,20 @@ export function Select({
 }: SelectProps) {
     const { theme } = useTheme();
     const classes = [
-        baseClasses,
+        "\
+	block \
+	rounded-xl \
+	border \
+	appearance-none \
+	font-bold \
+	transition-all \
+	shadow-lg \
+	focus-visible:outline-none \
+	focus-visible:ring-2 \
+	focus-visible:ring-offset-2 \
+	disabled:cursor-not-allowed \
+	disabled:opacity-60 \
+	cursor-pointer",
         sizeClasses[size],
         themeClasses[theme],
         className,

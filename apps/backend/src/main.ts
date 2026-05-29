@@ -1,12 +1,13 @@
 import { NestFactory } from "@nestjs/core";
+import { NestExpressApplication } from "@nestjs/platform-express";
 import { AppModule } from "./app.module";
-import type { INestApplication } from "@nestjs/common";
 import { ValidationPipe } from "@nestjs/common";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
+import { join } from "path";
 
 async function bootstrap() {
-    const app: INestApplication = await NestFactory.create(AppModule);
+    const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
     app.use(
         helmet({
@@ -15,6 +16,19 @@ async function bootstrap() {
         }),
     );
     app.use(cookieParser());
+
+    app.use(
+        "/uploads",
+        (
+            _req: unknown,
+            res: { setHeader: (k: string, v: string) => void },
+            next: () => void,
+        ) => {
+            res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
+            next();
+        },
+    );
+    app.useStaticAssets(join(process.cwd(), "uploads"), { prefix: "/uploads" });
 
     app.useGlobalPipes(
         new ValidationPipe({

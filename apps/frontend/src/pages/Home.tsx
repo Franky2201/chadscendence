@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { Button } from "../components/ui";
 import { useModal } from "../contexts/ModalContext";
@@ -7,6 +7,7 @@ import Leaderboard from "../components/home/Leaderboard";
 export default function HomePage() {
     const { user, isLoading, logout } = useAuth();
     const { openModal } = useModal();
+    const navigate = useNavigate();
 
     if (isLoading)
         return (
@@ -59,10 +60,10 @@ export default function HomePage() {
                                         Mes amis
                                     </Link>
                                     <Link
-                                        to="/history"
+                                        to="/profile"
                                         className="w-fit text-2xl hover:text-[#E43A70] transition-colors hover:scale-105"
                                     >
-                                        Historique
+                                        Profil
                                     </Link>
                                 </>
                             )}
@@ -74,12 +75,12 @@ export default function HomePage() {
                             >
                                 Subject
                             </a>
-                            <Link
-                                to="/about"
+                            <button
+                                onClick={() => openModal("ABOUT")}
                                 className="w-fit text-2xl hover:text-[#E43A70] transition-colors hover:scale-105"
                             >
                                 Credits
-                            </Link>
+                            </button>
                         </nav>
                     </div>
                 </div>
@@ -87,12 +88,24 @@ export default function HomePage() {
                 <div className="flex w-1/2 flex-col items-end gap-10 pr-10 pt-10">
                     {user && (
                         <div className="flex flex-col items-center gap-4">
-                            <img
-                                src={user.avatarUrl}
-                                onClick={logout}
-                                alt="avatar"
-                                className="w-40 h-40 rounded-full hover:cursor-pointer transition-transform hover:scale-110"
-                            />
+                            <div className="relative group">
+                                <img
+                                    src={user.avatarUrl}
+                                    onClick={() => navigate("/profile")}
+                                    alt="avatar"
+                                    className="w-40 h-40 rounded-full hover:cursor-pointer transition-transform hover:scale-110 object-cover"
+                                />
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        void logout();
+                                    }}
+                                    className="absolute -bottom-2 -right-2 bg-red-600 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                                    title="Déconnexion"
+                                >
+                                    🚪
+                                </button>
+                            </div>
                             <h2 className="text-3xl">{user.username}</h2>
                             <h2 className="text-3xl">
                                 {user.role}

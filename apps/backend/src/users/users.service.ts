@@ -1,18 +1,29 @@
-import { OnModuleInit, Injectable, NotFoundException } from "@nestjs/common";
+import {
+    OnModuleInit,
+    Injectable,
+    NotFoundException,
+    BadRequestException,
+    UnauthorizedException,
+} from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { MoreThan, Repository } from "typeorm";
 import { User, UserRole } from "src/common/entities/user.entity";
 import { UpdateUserDto } from "src/common/dto/users.dto";
-import { hash } from "bcrypt";
+import { hash, compare } from "bcrypt";
 import { RanksService } from "src/ranks/ranks.service";
 import { ConfigService } from "@nestjs/config";
+import { Block } from "src/common/entities/block.entity";
+import { PresenceService } from "src/presence/presence.service";
 
 @Injectable()
 export class UsersService implements OnModuleInit {
     constructor(
+        private readonly configService: ConfigService,
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
-        private readonly configService: ConfigService,
+        @InjectRepository(Block)
+        private readonly blockRepository: Repository<Block>,
+        private readonly presenceService: PresenceService,
         private readonly ranksService: RanksService,
     ) {}
 
@@ -66,15 +77,51 @@ export class UsersService implements OnModuleInit {
     }
 
     async updateUser(id: string, updateUserDto: UpdateUserDto) {
-        const { password, ...rest } = updateUserDto;
+        const { password, oldPassword, ...rest } = updateUserDto;
         const dataToUpdate: Partial<User> = { ...rest };
 
+        if ("bio" in updateUserDto) {
+            dataToUpdate.bio = updateUserDto.bio;
+        }
+
         if (password) {
+            const userWithPassword = await this.userRepository
+                .createQueryBuilder("user")
+                .where("user.id = :id", { id })
+                .addSelect("user.password")
+                .getOne();
+
+            if (!userWithPassword) throw new NotFoundException("User not found");
+
+            if (!userWithPassword.password)
+                throw new BadRequestException(
+                    "Les comptes OAuth ne peuvent pas définir de mot de passe ici.",
+                );
+
+            if (!oldPassword)
+                throw new BadRequestException(
+                    "L'ancien mot de passe est requis pour en définir un nouveau.",
+                );
+
+            const isValid = await compare(oldPassword, userWithPassword.password);
+            if (!isValid)
+                throw new UnauthorizedException(
+                    "L'ancien mot de passe est incorrect.",
+                );
+
             dataToUpdate.password = await hash(password, 10);
         }
 
         await this.userRepository.save({ id, ...dataToUpdate });
 
+        return this.getUser(id);
+    }
+
+    async uploadAvatar(id: string, filename: string) {
+        await this.userRepository.save({
+            id,
+            avatarUrl: `http://localhost:3000/uploads/${filename}`,
+        });
         return this.getUser(id);
     }
 
@@ -90,6 +137,14 @@ export class UsersService implements OnModuleInit {
         return { message: "User deleted successfully." };
     }
 
+    async getUserLeaderboardRank(userId: string): Promise<number> {
+        const user = await this.getUser(userId);
+        const above = await this.userRepository.count({
+            where: { score: MoreThan(user.score) },
+        });
+        return above + 1;
+    }
+
     async getGlobalLeaderboard(count: number) {
         const users = await this.userRepository.find({
             select: { id: true, username: true, avatarUrl: true, score: true },
@@ -102,6 +157,46 @@ export class UsersService implements OnModuleInit {
             username: u.username,
             avatarUrl: u.avatarUrl,
             score: u.score,
+        }));
+    }
+
+    async searchUsers(query: string, currentUserId: string) {
+        const blockedRelations = await this.blockRepository.find({
+            where: [
+                { blocker: { id: currentUserId } },
+                { blocked: { id: currentUserId } },
+            ],
+            relations: { blocker: true, blocked: true },
+        });
+
+        const excludedIds = blockedRelations.map((b) =>
+            b.blocker.id === currentUserId ? b.blocked.id : b.blocker.id,
+        );
+        excludedIds.push(currentUserId);
+
+        let queryBuilder = this.userRepository
+            .createQueryBuilder("user")
+            .where("user.username ILIKE :query", { query: `%${query}%` });
+
+        if (excludedIds.length > 0) {
+            queryBuilder = queryBuilder.andWhere(
+                "user.id NOT IN (:...excludedIds)",
+                {
+                    excludedIds,
+                },
+            );
+        }
+
+        const users = await queryBuilder
+            .select(["user.id", "user.username", "user.avatarUrl"])
+            .take(10)
+            .getMany();
+
+        return users.map((u) => ({
+            id: u.id,
+            username: u.username,
+            avatarUrl: u.avatarUrl,
+            status: this.presenceService.isUserOnline(u.id) ? "online" : "offline",
         }));
     }
 

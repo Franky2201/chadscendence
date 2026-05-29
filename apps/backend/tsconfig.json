@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "types": ["node", "jest"],
         "module": "nodenext",
         "moduleResolution": "nodenext",
         "resolvePackageJsonExports": true,
@@ -14,14 +15,17 @@
         "sourceMap": true,
         "outDir": "./dist",
         "baseUrl": "./",
+        "paths": {
+            "*": ["./*"],
+        },
         "incremental": true,
         "skipLibCheck": true,
         "strictNullChecks": true,
         "forceConsistentCasingInFileNames": true,
         "noImplicitAny": true,
         "strictBindCallApply": true,
-        "noFallthroughCasesInSwitch": true
+        "noFallthroughCasesInSwitch": true,
     },
     "include": ["src/**/*", "test/**/*"],
-    "exclude": ["node_modules", "dist"]
+    "exclude": ["node_modules", "dist"],
 }

@@ -1,56 +1,89 @@
 import type { ButtonHTMLAttributes } from "react";
-import { type ThemeName, useTheme } from "../../themeContext";
-
-type ButtonSize = "small" | "medium" | "large";
+import type { ItemColor, ItemSize } from "./unified";
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-    size?: ButtonSize;
+    size?: ItemSize;
+    color?: ItemColor;
+    borderRadius?: string;
+    buttonClassName?: string;
 };
 
-const baseClasses =
-    "\
-	inline-flex \
-	items-center \
-	justify-center \
-	rounded-full \
-	font-bold \
-	transition-all \
-	shadow-lg \
-	focus-visible:outline-none \
-	focus-visible:ring-2 \
-	focus-visible:ring-slate-400 \
-	focus-visible:ring-offset-2 \
-	active:scale-95 \
-	disabled:cursor-not-allowed \
-	disabled:opacity-60 \
-	cursor-pointer";
-
-const sizeClasses: Record<ButtonSize, string> = {
-    small: "px-4 py-2 text-sm",
-    medium: "px-6 py-3 text-base",
-    large: "px-8 py-4 text-lg",
+const sizeClasses: Record<ItemSize, string> = {
+    small: "px-2 py-1 text-md",
+    medium: "px-4 py-2 text-lg",
+    large: "px-6 py-3 text-xl",
 };
 
-const themeClasses: Record<ThemeName, string> = {
-    light: "bg-slate-900 text-white hover:bg-slate-800",
-    dark: "bg-slate-100 text-slate-900 hover:bg-white",
+const baseOffsetClasses: Record<ItemSize, string> = {
+    small: "translate-y-[3px]",
+    medium: "translate-y-[4px]",
+    large: "translate-y-[5px]",
+};
+
+const topOffsetClasses: Record<ItemSize, string> = {
+    small: "translate-y-[-1px] group-hover:translate-y-[-3px] group-active:translate-y-[+3px]",
+    medium: "translate-y-[-2px] group-hover:translate-y-[-4px] group-active:translate-y-[+4px]",
+    large: "translate-y-[-3px] group-hover:translate-y-[-5px] group-active:translate-y-[+5px]",
+};
+
+const colorClasses: Record<ItemColor, string> = {
+    grey: "bg-[#bfbfbf]",
+    red: "bg-[#ff9191]",
+    orange: "bg-[#ffc780]",
+    yellow: "bg-[#fff190]",
+    green: "bg-[#daffb6]",
+    blue: "bg-[#6dd8fe]",
+    purple: "bg-[#d791ff]",
+    pink: "bg-[#ffbfff]",
+    violet: "bg-[#a9a3ff]",
+    white: "bg-[#f8f8f8]",
 };
 
 export function Button({
     size = "medium",
+    color = "grey",
+    borderRadius = "rounded-xl",
+    children,
+    buttonClassName = "",
     className = "",
-    type = "button",
     ...props
 }: ButtonProps) {
-    const { theme } = useTheme();
-    const classes = [
-        baseClasses,
-        themeClasses[theme],
-        sizeClasses[size],
+    const buttonClasses = [
+        "group relative overflow-visible font-bold border-none select-none cursor-pointer",
+        borderRadius,
+        buttonClassName,
         className,
     ]
         .filter(Boolean)
         .join(" ");
 
-    return <button type={type} className={classes} {...props} />;
+    const spanTopClasses = [
+        "absolute inset-0 pointer-events-none",
+        borderRadius,
+        colorClasses[color as ItemColor],
+        baseOffsetClasses[size as ItemSize],
+    ]
+        .filter(Boolean)
+        .join(" ");
+
+    const spanBotClasses = [
+        "relative inline-flex items-center justify-center text-black transition-transform duration-100 ease-in-out select-none",
+        borderRadius,
+        colorClasses[color as ItemColor],
+        sizeClasses[size as ItemSize],
+        topOffsetClasses[size as ItemSize],
+        className,
+    ]
+        .filter(Boolean)
+        .join(" ");
+
+    return (
+        <button type="button" className={buttonClasses} {...props}>
+            <span
+                className={spanTopClasses}
+                style={{ filter: "brightness(0.8)" }}
+            />
+            <span className={spanBotClasses}>{children}</span>
+        </button>
+    );
 }

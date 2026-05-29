@@ -31,7 +31,7 @@ export class User {
     avatarUrl?: string;
 
     @Column({ type: "text", nullable: true })
-    bio?: string;
+    bio?: string | null;
 
     @Column({
         type: "enum",

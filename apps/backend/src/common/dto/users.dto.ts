@@ -1,9 +1,13 @@
-import { IsString, IsOptional } from "class-validator";
+import { IsString, IsOptional, Allow } from "class-validator";
 
 export class UpdateUserDto {
     @IsString()
     @IsOptional()
     username?: string;
+
+    @IsString()
+    @IsOptional()
+    oldPassword?: string;
 
     @IsString()
     @IsOptional()
@@ -15,5 +19,6 @@ export class UpdateUserDto {
 
     @IsString()
     @IsOptional()
-    bio?: string;
+    @Allow()
+    bio?: string | null;
 }
