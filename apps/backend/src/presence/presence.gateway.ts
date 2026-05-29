@@ -42,6 +42,10 @@ export class PresenceGateway
                 secret: this.configService.get<string>("JWT_SECRET"),
             });
 
+            if (typeof payload.sub !== "string") {
+                throw new Error("Invalid token payload");
+            }
+
             const userId: string = payload.sub;
             const wasOffline = !this.presenceService.isUserOnline(userId);
 

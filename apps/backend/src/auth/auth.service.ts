@@ -88,7 +88,13 @@ export class AuthService {
             );
         }
 
-        const safeUsername = username ?? email.split("@")[0] ?? "user";
+        const safeUsername: string =
+            typeof username === "string"
+                ? username
+                : typeof email === "string" && email.includes("@")
+                  ? (email.split("@")[0] ?? "user")
+                  : "user";
+
         const safeAvatarUrl = avatarUrl ?? undefined;
 
         const providerKey = provider === "github" ? "githubId" : "intraId";
