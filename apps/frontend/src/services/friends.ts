@@ -18,6 +18,8 @@ export interface FriendRequest {
 export interface SentRequest {
   friendshipId: string;
   addresseeId: string;
+  username: string;
+  avatarUrl: string;
 }
 
 export const getFriends = async (): Promise<Friend[]> => {

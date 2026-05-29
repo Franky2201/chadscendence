@@ -19,6 +19,12 @@ import {
 } from '../services/friends';
 import { useAuth } from './AuthContext';
 import { socket } from '../services/socket';
+import {
+  type BlockedUser,
+  getBlockedUsers,
+  blockUser as apiBlockUser,
+  unblockUser as apiUnblockUser,
+} from '../services/blocks';
 
 interface FriendsContextType {
   friends: Friend[];
@@ -30,6 +36,9 @@ interface FriendsContextType {
   declineRequest: (friendshipId: string) => Promise<void>;
   removeFriend: (friendshipId: string) => Promise<void>;
   sendRequest: (userId: string) => Promise<void>;
+  blockUser: (userId: string) => Promise<void>;
+  blockedUsers: BlockedUser[];
+  unblockUser: (userId: string) => Promise<void>;
 }
 
 const FriendsContext = createContext<FriendsContextType | undefined>(undefined);
@@ -40,6 +49,7 @@ export function FriendsProvider({ children }: { children: ReactNode }) {
   const [friends, setFriends] = useState<Friend[]>([]);
   const [requests, setRequests] = useState<FriendRequest[]>([]);
   const [sentRequests, setSentRequests] = useState<SentRequest[]>([]);
+  const [blockedUsers, setBlockedUsers] = useState<BlockedUser[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const refreshFriends = useCallback(async () => {
@@ -47,20 +57,24 @@ export function FriendsProvider({ children }: { children: ReactNode }) {
       setFriends([]);
       setRequests([]);
       setSentRequests([]);
+      setBlockedUsers([]);
       setIsLoading(false);
       return;
     }
 
     try {
       setIsLoading(true);
-      const [friendsData, requestsData, sentRequestsData] = await Promise.all([
-        getFriends(),
-        getPendingRequests(),
-        getSentRequests(),
-      ]);
+      const [friendsData, requestsData, sentRequestsData, blockedUsersData] =
+        await Promise.all([
+          getFriends(),
+          getPendingRequests(),
+          getSentRequests(),
+          getBlockedUsers(),
+        ]);
       setFriends(friendsData);
       setRequests(requestsData);
       setSentRequests(sentRequestsData);
+      setBlockedUsers(blockedUsersData);
     } catch (error) {
       console.error(error);
     } finally {
@@ -123,6 +137,16 @@ export function FriendsProvider({ children }: { children: ReactNode }) {
     await refreshFriends();
   };
 
+  const handleBlockUser = async (userId: string) => {
+    await apiBlockUser(userId);
+    await refreshFriends();
+  };
+
+  const handleUnblockUser = async (userId: string) => {
+    await apiUnblockUser(userId);
+    await refreshFriends();
+  };
+
   return (
     <FriendsContext.Provider
       value={{
@@ -135,6 +159,9 @@ export function FriendsProvider({ children }: { children: ReactNode }) {
         declineRequest,
         removeFriend: handleRemoveFriend,
         sendRequest: handleSendRequest,
+        blockUser: handleBlockUser,
+        blockedUsers,
+        unblockUser: handleUnblockUser,
       }}
     >
       {children}

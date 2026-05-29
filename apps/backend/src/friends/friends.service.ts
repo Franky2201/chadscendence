@@ -12,6 +12,7 @@ import {
 } from 'src/common/entities/friendship.entity';
 import { User } from 'src/common/entities/user.entity';
 import { PresenceService } from 'src/presence/presence.service';
+import { Block } from 'src/common/entities/block.entity';
 
 @Injectable()
 export class FriendsService {
@@ -22,6 +23,8 @@ export class FriendsService {
     private readonly userRepository: Repository<User>,
     @Inject()
     private readonly presenceService: PresenceService,
+    @InjectRepository(Block)
+    private readonly blockRepository: Repository<Block>,
   ) {}
 
   async getFriends(userId: string) {
@@ -70,6 +73,8 @@ export class FriendsService {
     return requests.map((f) => ({
       friendshipId: f.id,
       addresseeId: f.addressee.id,
+      username: f.addressee.username,
+      avatarUrl: f.addressee.avatarUrl,
     }));
   }
 
@@ -98,6 +103,19 @@ export class FriendsService {
       throw new BadRequestException('Friendship or request already exists');
     }
 
+    const existingBlock = await this.blockRepository.findOne({
+      where: [
+        { blocker: { id: requesterId }, blocked: { id: addresseeId } },
+        { blocker: { id: addresseeId }, blocked: { id: requesterId } },
+      ],
+    });
+
+    if (existingBlock) {
+      throw new BadRequestException(
+        'Vous ne pouvez pas interagir avec cet utilisateur.',
+      );
+    }
+
     const friendship = this.friendshipRepository.create({
       requester: { id: requesterId },
       addressee: { id: addresseeId },
@@ -115,14 +133,30 @@ export class FriendsService {
         addressee: { id: userId },
         status: FriendshipStatus.PENDING,
       },
+      relations: {
+        requester: true,
+      },
     });
 
     if (!friendship) {
       throw new NotFoundException('Friend request not found');
     }
 
+    const existingBlock = await this.blockRepository.findOne({
+      where: [
+        { blocker: { id: userId }, blocked: { id: friendship.requester.id } },
+        { blocker: { id: friendship.requester.id }, blocked: { id: userId } },
+      ],
+    });
+
+    if (existingBlock) {
+      await this.friendshipRepository.remove(friendship);
+      throw new BadRequestException('Action impossible suite à un blocage.');
+    }
+
     friendship.status = FriendshipStatus.ACCEPTED;
     await this.friendshipRepository.save(friendship);
+
     return { message: 'Friend request accepted' };
   }
 
