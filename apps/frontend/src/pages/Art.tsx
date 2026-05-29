@@ -41,7 +41,7 @@ function App() {
               color="red"
               onClick={() => {
                 setGridColor('red');
-                setGridAngle(135);
+                setGridAngle(45);
                 setGridSize(30);
                 setGridSpeed(2);
               }}
@@ -77,7 +77,7 @@ function App() {
               color="green"
               onClick={() => {
                 setGridColor('green');
-                setGridAngle(190);
+                setGridAngle(0);
                 setGridSize(10);
                 setGridSpeed(1);
               }}
@@ -89,9 +89,9 @@ function App() {
               color="blue"
               onClick={() => {
                 setGridColor('blue');
-                setGridAngle(135);
-                setGridSize(30);
-                setGridSpeed(2);
+                setGridAngle(0);
+                setGridSize(1);
+                setGridSpeed(100);
               }}
             >
               Blue
@@ -101,7 +101,7 @@ function App() {
               color="purple"
               onClick={() => {
                 setGridColor('purple');
-                setGridAngle(135);
+                setGridAngle(180);
                 setGridSize(30);
                 setGridSpeed(2);
               }}
@@ -113,7 +113,7 @@ function App() {
               color="pink"
               onClick={() => {
                 setGridColor('pink');
-                setGridAngle(135);
+                setGridAngle(315);
                 setGridSize(30);
                 setGridSpeed(2);
               }}
@@ -125,7 +125,7 @@ function App() {
               color="violet"
               onClick={() => {
                 setGridColor('violet');
-                setGridAngle(135);
+                setGridAngle(270);
                 setGridSize(30);
                 setGridSpeed(2);
               }}
@@ -137,7 +137,7 @@ function App() {
               color="white"
               onClick={() => {
                 setGridColor('white');
-                setGridAngle(135);
+                setGridAngle(225);
                 setGridSize(30);
                 setGridSpeed(2);
               }}
@@ -243,7 +243,7 @@ function App() {
             size="large"
             color="green"
             disabled={isDisabled}
-            className="w-40"
+            className="w-20"
           >
             Button
           </Button>
