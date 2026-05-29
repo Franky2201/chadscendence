@@ -1,18 +1,17 @@
 #!/bin/bash
 
-# Usage: ./generate-game.sh <game-id> <game-name>
-# Example: ./generate-game.sh pong "Retro Pong"
+# Usage: ./generate-game.sh <game-id>
+# Example: ./generate-game.sh retro-pong
 
 set -euo pipefail
 
 GAME_ID=${1:-}
-GAME_NAME=${2:-}
 NEW_PORT="(not assigned)"
 
 # 1. Validation check for empty arguments first
-if [[ -z "$GAME_ID" || -z "$GAME_NAME" ]]; then
-    echo "Usage: ./generate-game.sh <game-id> <game-name>"
-    echo "Example: ./generate-game.sh pong \"Retro Pong\""
+if [[ -z "$GAME_ID" ]]; then
+    echo "Usage: ./generate-game.sh <game-id>"
+    echo "Example: ./generate-game.sh retro-pong"
     exit 1
 fi
 
@@ -27,6 +26,17 @@ fi
 COMPONENT_NAME=$(echo "$GAME_ID" | awk -F'-' '{
     result=""
     for(i=1; i<=NF; i++) result = result toupper(substr($i,1,1)) substr($i,2)
+    print result
+}')
+
+# Derive GAME_NAME (Title Case) from GAME_ID
+# "retro-pong" -> "Retro Pong"
+GAME_NAME=$(echo "$GAME_ID" | awk -F'-' '{
+    result=""
+    for(i=1; i<=NF; i++) {
+        sep = (i==1) ? "" : " "
+        result = result sep toupper(substr($i,1,1)) substr($i,2)
+    }
     print result
 }')
 
@@ -70,8 +80,8 @@ SAFE_NAME=$(printf '%s' "$GAME_NAME" | sed 's/[\/&]/\\&/g')
 echo "Applying template replacements..."
 while IFS= read -r file; do
     "${SED_CMD[@]}" \
-        -e "s/template/$GAME_ID/g" \
         -e "s/template-id/$GAME_ID/g" \
+        -e "s/template/$GAME_ID/g" \
         -e "s/GAME_NAME/$SAFE_NAME/g" \
         -e "s/Template/$COMPONENT_NAME/g" \
         -e "s|apps/games/template|apps/games/$GAME_ID|g" \
@@ -174,17 +184,20 @@ if [ -f "$GAMES_PAGE" ]; then
       }
 
       // Add switch case
-      const switchMarker = 'switch (activeGameId) {';
+      const switchMarker = 'const renderActiveGame = () => {';
       const switchIndex = content.indexOf(switchMarker);
       if (switchIndex === -1) {
-          console.error('Could not find switch (activeGameId) in Games.tsx — skipping case registration.');
+          console.error('Could not find renderActiveGame in Games.tsx — skipping case registration.');
           process.exit(1);
       }
+
+      const switchBodyMarker = 'switch (activeGameId) {';
+      const switchBodyIndex = content.indexOf(switchBodyMarker, switchIndex);
 
       const caseBlock = \`            case \"\${process.env.GAME_ID}\":\n                return <\${process.env.COMPONENT_NAME}UI />;\n\`;
 
       if (!content.includes(\`case \"\${process.env.GAME_ID}\":\`)) {
-          const index = switchIndex + switchMarker.length;
+          const index = switchBodyIndex + switchBodyMarker.length;
           content = content.slice(0, index) + '\n' + caseBlock + content.slice(index);
       }
 
