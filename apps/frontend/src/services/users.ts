@@ -5,6 +5,9 @@ export interface User {
   username: string;
   email: string;
   avatarUrl: string;
+  bio?: string;
+  githubId?: string;
+  intraId?: string;
   role: 'user' | 'admin';
   score: number;
   rank: {
@@ -13,13 +16,16 @@ export interface User {
     minScore: number;
     icon?: string;
   };
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 interface UpdateMe {
   username?: string;
+  oldPassword?: string;
   password?: string;
   avatarUrl?: string;
-  bio?: string;
+  bio?: string | null;
 }
 
 export type LeaderboardType = {
@@ -38,11 +44,21 @@ export interface UserSearchResult {
 
 export const getMe = async (): Promise<User> => {
   const res = await api.get<User>('/users/me');
+  console.log(res.data);
   return res.data;
 };
 
 export const updateMe = async (data: UpdateMe): Promise<User> => {
   const res = await api.patch<User>('/users/me', data);
+  return res.data;
+};
+
+export const uploadAvatar = async (file: File): Promise<User> => {
+  const formData = new FormData();
+  formData.append('file', file);
+  const res = await api.post<User>('/users/me/avatar', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
   return res.data;
 };
 
@@ -57,6 +73,11 @@ export const getLeaderboard = async (
   const res = await api.get<LeaderboardType>(
     `/users/leaderboard?count=${count}`,
   );
+  return res.data;
+};
+
+export const getMyLeaderboardRank = async (): Promise<number> => {
+  const res = await api.get<number>('/users/me/leaderboard-rank');
   return res.data;
 };
 

@@ -1,9 +1,15 @@
-import { OnModuleInit, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  OnModuleInit,
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { MoreThan, Repository } from 'typeorm';
 import { User, UserRole } from 'src/common/entities/user.entity';
 import { UpdateUserDto } from 'src/common/dto/users.dto';
-import { hash } from 'bcrypt';
+import { hash, compare } from 'bcrypt';
 import { RanksService } from 'src/ranks/ranks.service';
 import { ConfigService } from '@nestjs/config';
 import { Block } from 'src/common/entities/block.entity';
@@ -70,15 +76,45 @@ export class UsersService implements OnModuleInit {
   }
 
   async updateUser(id: string, updateUserDto: UpdateUserDto) {
-    const { password, ...rest } = updateUserDto;
+    const { password, oldPassword, ...rest } = updateUserDto;
     const dataToUpdate: Partial<User> = { ...rest };
+    if ('bio' in updateUserDto) {
+      dataToUpdate.bio = updateUserDto.bio;
+    }
 
     if (password) {
+      const userWithPassword = await this.userRepository
+        .createQueryBuilder('user')
+        .where('user.id = :id', { id })
+        .addSelect('user.password')
+        .getOne();
+
+      if (!userWithPassword) throw new NotFoundException('User not found');
+
+      if (!userWithPassword.password)
+        throw new BadRequestException(
+          'Les comptes OAuth ne peuvent pas définir de mot de passe ici.',
+        );
+
+      if (!oldPassword)
+        throw new BadRequestException(
+          "L'ancien mot de passe est requis pour en définir un nouveau.",
+        );
+
+      const isValid = await compare(oldPassword, userWithPassword.password);
+      if (!isValid)
+        throw new UnauthorizedException("L'ancien mot de passe est incorrect.");
+
       dataToUpdate.password = await hash(password, 10);
     }
 
     await this.userRepository.save({ id, ...dataToUpdate });
 
+    return this.getUser(id);
+  }
+
+  async uploadAvatar(id: string, filename: string) {
+    await this.userRepository.save({ id, avatarUrl: `http://localhost:3000/uploads/${filename}` });
     return this.getUser(id);
   }
 
@@ -107,6 +143,14 @@ export class UsersService implements OnModuleInit {
       avatarUrl: u.avatarUrl,
       score: u.score,
     }));
+  }
+
+  async getUserLeaderboardRank(userId: string): Promise<number> {
+    const user = await this.getUser(userId);
+    const above = await this.userRepository.count({
+      where: { score: MoreThan(user.score) },
+    });
+    return above + 1;
   }
 
   async searchUsers(query: string, currentUserId: string) {
