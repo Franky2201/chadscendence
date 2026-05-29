@@ -19,6 +19,7 @@ export class AppModule
     implements OnApplicationBootstrap, OnApplicationShutdown
 {
     private readonly logger = new Logger(AppModule.name);
+    private heartbeatInterval?: NodeJS.Timeout;
 
     constructor(private readonly _redisService: RedisService) {}
 
@@ -29,14 +30,34 @@ export class AppModule
             description: "C'est du calcul mental frangin",
             port: Number(process.env.PORT ?? 3001),
         };
-        await this._redisService
-            .getClient()
-            .hset("games:registry", "math", JSON.stringify(gameData));
-        this.logger.log("Game registered in Redis as 'math'");
+
+        const register = async () => {
+            await this._redisService
+                .getClient()
+                .set(
+                    `games:active:${gameData.id}`,
+                    JSON.stringify(gameData),
+                    "EX",
+                    15,
+                );
+        };
+
+        // Initial registration
+        await register();
+
+        // Heartbeat every 5 seconds
+        this.heartbeatInterval = setInterval(() => {
+            void register();
+        }, 5000);
+
+        this.logger.log("Game registered in Redis with heartbeat (15s TTL)");
     }
 
     async onApplicationShutdown() {
-        await this._redisService.getClient().hdel("games:registry", "math");
+        if (this.heartbeatInterval) {
+            clearInterval(this.heartbeatInterval);
+        }
+        await this._redisService.getClient().del(`games:active:math`);
         this.logger.log("Game deregistered from Redis");
     }
 }

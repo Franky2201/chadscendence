@@ -31,11 +31,16 @@ export class GamesService implements OnModuleInit, OnModuleDestroy {
     }
 
     async getActiveGames(): Promise<Game[]> {
-        const rawGames = await this.redis.hgetall("games:registry");
-        return Object.values(rawGames).map((gameStr): Game => {
-            const parsed: unknown = JSON.parse(gameStr);
-            return parsed as Game;
-        });
+        const keys = await this.redis.keys("games:active:*");
+        if (keys.length === 0) return [];
+
+        const rawGames = await this.redis.mget(...keys);
+        return rawGames
+            .filter((gameStr): gameStr is string => gameStr !== null)
+            .map((gameStr): Game => {
+                const parsed: unknown = JSON.parse(gameStr);
+                return parsed as Game;
+            });
     }
 
     async sendCommand<T = unknown, R = unknown>(

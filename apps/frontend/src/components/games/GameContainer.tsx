@@ -17,7 +17,10 @@ interface GameContainerProps<TProblem, TResult, TSubmission = unknown> {
 
 export default function GameContainer<
     TProblem = unknown,
-    TResult = { success: boolean; message?: string },
+    TResult extends { success: boolean; message?: string } = {
+        success: boolean;
+        message?: string;
+    },
     TSubmission = unknown,
 >({
     gameId,
