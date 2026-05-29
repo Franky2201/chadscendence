@@ -21,7 +21,3 @@ services:
         networks:
             - ft_network
         restart: unless-stopped
-
-networks:
-    ft_network:
-        name: ft_network
