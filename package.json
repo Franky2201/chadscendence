@@ -2,14 +2,15 @@
     "name": "chadscendence",
     "private": true,
     "workspaces": [
-        "apps/*",
+        "apps/backend",
+        "apps/frontend",
         "apps/games/*",
         "libs/*"
     ],
     "scripts": {
         "backend:dev": "npm run start:dev -w backend",
         "frontend:dev": "npm run dev -w frontend",
-        "math-game:dev": "npm run start:dev -w math-game",
+        "math:dev": "npm run start:dev -w math",
         "build": "npm run build -ws",
         "lint": "npm run lint -ws",
         "test": "npm run test -ws"

@@ -70,7 +70,7 @@ SAFE_NAME=$(printf '%s' "$GAME_NAME" | sed 's/[\/&]/\\&/g')
 echo "Applying template replacements..."
 while IFS= read -r file; do
     "${SED_CMD[@]}" \
-        -e "s/template-game/$GAME_ID-game/g" \
+        -e "s/template/$GAME_ID/g" \
         -e "s/template-id/$GAME_ID/g" \
         -e "s/GAME_NAME/$SAFE_NAME/g" \
         -e "s/Template/$COMPONENT_NAME/g" \
@@ -91,8 +91,8 @@ if [ -f "$DOCKER_COMPOSE" ]; then
     NEW_PORT=$((LAST_PORT + 1))
 
     # Create the service block
-    SERVICE_BLOCK="    $GAME_ID-game:
-        container_name: ft_$GAME_ID-game
+    SERVICE_BLOCK="    $GAME_ID:
+        container_name: ft_$GAME_ID
         build:
             context: ../../
             dockerfile: apps/games/$GAME_ID/Dockerfile
@@ -132,7 +132,7 @@ if [ -f "$ROOT_PACKAGE" ]; then
     PACKAGE_PATH="$ROOT_PACKAGE" GAME_ID="$GAME_ID" node -e "
       const fs = require('fs');
       const pkg = JSON.parse(fs.readFileSync(process.env.PACKAGE_PATH));
-      pkg.scripts[process.env.GAME_ID + ':dev'] = 'npm run start:dev -w ' + process.env.GAME_ID + '-game';
+      pkg.scripts[process.env.GAME_ID + ':dev'] = 'npm run start:dev -w ' + process.env.GAME_ID;
       fs.writeFileSync(process.env.PACKAGE_PATH, JSON.stringify(pkg, null, 2) + '\n');
     "
 fi
