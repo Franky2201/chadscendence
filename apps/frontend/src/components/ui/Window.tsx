@@ -30,7 +30,7 @@ export function Window({
 }: WindowProps) {
   const { theme, toggleTheme } = useTheme();
   const classes = [
-    'min-h-screen relative overflow-hidden font-sans p-8',
+    'min-h-screen relative overflow-hidden font-sans p-8 transition-colors duration-500 ease-in-out',
     className,
   ]
     .filter(Boolean)
@@ -40,17 +40,21 @@ export function Window({
 	justify-center rounded-full border shadow-lg transition-all \
 	focus-visible:outline-none focus-visible:ring-2 \
 	focus-visible:ring-offset-2 active:scale-95 cursor-pointer \
+	overflow-hidden transition-colors duration-300 ease-in-out \
 	select-none',
     themeButtonClasses[theme],
   ]
     .filter(Boolean)
     .join(' ');
   const isDark = theme === 'dark';
-  const iconSrc = isDark ? '/light.svg' : '/dark.svg';
-  const iconSizeClasses = 'h-8 w-8';
-  const iconClasses = isDark
-    ? iconSizeClasses
-    : `${iconSizeClasses} filter brightness-0 invert`;
+  const iconBaseClasses =
+    'absolute inset-0 h-8 w-8 transition-all duration-300 ease-in-out';
+  const darkIconClasses = isDark
+    ? `${iconBaseClasses} opacity-0 scale-75`
+    : `${iconBaseClasses} opacity-100 scale-100 filter brightness-0 invert`;
+  const lightIconClasses = isDark
+    ? `${iconBaseClasses} opacity-100 scale-100`
+    : `${iconBaseClasses} opacity-0 scale-75 filter brightness-0 invert`;
   return (
     <div className={classes}>
       <AnimatedBackground
@@ -66,7 +70,20 @@ export function Window({
         onClick={toggleTheme}
         aria-label=""
       >
-        <img src={iconSrc} alt="" aria-hidden="true" className={iconClasses} />
+        <span className="relative h-8 w-8">
+          <img
+            src="/dark.svg"
+            alt=""
+            aria-hidden="true"
+            className={darkIconClasses}
+          />
+          <img
+            src="/light.svg"
+            alt=""
+            aria-hidden="true"
+            className={lightIconClasses}
+          />
+        </span>
       </button>
     </div>
   );

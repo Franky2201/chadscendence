@@ -41,7 +41,8 @@ export function Toggle({
     after:absolute after:rounded-full after:top-[2px] active:scale-95 \
     after:start-[2px] after:transition-all after:duration-100 transition-all \
     duration-100 rounded-full after:translate-y-[2px] after:translate-x-[2px] \
-	peer-checked:bg-[color:var(--ui-color)] bg-[color:var(--color-grey)]',
+	peer-checked:bg-[color:var(--ui-color)] bg-[color:var(--color-grey)] \
+	transition-[background-color,color,border-color,box-shadow,transform] ease-in-out',
     themeClasses[theme],
     sizeClasses[size],
   ]

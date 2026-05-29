@@ -27,7 +27,7 @@ const baseClasses =
 	font-bold \
 	group \
 	relative \
-	transition-all \
+  transition-[background-color,color,border-color,box-shadow,transform] duration-300 ease-in-out \
 	shadow-lg \
 	active:scale-95 \
 	select-none';
