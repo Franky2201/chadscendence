@@ -95,16 +95,6 @@ export default function HomePage() {
                                     alt="avatar"
                                     className="w-40 h-40 rounded-full hover:cursor-pointer transition-transform hover:scale-110 object-cover"
                                 />
-                                <button
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        void logout();
-                                    }}
-                                    className="absolute -bottom-2 -right-2 bg-red-600 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                                    title="Déconnexion"
-                                >
-                                    🚪
-                                </button>
                             </div>
                             <h2 className="text-3xl">{user.username}</h2>
                             <h2 className="text-3xl">
