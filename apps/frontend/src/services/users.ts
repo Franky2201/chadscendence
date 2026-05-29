@@ -25,7 +25,7 @@ interface UpdateMe {
   oldPassword?: string;
   password?: string;
   avatarUrl?: string;
-  bio?: string;
+  bio?: string | null;
 }
 
 export type LeaderboardType = {
