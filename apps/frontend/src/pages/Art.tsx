@@ -146,7 +146,7 @@ function App() {
             </Button>
           </div>
           <Button
-            className="w-66 mt-4"
+            className="mt-4"
             onClick={() => {
               setGridColor('grey');
               setGridAngle(45);
@@ -173,9 +173,9 @@ function App() {
         </Card>
         <Card className="flex w-full flex-col items-center">
           <Button className="w-20 h-20" borderRadius="rounded-full">
-            <img src="../public/game_icon.png" className="h-16 w-16" />
+            <img src="../public/game_icon.png" className="" />
           </Button>
-          <Button className="mt-4 mb-4 w-64 h-20" size="large">
+          <Button className="mt-4" size="large">
             <img src="../public/game_icon.png" className="h-16 w-16" />
             Default
           </Button>
@@ -221,10 +221,10 @@ function App() {
           <div className="flex flex-col gap-3">
             <Input type="text" placeholder="Username ..." />
             <div className="flex gap-3">
-              <Button color="violet" className="w-25">
+              <Button color="violet" className="">
                 Inviter
               </Button>
-              <Button color="grey" className="w-25">
+              <Button color="grey" className="">
                 Share link
               </Button>
             </div>
@@ -235,16 +235,11 @@ function App() {
             size="large"
             color="blue"
             onClick={toggleBoolean}
-            className="w-40"
+            className=""
           >
             Disable button
           </Button>
-          <Button
-            size="large"
-            color="green"
-            disabled={isDisabled}
-            className="w-20"
-          >
+          <Button size="large" color="green" disabled={isDisabled} className="">
             Button
           </Button>
         </Card>

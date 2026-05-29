@@ -75,8 +75,8 @@ export default function AnimatedBackground({
       <div
         className="absolute left-1/2 top-1/2 h-[300vmax] w-[300vmax] -translate-x-1/2 -translate-y-1/2"
         style={{
-		  width: '600vmax',
-		  height: '600vmax',
+          width: '600vmax',
+          height: '600vmax',
           transform: 'rotate(var(--ab-angle))',
           transition: 'transform 450ms ease',
           transformOrigin: 'center center',

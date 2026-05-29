@@ -10,9 +10,9 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 const sizeClasses: Record<ItemSize, string> = {
-  small: 'py-2 text-sm',
-  medium: 'py-3 text-md',
-  large: 'py-4 text-lg',
+  small: 'px-2 py-1 text-sm',
+  medium: 'px-3 py-2 text-md',
+  large: 'px-4 py-3 text-lg',
 };
 
 export function Button({
@@ -65,7 +65,7 @@ export function Button({
       />
       <button
         type="button"
-        className={`${buttonClasses}`}
+        className={buttonClasses}
         style={{
           ...style,
           ...textStyle,
