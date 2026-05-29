@@ -16,12 +16,12 @@ RUN npm ci
 # 2. Development stage
 FROM base AS development
 COPY . .
-CMD ["npm", "run", "start:dev", "-w", "template-game"]
+CMD ["npm", "run", "start:dev", "-w", "template"]
 
 # 3. Build stage
 FROM base AS build
 COPY . .
-RUN npm run build -w template-game
+RUN npm run build -w template
 
 # Prune devDependencies
 RUN npm prune --omit=dev

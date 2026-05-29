@@ -16,12 +16,12 @@ RUN npm ci
 # 2. Development stage
 FROM base AS development
 COPY . .
-CMD ["npm", "run", "start:dev", "-w", "math-game"]
+CMD ["npm", "run", "start:dev", "-w", "math"]
 
 # 3. Build stage
 FROM base AS build
 COPY . .
-RUN npm run build -w math-game
+RUN npm run build -w math
 
 # Prune devDependencies
 RUN npm prune --omit=dev
