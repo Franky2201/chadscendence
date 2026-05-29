@@ -81,9 +81,9 @@ echo "Applying template replacements..."
 while IFS= read -r file; do
     "${SED_CMD[@]}" \
         -e "s/template-id/$GAME_ID/g" \
-        -e "s/template/$GAME_ID/g" \
-        -e "s/GAME_NAME/$SAFE_NAME/g" \
         -e "s/Template/$COMPONENT_NAME/g" \
+        -e "s/GAME_NAME/$SAFE_NAME/g" \
+        -e "s/template/$GAME_ID/g" \
         -e "s|apps/games/template|apps/games/$GAME_ID|g" \
         "$file"
 done < <(find "$TARGET_DIR" -type f)
