@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Button, Input } from '../components/ui';
-import { updateMe, uploadAvatar } from '../services/users';
+import { updateMe, uploadAvatar, getMyLeaderboardRank } from '../services/users';
 
 export default function ProfilePage() {
   const { user, isLoading, logout, login } = useAuth();
@@ -17,6 +17,7 @@ export default function ProfilePage() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [leaderboardRank, setLeaderboardRank] = useState<number | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -24,6 +25,12 @@ export default function ProfilePage() {
       navigate('/');
     }
   }, [isLoading, user, navigate]);
+
+  useEffect(() => {
+    if (user) {
+      getMyLeaderboardRank().then(setLeaderboardRank).catch(() => {});
+    }
+  }, [user]);
 
   if (isLoading || !user)
     return (
@@ -162,7 +169,10 @@ export default function ProfilePage() {
                   {user.rank.icon} {user.rank.name}
                 </p>
                 <p className="text-3xl font-bold text-[#FFD931]">
-                  {user.score} pts
+                  {user.score} pts{' '}
+                  <span className="text-2xl font-semibold text-[#FFD931]/70">
+                    #{leaderboardRank ?? '…'}
+                  </span>
                 </p>
                 {user.bio && (
                   <p className="text-white/70 text-base text-center max-w-sm mt-1 italic">
@@ -184,6 +194,9 @@ export default function ProfilePage() {
                 <Button onClick={handleEdit} size="medium">
                   Modifier le profil
                 </Button>
+                <Link to="/friends">
+                  <Button size="medium">Mes amis</Button>
+                </Link>
                 <Button onClick={handleLogout} size="medium">
                   Se déconnecter
                 </Button>

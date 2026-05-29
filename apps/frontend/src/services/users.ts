@@ -76,6 +76,11 @@ export const getLeaderboard = async (
   return res.data;
 };
 
+export const getMyLeaderboardRank = async (): Promise<number> => {
+  const res = await api.get<number>('/users/me/leaderboard-rank');
+  return res.data;
+};
+
 export const searchUsers = async (
   query: string,
 ): Promise<UserSearchResult[]> => {

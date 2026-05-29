@@ -80,6 +80,12 @@ export class UsersController {
     return this.usersService.searchUsers(query, body.sub);
   }
 
+  @Get('me/leaderboard-rank')
+  @UseGuards(JwtAuthGuard)
+  getMyLeaderboardRank(@GetUser() payload: JwtPayload) {
+    return this.usersService.getUserLeaderboardRank(payload.sub);
+  }
+
   @Get('leaderboard')
   getGlobalLeaderboard(@Query('count') count: string = '10') {
     return this.usersService.getGlobalLeaderboard(Number(count));

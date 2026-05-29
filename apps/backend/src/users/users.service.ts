@@ -6,7 +6,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { MoreThan, Repository } from 'typeorm';
 import { User, UserRole } from 'src/common/entities/user.entity';
 import { UpdateUserDto } from 'src/common/dto/users.dto';
 import { hash, compare } from 'bcrypt';
@@ -143,6 +143,14 @@ export class UsersService implements OnModuleInit {
       avatarUrl: u.avatarUrl,
       score: u.score,
     }));
+  }
+
+  async getUserLeaderboardRank(userId: string): Promise<number> {
+    const user = await this.getUser(userId);
+    const above = await this.userRepository.count({
+      where: { score: MoreThan(user.score) },
+    });
+    return above + 1;
   }
 
   async searchUsers(query: string, currentUserId: string) {
