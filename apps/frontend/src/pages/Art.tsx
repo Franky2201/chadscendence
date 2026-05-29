@@ -175,7 +175,7 @@ function App() {
           <Button className="w-20 h-20" borderRadius="rounded-full">
             <img src="../public/game_icon.png" className="h-16 w-16" />
           </Button>
-          <Button className="mt-4 w-64 h-20" size="large">
+          <Button className="mt-4 mb-4 w-64 h-20" size="large">
             <img src="../public/game_icon.png" className="h-16 w-16" />
             Default
           </Button>
