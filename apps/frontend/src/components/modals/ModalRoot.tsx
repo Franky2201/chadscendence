@@ -25,7 +25,11 @@ export default function ModalRoot() {
                 <GameModal isOpen={true} onClose={closeModal} {...modalProps} />
             )}
             {activeModal === "ABOUT" && (
-                <AboutModal isOpen={true} onClose={closeModal} {...modalProps} />
+                <AboutModal
+                    isOpen={true}
+                    onClose={closeModal}
+                    {...modalProps}
+                />
             )}
         </>
     );

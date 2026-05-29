@@ -5,7 +5,7 @@ import { useModal } from "../contexts/ModalContext";
 import Leaderboard from "../components/home/Leaderboard";
 
 export default function HomePage() {
-    const { user, isLoading, logout } = useAuth();
+    const { user, isLoading } = useAuth();
     const { openModal } = useModal();
     const navigate = useNavigate();
 

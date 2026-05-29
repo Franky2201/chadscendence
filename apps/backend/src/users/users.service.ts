@@ -91,7 +91,8 @@ export class UsersService implements OnModuleInit {
                 .addSelect("user.password")
                 .getOne();
 
-            if (!userWithPassword) throw new NotFoundException("User not found");
+            if (!userWithPassword)
+                throw new NotFoundException("User not found");
 
             if (!userWithPassword.password)
                 throw new BadRequestException(
@@ -103,7 +104,10 @@ export class UsersService implements OnModuleInit {
                     "L'ancien mot de passe est requis pour en définir un nouveau.",
                 );
 
-            const isValid = await compare(oldPassword, userWithPassword.password);
+            const isValid = await compare(
+                oldPassword,
+                userWithPassword.password,
+            );
             if (!isValid)
                 throw new UnauthorizedException(
                     "L'ancien mot de passe est incorrect.",
@@ -196,7 +200,9 @@ export class UsersService implements OnModuleInit {
             id: u.id,
             username: u.username,
             avatarUrl: u.avatarUrl,
-            status: this.presenceService.isUserOnline(u.id) ? "online" : "offline",
+            status: this.presenceService.isUserOnline(u.id)
+                ? "online"
+                : "offline",
         }));
     }
 
