@@ -38,6 +38,7 @@ prerequisites: check
 
 build: prerequisites
 	@printf "$(GREEN)Building shared libraries...$(NO_COLOR)\n"
+	@npm run build -w @chad/types
 	@npm run build -ws --if-present
 	@DOCKER_BUILDKIT=1 $(COMPOSE) build
 
