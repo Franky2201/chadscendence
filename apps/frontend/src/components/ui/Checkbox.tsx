@@ -27,7 +27,7 @@ const baseClasses =
 	font-bold \
 	group \
 	relative \
-	transition-all \
+  transition-[background-color,color,border-color,box-shadow,transform] duration-300 ease-in-out \
 	shadow-lg \
 	active:scale-95 \
 	select-none";
@@ -139,7 +139,7 @@ export function Checkbox({
             <span className={buttonClasses}>
                 <span className={iconWrapperClasses} data-icon="unchecked">
                     <img
-                        src="/check.svg"
+                        src="/unchecked.svg"
                         alt=""
                         aria-hidden="true"
                         className={iconUncheckedClasses}

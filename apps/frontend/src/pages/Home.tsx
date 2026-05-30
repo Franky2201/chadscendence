@@ -1,113 +1,165 @@
-import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { Button } from "../components/ui";
+import { Button, Card, Window, Title } from "../components/ui";
 import { useModal } from "../contexts/ModalContext";
 import Leaderboard from "../components/home/Leaderboard";
+import { withIntra, withGithub } from "../services/auth";
+import { developers } from "../contexts/AboutContext";
 
 export default function HomePage() {
     const { user, isLoading } = useAuth();
     const { openModal } = useModal();
-    const navigate = useNavigate();
 
     if (isLoading)
         return (
             <div className="min-h-screen flex items-center justify-center">
-                Chargement...
+                Loading ...
             </div>
         );
 
     return (
-        <div
-            className="relative min-h-screen w-full overflow-hidden bg-slate-900 bg-cover bg-center text-white font-sans"
-            style={{ backgroundImage: "url('/background.png')" }}
-        >
-            <div className="absolute inset-0 bg-linear-to-r from-slate-900/90 via-slate-900/50 to-transparent" />
-            <div className="relative z-10 flex h-full min-h-screen">
-                <div className="flex w-1/2 flex-col items-start gap-10 pl-10 pt-10">
-                    <img
-                        src="/logo.png"
-                        alt="WhoIsChad"
-                        className="w-72 object-contain drop-shadow-2xl"
-                    />
-
-                    <button
-                        onClick={() => openModal("GAME")}
-                        className="w-72 rounded-2xl border-2 border-white/80 bg-[#E43A70] py-4 text-center text-3xl font-black tracking-wide text-white shadow-xl drop-shadow-lg transition-transform hover:scale-105"
+        <Window>
+            <header className="justify-self-center">
+                <img
+                    className="select-none w-auto drop-shadow-lg max-h-30 mb-8"
+                    src="/game_banner.png"
+                    alt="GameLogo"
+                />
+            </header>
+            <div className="flex flex-wrap max-w-400 justify-self-center justify-center gap-3">
+                {!user && (
+                    <Card
+                        className="flex flex-col basis-100"
+                        title="Identification"
                     >
-                        Jouer
-                    </button>
-
-                    {!user && (
-                        <Button onClick={() => openModal("LOGIN")} size="large">
-                            Se connecter
+                        <Button
+                            className="w-full"
+                            onClick={() => openModal("LOGIN")}
+                        >
+                            Login
                         </Button>
-                    )}
-
-                    <div className="flex flex-1 flex-col justify-between mt-10">
-                        <nav className="flex flex-col gap-5 text-xl font-bold">
-                            <Link
-                                to="/games"
-                                className="w-fit text-2xl hover:text-[#E43A70] transition-colors hover:scale-105"
-                            >
-                                Les jeux
-                            </Link>
-                            {user && (
-                                <>
-                                    <Link
-                                        to="/friends"
-                                        className="w-fit text-2xl hover:text-[#E43A70] transition-colors hover:scale-105"
-                                    >
-                                        Mes amis
-                                    </Link>
-                                    <Link
-                                        to="/profile"
-                                        className="w-fit text-2xl hover:text-[#E43A70] transition-colors hover:scale-105"
-                                    >
-                                        Profil
-                                    </Link>
-                                </>
-                            )}
-                            <a
-                                href="https://cdn.intra.42.fr/pdf/pdf/203995/en.subject.pdf"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="w-fit text-2xl hover:text-[#E43A70] transition-colors hover:scale-105"
-                            >
-                                Subject
-                            </a>
-                            <button
-                                onClick={() => openModal("ABOUT")}
-                                className="w-fit text-2xl hover:text-[#E43A70] transition-colors hover:scale-105"
-                            >
-                                Credits
-                            </button>
-                        </nav>
-                    </div>
-                </div>
-
-                <div className="flex w-1/2 flex-col items-end gap-10 pr-10 pt-10">
-                    {user && (
-                        <div className="flex flex-col items-center gap-4">
-                            <div className="relative group">
-                                <img
-                                    src={user.avatarUrl}
-                                    onClick={() => navigate("/profile")}
-                                    alt="avatar"
-                                    className="w-40 h-40 rounded-full hover:cursor-pointer transition-transform hover:scale-110 object-cover"
-                                />
-                            </div>
-                            <h2 className="text-3xl">{user.username}</h2>
-                            <h2 className="text-3xl">
-                                {user.role}
-                                {user.rank?.icon} {user.rank?.name} -{" "}
-                                {user.score}
-                            </h2>
+                        <Button
+                            className="w-full"
+                            onClick={() => openModal("REGISTER")}
+                        >
+                            Register
+                        </Button>
+                        <div className="flex flex-row gap-2 w-full">
+                            <Button className="w-full" onClick={withIntra}>
+                                42
+                            </Button>
+                            <Button className="w-full" onClick={withGithub}>
+                                GitHub
+                            </Button>
                         </div>
-                    )}
+                    </Card>
+                )}
+                <Card className="flex basis-100">
+                    <div className="flex w-full justify-between">
+                        <Title>Play</Title>
+                        <Button
+                            className="w-9 h-8"
+                            size="large"
+                            borderRadius="rounded-full"
+                        >
+                            ?
+                        </Button>
+                    </div>
+                    <div className="flex flex-col gap-3 w-full h-full justify-center">
+                        <Button className="w-full">Party</Button>
+                        <Button className="w-full">Solo</Button>
+                        {user && (
+                            <Button className="w-full">Multiplayer</Button>
+                        )}
+                        {user && (
+                            <Button className="w-full">Custom Game</Button>
+                        )}
+                    </div>
+                </Card>
+                <Card
+                    className="basis-100"
+                    contentClassName="justify-start"
+                    title="Leaderboard"
+                >
+                    <div className="w-full">
+                        <Leaderboard count={5} />
+                    </div>
+                </Card>
+                {user && (
+                    <Card className="flex flex-col basis-100" title="Profile">
+                        <></>
+                    </Card>
+                )}
+                {user && (
+                    <Card className="flex flex-col basis-100" title="Friends">
+                        <></>
+                    </Card>
+                )}
+                {user && (
+                    <Card className="flex flex-col basis-100" title="Clan">
+                        <></>
+                    </Card>
+                )}
+                {user && (
+                    <Card
+                        className="flex flex-col basis-100"
+                        title="Achievements"
+                    >
+                        <></>
+                    </Card>
+                )}
+                <Card className="flex flex-col basis-100" title="Settings">
+                    <></>
+                </Card>
+                <Card className="flex flex-col basis-203" title="Credits">
+                    <Card className="border-none relative">
+                        <p className="text-center text-sm">
+                            This project was created collaboratively by our team
+                            of 5 developers.
+                        </p>
+                        <div className="grid md:grid-cols-2 gap-3">
+                            {developers.map((dev, index) => (
+                                <a href={dev.link} target="_blank">
+                                    <Card
+                                        key={index}
+                                        className="border transition-all
+										hover:bg-[color:var(--color-grey)]/40
+										hover:border-[color:var(--color-grey)]/60"
+                                    >
+                                        <div className="flex flex-wrap gap-2">
+                                            <img
+                                                src={dev.pic}
+                                                alt={`${dev.name} profile`}
+                                                className="w-14 h-14 rounded-xl object-cover flex-shrink-0"
+                                            />
+                                            <div>
+                                                <h2 className="font-bold text-sm mb-0.5">
+                                                    {dev.name}
+                                                </h2>
+                                                <p className="text-xs mb-1">
+                                                    @{dev.username}
+                                                </p>
+                                                <p className="text-xs uppercase tracking-widest">
+                                                    {dev.role}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </Card>
+                                </a>
+                            ))}
+                        </div>
 
-                    <Leaderboard count={5} />
-                </div>
+                        <div className="border-t border-white/10 pt-4 flex items-center justify-between text-xs uppercase tracking-widest">
+                            <span>Made with ❤️ at 42 Belgium</span>
+                            <a
+                                href="/about"
+                                className="hover:underline normal-case tracking-normal"
+                            >
+                                More info →
+                            </a>
+                        </div>
+                    </Card>
+                </Card>
             </div>
-        </div>
+        </Window>
     );
 }

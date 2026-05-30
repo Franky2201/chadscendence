@@ -5,12 +5,30 @@ import {
     Checkbox,
     Input,
     Select,
+    Toggle,
     Window,
 } from "../components/ui";
+import { useState } from "react";
+import type { ItemColor } from "../components/ui/unified";
 
 function App() {
+    const [isDisabled, setIsDisabled] = useState(false);
+    const [gridColor, setGridColor] = useState<ItemColor>("grey");
+    const [gridAngle, setGridAngle] = useState(45);
+    const [gridSize, setGridSize] = useState(20);
+    const [gridSpeed, setGridSpeed] = useState(4);
+
+    function toggleBoolean() {
+        setIsDisabled((previousValue) => !previousValue);
+    }
+
     return (
-        <Window>
+        <Window
+            color={gridColor}
+            angle={gridAngle}
+            size={gridSize}
+            speed={gridSpeed}
+        >
             <div className="mx-auto flex w-full max-w-5xl flex-col items-center gap-6">
                 <img
                     src="../public/game_banner.png"
@@ -18,100 +36,237 @@ function App() {
                 ></img>
                 <Card className="flex w-full flex-col items-center text-center">
                     <div className="grid grid-cols-3 gap-3 place-items-center">
-                        <Button className="h-20 w-20" color="red">
-                            #ff9191
+                        <Button
+                            className="h-20 w-20"
+                            color="red"
+                            onClick={() => {
+                                setGridColor("red");
+                                setGridAngle(45);
+                                setGridSize(30);
+                                setGridSpeed(2);
+                            }}
+                        >
+                            Red
                         </Button>
-                        <Button className="h-20 w-20" color="orange">
-                            #ffc780
+                        <Button
+                            className="h-20 w-20"
+                            color="orange"
+                            onClick={() => {
+                                setGridColor("orange");
+                                setGridAngle(90);
+                                setGridSize(40);
+                                setGridSpeed(1);
+                            }}
+                        >
+                            Orange
                         </Button>
-                        <Button className="h-20 w-20" color="yellow">
-                            #fff190
+                        <Button
+                            className="h-20 w-20"
+                            color="yellow"
+                            onClick={() => {
+                                setGridColor("yellow");
+                                setGridAngle(135);
+                                setGridSize(30);
+                                setGridSpeed(2);
+                            }}
+                        >
+                            Yellow
                         </Button>
-                        <Button className="h-20 w-20" color="green">
-                            #a9ffb3
+                        <Button
+                            className="h-20 w-20"
+                            color="green"
+                            onClick={() => {
+                                setGridColor("green");
+                                setGridAngle(0);
+                                setGridSize(10);
+                                setGridSpeed(1);
+                            }}
+                        >
+                            Green
                         </Button>
-                        <Button className="h-20 w-20" color="blue">
-                            #6dd8fe
+                        <Button
+                            className="h-20 w-20"
+                            color="blue"
+                            onClick={() => {
+                                setGridColor("blue");
+                                setGridAngle(0);
+                                setGridSize(1);
+                                setGridSpeed(100);
+                            }}
+                        >
+                            Blue
                         </Button>
-                        <Button className="h-20 w-20" color="purple">
-                            #d791ff
+                        <Button
+                            className="h-20 w-20"
+                            color="purple"
+                            onClick={() => {
+                                setGridColor("purple");
+                                setGridAngle(180);
+                                setGridSize(30);
+                                setGridSpeed(2);
+                            }}
+                        >
+                            Purple
                         </Button>
-                        <Button className="h-20 w-20" color="pink">
-                            #ffbfff
+                        <Button
+                            className="h-20 w-20"
+                            color="pink"
+                            onClick={() => {
+                                setGridColor("pink");
+                                setGridAngle(315);
+                                setGridSize(30);
+                                setGridSpeed(2);
+                            }}
+                        >
+                            Pink
                         </Button>
-                        <Button className="h-20 w-20" color="violet">
-                            #a9a3ff
+                        <Button
+                            className="h-20 w-20"
+                            color="violet"
+                            onClick={() => {
+                                setGridColor("violet");
+                                setGridAngle(270);
+                                setGridSize(30);
+                                setGridSpeed(2);
+                            }}
+                        >
+                            Violet
                         </Button>
-                        <Button className="h-20 w-20" color="white">
-                            #f8f8f8
+                        <Button
+                            className="h-20 w-20"
+                            color="white"
+                            onClick={() => {
+                                setGridColor("white");
+                                setGridAngle(225);
+                                setGridSize(30);
+                                setGridSpeed(2);
+                            }}
+                        >
+                            White
                         </Button>
                     </div>
-                    <Button buttonClassName="mt-4" className="w-66">
+                    <Button
+                        className="mt-4"
+                        onClick={() => {
+                            setGridColor("grey");
+                            setGridAngle(45);
+                            setGridSize(20);
+                            setGridSpeed(4);
+                        }}
+                    >
                         Default
                     </Button>
                 </Card>
                 <Card className="flex w-full flex-col items-center text-center">
-                    <nav className="flex flex-col items-center gap-10">
-                        <Anchor size="small">#bfbfbf</Anchor>
-                        <Anchor color="red">#ff9191</Anchor>
-                        <Anchor color="orange" size="large">
-                            #ffc780
-                        </Anchor>
-                        <Anchor color="yellow">#fff190</Anchor>
-                        <Anchor color="green">#a9ffb3</Anchor>
-                        <Anchor color="blue">#6dd8fe</Anchor>
-                        <Anchor color="purple">#d791ff</Anchor>
-                        <Anchor color="pink">#ffbfff</Anchor>
-                        <Anchor color="violet">#a9a3ff</Anchor>
-                        <Anchor color="white">#f8f8f8</Anchor>
+                    <nav className="flex flex-col items-center gap-4">
+                        <Anchor>grey</Anchor>
+                        <Anchor color="red">red</Anchor>
+                        <Anchor color="orange">orange</Anchor>
+                        <Anchor color="yellow">yellow</Anchor>
+                        <Anchor color="green">green</Anchor>
+                        <Anchor color="blue">blue</Anchor>
+                        <Anchor color="purple">purple</Anchor>
+                        <Anchor color="pink">pink</Anchor>
+                        <Anchor color="violet">violet</Anchor>
+                        <Anchor color="white">white</Anchor>
                     </nav>
                 </Card>
-                <Card className="flex w-full flex-col items-center text-center">
+                <Card className="flex w-full flex-col items-center">
                     <Button className="w-20 h-20" borderRadius="rounded-full">
-                        <img
-                            src="../public/game_icon.png"
-                            className="scale-120"
-                        />
+                        <img src="../public/game_icon.png" className="" />
                     </Button>
-                    <Button buttonClassName="mt-4" className="">
+                    <Button className="mt-4" size="large">
                         <img
                             src="../public/game_icon.png"
-                            className="w-16 h-16"
+                            className="h-16 w-16"
                         />
                         Default
                     </Button>
                 </Card>
                 <Card className="flex w-full flex-col items-center text-center">
-                    <Input placeholder="username" className="w-64"></Input>
-                    <Input
-                        type="password"
-                        placeholder="password"
-                        className="mt-4 w-64"
-                    ></Input>
-                    <Button
-                        buttonClassName="mt-4"
-                        className="w-64"
-                        size="small"
-                    >
-                        Login
-                    </Button>
-                    <Button buttonClassName="mt-4" className="w-64">
-                        Register
-                    </Button>
-                    <Button
-                        buttonClassName="mt-4"
-                        className="w-64"
+                    <div className="flex">
+                        <div className="flex flex-col gap-2 mr-2">
+                            <Input
+                                placeholder="nickname"
+                                className="w-30"
+                                size="small"
+                            ></Input>
+                            <Input
+                                placeholder="username"
+                                className="w-30"
+                            ></Input>
+                            <Input
+                                type="password"
+                                placeholder="password"
+                                className="w-30"
+                                size="large"
+                                color="red"
+                            ></Input>
+                        </div>
+                        <div className="flex flex-col ml-2">
+                            <Button className="w-30" size="small">
+                                Login
+                            </Button>
+                            <Button className="w-30 mt-1">Register</Button>
+                            <Button
+                                className="w-30 mt-1"
+                                color="red"
+                                size="large"
+                            >
+                                Refuse
+                            </Button>
+                        </div>
+                    </div>
+                    <Checkbox label="CheckBox" className="w-64 mt-4" />
+                    <Toggle
+                        label="Toggle"
                         color="red"
+                        className="mt-4"
                         size="small"
-                    >
-                        Refuse
-                    </Button>
-                    <Checkbox label="CheckBox" className="mt-4 w-64" />
+                    />
+                    <Toggle label="Toggle" color="green" className="mt-4" />
+                    <Toggle
+                        label="Toggle"
+                        color="purple"
+                        className="mt-4"
+                        size="large"
+                    />
                     <Select className="mt-4 w-64">
                         <option value="Hello1">Hello1</option>
                         <option value="Hello2">Hello2</option>
                         <option value="Hello3">Hello3</option>
                     </Select>
+                </Card>
+                <Card className="flex w-full flex-col items-center text-center">
+                    <div className="flex flex-col gap-3">
+                        <Input type="text" placeholder="Username ..." />
+                        <div className="flex gap-3">
+                            <Button color="violet" className="">
+                                Inviter
+                            </Button>
+                            <Button color="grey" className="">
+                                Share link
+                            </Button>
+                        </div>
+                    </div>
+                </Card>
+                <Card className="flex w-full justify-center items-center gap-4">
+                    <Button
+                        size="large"
+                        color="blue"
+                        onClick={toggleBoolean}
+                        className=""
+                    >
+                        Disable button
+                    </Button>
+                    <Button
+                        size="large"
+                        color="green"
+                        disabled={isDisabled}
+                        className=""
+                    >
+                        Button
+                    </Button>
                 </Card>
             </div>
         </Window>

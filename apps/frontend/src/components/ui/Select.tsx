@@ -44,7 +44,7 @@ export function Select({
 	border \
 	appearance-none \
 	font-bold \
-	transition-all \
+  transition-[background-color,color,border-color,box-shadow,transform] duration-300 ease-in-out \
 	shadow-lg \
 	focus-visible:outline-none \
 	focus-visible:ring-2 \

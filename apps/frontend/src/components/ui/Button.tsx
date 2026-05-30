@@ -1,5 +1,6 @@
 import type { ButtonHTMLAttributes } from "react";
 import type { ItemColor, ItemSize } from "./unified";
+import { getItemColorStyle, getItemColorTextStyle } from "./unified";
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
     size?: ItemSize;
@@ -9,34 +10,9 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 const sizeClasses: Record<ItemSize, string> = {
-    small: "px-2 py-1 text-md",
-    medium: "px-4 py-2 text-lg",
-    large: "px-6 py-3 text-xl",
-};
-
-const baseOffsetClasses: Record<ItemSize, string> = {
-    small: "translate-y-[3px]",
-    medium: "translate-y-[4px]",
-    large: "translate-y-[5px]",
-};
-
-const topOffsetClasses: Record<ItemSize, string> = {
-    small: "translate-y-[-1px] group-hover:translate-y-[-3px] group-active:translate-y-[+3px]",
-    medium: "translate-y-[-2px] group-hover:translate-y-[-4px] group-active:translate-y-[+4px]",
-    large: "translate-y-[-3px] group-hover:translate-y-[-5px] group-active:translate-y-[+5px]",
-};
-
-const colorClasses: Record<ItemColor, string> = {
-    grey: "bg-[#bfbfbf]",
-    red: "bg-[#ff9191]",
-    orange: "bg-[#ffc780]",
-    yellow: "bg-[#fff190]",
-    green: "bg-[#daffb6]",
-    blue: "bg-[#6dd8fe]",
-    purple: "bg-[#d791ff]",
-    pink: "bg-[#ffbfff]",
-    violet: "bg-[#a9a3ff]",
-    white: "bg-[#f8f8f8]",
+    small: "px-2 py-1 text-sm",
+    medium: "px-3 py-2 text-md",
+    large: "px-4 py-3 text-lg",
 };
 
 export function Button({
@@ -44,46 +20,61 @@ export function Button({
     color = "grey",
     borderRadius = "rounded-xl",
     children,
-    buttonClassName = "",
     className = "",
+    style,
     ...props
 }: ButtonProps) {
-    const buttonClasses = [
-        "group relative overflow-visible font-bold border-none select-none cursor-pointer",
+    const divClasses = [
+        "group relative overflow-visible border-none select-none",
         borderRadius,
-        buttonClassName,
         className,
     ]
         .filter(Boolean)
         .join(" ");
-
-    const spanTopClasses = [
+    const buttonClasses = [
+        "inline-flex items-center justify-center \
+	transition-all duration-100 ease-in-out select-none \
+	group-active:translate-y-0 font-bold",
+        borderRadius,
+        "bg-[color:var(--ui-color)]",
+        sizeClasses[size],
+        className,
+        props.disabled
+            ? "translate-y-0 cursor-not-allowed"
+            : "translate-y-[-5px] group-hover:translate-y-[-7px] cursor-pointer",
+    ]
+        .filter(Boolean)
+        .join(" ");
+    const spanBotClasses = [
         "absolute inset-0 pointer-events-none",
         borderRadius,
-        colorClasses[color as ItemColor],
-        baseOffsetClasses[size as ItemSize],
-    ]
-        .filter(Boolean)
-        .join(" ");
-
-    const spanBotClasses = [
-        "relative inline-flex items-center justify-center text-black transition-transform duration-100 ease-in-out select-none",
-        borderRadius,
-        colorClasses[color as ItemColor],
-        sizeClasses[size as ItemSize],
-        topOffsetClasses[size as ItemSize],
+        "bg-[color:var(--ui-color)]",
+        sizeClasses[size],
         className,
     ]
         .filter(Boolean)
         .join(" ");
-
+    const resolvedColor = props.disabled ? "grey" : color;
+    const colorStyle = getItemColorStyle(resolvedColor);
+    const textStyle = getItemColorTextStyle(resolvedColor, 65);
     return (
-        <button type="button" className={buttonClasses} {...props}>
+        <div className={divClasses}>
             <span
-                className={spanTopClasses}
-                style={{ filter: "brightness(0.8)" }}
+                className={spanBotClasses}
+                style={{ ...colorStyle, filter: "brightness(0.8)" }}
             />
-            <span className={spanBotClasses}>{children}</span>
-        </button>
+            <button
+                type="button"
+                className={buttonClasses}
+                style={{
+                    ...style,
+                    ...textStyle,
+                    ...colorStyle,
+                }}
+                {...props}
+            >
+                {children}
+            </button>
+        </div>
     );
 }
