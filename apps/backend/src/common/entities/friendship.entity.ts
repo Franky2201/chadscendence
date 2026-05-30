@@ -7,7 +7,7 @@ import {
     CreateDateColumn,
     UpdateDateColumn,
 } from "typeorm";
-import { User } from "src/common/entities/user.entity";
+import { User } from "../entities/user.entity";
 
 export enum FriendshipStatus {
     PENDING = "pending",

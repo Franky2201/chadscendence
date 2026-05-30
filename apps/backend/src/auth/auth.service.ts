@@ -12,10 +12,10 @@ import {
     OAuthProfile,
     JwtPayload,
     LoginUserDto,
-} from "src/common/dto/auth.dto";
+} from "../common/dto/auth.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { RanksService } from "src/ranks/ranks.service";
+import { RanksService } from "../ranks/ranks.service";
 
 const DEFAULT_AVATAR = "http://localhost:5173/public/avatar.jpg";
 

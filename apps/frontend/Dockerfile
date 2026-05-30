@@ -5,11 +5,14 @@ WORKDIR /app
 # Copy root package files
 COPY package*.json ./
 
-# Copy all workspace package.json files (needed for monorepo npm ci)
-COPY apps/backend/package*.json ./apps/backend/
+# Copy necessary workspace package.json files
 COPY apps/frontend/package*.json ./apps/frontend/
+COPY libs/types/package*.json ./libs/types/
 
-# Install all dependencies
+# Prune other workspaces from root package.json to satisfy npm ci
+RUN node -e "const p = require('./package.json'); p.workspaces = p.workspaces.filter(w => w === 'apps/frontend' || w.startsWith('libs/')); require('fs').writeFileSync('./package.json', JSON.stringify(p))"
+
+# Install dependencies
 RUN npm ci
 
 # 2. Development stage

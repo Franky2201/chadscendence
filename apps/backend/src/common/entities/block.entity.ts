@@ -5,7 +5,7 @@ import {
     JoinColumn,
     CreateDateColumn,
 } from "typeorm";
-import { User } from "src/common/entities/user.entity";
+import { User } from "../entities/user.entity";
 
 @Entity("blocks")
 export class Block {

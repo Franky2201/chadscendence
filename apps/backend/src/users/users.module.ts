@@ -2,10 +2,10 @@ import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { UsersController } from "./users.controller";
 import { UsersService } from "./users.service";
-import { User } from "src/common/entities/user.entity";
-import { Rank } from "src/common/entities/rank.entity";
-import { RanksModule } from "src/ranks/ranks.module";
-import { Block } from "src/common/entities/block.entity";
+import { User } from "../common/entities/user.entity";
+import { Rank } from "../common/entities/rank.entity";
+import { RanksModule } from "../ranks/ranks.module";
+import { Block } from "../common/entities/block.entity";
 
 @Module({
     imports: [TypeOrmModule.forFeature([Rank, User, Block]), RanksModule],
