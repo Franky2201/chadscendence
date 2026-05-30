@@ -31,7 +31,7 @@ export function Card({
     .join(' ');
   return (
     <section className={classes} {...props}>
-      <Title className="mb-3 self-start">{title}</Title>
+      {title && <Title className="mb-3 self-start">{title}</Title>}
       <div className={`${contentClassName} flex flex-col gap-3 w-full h-full`}>
         {children}
       </div>

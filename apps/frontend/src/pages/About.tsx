@@ -54,7 +54,7 @@ const About: React.FC = () => {
   if (isLoading)
     return (
       <div className="min-h-screen flex items-center justify-center text-white bg-slate-900">
-        Chargement...
+        Loading ...
       </div>
     );
 

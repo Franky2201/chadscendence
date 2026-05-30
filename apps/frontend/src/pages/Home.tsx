@@ -11,7 +11,7 @@ export default function HomePage() {
   if (isLoading)
     return (
       <div className="min-h-screen flex items-center justify-center">
-        Chargement...
+        Loading ...
       </div>
     );
 

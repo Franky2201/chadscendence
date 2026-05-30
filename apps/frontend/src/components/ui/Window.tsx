@@ -14,10 +14,10 @@ type WindowProps = {
 
 const themeButtonClasses: Record<ThemeName, string> = {
   light:
-    'bg-zinc-900 text-zinc-50 border-zinc-800 hover:bg-zinc-800 \
-		focus-visible:ring-zinc-400 focus-visible:ring-offset-zinc-100',
-  dark: 'bg-zinc-100 text-zinc-900 border-zinc-200 hover:bg-white \
-		focus-visible:ring-zinc-500 focus-visible:ring-offset-zinc-950',
+    'bg-neutral-900 text-neutral-200 border-neutral-800 hover:bg-neutral-800 \
+		focus-visible:ring-neutral-400 focus-visible:ring-offset-neutral-100',
+  dark: 'bg-neutral-100 text-neutral-900 border-neutral-200 hover:bg-white \
+		focus-visible:ring-neutral-500 focus-visible:ring-offset-neutral-950',
 };
 
 export function Window({
@@ -30,7 +30,8 @@ export function Window({
 }: WindowProps) {
   const { theme, toggleTheme } = useTheme();
   const classes = [
-    'min-h-screen relative overflow-hidden font-sans p-8 transition-colors duration-500 ease-in-out',
+    'min-h-screen relative overflow-hidden font-sans p-8 transition-colors \
+	duration-500 ease-in-out',
     className,
   ]
     .filter(Boolean)

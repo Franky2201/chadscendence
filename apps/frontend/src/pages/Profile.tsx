@@ -35,7 +35,7 @@ export default function ProfilePage() {
   if (isLoading || !user)
     return (
       <div className="min-h-screen flex items-center justify-center">
-        Chargement...
+        Loading ...
       </div>
     );
 
