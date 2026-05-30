@@ -79,6 +79,9 @@ export default function HomePage() {
         <Card className="flex flex-col basis-100" title="Clan">
           <></>
         </Card>
+        <Card className="flex flex-col basis-100" title="Achievements">
+          <></>
+        </Card>
         <Card className="flex flex-col basis-100" title="Settings">
           <></>
         </Card>

@@ -1,9 +1,8 @@
-import type { ReactNode } from 'react';
+import type { HTMLAttributes } from 'react';
 import { Title } from './index';
 import { type ThemeName, useTheme } from '../../contexts/theme-context';
 
-type CardProps = {
-  children: ReactNode;
+type CardProps = HTMLAttributes<HTMLElement> & {
   className?: string;
   title?: string;
   contentClassName?: string;
@@ -19,6 +18,7 @@ export function Card({
   className = '',
   title = '',
   contentClassName = 'justify-center',
+  ...props
 }: CardProps) {
   const { theme } = useTheme();
   const classes = [
@@ -30,7 +30,7 @@ export function Card({
     .filter(Boolean)
     .join(' ');
   return (
-    <section className={classes}>
+    <section className={classes} {...props}>
       <Title className="mb-3 self-start">{title}</Title>
       <div className={`${contentClassName} flex flex-col gap-3 w-full h-full`}>
         {children}
