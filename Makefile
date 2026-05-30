@@ -48,8 +48,11 @@ up: build
 down start stop restart: check
 	@$(COMPOSE) $(MAKECMDGOALS) --remove-orphans 2>/dev/null || $(COMPOSE) $(MAKECMDGOALS)
 
-status logs: check
-	@$(COMPOSE) $(subst logs,logs -f,$(MAKECMDGOALS))
+status: check
+	@$(COMPOSE) ps
+
+logs: check
+	@$(COMPOSE) logs -f
 
 clean: check
 	@$(COMPOSE) down --remove-orphans
