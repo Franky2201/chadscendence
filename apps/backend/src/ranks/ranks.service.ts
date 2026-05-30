@@ -5,9 +5,9 @@ import {
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { Rank } from "src/common/entities/rank.entity";
+import { Rank } from "../common/entities/rank.entity";
 import { OnModuleInit } from "@nestjs/common";
-import { CreateRankDto, UpdateRankDto } from "src/common/dto/ranks.dto";
+import { CreateRankDto, UpdateRankDto } from "../common/dto/ranks.dto";
 
 @Injectable()
 export class RanksService implements OnModuleInit {

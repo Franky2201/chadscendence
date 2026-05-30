@@ -1,8 +1,8 @@
 import { Injectable, BadRequestException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { Block } from "src/common/entities/block.entity";
-import { Friendship } from "src/common/entities/friendship.entity";
+import { Block } from "../common/entities/block.entity";
+import { Friendship } from "../common/entities/friendship.entity";
 
 @Injectable()
 export class BlocksService {

@@ -2,7 +2,7 @@ import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { RanksController } from "./ranks.controller";
 import { RanksService } from "./ranks.service";
-import { Rank } from "src/common/entities/rank.entity";
+import { Rank } from "../common/entities/rank.entity";
 
 @Module({
     imports: [TypeOrmModule.forFeature([Rank])],

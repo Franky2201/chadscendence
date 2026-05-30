@@ -9,10 +9,10 @@ import { Repository } from "typeorm";
 import {
     Friendship,
     FriendshipStatus,
-} from "src/common/entities/friendship.entity";
-import { User } from "src/common/entities/user.entity";
-import { PresenceService } from "src/presence/presence.service";
-import { Block } from "src/common/entities/block.entity";
+} from "../common/entities/friendship.entity";
+import { User } from "../common/entities/user.entity";
+import { PresenceService } from "../presence/presence.service";
+import { Block } from "../common/entities/block.entity";
 
 @Injectable()
 export class FriendsService {

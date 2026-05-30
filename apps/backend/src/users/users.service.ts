@@ -7,13 +7,13 @@ import {
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { MoreThan, Repository } from "typeorm";
-import { User, UserRole } from "src/common/entities/user.entity";
-import { UpdateUserDto } from "src/common/dto/users.dto";
+import { User, UserRole } from "../common/entities/user.entity";
+import { UpdateUserDto } from "../common/dto/users.dto";
 import { hash, compare } from "bcrypt";
-import { RanksService } from "src/ranks/ranks.service";
+import { RanksService } from "../ranks/ranks.service";
 import { ConfigService } from "@nestjs/config";
-import { Block } from "src/common/entities/block.entity";
-import { PresenceService } from "src/presence/presence.service";
+import { Block } from "../common/entities/block.entity";
+import { PresenceService } from "../presence/presence.service";
 
 @Injectable()
 export class UsersService implements OnModuleInit {

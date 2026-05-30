@@ -9,11 +9,11 @@ import {
     UseGuards,
 } from "@nestjs/common";
 import { RanksService } from "./ranks.service";
-import { JwtAuthGuard } from "src/common/guards/jwt.guard";
-import { UserRole } from "src/common/entities/user.entity";
-import { RolesGuard } from "src/common/guards/roles.guard";
-import { Roles } from "src/common/decorators/roles.decorator";
-import { CreateRankDto, UpdateRankDto } from "src/common/dto/ranks.dto";
+import { JwtAuthGuard } from "../common/guards/jwt.guard";
+import { UserRole } from "../common/entities/user.entity";
+import { RolesGuard } from "../common/guards/roles.guard";
+import { Roles } from "../common/decorators/roles.decorator";
+import { CreateRankDto, UpdateRankDto } from "../common/dto/ranks.dto";
 
 @Controller("ranks")
 export class RanksController {
