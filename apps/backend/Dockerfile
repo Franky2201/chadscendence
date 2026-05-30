@@ -23,9 +23,11 @@ CMD ["npm", "run", "start:dev", "-w", "backend"]
 # 3. Build stage
 FROM base AS build
 COPY . .
+# Build both the types library and the backend
+RUN npm run build -w @chad/types
 RUN npm run build -w backend
 
-# Prune devDependencies to keep the final image small
+# Prune devDependencies
 RUN npm prune --omit=dev
 
 # 4. Final stage
@@ -40,6 +42,8 @@ USER nestjs
 COPY --from=build --chown=nestjs:nodejs /app/node_modules ./node_modules
 COPY --from=build --chown=nestjs:nodejs /app/apps/backend/dist ./apps/backend/dist
 COPY --from=build --chown=nestjs:nodejs /app/apps/backend/package.json ./apps/backend/package.json
+# Materialize the workspace dependency by copying the types library
+COPY --from=build --chown=nestjs:nodejs /app/libs/types ./libs/types
 
 EXPOSE 3000
 CMD ["node", "apps/backend/dist/main"]

@@ -5,7 +5,7 @@ WORKDIR /app
 # Copy root package files
 COPY package*.json ./
 
-# Copy necessary workspace package.json files
+# Copy only the necessary workspace package.json files
 COPY apps/frontend/package*.json ./apps/frontend/
 COPY libs/types/package*.json ./libs/types/
 
@@ -26,6 +26,9 @@ FROM base AS build
 # Install openssl to generate self-signed certificate
 RUN apk add --no-cache openssl
 COPY . .
+
+# Build @chad/types so its artifacts are available for the frontend build
+RUN npm run build -w @chad/types
 
 # Create directory for SSL certificates and generate a self-signed one
 ARG DOMAIN_NAME
