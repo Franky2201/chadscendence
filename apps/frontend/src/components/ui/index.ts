@@ -4,5 +4,6 @@ export { Card } from './Card';
 export { Checkbox } from './Checkbox';
 export { Input } from './Input';
 export { Select } from './Select';
+export { Title } from './Title';
 export { Toggle } from './Toggle';
 export { Window } from './Window';

@@ -33,7 +33,7 @@ export function Button({
     .join(' ');
   const buttonClasses = [
     'inline-flex items-center justify-center \
-	transition-[background-color,color,border-color,box-shadow,transform] duration-300 ease-in-out select-none \
+	transition-all duration-100 ease-in-out select-none \
 	group-active:translate-y-0 font-bold',
     borderRadius,
     'bg-[color:var(--ui-color)]',

@@ -1,14 +1,12 @@
-import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { Button } from '../components/ui';
+import { Button, Card, Window, Title } from '../components/ui';
 import { useModal } from '../contexts/ModalContext';
 import Leaderboard from '../components/home/Leaderboard';
-import { useNavigate } from 'react-router-dom';
+import { withIntra, withGithub } from '../services/auth';
 
 export default function HomePage() {
-  const { user, isLoading} = useAuth();
+  const { user, isLoading } = useAuth();
   const { openModal } = useModal();
-  const navigate = useNavigate();
 
   if (isLoading)
     return (
@@ -18,94 +16,76 @@ export default function HomePage() {
     );
 
   return (
-    <div
-      className="relative min-h-screen w-full overflow-hidden bg-slate-900 bg-cover bg-center text-white font-sans"
-      style={{ backgroundImage: "url('/background.png')" }}
-    >
-      <div className="absolute inset-0 bg-linear-to-r from-slate-900/90 via-slate-900/50 to-transparent" />
-      <div className="relative z-10 flex h-full min-h-screen">
-        <div className="flex w-1/2 flex-col items-start gap-10 pl-10 pt-10">
-          <img
-            src="/logo.png"
-            alt="WhoIsChad"
-            className="w-72 object-contain drop-shadow-2xl"
-          />
-
-          <button
-            onClick={() => openModal('GAME')}
-            className="w-72 rounded-2xl border-2 border-white/80 bg-[#E43A70] py-4 text-center text-3xl font-black tracking-wide text-white shadow-xl drop-shadow-lg transition-transform hover:scale-105"
-          >
-            Jouer
-          </button>
-
-          {!user && (
-            <Button onClick={() => openModal('LOGIN')} size="large">
-              Se connecter
+    <Window>
+      <header className="justify-self-center">
+        <img
+          className="select-none w-auto drop-shadow-lg max-h-30 mb-8"
+          src="/game_banner.png"
+          alt="GameLogo"
+        />
+      </header>
+      <div className="flex flex-wrap justify-center gap-3">
+        {!user && (
+          <Card className="flex flex-col basis-100" title="Identification">
+            <Button className="w-full" onClick={() => openModal('LOGIN')}>
+              Login
             </Button>
-          )}
-
-          <div className="flex flex-1 flex-col justify-between mt-10">
-            <nav className="flex flex-col gap-5 text-xl font-bold">
-              <Link
-                to="/faq"
-                className="w-fit text-2xl hover:text-[#E43A70] transition-colors hover:scale-105"
-              >
-                Les jeux
-              </Link>
-              {user && (
-                <>
-                  <Link
-                    to="/friends"
-                    className="w-fit text-2xl hover:text-[#E43A70] transition-colors hover:scale-105"
-                  >
-                    Mes amis
-                  </Link>
-                  <Link
-                    to="/profile"
-                    className="w-fit text-2xl hover:text-[#E43A70] transition-colors hover:scale-105"
-                  >
-                    Profile
-                  </Link>
-                </>
-              )}
-              <a
-                href="https://cdn.intra.42.fr/pdf/pdf/203995/en.subject.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-fit text-2xl hover:text-[#E43A70] transition-colors hover:scale-105"
-              >
-                Subject
-              </a>
-              <button
-                onClick={() => openModal('ABOUT')}
-                className="w-fit text-2xl hover:text-[#E43A70] transition-colors hover:scale-105"
-              >
-                Credits
-              </button>
-            </nav>
-          </div>
-        </div>
-
-        <div className="flex w-1/2 flex-col items-end gap-10 pr-10 pt-10">
-          {user && (
-            <div className="flex flex-col items-center gap-4">
-              <img
-                src={user.avatarUrl}
-                onClick={() => navigate('/profile')}
-                alt="avatar"
-                className="w-40 h-40 rounded-full hover:cursor-pointer transition-transform hover:scale-110"
-              />
-              <h2 className="text-3xl">{user.username}</h2>
-              <h2 className="text-3xl">
-                {user.role}
-                {user.rank.icon} {user.rank.name} - {user.score}
-              </h2>
+            <Button className="w-full" onClick={() => openModal('REGISTER')}>
+              Register
+            </Button>
+            <div className="flex flex-row gap-2 w-full">
+              <Button className="w-full" onClick={withIntra}>
+                42
+              </Button>
+              <Button className="w-full" onClick={withGithub}>
+                GitHub
+              </Button>
             </div>
-          )}
-
-          <Leaderboard count={5} />
-        </div>
+          </Card>
+        )}
+        <Card className="flex basis-100">
+          <div className="flex w-full justify-between">
+            <Title>Play</Title>
+            <Button
+              className="w-9 h-8"
+              size="large"
+              borderRadius="rounded-full"
+            >
+              ?
+            </Button>
+          </div>
+          <div className="flex flex-col gap-3 w-full h-full justify-center">
+            <Button className="w-full">Party</Button>
+            <Button className="w-full">Solo</Button>
+            {user && <Button className="w-full">Multiplayer</Button>}
+            {user && <Button className="w-full">Custom Game</Button>}
+          </div>
+        </Card>
+        <Card
+          className="basis-100"
+          contentClassName="justify-start"
+          title="Leaderboard"
+        >
+          <div className="w-full">
+            <Leaderboard count={5} />
+          </div>
+        </Card>
+        <Card className="flex flex-col basis-100" title="Profile">
+          <></>
+        </Card>
+        <Card className="flex flex-col basis-100" title="Friends">
+          <></>
+        </Card>
+        <Card className="flex flex-col basis-100" title="Clan">
+          <></>
+        </Card>
+        <Card className="flex flex-col basis-100" title="Settings">
+          <></>
+        </Card>
+        <Card className="flex flex-col basis-100" title="Credits">
+          <></>
+        </Card>
       </div>
-    </div>
+    </Window>
   );
 }

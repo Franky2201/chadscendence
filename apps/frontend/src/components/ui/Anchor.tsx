@@ -31,7 +31,7 @@ export function Anchor({
     .join(' ');
   const anchorClasses = [
     'group relative inline-block select-none cursor-pointer',
-    'transition-transform duration-100 ease-in-out hover:scale-120',
+    'transition-transform duration-100 ease-in-out hover:scale-120 translate-y-[+4px]',
     className,
   ]
     .filter(Boolean)

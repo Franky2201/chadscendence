@@ -1,9 +1,12 @@
 import type { ReactNode } from 'react';
+import { Title } from './index';
 import { type ThemeName, useTheme } from '../../contexts/theme-context';
 
 type CardProps = {
   children: ReactNode;
   className?: string;
+  title?: string;
+  contentClassName?: string;
 };
 
 const themeClasses: Record<ThemeName, string> = {
@@ -11,15 +14,27 @@ const themeClasses: Record<ThemeName, string> = {
   dark: 'bg-neutral-800 border-neutral-500 text-neutral-200',
 };
 
-export function Card({ children, className = '' }: CardProps) {
+export function Card({
+  children,
+  className = '',
+  title = '',
+  contentClassName = 'justify-center',
+}: CardProps) {
   const { theme } = useTheme();
   const classes = [
-    'rounded-3xl border border-3 px-4 py-8 transition-colors duration-300 \
-	ease-in-out',
+    'rounded-3xl border border-3 px-4 py-4 transition-colors duration-300 \
+	ease-in-out justify-center',
     themeClasses[theme],
     className,
   ]
     .filter(Boolean)
     .join(' ');
-  return <section className={classes}> {children} </section>;
+  return (
+    <section className={classes}>
+      <Title className="mb-3 self-start">{title}</Title>
+      <div className={`${contentClassName} flex flex-col gap-3 w-full h-full`}>
+        {children}
+      </div>
+    </section>
+  );
 }
