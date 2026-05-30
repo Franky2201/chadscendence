@@ -1,16 +1,17 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Rank as IRank } from "@chad/types";
 
-@Entity('ranks')
-export class Rank {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+@Entity("ranks")
+export class Rank implements IRank {
+    @PrimaryGeneratedColumn("uuid")
+    id: string;
 
-  @Column({ unique: true })
-  name: string;
+    @Column({ unique: true })
+    name: string;
 
-  @Column({ name: 'min_score' })
-  minScore: number;
+    @Column({ name: "min_score" })
+    minScore: number;
 
-  @Column({ nullable: true })
-  icon?: string;
+    @Column({ nullable: true })
+    icon?: string;
 }

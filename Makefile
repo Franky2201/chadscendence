@@ -13,10 +13,26 @@ NO_COLOR := \033[0m
 
 all: up
 
+help:
+	@printf "$(GREEN)Available targets:$(NO_COLOR)\n"
+	@printf "  all (default)  Check prerequisites, build, and start containers\n"
+	@printf "  up             Build and start containers in the background\n"
+	@printf "  down           Stop and remove containers\n"
+	@printf "  status         Check container status\n"
+	@printf "  logs           Follow container logs\n"
+	@printf "  ci             Run full local CI pipeline\n"
+	@printf "  re             Full rebuild and restart\n"
+	@printf "  fclean         Deep clean (removes images and volumes)\n"
+
 prerequisites:
+	@printf "$(GREEN)Checking for required tools...$(NO_COLOR)\n"
+	@command -v node > /dev/null 2>&1 || (printf "$(RED)Node.js is not installed.$(NO_COLOR)\n"; exit 1)
+	@command -v npm > /dev/null 2>&1 || (printf "$(RED)npm is not installed.$(NO_COLOR)\n"; exit 1)
+	@command -v docker > /dev/null 2>&1 || (printf "$(RED)Docker is not installed.$(NO_COLOR)\n"; exit 1)
 	@test -f $(ENV_FILE) || (cp .env.example $(ENV_FILE))
 	@test -f $(COMPOSE_FILE) || (printf "$(RED)Missing $(COMPOSE_FILE) file$(NO_COLOR)\n"; exit 1)
 	@mkdir -p $(BACKEND_UPLOADS_PATH)
+	@printf "$(GREEN)Prerequisites met.$(NO_COLOR)\n"
 
 build: prerequisites
 	@DOCKER_BUILDKIT=1 $(COMPOSE) build
@@ -36,13 +52,13 @@ stop: prerequisites
 restart: prerequisites
 	@$(COMPOSE) restart
 
-status:
+status: prerequisites
 	@$(COMPOSE) ps
 
 logs: prerequisites
 	@$(COMPOSE) logs -f
 
-clean: down
+clean: prerequisites down
 
 fclean: prerequisites
 	@$(COMPOSE) down -v --rmi all --remove-orphans
@@ -54,24 +70,17 @@ re: prerequisites clean all
 
 ci: prerequisites
 	@printf "$(GREEN)--- Local CI Mimic ---$(NO_COLOR)\n"
-	@if [ ! -f $(ENV_FILE) ]; then \
-		printf "Copying .env.example to .env...\n"; \
-		cp .env.example $(ENV_FILE); \
-	fi
-	@mkdir -p $(BACKEND_UPLOADS_PATH)
 	@printf "$(GREEN)Step 1: Install Dependencies$(NO_COLOR)\n"
-	@npm install --silent --no-progress --no-audit --no-fund > /dev/null 2>&1
+	@npm install --no-audit --no-fund --silent || (printf "$(RED)Step 1 (Install) failed.$(NO_COLOR)\n"; exit 1)
 	@printf "$(GREEN)Step 2: Lint$(NO_COLOR)\n"
-	@npm run lint --silent > /dev/null 2>&1
+	@npm run lint || (printf "$(RED)Step 2 (Lint) failed.$(NO_COLOR)\n"; exit 1)
 	@printf "$(GREEN)Step 3: Test$(NO_COLOR)\n"
-	@npm run test --silent > /dev/null 2>&1
+	@npm run test || (printf "$(RED)Step 3 (Test) failed.$(NO_COLOR)\n"; exit 1)
 	@printf "$(GREEN)Step 4: Build$(NO_COLOR)\n"
-	@npm run build --silent > /dev/null 2>&1
+	@npm run build || (printf "$(RED)Step 4 (Build) failed.$(NO_COLOR)\n"; exit 1)
 	@printf "$(GREEN)Step 5: Docker Integration Test$(NO_COLOR)\n"
-	@$(COMPOSE) up -d --build --wait --quiet-pull > /dev/null 2>&1 || (printf "$(RED)Docker test failed. Logs:$(NO_COLOR)\n"; $(COMPOSE) logs; $(COMPOSE) down -v; exit 1)
-	@$(COMPOSE) ps
+	@$(COMPOSE) up -d --build --wait --quiet-pull || (printf "$(RED)Step 5 (Docker Integration) failed. Logs:$(NO_COLOR)\n"; $(COMPOSE) logs; $(COMPOSE) down -v; exit 1)
 	@$(COMPOSE) down -v > /dev/null 2>&1
 	@printf "$(GREEN)--- Local CI Success ---$(NO_COLOR)\n"
 
-
-.PHONY: all build up down start stop restart status logs clean fclean re ci
+.PHONY: all help prerequisites build up down start stop restart status logs clean fclean sprune re ci

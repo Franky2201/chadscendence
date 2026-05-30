@@ -1,29 +1,29 @@
-import { IsString, IsOptional, IsNotEmpty, IsNumber } from 'class-validator';
+import { IsString, IsOptional, IsNotEmpty, IsNumber } from "class-validator";
 
 export class CreateRankDto {
-  @IsString()
-  @IsNotEmpty()
-  name: string;
+    @IsString()
+    @IsNotEmpty()
+    name: string;
 
-  @IsNumber()
-  @IsNotEmpty()
-  minScore: number;
+    @IsNumber()
+    @IsNotEmpty()
+    minScore: number;
 
-  @IsString()
-  @IsOptional()
-  icon?: string;
+    @IsString()
+    @IsOptional()
+    icon?: string;
 }
 
 export class UpdateRankDto {
-  @IsString()
-  @IsOptional()
-  name?: string;
+    @IsString()
+    @IsOptional()
+    name?: string;
 
-  @IsNumber()
-  @IsOptional()
-  minScore?: number;
+    @IsNumber()
+    @IsOptional()
+    minScore?: number;
 
-  @IsString()
-  @IsOptional()
-  icon?: string;
+    @IsString()
+    @IsOptional()
+    icon?: string;
 }

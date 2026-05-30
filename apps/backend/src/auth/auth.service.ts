@@ -1,157 +1,165 @@
 import {
-  ConflictException,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
-import { User } from '../common/entities/user.entity';
+    ConflictException,
+    Injectable,
+    UnauthorizedException,
+} from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { JwtService } from "@nestjs/jwt";
+import * as bcrypt from "bcrypt";
+import { User } from "../common/entities/user.entity";
 import {
-  CreateUserDto,
-  OAuthProfile,
-  JwtPayload,
-  LoginUserDto,
-} from 'src/common/dto/auth.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { RanksService } from 'src/ranks/ranks.service';
+    CreateUserDto,
+    OAuthProfile,
+    JwtPayload,
+    LoginUserDto,
+} from "src/common/dto/auth.dto";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { RanksService } from "src/ranks/ranks.service";
 
-const DEFAULT_AVATAR = 'http://localhost:5173/public/avatar.jpg';
+const DEFAULT_AVATAR = "http://localhost:5173/public/avatar.jpg";
 
 @Injectable()
 export class AuthService {
-  constructor(
-    @InjectRepository(User) private readonly userRepository: Repository<User>,
-    private readonly configService: ConfigService,
-    private readonly jwtService: JwtService,
-    private readonly ranksService: RanksService,
-  ) {}
+    constructor(
+        @InjectRepository(User)
+        private readonly userRepository: Repository<User>,
+        private readonly configService: ConfigService,
+        private readonly jwtService: JwtService,
+        private readonly ranksService: RanksService,
+    ) {}
 
-  async login({ authlogin }: { authlogin: LoginUserDto }) {
-    const { email, password } = authlogin;
+    async login({ authlogin }: { authlogin: LoginUserDto }) {
+        const { email, password } = authlogin;
 
-    const user = await this.userRepository
-      .createQueryBuilder('user')
-      .where('user.email = :email', { email })
-      .addSelect('user.password')
-      .getOne();
+        const user = await this.userRepository
+            .createQueryBuilder("user")
+            .where("user.email = :email", { email })
+            .addSelect("user.password")
+            .getOne();
 
-    if (!user || !user.password)
-      throw new UnauthorizedException('Account not found');
+        if (!user || !user.password)
+            throw new UnauthorizedException("Account not found");
 
-    const isValid = await bcrypt.compare(password, user.password);
-    if (!isValid) throw new UnauthorizedException('Invalid password');
+        const isValid = await bcrypt.compare(password, user.password);
+        if (!isValid) throw new UnauthorizedException("Invalid password");
 
-    return this.generateTokens(user);
-  }
-
-  async register({ authregister }: { authregister: CreateUserDto }) {
-    const { email, username, password } = authregister;
-
-    const existingEmail = await this.userRepository.findOne({
-      where: { email },
-    });
-    if (existingEmail) throw new ConflictException('Email already exists');
-
-    const existingUsername = await this.userRepository.findOne({
-      where: { username },
-    });
-    if (existingUsername)
-      throw new ConflictException('Username already exists');
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const defaultRank = await this.ranksService.getRankForScore(0);
-
-    const user = this.userRepository.create({
-      email,
-      username,
-      password: hashedPassword,
-      avatarUrl: DEFAULT_AVATAR,
-      score: 0,
-      rankId: defaultRank.id,
-    });
-
-    await this.userRepository.save(user);
-
-    return this.generateTokens(user);
-  }
-
-  async registerOAuth(oauthProfile: OAuthProfile) {
-    const { provider, providerId, email, username, avatarUrl } = oauthProfile;
-
-    if (!email) {
-      throw new UnauthorizedException(
-        `An email is required to login with ${provider}.`,
-      );
+        return this.generateTokens(user);
     }
 
-    const safeUsername = username ?? email.split('@')[0] ?? 'user';
-    const safeAvatarUrl = avatarUrl ?? undefined;
+    async register({ authregister }: { authregister: CreateUserDto }) {
+        const { email, username, password } = authregister;
 
-    const providerKey = provider === 'github' ? 'githubId' : 'intraId';
+        const existingEmail = await this.userRepository.findOne({
+            where: { email },
+        });
+        if (existingEmail) throw new ConflictException("Email already exists");
 
-    let user = await this.userRepository.findOne({
-      where: { [providerKey]: providerId },
-    });
-    if (user) return this.generateTokens(user);
+        const existingUsername = await this.userRepository.findOne({
+            where: { username },
+        });
+        if (existingUsername)
+            throw new ConflictException("Username already exists");
 
-    user = await this.userRepository.findOne({ where: { email } });
-    if (user) {
-      if (provider === 'github') {
-        user.githubId = providerId;
-      } else {
-        user.intraId = providerId;
-      }
-      user.avatarUrl = user.avatarUrl || safeAvatarUrl;
-      await this.userRepository.save(user);
-      return this.generateTokens(user);
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const defaultRank = await this.ranksService.getRankForScore(0);
+
+        const user = this.userRepository.create({
+            email,
+            username,
+            password: hashedPassword,
+            avatarUrl: DEFAULT_AVATAR,
+            score: 0,
+            rankId: defaultRank.id,
+        });
+
+        await this.userRepository.save(user);
+
+        return this.generateTokens(user);
     }
 
-    const finalUsername = await this.generateUniqueUsername(safeUsername);
-    const defaultRank = await this.ranksService.getRankForScore(0);
+    async registerOAuth(oauthProfile: OAuthProfile) {
+        const { provider, providerId, email, username, avatarUrl } =
+            oauthProfile;
 
-    user = this.userRepository.create({
-      ...(provider === 'github'
-        ? { githubId: providerId }
-        : { intraId: providerId }),
-      email,
-      username: finalUsername,
-      avatarUrl: safeAvatarUrl,
-      score: 0,
-      rankId: defaultRank.id,
-    });
+        if (!email) {
+            throw new UnauthorizedException(
+                `An email is required to login with ${provider}.`,
+            );
+        }
 
-    await this.userRepository.save(user);
+        const safeUsername: string =
+            typeof username === "string"
+                ? username
+                : typeof email === "string" && email.includes("@")
+                  ? (email.split("@")[0] ?? "user")
+                  : "user";
 
-    return this.generateTokens(user);
-  }
+        const safeAvatarUrl = avatarUrl ?? undefined;
 
-  private async generateUniqueUsername(base: string) {
-    let username = base;
-    let i = 0;
+        const providerKey = provider === "github" ? "githubId" : "intraId";
 
-    while (await this.userRepository.findOne({ where: { username } })) {
-      i++;
-      username = `${base}_${i}${Math.floor(Math.random() * 1000)}`;
+        let user = await this.userRepository.findOne({
+            where: { [providerKey]: providerId },
+        });
+        if (user) return this.generateTokens(user);
+
+        user = await this.userRepository.findOne({ where: { email } });
+        if (user) {
+            if (provider === "github") {
+                user.githubId = providerId;
+            } else {
+                user.intraId = providerId;
+            }
+            user.avatarUrl = user.avatarUrl || safeAvatarUrl;
+            await this.userRepository.save(user);
+            return this.generateTokens(user);
+        }
+
+        const finalUsername = await this.generateUniqueUsername(safeUsername);
+        const defaultRank = await this.ranksService.getRankForScore(0);
+
+        user = this.userRepository.create({
+            ...(provider === "github"
+                ? { githubId: providerId }
+                : { intraId: providerId }),
+            email,
+            username: finalUsername,
+            avatarUrl: safeAvatarUrl,
+            score: 0,
+            rankId: defaultRank.id,
+        });
+
+        await this.userRepository.save(user);
+
+        return this.generateTokens(user);
     }
 
-    return username;
-  }
+    private async generateUniqueUsername(base: string) {
+        let username = base;
+        let i = 0;
 
-  private generateTokens(user: User) {
-    const payload: JwtPayload = {
-      sub: user.id,
-      email: user.email,
-      username: user.username,
-      role: user.role,
-    };
+        while (await this.userRepository.findOne({ where: { username } })) {
+            i++;
+            username = `${base}_${i}${Math.floor(Math.random() * 1000)}`;
+        }
 
-    const access_token = this.jwtService.sign(payload, {
-      secret: this.configService.get<string>('JWT_SECRET'),
-      expiresIn: '15m',
-    });
+        return username;
+    }
 
-    return { access_token };
-  }
+    private generateTokens(user: User) {
+        const payload: JwtPayload = {
+            sub: user.id,
+            email: user.email,
+            username: user.username,
+            role: user.role,
+        };
+
+        const access_token = this.jwtService.sign(payload, {
+            secret: this.configService.get<string>("JWT_SECRET"),
+            expiresIn: "15m",
+        });
+
+        return { access_token };
+    }
 }
