@@ -1,220 +1,236 @@
 import {
-  OnModuleInit,
-  Injectable,
-  NotFoundException,
-  BadRequestException,
-  UnauthorizedException,
-} from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { MoreThan, Repository } from 'typeorm';
-import { User, UserRole } from 'src/common/entities/user.entity';
-import { UpdateUserDto } from 'src/common/dto/users.dto';
-import { hash, compare } from 'bcrypt';
-import { RanksService } from 'src/ranks/ranks.service';
-import { ConfigService } from '@nestjs/config';
-import { Block } from 'src/common/entities/block.entity';
-import { PresenceService } from 'src/presence/presence.service';
+    OnModuleInit,
+    Injectable,
+    NotFoundException,
+    BadRequestException,
+    UnauthorizedException,
+} from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { MoreThan, Repository } from "typeorm";
+import { User, UserRole } from "../common/entities/user.entity";
+import { UpdateUserDto } from "../common/dto/users.dto";
+import { hash, compare } from "bcrypt";
+import { RanksService } from "../ranks/ranks.service";
+import { ConfigService } from "@nestjs/config";
+import { Block } from "../common/entities/block.entity";
+import { PresenceService } from "../presence/presence.service";
 
 @Injectable()
 export class UsersService implements OnModuleInit {
-  constructor(
-    private readonly configService: ConfigService,
-    @InjectRepository(User) private readonly userRepository: Repository<User>,
-    @InjectRepository(Block)
-    private readonly blockRepository: Repository<Block>,
-    private readonly presenceService: PresenceService,
-    private readonly ranksService: RanksService,
-  ) {}
+    constructor(
+        private readonly configService: ConfigService,
+        @InjectRepository(User)
+        private readonly userRepository: Repository<User>,
+        @InjectRepository(Block)
+        private readonly blockRepository: Repository<Block>,
+        private readonly presenceService: PresenceService,
+        private readonly ranksService: RanksService,
+    ) {}
 
-  async onModuleInit() {
-    await this.seedAdmin();
-  }
-
-  private async seedAdmin() {
-    const adminEmail = this.configService.get<string>('ADMIN_EMAIL');
-    const adminUsername = this.configService.get<string>('ADMIN_USERNAME');
-    const adminPassword = this.configService.get<string>('ADMIN_PASSWORD');
-
-    if (!adminEmail || !adminUsername || !adminPassword) {
-      throw new Error('Missing admin credentials');
+    async onModuleInit() {
+        await this.seedAdmin();
     }
 
-    const admin = await this.userRepository.findOne({
-      where: { email: adminEmail },
-    });
+    private async seedAdmin() {
+        const adminEmail = this.configService.get<string>("ADMIN_EMAIL");
+        const adminUsername = this.configService.get<string>("ADMIN_USERNAME");
+        const adminPassword = this.configService.get<string>("ADMIN_PASSWORD");
 
-    if (admin) return;
+        if (!adminEmail || !adminUsername || !adminPassword) {
+            throw new Error("Missing admin credentials");
+        }
 
-    const hashedPassword = await hash(adminPassword, 10);
-    const defaultRank = await this.ranksService.getRankForScore(5000);
+        const admin = await this.userRepository.findOne({
+            where: { email: adminEmail },
+        });
 
-    const adminUser = this.userRepository.create({
-      email: adminEmail,
-      username: adminUsername,
-      password: hashedPassword,
-      role: UserRole.ADMIN,
-      avatarUrl: 'http://localhost:5173/public/admin.png',
-      score: 5000,
-      rankId: defaultRank.id,
-    });
+        if (admin) return;
 
-    await this.userRepository.save(adminUser);
-    console.log('Admin user created successfully!');
-  }
+        const hashedPassword = await hash(adminPassword, 10);
+        const defaultRank = await this.ranksService.getRankForScore(5000);
 
-  async getUser(id: string) {
-    const user = await this.userRepository.findOne({
-      where: { id },
-      relations: { rank: true },
-    });
+        const adminUser = this.userRepository.create({
+            email: adminEmail,
+            username: adminUsername,
+            password: hashedPassword,
+            role: UserRole.ADMIN,
+            avatarUrl: "http://localhost:5173/public/admin.png",
+            score: 5000,
+            rankId: defaultRank.id,
+        });
 
-    if (!user) {
-      throw new NotFoundException('User not found');
+        await this.userRepository.save(adminUser);
+        console.log("Admin user created successfully!");
     }
 
-    return user;
-  }
+    async getUser(id: string) {
+        const user = await this.userRepository.findOne({
+            where: { id },
+            relations: { rank: true },
+        });
 
-  async updateUser(id: string, updateUserDto: UpdateUserDto) {
-    const { password, oldPassword, ...rest } = updateUserDto;
-    const dataToUpdate: Partial<User> = { ...rest };
-    if ('bio' in updateUserDto) {
-      dataToUpdate.bio = updateUserDto.bio;
+        if (!user) {
+            throw new NotFoundException("User not found");
+        }
+
+        return user;
     }
 
-    if (password) {
-      const userWithPassword = await this.userRepository
-        .createQueryBuilder('user')
-        .where('user.id = :id', { id })
-        .addSelect('user.password')
-        .getOne();
+    async updateUser(id: string, updateUserDto: UpdateUserDto) {
+        const { password, oldPassword, ...rest } = updateUserDto;
+        const dataToUpdate: Partial<User> = { ...rest };
 
-      if (!userWithPassword) throw new NotFoundException('User not found');
+        if ("bio" in updateUserDto) {
+            dataToUpdate.bio = updateUserDto.bio;
+        }
 
-      if (!userWithPassword.password)
-        throw new BadRequestException(
-          'Les comptes OAuth ne peuvent pas définir de mot de passe ici.',
+        if (password) {
+            const userWithPassword = await this.userRepository
+                .createQueryBuilder("user")
+                .where("user.id = :id", { id })
+                .addSelect("user.password")
+                .getOne();
+
+            if (!userWithPassword)
+                throw new NotFoundException("User not found");
+
+            if (!userWithPassword.password)
+                throw new BadRequestException(
+                    "Les comptes OAuth ne peuvent pas définir de mot de passe ici.",
+                );
+
+            if (!oldPassword)
+                throw new BadRequestException(
+                    "L'ancien mot de passe est requis pour en définir un nouveau.",
+                );
+
+            const isValid = await compare(
+                oldPassword,
+                userWithPassword.password,
+            );
+            if (!isValid)
+                throw new UnauthorizedException(
+                    "L'ancien mot de passe est incorrect.",
+                );
+
+            dataToUpdate.password = await hash(password, 10);
+        }
+
+        await this.userRepository.save({ id, ...dataToUpdate });
+
+        return this.getUser(id);
+    }
+
+    async uploadAvatar(id: string, filename: string) {
+        await this.userRepository.save({
+            id,
+            avatarUrl: `http://localhost:3000/uploads/${filename}`,
+        });
+        return this.getUser(id);
+    }
+
+    async deleteUser(id: string) {
+        const user = await this.userRepository.findOne({ where: { id } });
+
+        if (!user) {
+            throw new NotFoundException("User not found");
+        }
+
+        await this.userRepository.remove(user);
+
+        return { message: "User deleted successfully." };
+    }
+
+    async getUserLeaderboardRank(userId: string): Promise<number> {
+        const user = await this.getUser(userId);
+        const above = await this.userRepository.count({
+            where: { score: MoreThan(user.score) },
+        });
+        return above + 1;
+    }
+
+    async getGlobalLeaderboard(count: number) {
+        const users = await this.userRepository.find({
+            select: { id: true, username: true, avatarUrl: true, score: true },
+            order: { score: "DESC", username: "ASC" },
+            take: count,
+        });
+
+        return users.map((u) => ({
+            id: u.id,
+            username: u.username,
+            avatarUrl: u.avatarUrl,
+            score: u.score,
+        }));
+    }
+
+    async searchUsers(query: string, currentUserId: string) {
+        const blockedRelations = await this.blockRepository.find({
+            where: [
+                { blocker: { id: currentUserId } },
+                { blocked: { id: currentUserId } },
+            ],
+            relations: { blocker: true, blocked: true },
+        });
+
+        const excludedIds = blockedRelations.map((b) =>
+            b.blocker.id === currentUserId ? b.blocked.id : b.blocker.id,
         );
+        excludedIds.push(currentUserId);
 
-      if (!oldPassword)
-        throw new BadRequestException(
-          "L'ancien mot de passe est requis pour en définir un nouveau.",
-        );
+        let queryBuilder = this.userRepository
+            .createQueryBuilder("user")
+            .where("user.username ILIKE :query", { query: `%${query}%` });
 
-      const isValid = await compare(oldPassword, userWithPassword.password);
-      if (!isValid)
-        throw new UnauthorizedException("L'ancien mot de passe est incorrect.");
+        if (excludedIds.length > 0) {
+            queryBuilder = queryBuilder.andWhere(
+                "user.id NOT IN (:...excludedIds)",
+                {
+                    excludedIds,
+                },
+            );
+        }
 
-      dataToUpdate.password = await hash(password, 10);
+        const users = await queryBuilder
+            .select(["user.id", "user.username", "user.avatarUrl"])
+            .take(10)
+            .getMany();
+
+        return users.map((u) => ({
+            id: u.id,
+            username: u.username,
+            avatarUrl: u.avatarUrl,
+            status: this.presenceService.isUserOnline(u.id)
+                ? "online"
+                : "offline",
+        }));
     }
 
-    await this.userRepository.save({ id, ...dataToUpdate });
-
-    return this.getUser(id);
-  }
-
-  async uploadAvatar(id: string, filename: string) {
-    await this.userRepository.save({ id, avatarUrl: `http://localhost:3000/uploads/${filename}` });
-    return this.getUser(id);
-  }
-
-  async deleteUser(id: string) {
-    const user = await this.userRepository.findOne({ where: { id } });
-
-    if (!user) {
-      throw new NotFoundException('User not found');
+    async findById(id: string) {
+        return this.userRepository.findOne({
+            where: { id },
+            relations: { rank: true },
+        });
     }
 
-    await this.userRepository.remove(user);
-
-    return { message: 'User deleted successfully.' };
-  }
-
-  async getGlobalLeaderboard(count: number) {
-    const users = await this.userRepository.find({
-      select: { id: true, username: true, avatarUrl: true, score: true },
-      order: { score: 'DESC', username: 'ASC' },
-      take: count,
-    });
-
-    return users.map((u) => ({
-      id: u.id,
-      username: u.username,
-      avatarUrl: u.avatarUrl,
-      score: u.score,
-    }));
-  }
-
-  async getUserLeaderboardRank(userId: string): Promise<number> {
-    const user = await this.getUser(userId);
-    const above = await this.userRepository.count({
-      where: { score: MoreThan(user.score) },
-    });
-    return above + 1;
-  }
-
-  async searchUsers(query: string, currentUserId: string) {
-    const blockedRelations = await this.blockRepository.find({
-      where: [
-        { blocker: { id: currentUserId } },
-        { blocked: { id: currentUserId } },
-      ],
-      relations: { blocker: true, blocked: true },
-    });
-
-    const excludedIds = blockedRelations.map((b) =>
-      b.blocker.id === currentUserId ? b.blocked.id : b.blocker.id,
-    );
-    excludedIds.push(currentUserId);
-
-    let queryBuilder = this.userRepository
-      .createQueryBuilder('user')
-      .where('user.username ILIKE :query', { query: `%${query}%` });
-
-    if (excludedIds.length > 0) {
-      queryBuilder = queryBuilder.andWhere('user.id NOT IN (:...excludedIds)', {
-        excludedIds,
-      });
+    async findByEmail(email: string) {
+        return this.userRepository.findOne({
+            where: { email },
+            relations: { rank: true },
+        });
     }
 
-    const users = await queryBuilder
-      .select(['user.id', 'user.username', 'user.avatarUrl'])
-      .take(10)
-      .getMany();
+    async findByUsername(username: string) {
+        return this.userRepository.findOne({
+            where: { username },
+            relations: { rank: true },
+        });
+    }
 
-    return users.map((u) => ({
-      id: u.id,
-      username: u.username,
-      avatarUrl: u.avatarUrl,
-      status: this.presenceService.isUserOnline(u.id) ? 'online' : 'offline',
-    }));
-  }
-
-  async findById(id: string) {
-    return this.userRepository.findOne({
-      where: { id },
-      relations: { rank: true },
-    });
-  }
-
-  async findByEmail(email: string) {
-    return this.userRepository.findOne({
-      where: { email },
-      relations: { rank: true },
-    });
-  }
-
-  async findByUsername(username: string) {
-    return this.userRepository.findOne({
-      where: { username },
-      relations: { rank: true },
-    });
-  }
-
-  async findByEmailOrUsername(email: string, username: string) {
-    return this.userRepository.findOne({
-      where: [{ email }, { username }],
-      relations: { rank: true },
-    });
-  }
+    async findByEmailOrUsername(email: string, username: string) {
+        return this.userRepository.findOne({
+            where: [{ email }, { username }],
+            relations: { rank: true },
+        });
+    }
 }

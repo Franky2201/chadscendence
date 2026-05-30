@@ -1,0 +1,24 @@
+{
+    "name": "@chad/types",
+    "version": "1.0.0",
+    "type": "module",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js",
+            "default": "./dist/index.js"
+        }
+    },
+    "private": true,
+    "scripts": {
+        "build": "tsc",
+        "dev": "tsc -w",
+        "lint": "eslint . --fix",
+        "test": "echo 'No tests for types library'"
+    },
+    "devDependencies": {
+        "typescript": "^5.0.0"
+    }
+}
