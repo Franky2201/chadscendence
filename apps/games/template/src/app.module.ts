@@ -27,7 +27,7 @@ export class AppModule
         const gameData: Game = {
             id: "__GAME_ID__",
             name: "__GAME_NAME__",
-            description: "A fun game made with the template",
+            description: "Game automatically generated",
             port: Number(process.env.PORT ?? 3000),
         };
 
