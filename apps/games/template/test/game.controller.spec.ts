@@ -37,7 +37,9 @@ describe("GameController", () => {
         it("should return a ping message", () => {
             const data = { test: "data" };
             const result = controller.handlePing(data);
-            expect(result.message).toBe("Hello from Template Game (Redis)");
+            expect(result.message).toBe(
+                "Hello from __GAME_NAME__ Game (Redis)",
+            );
             expect(result.received).toBe(data);
             expect(result).toHaveProperty("timestamp");
         });
