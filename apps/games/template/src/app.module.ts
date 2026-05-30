@@ -25,8 +25,8 @@ export class AppModule
 
     async onApplicationBootstrap() {
         const gameData: Game = {
-            id: "template-id",
-            name: "GAME_NAME",
+            id: "__GAME_ID__",
+            name: "__GAME_NAME__",
             description: "A fun game made with the template",
             port: Number(process.env.PORT ?? 3000),
         };
@@ -57,7 +57,7 @@ export class AppModule
         if (this.heartbeatInterval) {
             clearInterval(this.heartbeatInterval);
         }
-        await this._redisService.getClient().del(`games:active:template-id`);
+        await this._redisService.getClient().del(`games:active:__GAME_ID__`);
         this.logger.log("Game deregistered from Redis");
     }
 }

@@ -80,10 +80,13 @@ SAFE_NAME=$(printf '%s' "$GAME_NAME" | sed 's/[\/&]/\\&/g')
 echo "Applying template replacements..."
 while IFS= read -r file; do
     "${SED_CMD[@]}" \
+        -e "s/__GAME_ID__/$GAME_ID/g" \
+        -e "s/__GAME_NAME__/$SAFE_NAME/g" \
+        -e "s/__COMPONENT_NAME__/$COMPONENT_NAME/g" \
         -e "s/template-id/$GAME_ID/g" \
-        -e "s/Template/$COMPONENT_NAME/g" \
-        -e "s/GAME_NAME/$SAFE_NAME/g" \
         -e "s/template/$GAME_ID/g" \
+        -e "s/GAME_NAME/$SAFE_NAME/g" \
+        -e "s/Template/$COMPONENT_NAME/g" \
         -e "s|apps/games/template|apps/games/$GAME_ID|g" \
         "$file"
 done < <(find "$TARGET_DIR" -type f)
@@ -156,6 +159,8 @@ if [ -f "$UI_TEMPLATE_SRC" ]; then
     echo "Creating UI component at $UI_COMPONENT_PATH..."
     cp "$UI_TEMPLATE_SRC" "$UI_COMPONENT_PATH"
     "${SED_CMD[@]}" \
+        -e "s/__GAME_ID__/$GAME_ID/g" \
+        -e "s/__COMPONENT_NAME__/$COMPONENT_NAME/g" \
         -e "s/template-id/$GAME_ID/g" \
         -e "s/Template/$COMPONENT_NAME/g" \
         "$UI_COMPONENT_PATH"

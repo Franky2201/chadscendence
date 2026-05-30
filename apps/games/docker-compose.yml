@@ -1,6 +1,6 @@
 services:
-    math-game:
-        container_name: ft_math_game
+    math:
+        container_name: ft_math
         build:
             context: ../../
             dockerfile: apps/games/math/Dockerfile
