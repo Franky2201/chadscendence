@@ -8,7 +8,7 @@ COPY package*.json ./
 # Copy all workspace package.json files (needed for monorepo npm ci)
 COPY apps/backend/package*.json ./apps/backend/
 COPY apps/frontend/package*.json ./apps/frontend/
-COPY apps/games/template/package*.json ./apps/games/template/
+COPY apps/games/template-id/package*.json ./apps/games/template-id/
 
 # Install all dependencies
 RUN npm ci
@@ -16,12 +16,12 @@ RUN npm ci
 # 2. Development stage
 FROM base AS development
 COPY . .
-CMD ["npm", "run", "start:dev", "-w", "template"]
+CMD ["npm", "run", "start:dev", "-w", "template-id"]
 
 # 3. Build stage
 FROM base AS build
 COPY . .
-RUN npm run build -w template
+RUN npm run build -w template-id
 
 # Prune devDependencies
 RUN npm prune --omit=dev
@@ -36,8 +36,8 @@ USER nestjs
 
 # Copy artifacts from build stage
 COPY --from=build --chown=nestjs:nodejs /app/node_modules ./node_modules
-COPY --from=build --chown=nestjs:nodejs /app/apps/games/template/dist ./apps/games/template/dist
-COPY --from=build --chown=nestjs:nodejs /app/apps/games/template/package.json ./apps/games/template/package.json
+COPY --from=build --chown=nestjs:nodejs /app/apps/games/template-id/dist ./apps/games/template-id/dist
+COPY --from=build --chown=nestjs:nodejs /app/apps/games/template-id/package.json ./apps/games/template-id/package.json
 
 EXPOSE 3001
-CMD ["node", "apps/games/template/dist/main"]
+CMD ["node", "apps/games/template-id/dist/main"]
