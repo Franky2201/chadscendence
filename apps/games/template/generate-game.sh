@@ -84,7 +84,6 @@ while IFS= read -r file; do
         -e "s/__GAME_NAME__/$SAFE_NAME/g" \
         -e "s/__COMPONENT_NAME__/$COMPONENT_NAME/g" \
         -e "s/template-id/$GAME_ID/g" \
-        -e "s/template/$GAME_ID/g" \
         -e "s/GAME_NAME/$SAFE_NAME/g" \
         -e "s/Template/$COMPONENT_NAME/g" \
         -e "s|apps/games/template|apps/games/$GAME_ID|g" \
@@ -198,6 +197,10 @@ if [ -f "$GAMES_PAGE" ]; then
 
       const switchBodyMarker = 'switch (activeGameId) {';
       const switchBodyIndex = content.indexOf(switchBodyMarker, switchIndex);
+      if (switchBodyIndex === -1) {
+          console.error('Could not find switch (activeGameId) in renderActiveGame — skipping.');
+          process.exit(1);
+      }
 
       const caseBlock = \`            case \"\${process.env.GAME_ID}\":\n                return <\${process.env.COMPONENT_NAME}UI />;\n\`;
 
