@@ -32,9 +32,13 @@ prerequisites:
 	@test -f $(ENV_FILE) || (cp .env.example $(ENV_FILE))
 	@test -f $(COMPOSE_FILE) || (printf "$(RED)Missing $(COMPOSE_FILE) file$(NO_COLOR)\n"; exit 1)
 	@mkdir -p $(BACKEND_UPLOADS_PATH)
+	@printf "$(GREEN)Installing dependencies...$(NO_COLOR)\n"
+	@npm install
 	@printf "$(GREEN)Prerequisites met.$(NO_COLOR)\n"
 
 build: prerequisites
+	@printf "$(GREEN)Building shared libraries...$(NO_COLOR)\n"
+	@npm run build -ws --if-present
 	@DOCKER_BUILDKIT=1 $(COMPOSE) build
 
 up: build
