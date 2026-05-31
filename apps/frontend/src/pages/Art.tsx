@@ -160,15 +160,27 @@ function App() {
                 <Card className="flex w-full flex-col items-center text-center">
                     <nav className="flex flex-col items-center gap-4">
                         <Anchor>grey</Anchor>
-                        <Anchor color="red">red</Anchor>
-                        <Anchor color="orange">orange</Anchor>
-                        <Anchor color="yellow">yellow</Anchor>
+                        <Anchor size="small" color="red">
+                            red
+                        </Anchor>
+                        <Anchor size="small" color="orange">
+                            orange
+                        </Anchor>
+                        <Anchor size="small" color="yellow">
+                            yellow
+                        </Anchor>
                         <Anchor color="green">green</Anchor>
                         <Anchor color="blue">blue</Anchor>
                         <Anchor color="purple">purple</Anchor>
-                        <Anchor color="pink">pink</Anchor>
-                        <Anchor color="violet">violet</Anchor>
-                        <Anchor color="white">white</Anchor>
+                        <Anchor size="large" color="pink">
+                            pink
+                        </Anchor>
+                        <Anchor size="large" color="violet">
+                            violet
+                        </Anchor>
+                        <Anchor size="large" color="white">
+                            white
+                        </Anchor>
                     </nav>
                 </Card>
                 <Card className="flex w-full flex-col items-center">

@@ -17,24 +17,24 @@ export function Card({
     children,
     className = "",
     title = "",
-    contentClassName = "justify-center",
+    contentClassName = "",
     ...props
 }: CardProps) {
     const { theme } = useTheme();
     const classes = [
         "rounded-3xl border border-3 px-4 py-4 transition-colors duration-300 \
-	ease-in-out justify-center",
+		ease-in-out justify-center",
         themeClasses[theme],
         className,
     ]
         .filter(Boolean)
         .join(" ");
     return (
-        <section className={classes} {...props}>
-            {title && <Title className="self-start mb-2">{title}</Title>}
-            <div className={`${contentClassName} w-full h-full`}>
+        <div className={`flex flex-col ${classes}`} {...props}>
+            {title && <Title className="self-start mb-1">{title}</Title>}
+            <div className={`w-full h-full p-2 ${contentClassName} `}>
                 {children}
             </div>
-        </section>
+        </div>
     );
 }

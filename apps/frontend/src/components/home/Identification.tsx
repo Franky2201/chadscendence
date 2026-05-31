@@ -7,8 +7,8 @@ export function Identification({ className = "" }: { className?: string }) {
 
     return (
         <Card
-            className={`w-full ${className}`}
-            contentClassName="flex flex-col gap-3"
+            className={className}
+            contentClassName="flex flex-col gap-3 justify-center"
             title="Identification"
         >
             <Button className="w-full" onClick={() => openModal("LOGIN")}>
