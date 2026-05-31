@@ -4,33 +4,34 @@ import { developers } from "../../contexts/AboutContext";
 export function Credits({ className = "" }: { className?: string }) {
     return (
         <Card className={className}>
-            <div className="flex flex-wrap w-full justify-between mb-2">
-                <Title>Credits</Title>
+            <div className="flex flex-wrap w-full justify-between mb-3">
+                <a href="/about">
+                    <Title className="hover:underline">Credits</Title>
+                </a>
                 <p className="ml-4 text-sm">
                     This project was created collaboratively by our team of 5
                     developers.
                 </p>
             </div>
-            <div className="grid md:grid-cols-2 gap-1">
+            <div className="flex flex-wrap justify-center gap-3">
                 {developers.map((dev, index) => (
                     <a href={dev.link} target="_blank">
-                        <Card
+                        <div
                             key={index}
-                            className="border transition-all
-										hover:bg-[color:var(--color-grey)]/40
-										hover:border-[color:var(--color-grey)]/60"
+                            className="rounded-xl border border-neutral-400
+                                hover:bg-neutral-500 h-16,5 w-56"
                         >
-                            <div className="flex flex-wrap gap-2">
+                            <div className="flex m-1">
                                 <img
                                     src={dev.pic}
                                     alt={`${dev.name} profile`}
-                                    className="w-14 h-14 rounded-xl object-cover flex-shrink-0"
+                                    className="w-14 h-14 rounded-xl"
                                 />
-                                <div>
+                                <div className="ml-2">
                                     <h2 className="font-bold text-sm mb-0.5">
                                         {dev.name}
                                     </h2>
-                                    <p className="text-xs mb-1">
+                                    <p className="text-xs mb-0.5">
                                         @{dev.username}
                                     </p>
                                     <p className="text-xs uppercase tracking-widest">
@@ -38,19 +39,12 @@ export function Credits({ className = "" }: { className?: string }) {
                                     </p>
                                 </div>
                             </div>
-                        </Card>
+                        </div>
                     </a>
                 ))}
             </div>
-
-            <div className="pt-4 flex items-center justify-between text-xs uppercase tracking-widest">
+            <div className="pt-4 flex items-center justify-center text-xs uppercase tracking-widest">
                 <span>Made with ❤️ at 42 Belgium</span>
-                <a
-                    href="/about"
-                    className="hover:underline normal-case tracking-normal"
-                >
-                    More info →
-                </a>
             </div>
         </Card>
     );
