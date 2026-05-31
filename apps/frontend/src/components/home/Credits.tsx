@@ -4,9 +4,9 @@ import { developers } from "../../contexts/AboutContext";
 export function Credits({ className = "" }: { className?: string }) {
     return (
         <Card className={className}>
-            <div className="flex w-full justify-between mb-2">
+            <div className="flex flex-wrap w-full justify-between mb-2">
                 <Title>Credits</Title>
-                <p className="text-sm">
+                <p className="ml-4 text-sm">
                     This project was created collaboratively by our team of 5
                     developers.
                 </p>
