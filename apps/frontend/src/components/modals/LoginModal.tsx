@@ -50,11 +50,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
             onClick={onClose}
         >
-            <Card
-                className="max-w-md w-full"
-                onClick={(e) => e.stopPropagation()}
-                title="Log in"
-            >
+            <Card className="max-w-md w-full" title="Log in">
                 {error && (
                     <p className="text-[color:var(--color-red)] text-center mb-4 font-medium">
                         {error}

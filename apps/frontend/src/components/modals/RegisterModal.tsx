@@ -44,11 +44,7 @@ export default function RegisterModal({
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
             onMouseDown={onClose}
         >
-            <Card
-                className="max-w-md w-full"
-                onMouseDown={(e) => e.stopPropagation()}
-                title="Register"
-            >
+            <Card className="max-w-md w-full" title="Register">
                 {error && (
                     <p className="text-[color:var(--color-red)] text-center mb-4 font-medium">
                         {error}
