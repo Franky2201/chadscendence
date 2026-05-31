@@ -2,7 +2,13 @@ import { useEffect, useState } from "react";
 import { getLeaderboard, type LeaderboardType } from "../../services/users";
 import { Card } from "../ui/index";
 
-export default function Leaderboard({ count }: { count: number }) {
+export function Leaderboard({
+    count,
+    className = "",
+}: {
+    count: number;
+    className?: string;
+}) {
     const [topUsers, setTopUsers] = useState<LeaderboardType>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -31,41 +37,47 @@ export default function Leaderboard({ count }: { count: number }) {
     }, [count]);
 
     return (
-        <Card className="flex flex-col gap-[16px] w-full p-3 border-none">
-            {isLoading ? (
-                <p className="text-[16px]">Chargement des légendes...</p>
-            ) : error ? (
-                <p className="text-[color:var(--color-red)] text-[16px]">
-                    {error}
-                </p>
-            ) : (
-                topUsers.map((user, index) => (
-                    <div
-                        key={user.id}
-                        className="flex flex-row items-center justify-between w-full"
-                    >
-                        <div className="flex flex-row items-center gap-[16px]">
-                            <span className="font-semibold text-[24px] min-w-[36px]">
-                                {index + 1}.
-                            </span>
+        <Card
+            className={className}
+            contentClassName="justify-start"
+            title="Leaderboard"
+        >
+            <Card className="flex flex-col gap-[8px] w-full border-none">
+                {isLoading ? (
+                    <p className="text-[16px]">Chargement des légendes...</p>
+                ) : error ? (
+                    <p className="text-[color:var(--color-red)] text-[16px]">
+                        {error}
+                    </p>
+                ) : (
+                    topUsers.map((user, index) => (
+                        <div
+                            key={user.id}
+                            className="flex flex-row items-center justify-between w-full"
+                        >
+                            <div className="flex flex-row items-center gap-[16px]">
+                                <span className="font-semibold text-[24px] min-w-[36px]">
+                                    {index + 1}.
+                                </span>
 
-                            <img
-                                src={user.avatarUrl}
-                                alt={`${user.username} avatar`}
-                                className="w-[55px] h-[55px] rounded-full object-cover border border-white/10"
-                            />
+                                <img
+                                    src={user.avatarUrl}
+                                    alt={`${user.username} avatar`}
+                                    className="w-[55px] h-[55px] rounded-full object-cover border border-white/10"
+                                />
+
+                                <span className=" text-[24px] font-medium">
+                                    {user.username}
+                                </span>
+                            </div>
 
                             <span className=" text-[24px] font-medium">
-                                {user.username}
+                                {user.score}
                             </span>
                         </div>
-
-                        <span className=" text-[24px] font-medium">
-                            {user.score}
-                        </span>
-                    </div>
-                ))
-            )}
+                    ))
+                )}
+            </Card>
         </Card>
     );
 }
