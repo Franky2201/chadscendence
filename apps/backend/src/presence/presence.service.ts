@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class PresenceService {
@@ -35,5 +35,10 @@ export class PresenceService {
 
     isUserOnline(userId: string): boolean {
         return this.activeUsers.has(userId);
+    }
+
+    getUserClients(userId: string): string[] {
+        const clients = this.activeUsers.get(userId);
+        return clients ? Array.from(clients) : [];
     }
 }
