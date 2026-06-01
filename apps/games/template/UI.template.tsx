@@ -11,11 +11,9 @@ export default function TemplateUI() {
             setScore={setScore}
             renderGame={(
                 problem: Record<string, unknown> & { question?: string },
-                status: "playing" | "correct" | "wrong",
-                lastResult: any,
-                submitAnswer: (
-                    answer: Record<string, unknown>,
-                ) => Promise<void>,
+                status,
+                lastResult,
+                submitAnswer,
             ) => (
                 <div className="w-full max-w-xs text-center">
                     <div className="text-6xl font-black mb-8 tracking-tighter">

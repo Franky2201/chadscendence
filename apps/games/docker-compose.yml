@@ -17,7 +17,6 @@ services:
                 condition: service_healthy
         volumes:
             - ../../:/app
-            - /app/node_modules
         networks:
             - ft_network
         restart: unless-stopped

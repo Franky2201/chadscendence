@@ -10,7 +10,7 @@ COPY apps/games/template/package*.json ./apps/games/template/
 COPY libs/types/package*.json ./libs/types/
 
 # Prune other workspaces from root package.json to satisfy npm ci
-RUN node -e "const p = require('./package.json'); p.workspaces = p.workspaces.filter(w => w === 'apps/games/template' || w.startsWith('libs/')); require('fs').writeFileSync('./package.json', JSON.stringify(p))"
+RUN node -e "const p = require('./package.json'); p.workspaces = ['apps/games/template', ...p.workspaces.filter(w => w.startsWith('libs/'))]; require('fs').writeFileSync('./package.json', JSON.stringify(p))"
 
 # Install dependencies
 RUN npm ci
@@ -18,7 +18,8 @@ RUN npm ci
 # 2. Development stage
 FROM base AS development
 COPY . .
-CMD ["npm", "run", "start:dev", "-w", "template-id"]
+WORKDIR /app/apps/games/template
+CMD ["node", "../../../node_modules/@nestjs/cli/bin/nest.js", "start", "--watch"]
 
 # 3. Build stage
 FROM base AS build
