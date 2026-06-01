@@ -31,7 +31,8 @@ export function Anchor({
         .join(" ");
     const anchorClasses = [
         "group relative inline-block select-none cursor-pointer",
-        "transition-transform duration-100 ease-in-out hover:scale-120 translate-y-[+4px]",
+        "transition-transform duration-100 ease-in-out",
+        "translate-y-[+4px]",
         className,
     ]
         .filter(Boolean)
@@ -42,17 +43,16 @@ export function Anchor({
     ]
         .filter(Boolean)
         .join(" ");
-    const topTextClasses = ["relative inline-block ease-in-out", textClasses]
+    const topTextClasses = [
+        "relative inline-block ease-in-out group-hover:translate-y-[-7px]",
+        textClasses,
+    ]
         .filter(Boolean)
         .join(" ");
     const colorStyle = getItemColorTextStyle(color, 80);
     const topColorStyle = getItemColorStyle(color);
     return (
-        <a
-            className={anchorClasses}
-            style={{ ...style, ...colorStyle }}
-            {...props}
-        >
+        <a className={anchorClasses} style={{ ...style }} {...props}>
             <span
                 className={`${shadowClasses}`}
                 style={{ ...colorStyle }}
@@ -75,14 +75,14 @@ export function Anchor({
                 {children}
             </span>
             <span
-                className={`translate-y-[-3px] ${shadowClasses}`}
+                className={`translate-y-[-3px] group-hover:translate-y-[-4px] ${shadowClasses}`}
                 style={{ ...colorStyle }}
                 aria-hidden="true"
             >
                 {children}
             </span>
             <span
-                className={`translate-y-[-4px] ${shadowClasses}`}
+                className={`translate-y-[-4px] group-hover:translate-y-[-5px] ${shadowClasses}`}
                 style={{ ...colorStyle }}
                 aria-hidden="true"
             >

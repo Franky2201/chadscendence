@@ -7,3 +7,4 @@ export { Select } from "./Select";
 export { Title } from "./Title";
 export { Toggle } from "./Toggle";
 export { Window } from "./Window";
+export { IconButton } from "./IconButton";

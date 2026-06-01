@@ -29,19 +29,19 @@ export function Window({
 }: WindowProps) {
     const { theme, toggleTheme } = useTheme();
     const classes = [
-        "min-h-screen relative overflow-hidden font-sans p-8 transition-colors \
-	duration-500 ease-in-out",
+        "min-h-screen relative overflow-hidden font-sans p-8 transition-all \
+		duration-500 ease-in-out",
         className,
     ]
         .filter(Boolean)
         .join(" ");
     const buttonClasses = [
         "z-10 fixed bottom-6 right-6 inline-flex h-12 w-12 items-center \
-	justify-center rounded-full border shadow-lg transition-all \
-	focus-visible:outline-none focus-visible:ring-2 \
-	focus-visible:ring-offset-2 active:scale-95 cursor-pointer \
-	overflow-hidden transition-colors duration-300 ease-in-out \
-	select-none",
+		justify-center rounded-full border shadow-lg transition-all \
+		focus-visible:outline-none focus-visible:ring-2 \
+		focus-visible:ring-offset-2 active:scale-95 cursor-pointer \
+		overflow-hidden transition-colors duration-300 ease-in-out \
+		select-none",
         themeButtonClasses[theme],
     ]
         .filter(Boolean)

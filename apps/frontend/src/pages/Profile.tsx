@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { Button, Input } from "../components/ui";
+import { Button, Input, Window, Card } from "../components/ui";
 import {
     updateMe,
     uploadAvatar,
@@ -119,12 +119,7 @@ export default function ProfilePage() {
         });
 
     return (
-        <div
-            className="relative min-h-screen w-full overflow-hidden bg-slate-900 bg-cover bg-center text-white font-sans"
-            style={{ backgroundImage: "url('/background.png')" }}
-        >
-            <div className="absolute inset-0 bg-linear-to-r from-slate-900/90 via-slate-900/50 to-transparent" />
-
+        <Window className="relative min-h-screen w-full overflow-hidden bg-slate-900 bg-cover bg-center t-sans">
             <div className="relative z-10 flex flex-col items-center justify-center min-h-screen gap-8 p-8">
                 <Link
                     to="/"
@@ -133,8 +128,8 @@ export default function ProfilePage() {
                     ← Accueil
                 </Link>
 
-                <div
-                    className="flex flex-col items-center gap-6 p-10 w-full max-w-lg rounded-4xl"
+                <Card
+                    contentClassName="flex flex-col items-center gap-6 p-10 w-full max-w-lg rounded-4xl"
                     style={{
                         background:
                             "linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)",
@@ -161,7 +156,7 @@ export default function ProfilePage() {
                             ].join(" ")}
                         />
                         {editing && !isSSO && (
-                            <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-white opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                            <span className="absolute inset-0 flex items-center justify-center text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
                                 Changer
                             </span>
                         )}
@@ -180,20 +175,18 @@ export default function ProfilePage() {
                                 <h1 className="text-4xl font-black">
                                     {user.username}
                                 </h1>
-                                <p className="text-white/60 text-lg">
-                                    {user.email}
-                                </p>
+                                <p className="text-lg">{user.email}</p>
                                 <p className="text-2xl mt-1">
                                     {user.rank?.icon} {user.rank?.name}
                                 </p>
-                                <p className="text-3xl font-bold text-[#FFD931]">
+                                <p className="text-3xl font-bold">
                                     {user.score} pts{" "}
-                                    <span className="text-2xl font-semibold text-[#FFD931]/70">
+                                    <span className="text-2xl font-semibold/70">
                                         #{leaderboardRank ?? "…"}
                                     </span>
                                 </p>
                                 {user.bio && (
-                                    <p className="text-white/70 text-base text-center max-w-sm mt-1 italic">
+                                    <p className="text-base text-center max-w-sm mt-1 italic">
                                         {user.bio}
                                     </p>
                                 )}
@@ -202,7 +195,7 @@ export default function ProfilePage() {
                                         Admin
                                     </span>
                                 )}
-                                <div className="mt-3 flex flex-col gap-1 text-white/40 text-xs">
+                                <div className="mt-3 flex flex-col gap-1 text-xs">
                                     <span>
                                         Membre depuis le{" "}
                                         {formatDate(user.createdAt)}
@@ -238,7 +231,7 @@ export default function ProfilePage() {
                                     className="w-full"
                                 />
                                 {isSSO && (
-                                    <p className="text-white/40 text-xs text-center">
+                                    <p className="text-xs text-center">
                                         Avatar géré par{" "}
                                         {user.intraId ? "42 Intra" : "GitHub"}
                                     </p>
@@ -254,7 +247,7 @@ export default function ProfilePage() {
                                 {!isSSO && (
                                     <>
                                         <hr className="border-white/20" />
-                                        <p className="text-white/50 text-sm">
+                                        <p className="text-sm">
                                             Changer le mot de passe (optionnel)
                                         </p>
                                         <Input
@@ -317,8 +310,8 @@ export default function ProfilePage() {
                             </div>
                         </>
                     )}
-                </div>
+                </Card>
             </div>
-        </div>
+        </Window>
     );
 }

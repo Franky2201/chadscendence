@@ -2,7 +2,7 @@ import { useModal } from "../../contexts/ModalContext";
 import LoginModal from "./LoginModal";
 import RegisterModal from "./RegisterModal";
 import GameModal from "./GameModal";
-import AboutModal from "./AboutModal";
+import PlayModal from "./PlayModal";
 
 export default function ModalRoot() {
     const { activeModal, modalProps, closeModal } = useModal();
@@ -24,12 +24,8 @@ export default function ModalRoot() {
             {activeModal === "GAME" && (
                 <GameModal isOpen={true} onClose={closeModal} {...modalProps} />
             )}
-            {activeModal === "ABOUT" && (
-                <AboutModal
-                    isOpen={true}
-                    onClose={closeModal}
-                    {...modalProps}
-                />
+            {activeModal === "PLAY" && (
+                <PlayModal isOpen={true} onClose={closeModal} {...modalProps} />
             )}
         </>
     );
