@@ -11,7 +11,7 @@ export default function TemplateUI() {
             setScore={setScore}
             renderGame={(
                 problem: Record<string, unknown> & { question?: string },
-                status: "playing" | "correct" | "wrong",
+                status: "playing" | "correct" | "wrong" | "expired",
                 lastResult: any,
                 submitAnswer: (
                     answer: Record<string, unknown>,
