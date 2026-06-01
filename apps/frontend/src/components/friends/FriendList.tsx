@@ -1,4 +1,5 @@
 import { useFriends } from "../../contexts/FriendsContext";
+import { useChat } from '../../contexts/ChatContext';
 
 export default function FriendList() {
     const {
@@ -11,6 +12,7 @@ export default function FriendList() {
         removeFriend,
         blockUser,
     } = useFriends();
+    const { openChat } = useChat();
 
     if (isLoading)
         return (
@@ -103,11 +105,10 @@ export default function FriendList() {
                                     <img
                                         src={friend.avatarUrl}
                                         alt={friend.username}
-                                        className={`w-[50px] h-[50px] rounded-full object-cover border-2 transition-colors ${
-                                            friend.status === "online"
-                                                ? "border-green-500"
-                                                : "border-transparent"
-                                        }`}
+                                        className={`w-[50px] h-[50px] rounded-full object-cover border-2 transition-colors ${friend.status === "online"
+                                            ? "border-green-500"
+                                            : "border-transparent"
+                                            }`}
                                     />
                                     {friend.status === "online" && (
                                         <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-[#1E1E1E] rounded-full"></span>
@@ -118,6 +119,13 @@ export default function FriendList() {
                                 </span>
                             </div>
                             <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-all">
+                                <button
+                                    onClick={() => openChat({ id: friend.id, username: friend.username, avatarUrl: friend.avatarUrl })}
+                                    className="text-blue-400/70 hover:text-blue-400 font-bold"
+                                    title="Message privé"
+                                >
+                                    💬
+                                </button>
                                 <button
                                     onClick={() =>
                                         removeFriend(friend.friendshipId)
