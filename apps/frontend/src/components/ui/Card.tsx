@@ -24,7 +24,7 @@ export function Card({
 }: CardProps) {
     const { theme } = useTheme();
     const classes = [
-        "rounded-3xl border border-3 px-4 py-4 transition-colors duration-300 \
+        "rounded-3xl border border-3 px-3 py-3 transition-colors duration-300 \
 		ease-in-out justify-center",
         themeClasses[theme],
         className,
@@ -42,11 +42,11 @@ export function Card({
             onMouseDown={(e) => e.stopPropagation()}
         >
             {title && (
-                <div className="flex flex-wrap w-full justify-between mb-3">
+                <div className="flex flex-wrap w-full justify-between">
                     {title && (
                         <a {...props}>
                             <Title
-                                className={`self-start mb-1 flex flex-row items-center ${titleClasses}`}
+                                className={`self-start flex flex-row items-center ${titleClasses}`}
                             >
                                 {clickable && "⎋ "}
                                 {title}
