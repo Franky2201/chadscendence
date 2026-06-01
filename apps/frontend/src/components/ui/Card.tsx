@@ -1,6 +1,7 @@
 import type { AnchorHTMLAttributes } from "react";
+import { Link } from "react-router-dom";
 import { Title } from "./index";
-import { type ThemeName, useTheme } from "../../contexts/theme-context";
+import { type ThemeName, useTheme } from "../../contexts/ThemeContext";
 
 type CardProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
     className?: string;
@@ -49,16 +50,26 @@ export function Card({
         >
             {title && (
                 <div className="flex flex-wrap w-full justify-between">
-                    {title && (
-                        <a {...props}>
-                            <Title
-                                className={`self-start flex flex-row items-center ${titleClasses}`}
-                            >
-                                {clickable && "⎋ "}
-                                {title}
-                            </Title>
-                        </a>
-                    )}
+                    {title &&
+                        (props.href && !props.href.startsWith("http") ? (
+                            <Link {...props} to={props.href} ref={undefined}>
+                                <Title
+                                    className={`self-start flex flex-row items-center ${titleClasses}`}
+                                >
+                                    {clickable && "⎋ "}
+                                    {title}
+                                </Title>
+                            </Link>
+                        ) : (
+                            <a {...props}>
+                                <Title
+                                    className={`self-start flex flex-row items-center ${titleClasses}`}
+                                >
+                                    {clickable && "⎋ "}
+                                    {title}
+                                </Title>
+                            </a>
+                        ))}
                     {description && (
                         <p className="ml-4 text-sm">{description}</p>
                     )}
