@@ -25,7 +25,7 @@ export function Card({
 }: CardProps) {
     const { theme } = useTheme();
     const classes = [
-        "rounded-3xl border border-1 px-3 py-3 transition-colors duration-300 \
+        "rounded-3xl border border-1 py-3 px-4 transition-colors duration-300 \
 		ease-in-out justify-center ",
         themeClasses[theme],
         className,
@@ -33,46 +33,37 @@ export function Card({
         .filter(Boolean)
         .join(" ");
     const clickable = props.href || props.onClick;
-    const titleClasses = [
-        clickable ? "hover:underline hover:cursor-pointer" : "",
-    ];
+    const linkClass = clickable ? "hover:underline hover:cursor-pointer" : "";
     return (
         <div
             className={`flex flex-col ${classes}`}
             onClick={(e) => e.stopPropagation()}
             onMouseDown={(e) => e.stopPropagation()}
             style={{
-                backdropFilter: "blur(40px)",
-                WebkitBackdropFilter: "blur(40px)",
                 border: "1px solid rgba(255,255,255,0.2)",
                 boxShadow: "0 0 10px 0 rgba(0,0,0,0.5)",
             }}
         >
             {title && (
                 <div className="flex flex-wrap w-full justify-between">
-                    {title &&
+                    <Title className={`self-start flex flex-row items-center`}>
+                        {title}
+                    </Title>
+                    {clickable &&
                         (props.href && !props.href.startsWith("http") ? (
-                            <Link {...props} to={props.href} ref={undefined}>
-                                <Title
-                                    className={`self-start flex flex-row items-center ${titleClasses}`}
-                                >
-                                    {clickable && "⎋ "}
-                                    {title}
-                                </Title>
+                            <Link
+                                className={linkClass}
+                                {...props}
+                                to={props.href}
+                                ref={undefined}
+                            >
+                                {description} →
                             </Link>
                         ) : (
-                            <a {...props}>
-                                <Title
-                                    className={`self-start flex flex-row items-center ${titleClasses}`}
-                                >
-                                    {clickable && "⎋ "}
-                                    {title}
-                                </Title>
+                            <a className={`${linkClass} ml-2`} {...props}>
+                                {description} →
                             </a>
                         ))}
-                    {description && (
-                        <p className="ml-4 text-sm">{description}</p>
-                    )}
                 </div>
             )}
             <div className={`w-full h-full p-2 ${contentClassName} `}>

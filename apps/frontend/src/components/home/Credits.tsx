@@ -7,10 +7,12 @@ export function Credits({ className = "" }: { className?: string }) {
             className={className}
             title="Credits"
             href="/about"
-            description="This 
-					project was created collaboratively by our team of 5
-                    developers."
+            description="More info"
         >
+            <p className="justify-self-center mb-2 text-center">
+                This project was created collaboratively by our team of 5
+                developers.
+            </p>
             <div className="flex flex-wrap justify-center gap-3">
                 {developers.map((dev, index) => (
                     <a href={dev.link} target="_blank">
