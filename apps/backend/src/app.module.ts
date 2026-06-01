@@ -37,10 +37,9 @@ import { MessagesModule } from "./messages/messages.module";
         GamesModule,
         FriendsModule,
         BlocksModule,
-        MessagesModule
+        MessagesModule,
     ],
     controllers: [AppController],
     providers: [AppService],
 })
-
-export class AppModule { }
+export class AppModule {}
