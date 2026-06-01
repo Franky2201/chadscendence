@@ -25,18 +25,16 @@ export function Button({
     ...props
 }: ButtonProps) {
     const divClasses = [
-        "group relative overflow-visible border-none select-none",
+        "group relative border-none select-none",
         borderRadius,
         className,
     ]
         .filter(Boolean)
         .join(" ");
     const buttonClasses = [
-        "inline-flex items-center justify-center \
-	transition-all duration-100 ease-in-out select-none \
-	group-active:translate-y-0 font-bold",
+        "items-center justify-center transition-all duration-100 ease-in-out h-full w-full\
+		select-none group-active:translate-y-0 font-bold bg-[color:var(--ui-color)]",
         borderRadius,
-        "bg-[color:var(--ui-color)]",
         sizeClasses[size],
         className,
         props.disabled
@@ -46,9 +44,8 @@ export function Button({
         .filter(Boolean)
         .join(" ");
     const spanBotClasses = [
-        "absolute inset-0 pointer-events-none",
+        "absolute inset-0 bg-[color:var(--ui-color)]",
         borderRadius,
-        "bg-[color:var(--ui-color)]",
         sizeClasses[size],
         className,
     ]

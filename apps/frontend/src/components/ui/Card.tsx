@@ -31,10 +31,9 @@ export function Card({
     ]
         .filter(Boolean)
         .join(" ");
+    const clickable = props.href || props.onClick;
     const titleClasses = [
-        props.href || props.onClick
-            ? "hover:underline hover:cursor-pointer"
-            : "",
+        clickable ? "hover:underline hover:cursor-pointer" : "",
     ];
     return (
         <div
@@ -47,8 +46,9 @@ export function Card({
                     {title && (
                         <a {...props}>
                             <Title
-                                className={`self-start mb-1 ${titleClasses}`}
+                                className={`self-start mb-1 flex flex-row items-center ${titleClasses}`}
                             >
+                                {clickable && "⎋ "}
                                 {title}
                             </Title>
                         </a>

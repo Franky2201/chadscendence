@@ -4,7 +4,7 @@ export type ModalRegistry = {
     LOGIN: undefined;
     REGISTER: { prefilledEmail?: string };
     GAME: { gameMode?: string };
-    ABOUT: undefined;
+    PLAY: undefined;
 };
 
 export type ModalType = keyof ModalRegistry;

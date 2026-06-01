@@ -21,7 +21,10 @@ export default function HomePage() {
                     alt="GameLogo"
                 />
             </header>
-            <div className="grid w-full max-w-300 justify-self-center grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+            <div
+                className="grid w-full max-w-300 justify-self-center 
+				grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3"
+            >
                 {!user && <board.Identification />}
                 <board.Play />
                 <board.Leaderboard count={5} />
