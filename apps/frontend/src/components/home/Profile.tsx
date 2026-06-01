@@ -1,9 +1,21 @@
-import { Card } from "../ui";
+import { Card, Button } from "../ui";
+import { useAuth } from "../../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export function Profile({ className = "" }: { className?: string }) {
+    const { logout } = useAuth();
+    const navigate = useNavigate();
+
+    const handleLogout = async () => {
+        await logout();
+        navigate("/");
+    };
+
     return (
-        <Card className={className} title="Profile">
-            <></>
+        <Card className={className} title="Profile" href="/profile">
+            <Button onClick={handleLogout} size="medium">
+                Logout
+            </Button>
         </Card>
     );
 }

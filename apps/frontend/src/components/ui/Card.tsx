@@ -10,8 +10,8 @@ type CardProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
 };
 
 const themeClasses: Record<ThemeName, string> = {
-    light: "bg-neutral-200 border-neutral-300 text-neutral-900",
-    dark: "bg-neutral-800 border-neutral-500 text-neutral-200",
+    light: "bg-neutral-300 border-neutral-300 text-neutral-900",
+    dark: "bg-neutral-800 border-neutral-600 text-neutral-200",
 };
 
 export function Card({
@@ -24,8 +24,8 @@ export function Card({
 }: CardProps) {
     const { theme } = useTheme();
     const classes = [
-        "rounded-3xl border border-3 px-3 py-3 transition-colors duration-300 \
-		ease-in-out justify-center",
+        "rounded-3xl border border-1 px-3 py-3 transition-colors duration-300 \
+		ease-in-out justify-center ",
         themeClasses[theme],
         className,
     ]
@@ -40,6 +40,12 @@ export function Card({
             className={`flex flex-col ${classes}`}
             onClick={(e) => e.stopPropagation()}
             onMouseDown={(e) => e.stopPropagation()}
+            style={{
+                backdropFilter: "blur(40px)",
+                WebkitBackdropFilter: "blur(40px)",
+                border: "1px solid rgba(255,255,255,0.2)",
+                boxShadow: "0 0 10px 0 rgba(0,0,0,0.5)",
+            }}
         >
             {title && (
                 <div className="flex flex-wrap w-full justify-between">

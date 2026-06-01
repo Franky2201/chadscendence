@@ -77,7 +77,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                         required
                     />
                     <Button type="submit" className="w-full" size="large">
-                        Log In
+                        Login
                     </Button>
                 </form>
             </Card>
