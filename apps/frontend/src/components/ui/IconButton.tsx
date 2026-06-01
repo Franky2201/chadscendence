@@ -31,7 +31,7 @@ export function IconButton({
         >
             <span
                 aria-hidden="true"
-                className="mb-2 block h-15 w-15 bg-current"
+                className="mb-1 block h-15 w-15 bg-current"
                 style={{
                     maskImage: `url('/${img}')`,
                     WebkitMaskImage: `url('/${img}')`,
