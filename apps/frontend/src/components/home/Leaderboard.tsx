@@ -42,42 +42,40 @@ export function Leaderboard({
             contentClassName="justify-start"
             title="Leaderboard"
         >
-            <Card className="flex flex-col gap-[8px] w-full border-none">
+            <div className="flex flex-col w-full border-none">
                 {isLoading ? (
-                    <p className="text-[16px]">Chargement des légendes...</p>
+                    <p className="text-lg">Loading ...</p>
                 ) : error ? (
-                    <p className="text-[color:var(--color-red)] text-[16px]">
-                        {error}
-                    </p>
+                    <p className="text-[color:var(--color-red)]">{error}</p>
                 ) : (
                     topUsers.map((user, index) => (
                         <div
                             key={user.id}
                             className="flex flex-row items-center justify-between w-full"
                         >
-                            <div className="flex flex-row items-center gap-[16px]">
-                                <span className="font-semibold text-[24px] min-w-[36px]">
+                            <div className="flex flex-row items-center min-w-0">
+                                <span className="text-xl mr-4 w-5 text-right font-energy">
                                     {index + 1}.
                                 </span>
 
                                 <img
                                     src={user.avatarUrl}
                                     alt={`${user.username} avatar`}
-                                    className="w-[55px] h-[55px] rounded-full object-cover border border-white/10"
+                                    className="w-10 h-10 mr-2 mb-1 rounded-xl border"
                                 />
 
-                                <span className=" text-[24px] font-medium">
+                                <span className="block truncate text-xl font-bold max-w-[14rem] sm:max-w-[18rem]">
                                     {user.username}
                                 </span>
                             </div>
 
-                            <span className=" text-[24px] font-medium">
+                            <span className="text-lg font-energy">
                                 {user.score}
                             </span>
                         </div>
                     ))
                 )}
-            </Card>
+            </div>
         </Card>
     );
 }
