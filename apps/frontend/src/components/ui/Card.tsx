@@ -62,16 +62,16 @@ export function Card({
             }}
         >
             {title && (
-                <div className="flex flex-wrap w-full justify-between">
+                <div className="flex w-full items-start gap-2">
                     <Title
-                        className={`self-start flex flex-row items-center mb-2 ${titleSizeClasses[size]}`}
+                        className={`min-w-0 flex-1 mb-2 ${titleSizeClasses[size]}`}
                     >
                         {title}
                     </Title>
                     {clickable &&
                         (props.href && !props.href.startsWith("http") ? (
                             <Link
-                                className={linkClass}
+                                className={`${linkClass} ml-auto shrink-0 whitespace-nowrap self-start`}
                                 {...props}
                                 to={props.href}
                                 ref={undefined}
@@ -79,7 +79,10 @@ export function Card({
                                 {description} →
                             </Link>
                         ) : (
-                            <a className={`${linkClass} ml-2`} {...props}>
+                            <a
+                                className={`${linkClass} ml-auto shrink-0 whitespace-nowrap self-start`}
+                                {...props}
+                            >
                                 {description} →
                             </a>
                         ))}
