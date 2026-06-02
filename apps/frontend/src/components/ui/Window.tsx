@@ -1,4 +1,5 @@
 import { type ReactNode } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { type ThemeName, useTheme } from "../../contexts/ThemeContext";
 import { type ItemColor } from "./unified";
 import AnimatedBackground from "./AnimatedBackground";
@@ -19,6 +20,16 @@ const themeButtonClasses: Record<ThemeName, string> = {
 		focus-visible:ring-neutral-500 focus-visible:ring-offset-neutral-950",
 };
 
+const footerThemeClasses: Record<ThemeName, string> = {
+    light: "text-neutral-500",
+    dark: "text-neutral-400",
+};
+
+const footerLinkClasses: Record<ThemeName, string> = {
+    light: "text-neutral-700 hover:text-neutral-950",
+    dark: "text-neutral-300 hover:text-white",
+};
+
 export function Window({
     children,
     className = "",
@@ -28,6 +39,7 @@ export function Window({
     color = "grey",
 }: WindowProps) {
     const { theme, toggleTheme } = useTheme();
+    const location = useLocation();
     const classes = [
         "min-h-screen relative overflow-hidden font-sans p-8 transition-all \
 		duration-500 ease-in-out",
@@ -47,6 +59,18 @@ export function Window({
         .filter(Boolean)
         .join(" ");
     const isDark = theme === "dark";
+    const footerClasses = [
+        "flex justify-center mt-4 items-center text-sm transition-colors duration-300 ease-in-out",
+        footerThemeClasses[theme],
+    ]
+        .filter(Boolean)
+        .join(" ");
+    const linkClasses = [
+        "transition-colors duration-300 ease-in-out hover:underline uppercase",
+        footerLinkClasses[theme],
+    ]
+        .filter(Boolean)
+        .join(" ");
     const iconBaseClasses =
         "absolute inset-0 h-8 w-8 transition-all duration-300 ease-in-out";
     const darkIconClasses = isDark
@@ -63,7 +87,26 @@ export function Window({
                 angle={angle}
                 size={size}
             />
-            <div className="relative z-10">{children}</div>
+            <div className="relative z-10">
+                {children}
+                <footer className={footerClasses}>
+                    <a href="" className={linkClasses}>
+                        RGPD
+                    </a>
+                    <span className="mx-2 select-none">|</span>
+                    <a href="" className={linkClasses}>
+                        Credits
+                    </a>
+                    {location.pathname !== "/about" && (
+                        <>
+                            <span className="mx-2 select-none">|</span>
+                            <Link to="/about" className={linkClasses}>
+                                About Us
+                            </Link>
+                        </>
+                    )}
+                </footer>
+            </div>
             <button
                 type="button"
                 className={buttonClasses}

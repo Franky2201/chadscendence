@@ -22,18 +22,18 @@ export default function HomePage() {
                 />
             </header>
             <div
-                className="grid w-full max-w-300 justify-self-center 
-				grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3"
+                className={`grid w-full max-w-300 md:grid-cols-2 lg:grid-cols-3 
+					justify-self-center grid-cols-1 gap-3`}
             >
                 {!user && <board.Identification />}
                 <board.Play />
-                <board.Leaderboard count={5} />
+                <board.Settings />
                 {user && <board.Profile />}
+                <board.Leaderboard count={5} />
                 {user && <board.Friends />}
                 {user && <board.Clan />}
                 {user && <board.Achievements />}
-                <board.Settings />
-                <board.Credits className="md:col-span-2 xl:col-span-2" />
+                {/* <board.Credits className="md:col-span-2" /> */}
             </div>
         </Window>
     );
