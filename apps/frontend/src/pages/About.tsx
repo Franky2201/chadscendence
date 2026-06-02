@@ -1,6 +1,5 @@
-import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { Card, Button } from "../components/ui";
+import { Card, Window } from "../components/ui";
 import { developers } from "../contexts/AboutContext";
 
 const stackLayers = [
@@ -59,158 +58,140 @@ const About: React.FC = () => {
         );
 
     return (
-        <div
-            className="relative min-h-screen w-full overflow-hidden bg-slate-900 bg-cover bg-center text-white font-sans"
-            style={{ backgroundImage: "url('/background.png')" }}
-        >
-            <div className="absolute inset-0 bg-linear-to-r from-slate-900/90 via-slate-900/50 to-slate-900/90" />
+        <Window className="relative min-h-screen w-full overflow-hidden bg-cover bg-center font-sans">
+            <header className="justify-self-center">
+                <img
+                    className="select-none w-auto drop-shadow-lg max-h-30 mb-8"
+                    src="/game_banner.png"
+                    alt="GameLogo"
+                />
+            </header>
 
-            <div className="relative z-10 flex flex-col h-full min-h-screen">
-                <div className="flex w-full justify-between items-center p-10">
-                    <Link to="/">
-                        <img
-                            src="/logo.png"
-                            alt="WhoIsChad"
-                            className="w-48 object-contain drop-shadow-2xl transition-transform hover:scale-105"
-                        />
-                    </Link>
-                    <div className="flex items-center gap-6">
-                        <h1 className="text-4xl font-black tracking-wide drop-shadow-xl">
-                            Credits
-                        </h1>
-                        <Link to="/">
-                            <Button>Retour</Button>
-                        </Link>
+            <Card
+                className="relative max-w-250 mx-auto p-6"
+                title="Who's is the Chad ?"
+                href="/"
+                titleClassName="text-4xl"
+                description="Back"
+                size="large"
+            >
+                <div className="flex flex-row">
+                    {badges.map((badge) => (
+                        <div key={badge.name}>
+                            <a
+                                href={badge.link}
+                                className="hover:underline mr-3 inline-flex 
+									items-center gap-1.5 text-xs text-slate-500 
+									bg-slate-100 border border-slate-200 
+									rounded-full px-3 py-1 mb-3"
+                            >
+                                {badge.name}
+                            </a>
+                        </div>
+                    ))}
+                </div>
+
+                <div className="mb-4">
+                    <p className="text-sm leading-relaxed">
+                        A web platform for primitive minigames built around
+                        knowledge and reflection. A fun way to learn things,
+                        train your brain, or compete with friends. Built by a
+                        team of 5 as part of the 42 curriculum.
+                    </p>
+                </div>
+
+                <div className="mb-4">
+                    <p className="text-xs font-semibold tracking-widest uppercase mb-2">
+                        The Team
+                    </p>
+                    <div className="flex flex-wrap justify-center gap-3">
+                        {developers.map((dev, index) => (
+                            <a href={dev.link} target="_blank">
+                                <div
+                                    key={index}
+                                    className="rounded-2xl border border-neutral-400
+                                		hover:bg-neutral-500 h-16,5 w-60"
+                                >
+                                    <div className="flex m-1">
+                                        <img
+                                            src={dev.pic}
+                                            alt={`${dev.name} profile`}
+                                            className="w-22 h-22 rounded-xl"
+                                        />
+                                        <div className="ml-2">
+                                            <h2 className="font-bold text-sm mb-0.5">
+                                                {dev.name}
+                                            </h2>
+                                            <p className="text-xs mb-0.5">
+                                                @{dev.username}
+                                            </p>
+                                            <p className="text-xs uppercase tracking-widest">
+                                                {dev.role}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        ))}
                     </div>
                 </div>
 
-                <Card className="relative max-w-4xl min-w-1/2 -mt-10 mx-auto">
-                    <div className="flex flex-row">
-                        {badges.map((badge) => (
-                            <div key={badge.name}>
-                                <a
-                                    href={badge.link}
-                                    className="hover:underline mr-3 inline-flex items-center gap-1.5 text-xs text-slate-500 bg-slate-100 border border-slate-200 rounded-full px-3 py-1 mb-3"
+                <h2 className="text-2xl font-bold">Technologies Used</h2>
+                <div className="p-4">
+                    {stackLayers.map((layer) => (
+                        <div
+                            key={layer.label}
+                            className="flex item-center gap-4"
+                        >
+                            <span className="text-xs uppercase tracking-widest w-20">
+                                {layer.label}
+                            </span>
+                            <div className="flex flex-wrap gap-2 m-1">
+                                {layer.stack.map((layer) => (
+                                    <span
+                                        key={layer.name}
+                                        className={`${layer.color} text-xs px-3 py-1 rounded-full font-medium`}
+                                    >
+                                        {layer.name}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                <div>
+                    <p className="text-xs font-semibold tracking-widest uppercase mb-4">
+                        Modules
+                    </p>
+                    <div className="flex flex-col gap-2 mb-6">
+                        {modules.map((mod) => (
+                            <div
+                                key={mod.name}
+                                className="bg-[#E43A70]/10 flex items-center justify-between rounded-xl px-4 py-1 border"
+                                style={{
+                                    borderColor: "rgba(228, 58, 112, 0.4)",
+                                }}
+                            >
+                                <span className="text-sm">{mod.name}</span>
+                                <span
+                                    className={`text-xs font-medium px-2.5 py-1 rounded-full border ${
+                                        mod.type === "Major"
+                                            ? "bg-[#fce8ef] text-[#993556] border-[#F4C0D1]"
+                                            : "bg-emerald-50 text-emerald-700 border-emerald-200"
+                                    }`}
                                 >
-                                    {badge.name}
-                                </a>
+                                    {mod.type}
+                                </span>
                             </div>
                         ))}
                     </div>
-
-                    <div className="mb-8">
-                        <h1 className="text-5xl font-black tracking-widest uppercase text-slate-800 mb-2">
-                            Who's the{" "}
-                            <span className="text-[#E43A70]">Chad?</span>
-                        </h1>
-                        <p className="text-slate-500 text-sm leading-relaxed">
-                            A web platform for primitive minigames built around
-                            knowledge and reflection. A fun way to learn things,
-                            train your brain, or compete with friends. Built by
-                            a team of 5 as part of the 42 curriculum.
-                        </p>
-                    </div>
-
-                    <div>
-                        <p className="text-xs font-semibold tracking-widest uppercase text-slate-400 mb-3">
-                            The Team
-                        </p>
-                        <div className="grid md:grid-cols-2 gap-3 mb-8">
-                            {developers.map((dev, index) => (
-                                <Card
-                                    key={index}
-                                    className="flex items-center gap-4 p-4 h-15 rounded-xl bg-white/[0.04] border border-white/10 transition-all hover:bg-[#E43A70]/10 hover:border-[#E43A70]/40 hover:-translate-y-0.5"
-                                >
-                                    <img
-                                        src={dev.pic}
-                                        alt={`${dev.name} profile`}
-                                        className="w-14 h-14 rounded-xl object-cover flex-shrink-0"
-                                    />
-                                    <div>
-                                        <h2 className="font-bold text-slate-800 text-sm mb-0.5">
-                                            {dev.name}
-                                        </h2>
-                                        <a
-                                            href={dev.link}
-                                            className="text-[#E43A70] text-xs hover:underline block mb-1"
-                                        >
-                                            @{dev.username}
-                                        </a>
-                                        <p className="text-slate-400 text-xs uppercase tracking-widest">
-                                            {dev.role}
-                                        </p>
-                                    </div>
-                                </Card>
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className="mb-10">
-                        <h2 className="text-slate-600 text-2xl font-bold mb-4">
-                            Technologies Used
-                        </h2>
-                        <div>
-                            {stackLayers.map((layer) => (
-                                <div
-                                    key={layer.label}
-                                    className="flex item-center gap-4"
-                                >
-                                    <span className="text-slate-400 text-xs uppercase tracking-widest w-20">
-                                        {layer.label}
-                                    </span>
-                                    <div className="flex flex-wrap gap-2 m-1">
-                                        {layer.stack.map((layer) => (
-                                            <span
-                                                key={layer.name}
-                                                className={`${layer.color} text-xs px-3 py-1 rounded-full font-medium`}
-                                            >
-                                                {layer.name}
-                                            </span>
-                                        ))}
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className="m-6">
-                        <p className="text-xs font-semibold tracking-widest uppercase text-slate-400 mb-4">
-                            Modules
-                        </p>
-                        <div className="flex flex-col gap-2">
-                            {modules.map((mod) => (
-                                <div
-                                    key={mod.name}
-                                    className="bg-[#E43A70]/10 flex items-center justify-between rounded-xl px-4 py-1 border"
-                                    style={{
-                                        borderColor: "rgba(228, 58, 112, 0.4)",
-                                    }}
-                                >
-                                    <span className="text-sm text-slate-700">
-                                        {mod.name}
-                                    </span>
-                                    <span
-                                        className={`text-xs font-medium px-2.5 py-1 rounded-full border ${
-                                            mod.type === "Major"
-                                                ? "bg-[#fce8ef] text-[#993556] border-[#F4C0D1]"
-                                                : "bg-emerald-50 text-emerald-700 border-emerald-200"
-                                        }`}
-                                    >
-                                        {mod.type}
-                                    </span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </Card>
-
-                <div className="relative mb-10">
-                    <p className="mt-5 text-center font-medium">
-                        Made with ❤️ at 42 Belgium
-                    </p>
                 </div>
-            </div>
-        </div>
+                <p className="flex items-center justify-center text-sm uppercase tracking-widest">
+                    Made with ❤️ at 42 Belgium
+                </p>
+            </Card>
+        </Window>
     );
 };
 

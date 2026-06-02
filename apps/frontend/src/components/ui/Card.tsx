@@ -2,12 +2,27 @@ import type { AnchorHTMLAttributes } from "react";
 import { Link } from "react-router-dom";
 import { Title } from "./index";
 import { type ThemeName, useTheme } from "../../contexts/ThemeContext";
+import { type ItemSize } from "./unified";
 
 type CardProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
     className?: string;
     title?: string;
     description?: string;
     contentClassName?: string;
+    titleClassName?: string;
+    size?: ItemSize;
+};
+
+const titleSizeClasses: Record<ItemSize, string> = {
+    small: "text-xl",
+    medium: "text-2xl",
+    large: "text-3xl",
+};
+
+const sizeClasses: Record<ItemSize, string> = {
+    small: "py-1 px-2",
+    medium: "py-4 px-5",
+    large: "py-5 px-6",
 };
 
 const themeClasses: Record<ThemeName, string> = {
@@ -21,13 +36,15 @@ export function Card({
     title = "",
     description = "",
     contentClassName = "",
+    size = "medium",
     ...props
 }: CardProps) {
     const { theme } = useTheme();
     const classes = [
-        "rounded-3xl border border-1 py-3 px-4 transition-colors duration-300 \
+        "rounded-3xl border border-1 transition-colors duration-300 \
 		ease-in-out justify-center ",
         themeClasses[theme],
+        sizeClasses[size],
         className,
     ]
         .filter(Boolean)
@@ -46,7 +63,9 @@ export function Card({
         >
             {title && (
                 <div className="flex flex-wrap w-full justify-between">
-                    <Title className={`self-start flex flex-row items-center`}>
+                    <Title
+                        className={`self-start flex flex-row items-center mb-2 ${titleSizeClasses[size]}`}
+                    >
                         {title}
                     </Title>
                     {clickable &&

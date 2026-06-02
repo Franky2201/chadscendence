@@ -18,7 +18,7 @@ export function Credits({ className = "" }: { className?: string }) {
                     <a href={dev.link} target="_blank">
                         <div
                             key={index}
-                            className="rounded-xl border border-neutral-400
+                            className="rounded-2xl border border-neutral-400
                                 hover:bg-neutral-500 h-16,5 w-56"
                         >
                             <div className="flex m-1">
