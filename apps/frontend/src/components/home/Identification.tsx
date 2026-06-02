@@ -20,15 +20,16 @@ export function Identification({ className = "" }: { className?: string }) {
             <hr className="w-full border-t mb-1" />
             <div className="flex gap-3 justify-center items-center">
                 <IconButton
-                    className="w-full h-10"
+                    className="w-full h-10 bg-[var(--color-github)]"
                     img="github_logo.svg"
-                    onClick={withIntra}
+                    imgClassName="bg-white"
+                    onClick={withGithub}
                 ></IconButton>
                 <IconButton
-                    className="w-full h-10"
+                    className="w-full h-10 bg-[var(--color-github)]"
                     img="42_logo.svg"
-                    imgClassName="translate-x-[-1px]"
-                    onClick={withGithub}
+                    imgClassName="translate-x-[-1px] bg-white"
+                    onClick={withIntra}
                 ></IconButton>
             </div>
         </Card>
