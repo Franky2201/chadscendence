@@ -87,7 +87,7 @@ const About: React.FC = () => {
                         return (
                             <a
                                 href={badge.link}
-                                className="mr-2"
+                                className="mr-2 flex"
                                 key={badge.name}
                             >
                                 <Badge className="text-xs">{badge.name}</Badge>
@@ -180,7 +180,7 @@ const About: React.FC = () => {
                                             {mod.name}
                                         </span>
                                         <Badge
-                                            className="text-xs font-medium rounded-full border"
+                                            className="text-xs font-medium rounded-full"
                                             color={`${mod.type === "Major" ? "red" : "green"}`}
                                         >
                                             {mod.type}

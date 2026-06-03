@@ -1,19 +1,19 @@
 @import "tailwindcss";
 
 @font-face {
-	font-family: "Energy";
-	src: url("/Energy.ttf") format("truetype");
-	font-weight: 400;
-	font-style: normal;
-	font-display: swap;
+    font-family: "Energy";
+    src: url("/Energy.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
 }
 
 .font-energy {
-	font-family: "Energy", sans-serif;
+    font-family: "Energy", sans-serif;
 }
 
 :root {
-	--color-grey: #cbcbcb;
+    --color-grey: #bbbbbb;
     --color-red: #ff9191;
     --color-orange: #ffc780;
     --color-yellow: #f7f08c;
@@ -24,7 +24,7 @@
     --color-violet: #a9a3ff;
     --color-white: #f0f0f0;
     --color-github: #101411;
-	--color-black: #3d3d3d;
+    --color-black: #000000;
 }
 
 .font-lexend {
@@ -32,4 +32,13 @@
   font-optical-sizing: auto;
   font-weight: 500;
   font-style: normal;
+}
+
+@keyframes  top-down{
+    0% {
+        background-position: 0% 120%;
+    }
+    100% {
+        background-position: 0% 0%;
+    }
 }

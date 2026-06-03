@@ -183,7 +183,7 @@ export default function ProfilePage() {
                             )}
                             {user.role === "admin" && (
                                 <Badge
-                                    color="red"
+                                    color="black"
                                     className="text-xs font-bold uppercase mt-1"
                                 >
                                     Admin

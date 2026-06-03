@@ -33,9 +33,12 @@ export function getItemColorVariable(color: ItemColor) {
     return colorVariables[color];
 }
 
-export function getItemColorStyle(color: ItemColor): CSSProperties {
+export function getItemColorStyle(
+    color: ItemColor,
+    name: string = "--ui-color",
+): CSSProperties {
     return {
-        "--ui-color": getItemColorVariable(color),
+        [name]: getItemColorVariable(color),
     } as CSSProperties;
 }
 
