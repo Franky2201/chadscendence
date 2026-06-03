@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { Card, Window } from "../components/ui";
 import { developers } from "../contexts/AboutContext";
@@ -49,6 +50,7 @@ const badges = [
 
 const About: React.FC = () => {
     const { isLoading } = useAuth();
+    const navigate = useNavigate();
 
     if (isLoading)
         return (
@@ -58,7 +60,7 @@ const About: React.FC = () => {
         );
 
     return (
-        <Window className="relative min-h-screen w-full overflow-hidden bg-cover bg-center font-sans">
+        <Window className="relative min-h-screen w-full overflow-hidden bg-cover bg-center">
             <header className="justify-self-center">
                 <img
                     className="select-none w-auto drop-shadow-lg max-h-30 mb-8"
@@ -70,10 +72,10 @@ const About: React.FC = () => {
             <Card
                 className="relative max-w-250 mx-auto p-6"
                 title="Who's is the Chad ?"
-                href="/"
                 titleClassName="text-4xl"
                 description="Back"
                 size="large"
+                onClick={() => navigate(-1)}
             >
                 <div className="flex flex-row">
                     {badges.map((badge) => (

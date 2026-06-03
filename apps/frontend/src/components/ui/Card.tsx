@@ -50,6 +50,8 @@ export function Card({
         .filter(Boolean)
         .join(" ");
     const clickable = props.href || props.onClick;
+    const commonLinkClass =
+        "ml-auto shrink-0 whitespace-nowrap self-start font-semibold";
     const linkClass = clickable ? "hover:underline hover:cursor-pointer" : "";
     return (
         <div
@@ -71,19 +73,19 @@ export function Card({
                     {clickable &&
                         (props.href && !props.href.startsWith("http") ? (
                             <Link
-                                className={`${linkClass} ml-auto shrink-0 whitespace-nowrap self-start`}
+                                className={`${linkClass} ${commonLinkClass}`}
                                 {...props}
                                 to={props.href}
                                 ref={undefined}
                             >
-                                {description} →
+                                {description} ⮕
                             </Link>
                         ) : (
                             <a
-                                className={`${linkClass} ml-auto shrink-0 whitespace-nowrap self-start`}
+                                className={`${linkClass} ${commonLinkClass}`}
                                 {...props}
                             >
-                                {description} →
+                                {description} ⮕
                             </a>
                         ))}
                 </div>
