@@ -1,11 +1,31 @@
+import { Rank } from "./rank";
+
 export enum UserStatus {
     ONLINE = "online",
-    OFFLINE = "offline",
+    OFFLINE = "offline"
 }
 
-export enum UserRole {
-    USER = "user",
-    ADMIN = "admin",
+export enum PermissionAction {
+    BAN_USER = "BAN_USER",
+    UNBAN_USER = "UNBAN_USER",
+    UPDATE_USER_AVATAR = "UPDATE_USER_AVATAR",
+    UPDATE_USER_USERNAME = "UPDATE_USER_USERNAME",
+    UPDATE_USER_SCORE = "UPDATE_USER_SCORE",
+    MANAGE_ROLES = "MANAGE_ROLES",
+    ADD_RANK = "ADD_RANK",
+    UPDATE_RANK = "UPDATE_RANK",
+    DELETE_RANK = "DELETE_RANK",
+}
+
+export interface Permission {
+    id: string;
+    action: PermissionAction;
+}
+
+export interface Role {
+    id: string;
+    name: string;
+    permissions: Permission[];
 }
 
 export interface User {
@@ -15,7 +35,7 @@ export interface User {
     avatarUrl?: string;
     bio?: string;
     status: UserStatus;
-    role: UserRole;
+    role?: Role;
     score: number;
     rankId?: string;
     rank?: Rank;
@@ -24,5 +44,3 @@ export interface User {
     createdAt: string | Date;
     updatedAt: string | Date;
 }
-
-import { Rank } from "./rank";
