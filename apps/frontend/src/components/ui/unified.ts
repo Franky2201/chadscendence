@@ -42,6 +42,17 @@ export function getItemColorStyle(
     } as CSSProperties;
 }
 
+export function getItemMixedColorStyle(
+    color: ItemColor,
+    name: string,
+    percentage: number = 80,
+    color2: ItemColor = "black",
+): CSSProperties {
+    return {
+        [name]: `color-mix(in srgb, ${getItemColorVariable(color)} ${percentage}%, ${getItemColorVariable(color2)})`,
+    } as CSSProperties;
+}
+
 export function getItemColorMix(color: ItemColor, percentage = 80) {
     return `color-mix(in srgb, ${getItemColorVariable(color)} ${percentage}%, black)`;
 }

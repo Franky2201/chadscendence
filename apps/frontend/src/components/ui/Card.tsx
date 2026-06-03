@@ -1,8 +1,12 @@
 import type { AnchorHTMLAttributes } from "react";
 import { Link } from "react-router-dom";
 import { Title } from "./index";
-import { type ThemeName, useTheme } from "../../contexts/ThemeContext";
-import { type ItemSize } from "./unified";
+import {
+    type ItemSize,
+    type ItemColor,
+    getItemMixedColorStyle,
+    getItemColorStyle,
+} from "./unified";
 
 type CardProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
     className?: string;
@@ -11,6 +15,7 @@ type CardProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
     contentClassName?: string;
     titleClassName?: string;
     size?: ItemSize;
+    color?: ItemColor;
 };
 
 const titleSizeClasses: Record<ItemSize, string> = {
@@ -25,11 +30,6 @@ const sizeClasses: Record<ItemSize, string> = {
     large: "py-5 px-6",
 };
 
-const themeClasses: Record<ThemeName, string> = {
-    light: "bg-neutral-300 border-neutral-300 text-neutral-900",
-    dark: "bg-neutral-800 border-neutral-600 text-neutral-200",
-};
-
 export function Card({
     children,
     className = "",
@@ -37,43 +37,42 @@ export function Card({
     description = "",
     contentClassName = "",
     size = "medium",
+    color = "grey",
     ...props
 }: CardProps) {
-    const { theme } = useTheme();
     const classes = [
-        "rounded-3xl border border-1 transition-colors duration-300 \
-		ease-in-out justify-center ",
-        themeClasses[theme],
-        sizeClasses[size],
-        className,
-    ]
-        .filter(Boolean)
-        .join(" ");
+        `rounded-3xl transition-colors duration-300 ease-in-out 
+		justify-center bg-black/60 backdrop-blur-sm
+		${color === "grey" ? "border-none" : "border-[var(--ui-color)]"}
+		${sizeClasses[size]} \
+		${className}`,
+    ];
     const clickable = props.href || props.onClick;
-    const commonLinkClass =
-        "ml-auto shrink-0 whitespace-nowrap self-start font-semibold";
-    const linkClass = clickable ? "hover:underline hover:cursor-pointer" : "";
+    const commonLinkClass = `ml-auto shrink-0 whitespace-nowrap self-start font-semibold
+		${clickable ? "hover:underline hover:cursor-pointer" : ""} text-[var(--ui-color)]`;
     return (
         <div
             className={`flex flex-col ${classes}`}
             onClick={(e) => e.stopPropagation()}
             onMouseDown={(e) => e.stopPropagation()}
             style={{
-                border: "1px solid rgba(255,255,255,0.2)",
-                boxShadow: "0 0 10px 0 rgba(0,0,0,0.5)",
+                ...getItemMixedColorStyle(color, "--alt-color"),
+                ...getItemColorStyle(color),
+                boxShadow: "0px 0px 8px 0px var(--alt-color)",
             }}
         >
             {title && (
                 <div className="flex w-full items-start gap-2">
                     <Title
                         className={`min-w-0 flex-1 mb-2 ${titleSizeClasses[size]}`}
+                        color={color}
                     >
                         {title}
                     </Title>
                     {clickable &&
                         (props.href && !props.href.startsWith("http") ? (
                             <Link
-                                className={`${linkClass} ${commonLinkClass}`}
+                                className={commonLinkClass}
                                 {...props}
                                 to={props.href}
                                 ref={undefined}
@@ -81,10 +80,7 @@ export function Card({
                                 {description} ⮕
                             </Link>
                         ) : (
-                            <a
-                                className={`${linkClass} ${commonLinkClass}`}
-                                {...props}
-                            >
+                            <a className={commonLinkClass} {...props}>
                                 {description} ⮕
                             </a>
                         ))}
