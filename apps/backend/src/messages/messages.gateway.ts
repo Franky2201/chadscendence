@@ -13,10 +13,11 @@ export class MessagesGateway {
     @WebSocketServer()
     server: Server;
 
-    constructor(private readonly presenceService: PresenceService) { }
+    constructor(private readonly presenceService: PresenceService) {}
 
     notifyNewMessage(receiverId: string, message: Message) {
-        const clients: string[] = this.presenceService.getUserClients(receiverId);
+        const clients: string[] =
+            this.presenceService.getUserClients(receiverId);
 
         clients.forEach((clientId) => {
             this.server.to(clientId).emit("new_message", message);
