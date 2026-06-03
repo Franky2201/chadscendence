@@ -16,7 +16,7 @@ import { Block } from "../common/entities/block.entity";
 import { PresenceService } from "../presence/presence.service";
 import { Role } from "src/common/entities/role.entity";
 import { Permission } from "src/common/entities/permission.entity";
-import { PermissionAction } from '@chad/types';
+import { PermissionAction } from "@chad/types";
 
 @Injectable()
 export class UsersService implements OnModuleInit {
@@ -32,24 +32,26 @@ export class UsersService implements OnModuleInit {
         private readonly permissionRepository: Repository<Permission>,
         private readonly presenceService: PresenceService,
         private readonly ranksService: RanksService,
-    ) { }
+    ) {}
 
     async onModuleInit() {
         await this.seedAdmin();
     }
 
     private async seedAdmin() {
-        const adminEmail = this.configService.get<string>('ADMIN_EMAIL');
-        const adminUsername = this.configService.get<string>('ADMIN_USERNAME');
-        const adminPassword = this.configService.get<string>('ADMIN_PASSWORD');
+        const adminEmail = this.configService.get<string>("ADMIN_EMAIL");
+        const adminUsername = this.configService.get<string>("ADMIN_USERNAME");
+        const adminPassword = this.configService.get<string>("ADMIN_PASSWORD");
 
         if (!adminEmail || !adminUsername || !adminPassword) {
-            throw new Error('Missing admin credentials');
+            throw new Error("Missing admin credentials");
         }
 
         const allPermissions: Permission[] = [];
         for (const action of Object.values(PermissionAction)) {
-            let permission = await this.permissionRepository.findOne({ where: { action } });
+            let permission = await this.permissionRepository.findOne({
+                where: { action },
+            });
             if (!permission) {
                 permission = this.permissionRepository.create({ action });
                 await this.permissionRepository.save(permission);
@@ -57,19 +59,23 @@ export class UsersService implements OnModuleInit {
             allPermissions.push(permission);
         }
 
-        let userRole = await this.roleRepository.findOne({ where: { name: 'USER' } });
+        let userRole = await this.roleRepository.findOne({
+            where: { name: "USER" },
+        });
         if (!userRole) {
             userRole = this.roleRepository.create({
-                name: 'USER',
+                name: "USER",
                 permissions: [],
             });
             await this.roleRepository.save(userRole);
         }
 
-        let superAdminRole = await this.roleRepository.findOne({ where: { name: 'SUPERADMIN' } });
+        let superAdminRole = await this.roleRepository.findOne({
+            where: { name: "SUPERADMIN" },
+        });
         if (!superAdminRole) {
             superAdminRole = this.roleRepository.create({
-                name: 'SUPERADMIN',
+                name: "SUPERADMIN",
                 permissions: allPermissions,
             });
             await this.roleRepository.save(superAdminRole);
@@ -91,14 +97,14 @@ export class UsersService implements OnModuleInit {
             email: adminEmail,
             username: adminUsername,
             password: hashedPassword,
-            avatarUrl: 'http://localhost:5173/public/admin.png',
+            avatarUrl: "http://localhost:5173/public/admin.png",
             score: 5000,
             rankId: defaultRank.id,
             role: superAdminRole,
         });
 
         await this.userRepository.save(adminUser);
-        console.log('Roles and Admin user seeded successfully!');
+        console.log("Roles and Admin user seeded successfully!");
     }
 
     async getUser(id: string) {

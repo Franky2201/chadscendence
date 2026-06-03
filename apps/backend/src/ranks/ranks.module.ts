@@ -6,12 +6,9 @@ import { Rank } from "../common/entities/rank.entity";
 import { UsersModule } from "../users/users.module";
 
 @Module({
-    imports: [
-        TypeOrmModule.forFeature([Rank]),
-        forwardRef(() => UsersModule),
-    ],
+    imports: [TypeOrmModule.forFeature([Rank]), forwardRef(() => UsersModule)],
     controllers: [RanksController],
     providers: [RanksService],
     exports: [RanksService],
 })
-export class RanksModule { }
+export class RanksModule {}

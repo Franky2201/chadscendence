@@ -31,7 +31,7 @@ export class AuthService {
         private readonly ranksService: RanksService,
         @InjectRepository(Role)
         private readonly roleRepository: Repository<Role>,
-    ) { }
+    ) {}
 
     async login({ authlogin }: { authlogin: LoginUserDto }) {
         const { email, password } = authlogin;
@@ -67,9 +67,14 @@ export class AuthService {
 
         const hashedPassword = await bcrypt.hash(password, 10);
         const defaultRank = await this.ranksService.getRankForScore(0);
-        const defaultRole = await this.roleRepository.findOne({ where: { name: 'USER' } });
+        const defaultRole = await this.roleRepository.findOne({
+            where: { name: "USER" },
+        });
 
-        if (!defaultRole) throw new InternalServerErrorException('Role USER is missing in database');
+        if (!defaultRole)
+            throw new InternalServerErrorException(
+                "Role USER is missing in database",
+            );
 
         const user = this.userRepository.create({
             email,
@@ -100,8 +105,8 @@ export class AuthService {
             typeof username === "string"
                 ? username
                 : typeof email === "string" && email.includes("@")
-                    ? (email.split("@")[0] ?? "user")
-                    : "user";
+                  ? (email.split("@")[0] ?? "user")
+                  : "user";
 
         const safeAvatarUrl = avatarUrl ?? undefined;
 
@@ -126,9 +131,14 @@ export class AuthService {
 
         const finalUsername = await this.generateUniqueUsername(safeUsername);
         const defaultRank = await this.ranksService.getRankForScore(0);
-        const defaultRole = await this.roleRepository.findOne({ where: { name: 'USER' } });
+        const defaultRole = await this.roleRepository.findOne({
+            where: { name: "USER" },
+        });
 
-        if (!defaultRole) throw new InternalServerErrorException('Role USER is missing in database');
+        if (!defaultRole)
+            throw new InternalServerErrorException(
+                "Role USER is missing in database",
+            );
 
         user = this.userRepository.create({
             ...(provider === "github"

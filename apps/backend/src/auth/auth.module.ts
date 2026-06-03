@@ -33,4 +33,4 @@ import { Role } from "src/common/entities/role.entity";
     controllers: [AuthController],
     providers: [AuthService, JwtStrategy, IntraStrategy, GithubStrategy],
 })
-export class AuthModule { }
+export class AuthModule {}

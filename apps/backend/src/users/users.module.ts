@@ -18,4 +18,4 @@ import { Permission } from "../common/entities/permission.entity";
     providers: [UsersService],
     exports: [UsersService],
 })
-export class UsersModule { }
+export class UsersModule {}

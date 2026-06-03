@@ -41,8 +41,11 @@ export class User {
     })
     status: UserStatus;
 
-    @ManyToOne(() => Role, (role) => role.users, { nullable: true, onDelete: 'SET NULL' })
-    @JoinColumn({ name: 'role_id' })
+    @ManyToOne(() => Role, (role) => role.users, {
+        nullable: true,
+        onDelete: "SET NULL",
+    })
+    @JoinColumn({ name: "role_id" })
     role: Role;
 
     @Column({ type: "int", default: 0 })
