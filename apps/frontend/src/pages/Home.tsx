@@ -29,7 +29,7 @@ export default function HomePage() {
             >
                 {!user && <board.Identification />}
                 <board.Play />
-                {user && <board.Settings />}
+                <board.Settings />
                 {user && <board.Profile />}
                 {user && <board.Leaderboard count={5} />}
                 {user && <board.Friends />}
