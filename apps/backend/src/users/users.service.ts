@@ -7,13 +7,15 @@ import {
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { MoreThan, Repository } from "typeorm";
-import { User, UserRole } from "../common/entities/user.entity";
+import { User } from "../common/entities/user.entity";
 import { UpdateUserDto } from "../common/dto/users.dto";
 import { hash, compare } from "bcrypt";
 import { RanksService } from "../ranks/ranks.service";
 import { ConfigService } from "@nestjs/config";
 import { Block } from "../common/entities/block.entity";
 import { PresenceService } from "../presence/presence.service";
+import { Role } from "src/common/entities/role.entity";
+import { Permission, PermissionAction } from "src/common/entities/permission.entity";
 
 @Injectable()
 export class UsersService implements OnModuleInit {
@@ -23,21 +25,47 @@ export class UsersService implements OnModuleInit {
         private readonly userRepository: Repository<User>,
         @InjectRepository(Block)
         private readonly blockRepository: Repository<Block>,
+        @InjectRepository(Role)
+        private readonly roleRepository: Repository<Role>,
+        @InjectRepository(Permission)
+        private readonly permissionRepository: Repository<Permission>,
         private readonly presenceService: PresenceService,
         private readonly ranksService: RanksService,
-    ) {}
+    ) { }
 
     async onModuleInit() {
         await this.seedAdmin();
     }
 
     private async seedAdmin() {
-        const adminEmail = this.configService.get<string>("ADMIN_EMAIL");
-        const adminUsername = this.configService.get<string>("ADMIN_USERNAME");
-        const adminPassword = this.configService.get<string>("ADMIN_PASSWORD");
+        const adminEmail = this.configService.get<string>('ADMIN_EMAIL');
+        const adminUsername = this.configService.get<string>('ADMIN_USERNAME');
+        const adminPassword = this.configService.get<string>('ADMIN_PASSWORD');
 
         if (!adminEmail || !adminUsername || !adminPassword) {
-            throw new Error("Missing admin credentials");
+            throw new Error('Missing admin credentials');
+        }
+
+        const allPermissions: Permission[] = [];
+        for (const action of Object.values(PermissionAction)) {
+            let permission = await this.permissionRepository.findOne({ where: { action } });
+            if (!permission) {
+                permission = this.permissionRepository.create({ action });
+                await this.permissionRepository.save(permission);
+            }
+            allPermissions.push(permission);
+        }
+
+        let superAdminRole = await this.roleRepository.findOne({ where: { name: 'SUPER_ADMIN' } });
+        if (!superAdminRole) {
+            superAdminRole = this.roleRepository.create({
+                name: 'SUPER_ADMIN',
+                permissions: allPermissions,
+            });
+            await this.roleRepository.save(superAdminRole);
+        } else {
+            superAdminRole.permissions = allPermissions;
+            await this.roleRepository.save(superAdminRole);
         }
 
         const admin = await this.userRepository.findOne({
@@ -53,20 +81,20 @@ export class UsersService implements OnModuleInit {
             email: adminEmail,
             username: adminUsername,
             password: hashedPassword,
-            role: UserRole.ADMIN,
-            avatarUrl: "http://localhost:5173/public/admin.png",
+            avatarUrl: 'http://localhost:5173/public/admin.png',
             score: 5000,
             rankId: defaultRank.id,
+            role: superAdminRole,
         });
 
         await this.userRepository.save(adminUser);
-        console.log("Admin user created successfully!");
+        console.log('Admin user and RBAC seeded successfully!');
     }
 
     async getUser(id: string) {
         const user = await this.userRepository.findOne({
             where: { id },
-            relations: { rank: true },
+            relations: { rank: true, role: { permissions: true } },
         });
 
         if (!user) {
