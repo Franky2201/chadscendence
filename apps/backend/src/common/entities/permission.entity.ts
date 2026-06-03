@@ -1,17 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
-
-export enum PermissionAction {
-	BAN_USER = 'BAN_USER',
-	UNBAN_USER = 'UNBAN_USER',
-	EDIT_USER_AVATAR = 'EDIT_USER_AVATAR',
-	EDIT_USER_USERNAME = 'EDIT_USER_USERNAME',
-	EDIT_USER_BIO = 'EDIT_USER_BIO',
-	EDIT_USER_SCORE = 'EDIT_USER_SCORE',
-	MANAGE_ROLES = 'MANAGE_ROLES',
-	CREATE_RANK = 'CREATE_RANK',
-	EDIT_RANK = 'EDIT_RANK',
-	DELETE_RANK = 'DELETE_RANK',
-}
+import { PermissionAction } from '@chad/types';
 
 @Entity('permissions')
 export class Permission {

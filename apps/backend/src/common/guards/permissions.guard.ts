@@ -1,6 +1,6 @@
 import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { PermissionAction } from '../entities/permission.entity';
+import { PermissionAction } from '@chad/types';
 import { PERMISSIONS_KEY } from '../decorators/permissions.decorator';
 import { UsersService } from '../../users/users.service';
 
