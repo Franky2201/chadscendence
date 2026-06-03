@@ -4,7 +4,6 @@ export interface JwtPayload {
     sub: string;
     email: string;
     username: string;
-    role: UserRole;
 }
 
 export interface OAuthProfile {
