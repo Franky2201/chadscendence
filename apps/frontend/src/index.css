@@ -24,11 +24,12 @@
     --color-violet: #a9a3ff;
     --color-white: #f0f0f0;
     --color-github: #101411;
+	--color-black: #3d3d3d;
 }
 
 .font-lexend {
   font-family: "Lexend", sans-serif;
   font-optical-sizing: auto;
-  font-weight: 900;
+  font-weight: 500;
   font-style: normal;
 }

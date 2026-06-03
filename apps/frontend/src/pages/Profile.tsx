@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { Button, Input, Window, Card } from "../components/ui";
+import { Button, Input, Window, Card, Badge } from "../components/ui";
 import {
     updateMe,
     uploadAvatar,
@@ -182,9 +182,12 @@ export default function ProfilePage() {
                                 </p>
                             )}
                             {user.role === "admin" && (
-                                <span className="text-xs bg-[#E43A70] px-3 py-1 rounded-full font-bold uppercase tracking-widest mt-1">
+                                <Badge
+                                    color="red"
+                                    className="text-xs font-bold uppercase mt-1"
+                                >
                                     Admin
-                                </span>
+                                </Badge>
                             )}
                             <div className="mt-3 flex flex-col gap-1 text-xs">
                                 <span>

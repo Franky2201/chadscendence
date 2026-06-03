@@ -1,33 +1,34 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { Card, Window } from "../components/ui";
+import { Card, Window, Badge } from "../components/ui";
 import { developers } from "../contexts/AboutContext";
+import { type ItemColor } from "../components/ui/unified";
 
 const stackLayers = [
     {
         label: "Frontend",
         stack: [
-            { name: "Typescript", color: "bg-cyan-100 text-cyan-700" },
-            { name: "React", color: "bg-sky-100 text-sky-700" },
-            { name: "Tailwind CSS", color: "bg-teal-100 text-teal-700" },
-            { name: "Vite", color: "bg-purple-100 text-purple-700" },
+            { name: "TypeScript", color: "blue" },
+            { name: "React", color: "blue" },
+            { name: "Tailwind CSS", color: "blue" },
+            { name: "Vite", color: "purple" },
         ],
     },
     {
         label: "Backend",
         stack: [
-            { name: "Typescript", color: "bg-cyan-100 text-cyan-700" },
-            { name: "NestJS", color: "bg-red-100 text-red-700" },
-            { name: "PostgreSQL", color: "bg-pink-100 text-pink-700" },
-            { name: "TypeORM", color: "bg-orange-100 text-orange-700" },
+            { name: "TypeScript", color: "blue" },
+            { name: "NestJS", color: "red" },
+            { name: "PostgreSQL", color: "pink" },
+            { name: "TypeORM", color: "orange" },
         ],
     },
     {
-        label: "Tooling",
+        label: "Others",
         stack: [
-            { name: "Docker", color: "bg-blue-100 text-blue-700" },
-            { name: "Node.js", color: "bg-green-100 text-green-700" },
-            { name: "ESLint", color: "bg-violet-100 text-violet-700" },
+            { name: "Docker", color: "blue" },
+            { name: "Node.js", color: "green" },
+            { name: "ESLint", color: "violet" },
         ],
     },
 ];
@@ -39,23 +40,26 @@ const modules = [
     { name: "Custom design system (10+ components)", type: "Minor" },
 ];
 
-const badges = [
+const badges: { name: string; link: string; requires42?: boolean }[] = [
     { name: "42 Belgium", link: "https://42belgium.be" },
     {
         name: "ft_transcendence",
         link: "https://cdn.intra.42.fr/pdf/pdf/203995/en.subject.pdf",
+        requires42: true,
     },
     { name: "GitHub", link: "https://github.com/Franky2201/chadscendence" },
 ];
 
 const About: React.FC = () => {
-    const { isLoading } = useAuth();
+    const { isLoading, user } = useAuth();
     const navigate = useNavigate();
+
+    const adminOr42 = Boolean(user?.intraId || user?.role === "admin");
 
     if (isLoading)
         return (
-            <div className="min-h-screen flex items-center justify-center text-white bg-slate-900">
-                Chargement...
+            <div className="min-h-screen flex items-center justify-center text-white bg-black">
+                Loading ...
             </div>
         );
 
@@ -77,20 +81,19 @@ const About: React.FC = () => {
                 size="large"
                 onClick={() => navigate(-1)}
             >
-                <div className="flex flex-row">
-                    {badges.map((badge) => (
-                        <div key={badge.name}>
+                <div className="flex flex-row mb-3">
+                    {badges.map((badge) => {
+                        if (badge.requires42 && !adminOr42) return null;
+                        return (
                             <a
                                 href={badge.link}
-                                className="hover:underline mr-3 inline-flex 
-									items-center gap-1.5 text-xs text-slate-500 
-									bg-slate-100 border border-slate-200 
-									rounded-full px-3 py-1 mb-3"
+                                className="mr-2"
+                                key={badge.name}
                             >
-                                {badge.name}
+                                <Badge className="text-xs">{badge.name}</Badge>
                             </a>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
 
                 <div className="mb-4">
@@ -101,11 +104,10 @@ const About: React.FC = () => {
                         team of 5 as part of the 42 curriculum.
                     </p>
                 </div>
-
-                <div className="mb-4">
-                    <p className="text-xs font-semibold tracking-widest uppercase mb-2">
-                        The Team
-                    </p>
+                <p className="text-md font-semibold tracking-widest justify-self-center uppercase">
+                    The Team
+                </p>
+                <div className="p-3 mb-3">
                     <div className="flex flex-wrap justify-center gap-3">
                         {developers.map((dev, index) => (
                             <a href={dev.link} target="_blank">
@@ -120,7 +122,7 @@ const About: React.FC = () => {
                                             alt={`${dev.name} profile`}
                                             className="w-22 h-22 rounded-xl"
                                         />
-                                        <div className="ml-2">
+                                        <div className="ml-2 self-center">
                                             <h2 className="font-bold text-sm mb-0.5">
                                                 {dev.name}
                                             </h2>
@@ -138,58 +140,58 @@ const About: React.FC = () => {
                     </div>
                 </div>
 
-                <h2 className="text-2xl font-bold">Technologies Used</h2>
-                <div className="p-4">
+                <p className="text-md font-semibold tracking-widest uppercase">
+                    Technologies Used
+                </p>
+                <div className="p-3 pt-2">
                     {stackLayers.map((layer) => (
-                        <div
-                            key={layer.label}
-                            className="flex item-center gap-4"
-                        >
-                            <span className="text-xs uppercase tracking-widest w-20">
+                        <div key={layer.label} className="mb-1">
+                            <span className="text-xs uppercase self-center">
                                 {layer.label}
                             </span>
-                            <div className="flex flex-wrap gap-2 m-1">
+                            <div className="flex flex-wrap gap-1 p-1">
                                 {layer.stack.map((layer) => (
-                                    <span
+                                    <Badge
                                         key={layer.name}
-                                        className={`${layer.color} text-xs px-3 py-1 rounded-full font-medium`}
+                                        color={layer.color as ItemColor}
+                                        className={`text-xs font-medium`}
                                     >
                                         {layer.name}
-                                    </span>
+                                    </Badge>
                                 ))}
                             </div>
                         </div>
                     ))}
                 </div>
 
-                <div>
-                    <p className="text-xs font-semibold tracking-widest uppercase mb-4">
-                        Modules
-                    </p>
-                    <div className="flex flex-col gap-2 mb-6">
-                        {modules.map((mod) => (
-                            <div
-                                key={mod.name}
-                                className="bg-[#E43A70]/10 flex items-center justify-between rounded-xl px-4 py-1 border"
-                                style={{
-                                    borderColor: "rgba(228, 58, 112, 0.4)",
-                                }}
-                            >
-                                <span className="text-sm">{mod.name}</span>
-                                <span
-                                    className={`text-xs font-medium px-2.5 py-1 rounded-full border ${
-                                        mod.type === "Major"
-                                            ? "bg-[#fce8ef] text-[#993556] border-[#F4C0D1]"
-                                            : "bg-emerald-50 text-emerald-700 border-emerald-200"
-                                    }`}
-                                >
-                                    {mod.type}
-                                </span>
+                {adminOr42 && (
+                    <>
+                        <p className="text-md font-semibold tracking-widest uppercase">
+                            Project Modules
+                        </p>
+                        <div className="p-3">
+                            <div className="flex flex-col gap-1">
+                                {modules.map((mod) => (
+                                    <div
+                                        key={mod.name}
+                                        className="border flex items-center justify-between rounded-xl px-1.5 py-1"
+                                    >
+                                        <span className="text-sm ml-1.5">
+                                            {mod.name}
+                                        </span>
+                                        <Badge
+                                            className="text-xs font-medium rounded-full border"
+                                            color={`${mod.type === "Major" ? "red" : "green"}`}
+                                        >
+                                            {mod.type}
+                                        </Badge>
+                                    </div>
+                                ))}
                             </div>
-                        ))}
-                    </div>
-                </div>
-                <p className="flex items-center justify-center text-sm uppercase tracking-widest">
+                        </div>
+                    </>
+                )}
+                <p className="flex items-center justify-center text-sm uppercase tracking-widest mt-3">
                     Made with ❤️ at 42 Belgium
                 </p>
             </Card>

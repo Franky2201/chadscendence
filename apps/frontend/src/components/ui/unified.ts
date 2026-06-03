@@ -12,7 +12,8 @@ export type ItemColor =
     | "purple"
     | "pink"
     | "violet"
-    | "white";
+    | "white"
+    | "black";
 
 const colorVariables: Record<ItemColor, string> = {
     grey: "var(--color-grey)",
@@ -25,6 +26,7 @@ const colorVariables: Record<ItemColor, string> = {
     pink: "var(--color-pink)",
     violet: "var(--color-violet)",
     white: "var(--color-white)",
+    black: "var(--color-black)",
 };
 
 export function getItemColorVariable(color: ItemColor) {
