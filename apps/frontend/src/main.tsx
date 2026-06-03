@@ -7,6 +7,7 @@ import { router } from "./router";
 import "./index.css";
 import { ModalProvider } from "./contexts/ModalContext";
 import { FriendsProvider } from "./contexts/FriendsContext";
+import { ChatProvider } from "./contexts/ChatContext";
 
 createRoot(document.getElementById("root")!).render(
     <StrictMode>
@@ -14,7 +15,9 @@ createRoot(document.getElementById("root")!).render(
             <AuthProvider>
                 <ModalProvider>
                     <FriendsProvider>
-                        <RouterProvider router={router} />
+                        <ChatProvider>
+                            <RouterProvider router={router} />
+                        </ChatProvider>
                     </FriendsProvider>
                 </ModalProvider>
             </AuthProvider>
