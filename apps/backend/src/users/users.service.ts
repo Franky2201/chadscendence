@@ -15,7 +15,8 @@ import { ConfigService } from "@nestjs/config";
 import { Block } from "../common/entities/block.entity";
 import { PresenceService } from "../presence/presence.service";
 import { Role } from "src/common/entities/role.entity";
-import { Permission, PermissionAction } from "src/common/entities/permission.entity";
+import { Permission } from "src/common/entities/permission.entity";
+import { PermissionAction } from '@chad/types';
 
 @Injectable()
 export class UsersService implements OnModuleInit {
@@ -56,10 +57,19 @@ export class UsersService implements OnModuleInit {
             allPermissions.push(permission);
         }
 
-        let superAdminRole = await this.roleRepository.findOne({ where: { name: 'SUPER_ADMIN' } });
+        let userRole = await this.roleRepository.findOne({ where: { name: 'USER' } });
+        if (!userRole) {
+            userRole = this.roleRepository.create({
+                name: 'USER',
+                permissions: [],
+            });
+            await this.roleRepository.save(userRole);
+        }
+
+        let superAdminRole = await this.roleRepository.findOne({ where: { name: 'SUPERADMIN' } });
         if (!superAdminRole) {
             superAdminRole = this.roleRepository.create({
-                name: 'SUPER_ADMIN',
+                name: 'SUPERADMIN',
                 permissions: allPermissions,
             });
             await this.roleRepository.save(superAdminRole);
@@ -88,7 +98,7 @@ export class UsersService implements OnModuleInit {
         });
 
         await this.userRepository.save(adminUser);
-        console.log('Admin user and RBAC seeded successfully!');
+        console.log('Roles and Admin user seeded successfully!');
     }
 
     async getUser(id: string) {
