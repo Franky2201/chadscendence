@@ -34,7 +34,7 @@ export default function ProfilePage() {
         if (user) {
             getMyLeaderboardRank()
                 .then(setLeaderboardRank)
-                .catch(() => {});
+                .catch(() => { });
         }
     }, [user]);
 
@@ -190,11 +190,11 @@ export default function ProfilePage() {
                                         {user.bio}
                                     </p>
                                 )}
-                                {user.role === "admin" && (
-                                    <span className="text-xs bg-[#E43A70] px-3 py-1 rounded-full font-bold uppercase tracking-widest mt-1">
-                                        Admin
-                                    </span>
-                                )}
+
+                                <span className="text-xs bg-[#E43A70] px-3 py-1 rounded-full font-bold uppercase tracking-widest mt-1">
+                                    {user.role?.name || 'USER'}
+                                </span>
+
                                 <div className="mt-3 flex flex-col gap-1 text-xs">
                                     <span>
                                         Membre depuis le{" "}
