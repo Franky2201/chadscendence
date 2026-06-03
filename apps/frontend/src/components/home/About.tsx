@@ -1,11 +1,11 @@
 import { Card } from "../ui";
 import { developers } from "../../contexts/AboutContext";
 
-export function Credits({ className = "" }: { className?: string }) {
+export function About({ className = "" }: { className?: string }) {
     return (
         <Card
             className={className}
-            title="Credits"
+            title="About Us"
             href="/about"
             description="More info"
         >

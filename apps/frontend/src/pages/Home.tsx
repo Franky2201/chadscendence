@@ -35,7 +35,7 @@ export default function HomePage() {
                 {user && <board.Friends />}
                 {/* user && <board.Clan /> */}
                 {user && <board.Achievements />}
-                {/* <board.Credits className="md:col-span-2" /> */}
+                {/* <board.About className="md:col-span-2" /> */}
             </div>
         </Window>
     );
