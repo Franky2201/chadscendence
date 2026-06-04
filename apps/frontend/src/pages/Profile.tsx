@@ -19,7 +19,7 @@ export default function ProfilePage() {
         if (user) {
             getMyLeaderboardRank()
                 .then(setLeaderboardRank)
-                .catch(() => {});
+                .catch(() => { });
         }
     }, [user]);
 
@@ -80,7 +80,7 @@ export default function ProfilePage() {
                             {user.bio}
                         </p>
                     )}
-                    {user?.role?.name === "SUPERADMIN" && (
+                    {user?.role?.name === "Admin" && (
                         <Badge
                             color="black"
                             className="text-xs font-bold uppercase mt-1"

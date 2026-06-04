@@ -55,7 +55,7 @@ const About: React.FC = () => {
     const navigate = useNavigate();
 
     const adminOr42 = Boolean(
-        user?.intraId || user?.role?.name === "SUPERADMIN",
+        user?.intraId || user?.role?.name === "Admin",
     );
 
     if (isLoading)
