@@ -11,6 +11,7 @@ export function Play({ className = "" }: { className?: string }) {
             className={className}
             contentClassName={`flex flex-wrap justify-center items-center gap-3`}
             title="Play"
+            description="More info"
             onClick={() => openModal("PLAY")}
         >
             <IconButton className="h-24" size="small" img="game_party.svg">

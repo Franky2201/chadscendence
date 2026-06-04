@@ -1,22 +1,24 @@
 import { Card } from "../ui";
 import { developers } from "../../contexts/AboutContext";
 
-export function Credits({ className = "" }: { className?: string }) {
+export function About({ className = "" }: { className?: string }) {
     return (
         <Card
             className={className}
-            title="Credits"
+            title="About Us"
             href="/about"
-            description="This 
-					project was created collaboratively by our team of 5
-                    developers."
+            description="More info"
         >
+            <p className="justify-self-center mb-2 text-center">
+                This project was created collaboratively by our team of 5
+                developers.
+            </p>
             <div className="flex flex-wrap justify-center gap-3">
                 {developers.map((dev, index) => (
                     <a href={dev.link} target="_blank">
                         <div
                             key={index}
-                            className="rounded-xl border border-neutral-400
+                            className="rounded-2xl border border-neutral-400
                                 hover:bg-neutral-500 h-16,5 w-56"
                         >
                             <div className="flex m-1">

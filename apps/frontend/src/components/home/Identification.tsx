@@ -1,4 +1,4 @@
-import { Card, Button } from "../ui";
+import { Card, Button, IconButton } from "../ui";
 import { useModal } from "../../contexts/ModalContext";
 import { withIntra, withGithub } from "../../services/auth";
 
@@ -17,13 +17,20 @@ export function Identification({ className = "" }: { className?: string }) {
             <Button className="w-full" onClick={() => openModal("REGISTER")}>
                 Register
             </Button>
-            <div className="flex flex-row gap-2 w-full">
-                <Button className="w-full" onClick={withIntra}>
-                    42
-                </Button>
-                <Button className="w-full" onClick={withGithub}>
-                    GitHub
-                </Button>
+            <hr className="w-full border-t mb-1" />
+            <div className="flex gap-3 justify-center items-center">
+                <IconButton
+                    className="w-full h-10 bg-[var(--color-github)]"
+                    img="github_logo.svg"
+                    imgClassName="bg-white"
+                    onClick={withGithub}
+                ></IconButton>
+                <IconButton
+                    className="w-full h-10 bg-[var(--color-github)]"
+                    img="42_logo.svg"
+                    imgClassName="translate-x-[-1px] bg-white"
+                    onClick={withIntra}
+                ></IconButton>
             </div>
         </Card>
     );

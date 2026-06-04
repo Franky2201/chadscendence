@@ -1,7 +1,7 @@
 import type { InputHTMLAttributes } from "react";
 import type { ItemColor, ItemSize } from "./unified";
 import { getItemColorStyle } from "./unified";
-import { type ThemeName, useTheme } from "../../contexts/theme-context";
+import { type ThemeName, useTheme } from "../../contexts/ThemeContext";
 
 type CheckboxProps = Omit<InputHTMLAttributes<HTMLInputElement>, "size"> & {
     size?: ItemSize;
