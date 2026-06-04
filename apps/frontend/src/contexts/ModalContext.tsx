@@ -2,7 +2,7 @@ import { createContext, useContext, useState, type ReactNode } from "react";
 
 export type ModalRegistry = {
     LOGIN: undefined;
-    REGISTER: { prefilledEmail?: string };
+    REGISTER: undefined;
     GAME: { gameMode?: string };
     PLAY: undefined;
 };
