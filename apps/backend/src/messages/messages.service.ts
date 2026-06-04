@@ -104,4 +104,21 @@ export class MessagesService {
             { isRead: true },
         );
     }
+
+    async getUnreadCounts(userId: string): Promise<Record<string, number>> {
+        const result = await this.messageRepository
+            .createQueryBuilder("message")
+            .select("message.sender_id", "senderId")
+            .addSelect("COUNT(message.id)", "count")
+            .where("message.receiver_id = :userId", { userId })
+            .andWhere("message.is_read = :isRead", { isRead: false })
+            .groupBy("message.sender_id")
+            .getRawMany();
+
+        const counts: Record<string, number> = {};
+        for (const row of result) {
+            counts[row.senderId] = Number(row.count);
+        }
+        return counts;
+    }
 }
