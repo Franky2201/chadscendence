@@ -48,7 +48,7 @@ export function Password() {
             setNewPassword("");
             setConfirmPassword("");
             toast.success("Mot de passe mis à jour avec succès.");
-        } catch (_error) {
+        } catch {
             toast.error("Erreur lors de la mise à jour.");
         } finally {
             setLoading(false);

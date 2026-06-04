@@ -62,7 +62,7 @@ export function Profile() {
             setBio(updated.bio ?? "");
             setAvatarFile(null);
             setAvatarPreview(null);
-        } catch (_error) {
+        } catch {
             toast.error("Failed to update profile");
         } finally {
             setLoading(false);

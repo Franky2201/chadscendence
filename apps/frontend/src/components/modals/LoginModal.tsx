@@ -25,7 +25,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
             const userResponse = await getMe();
             login(userResponse);
             onClose();
-        } catch (_error) {
+        } catch {
             toast.error("Invalid credentials");
         }
     };

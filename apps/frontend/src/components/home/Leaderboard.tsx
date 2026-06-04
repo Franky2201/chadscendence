@@ -56,7 +56,7 @@ export function Leaderboard({
                 }
                 if (isMounted) setTopUsers(displayData);
                 setIsLoading(false);
-            } catch (_err) {
+            } catch {
                 toast.error("Error while loading the leaderboard");
             }
         };

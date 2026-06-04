@@ -32,7 +32,7 @@ export class UsersService implements OnModuleInit {
         private readonly permissionRepository: Repository<Permission>,
         private readonly presenceService: PresenceService,
         private readonly ranksService: RanksService,
-    ) { }
+    ) {}
 
     async onModuleInit() {
         await this.seedAdmin();

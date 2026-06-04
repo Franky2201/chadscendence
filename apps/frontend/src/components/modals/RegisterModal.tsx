@@ -10,10 +10,7 @@ interface RegisterModalProps {
     onClose: () => void;
 }
 
-export default function RegisterModal({
-    isOpen,
-    onClose,
-}: RegisterModalProps) {
+export default function RegisterModal({ isOpen, onClose }: RegisterModalProps) {
     const { login } = useAuth();
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");

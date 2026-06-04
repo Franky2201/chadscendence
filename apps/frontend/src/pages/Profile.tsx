@@ -19,7 +19,7 @@ export default function ProfilePage() {
         if (user) {
             getMyLeaderboardRank()
                 .then(setLeaderboardRank)
-                .catch(() => { });
+                .catch(() => {});
         }
     }, [user]);
 
