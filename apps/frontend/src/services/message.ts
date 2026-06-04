@@ -23,7 +23,9 @@ export const getConversation = async (
 };
 
 export const getUnreadCounts = async (): Promise<Record<string, number>> => {
-    const res = await api.get<Record<string, number>>("/messages/unread-counts");
+    const res = await api.get<Record<string, number>>(
+        "/messages/unread-counts",
+    );
     return res.data;
 };
 

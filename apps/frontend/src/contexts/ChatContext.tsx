@@ -46,13 +46,16 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     const [page, setPage] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
-    const [unreadCounts, setUnreadCounts] = useState<Record<string, number>>({});
+    const [unreadCounts, setUnreadCounts] = useState<Record<string, number>>(
+        {},
+    );
 
     useEffect(() => {
         if (!user) {
-            setUnreadCounts({});
+            Promise.resolve().then(() => setUnreadCounts({}));
             return;
         }
+
         getUnreadCounts().then(setUnreadCounts).catch(console.error);
     }, [user]);
 

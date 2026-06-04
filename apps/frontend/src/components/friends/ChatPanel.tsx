@@ -162,10 +162,11 @@ export default function ChatPanel() {
                                         className={`flex flex-col max-w-[80%] ${isMe ? "self-end items-end" : "self-start items-start"}`}
                                     >
                                         <div
-                                            className={`px-4 py-2 rounded-2xl ${isMe
-                                                ? "bg-pink-600 text-white rounded-br-sm"
-                                                : "bg-white/10 text-white/90 rounded-bl-sm border border-white/5"
-                                                }`}
+                                            className={`px-4 py-2 rounded-2xl ${
+                                                isMe
+                                                    ? "bg-pink-600 text-white rounded-br-sm"
+                                                    : "bg-white/10 text-white/90 rounded-bl-sm border border-white/5"
+                                            }`}
                                             style={{ wordBreak: "break-word" }}
                                         >
                                             {msg.content}

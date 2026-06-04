@@ -5,7 +5,7 @@ export function Friends({ className = "" }: { className?: string }) {
     const { openPanel } = useChat();
 
     return (
-        <Card className={className} title="Friends" onClick={openPanel} >
+        <Card className={className} title="Friends" onClick={openPanel}>
             <></>
         </Card>
     );
