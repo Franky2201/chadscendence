@@ -18,6 +18,8 @@ RUN npm ci
 # 2. Development stage
 FROM base AS development
 COPY . .
+# Ensure types are built within the container for the dev environment
+RUN npm run build -w @chad/types
 CMD ["npm", "run", "dev", "-w", "frontend", "--", "--host", "0.0.0.0"]
 
 # 3. Build stage

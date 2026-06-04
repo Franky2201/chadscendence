@@ -10,7 +10,7 @@ COPY apps/games/math/package*.json ./apps/games/math/
 COPY libs/types/package*.json ./libs/types/
 
 # Prune other workspaces from root package.json to satisfy npm ci
-RUN node -e "const p = require('./package.json'); p.workspaces = ['apps/games/math', ...p.workspaces.filter(w => w.startsWith('libs/'))]; require('fs').writeFileSync('./package.json', JSON.stringify(p))"
+RUN node -e "const p = require('./package.json'); p.workspaces = ['apps/games/*', ...p.workspaces.filter(w => w.startsWith('libs/'))]; require('fs').writeFileSync('./package.json', JSON.stringify(p))"
 
 # Install dependencies
 RUN npm ci
@@ -18,8 +18,10 @@ RUN npm ci
 # 2. Development stage
 FROM base AS development
 COPY . .
-WORKDIR /app/apps/games/math
-CMD ["node", "../../../node_modules/@nestjs/cli/bin/nest.js", "start", "--watch"]
+RUN npm install -g @nestjs/cli
+# Ensure types are built within the container for the dev environment
+RUN npm run build -w @chad/types
+CMD ["npm", "run", "start:dev", "-w", "math"]
 
 # 3. Build stage
 FROM base AS build
@@ -43,8 +45,9 @@ USER nestjs
 COPY --from=build --chown=nestjs:nodejs /app/node_modules ./node_modules
 COPY --from=build --chown=nestjs:nodejs /app/apps/games/math/dist ./apps/games/math/dist
 COPY --from=build --chown=nestjs:nodejs /app/apps/games/math/package.json ./apps/games/math/package.json
-# Materialize the workspace dependency by copying the types library
-COPY --from=build --chown=nestjs:nodejs /app/libs/types ./libs/types
+# Materialize the workspace dependency: only copy compiled artifacts and package metadata
+COPY --from=build --chown=nestjs:nodejs /app/libs/types/package.json ./libs/types/package.json
+COPY --from=build --chown=nestjs:nodejs /app/libs/types/dist ./libs/types/dist
 
 EXPOSE 3001
 CMD ["node", "apps/games/math/dist/main"]

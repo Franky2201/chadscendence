@@ -59,10 +59,17 @@ services:
         ports:
             - "3000:3000"
         volumes:
-            #Bind mounts used for development to allow live code changes without rebuilding the image. In production, consider using named volumes or copying files into the image.
-            - .:/app # [DEV MODE ONLY]
-            - /app/node_modules # [DEV MODE ONLY]
             - ./apps/backend/uploads:/app/apps/backend/uploads
+        develop:
+            watch:
+                - action: sync
+                  path: ./apps/backend/src
+                  target: /app/apps/backend/src
+                - action: sync
+                  path: ./libs/types/src
+                  target: /app/libs/types/src
+                - action: rebuild
+                  path: ./apps/backend/package.json
         networks:
             - ft_network
         restart: unless-stopped
@@ -81,14 +88,17 @@ services:
         depends_on:
             - backend
         ports:
-            #sudo is necessary to bind to those ports on linux
-            #      - "80:80"
-            #     - "443:443"
             - "5173:5173"
-        volumes:
-            #Bind mounts used for development to allow live code changes without rebuilding the image. In production, consider using named volumes or copying files into the image.
-            - .:/app # [DEV MODE ONLY]
-            - /app/node_modules # [DEV MODE ONLY]
+        develop:
+            watch:
+                - action: sync
+                  path: ./apps/frontend/src
+                  target: /app/apps/frontend/src
+                - action: sync
+                  path: ./libs/types/src
+                  target: /app/libs/types/src
+                - action: rebuild
+                  path: ./apps/frontend/package.json
         networks:
             - ft_network
         restart: unless-stopped

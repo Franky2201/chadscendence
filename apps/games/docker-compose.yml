@@ -15,8 +15,16 @@ services:
         depends_on:
             redis:
                 condition: service_healthy
-        volumes:
-            - ../../:/app
+        develop:
+            watch:
+                - action: sync
+                  path: ../../apps/games/math/src
+                  target: /app/apps/games/math/src
+                - action: sync
+                  path: ../../libs/types/src
+                  target: /app/libs/types/src
+                - action: rebuild
+                  path: ../../apps/games/math/package.json
         networks:
             - ft_network
         restart: unless-stopped

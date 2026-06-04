@@ -18,6 +18,9 @@ RUN npm ci
 # 2. Development stage (Stops here for dev)
 FROM base AS development
 COPY . .
+RUN npm install -g @nestjs/cli
+# Ensure types are built within the container for the dev environment
+RUN npm run build -w @chad/types
 CMD ["npm", "run", "start:dev", "-w", "backend"]
 
 # 3. Build stage
@@ -42,8 +45,9 @@ USER nestjs
 COPY --from=build --chown=nestjs:nodejs /app/node_modules ./node_modules
 COPY --from=build --chown=nestjs:nodejs /app/apps/backend/dist ./apps/backend/dist
 COPY --from=build --chown=nestjs:nodejs /app/apps/backend/package.json ./apps/backend/package.json
-# Materialize the workspace dependency by copying the types library
-COPY --from=build --chown=nestjs:nodejs /app/libs/types ./libs/types
+# Materialize the workspace dependency: only copy compiled artifacts and package metadata
+COPY --from=build --chown=nestjs:nodejs /app/libs/types/package.json ./libs/types/package.json
+COPY --from=build --chown=nestjs:nodejs /app/libs/types/dist ./libs/types/dist
 
 EXPOSE 3000
 CMD ["node", "apps/backend/dist/main"]
