@@ -5,8 +5,6 @@ import * as board from "../components/home";
 export default function HomePage() {
     const { user, isLoading } = useAuth();
 
-    const classes = user ? " lg:grid-cols-3" : "lg:grid-cols-2";
-
     if (isLoading)
         return (
             <div className="min-h-screen flex items-center justify-center">
@@ -25,7 +23,7 @@ export default function HomePage() {
             </header>
             <div
                 className={`grid w-full max-w-300 justify-self-center grid-cols-1 
-					md:grid-cols-2 ${classes} gap-3`}
+					md:grid-cols-2 ${user ? " lg:grid-cols-3" : "lg:grid-cols-2"} gap-3`}
             >
                 {!user && <board.Identification />}
                 <board.Play />
