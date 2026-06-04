@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-import RootLayout from "./components/modals/RootLayout";
+import RootWrapper from "./components/RootWrapper";
 import Home from "./pages/Home";
 import Games from "./pages/Games";
 import Profile from "./pages/Profile";
@@ -10,7 +10,7 @@ import Settings from "./pages/Settings";
 export const router = createBrowserRouter([
     {
         path: "/",
-        element: <RootLayout />,
+        element: <RootWrapper />,
         children: [
             {
                 path: "",

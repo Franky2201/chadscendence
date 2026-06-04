@@ -1,4 +1,5 @@
 import { useFriends } from "../../contexts/FriendsContext";
+import { useChat } from "../../contexts/ChatContext";
 
 export default function FriendList() {
     const {
@@ -11,6 +12,7 @@ export default function FriendList() {
         removeFriend,
         blockUser,
     } = useFriends();
+    const { openChat } = useChat();
 
     if (isLoading)
         return (
@@ -118,6 +120,19 @@ export default function FriendList() {
                                 </span>
                             </div>
                             <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-all">
+                                <button
+                                    onClick={() =>
+                                        openChat({
+                                            id: friend.id,
+                                            username: friend.username,
+                                            avatarUrl: friend.avatarUrl,
+                                        })
+                                    }
+                                    className="text-blue-400/70 hover:text-blue-400 font-bold"
+                                    title="Message privé"
+                                >
+                                    💬
+                                </button>
                                 <button
                                     onClick={() =>
                                         removeFriend(friend.friendshipId)
