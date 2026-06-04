@@ -118,40 +118,38 @@ At first we used a Slack group, which felt not versatile enough to organize ours
 <!-- TODO : Brief explanation of the feature -->
 <!-- TODO : Which member worked on which feature -->
 ## Modules
-| Module | Points | Contributors |
-| - | - | - |
-| Use a framework for both the frontend and backend.                                                            | Major | [ade-woel](#ade-woel), [gde-win](#gde-win), [juhanse](#juhanse), [mmichele](#mmichele), [sdemey](#sdemey) |
-| Use an ORM for the database.                                                                                  | Minor | [ade-woel](#ade-woel), [juhanse](#juhanse), [sdemey](#sdemey)                                             |
-| Remote authentication with OAuth 2.0                                                                          | Minor | [juhanse](#juhanse)                                                                                       |
-| Custom-made design system with reusable component (at least 10), proper color palette, typography, and icons. | Minor | [mmichele](#mmichele)                                                                                     |
-|||
-| **TOTAL** | 5 / 14 (*19) |
+| Module | Status | Points | Contributors |
+| - | - | - | - |
+| Use a framework for both the frontend and backend.                               | Finished | Major | [ade-woel](#ade-woel), [gde-win](#gde-win), [juhanse](#juhanse), [mmichele](#mmichele), [sdemey](#sdemey) |
+| Implement real-time features ...                                                 | Ongoing  | Major |  |
+| Allow users to interact with other users.                                        | Ongoing  | Major |  |
+| Public API                                                                       | Ongoing  | Major |  |
+| Use an ORM for the database.                                                     | Finished | Minor |  |
+| Custom-made design system with reusable component ...                            | Finished | Minor |  |
+| Advanced search ...                                                              | ?        | Minor |  |
+| WCAG 2.1 AA                                                                      | ?        | Major |  |
+| Support multiples languages (at least 3)                                         | Ongoing  | Minor |  |
+| Support for additional browser                                                   | Ongoing  | Minor |  |
+| Standard user management and authentication                                      | Finished | Major |  |
+| Game statistics and match history                                                | Ongoing  | Minor |  |
+| Remote authentication with OAuth 2.0                                             | Finished | Minor |  |
+| Advanced permissions system                                                      | ?        | Major |  |
+| An organization system                                                           | ?        | Major |  |
+| User activity analytics and insights dashboard                                   | ?        | Minor |  |
+| Implement a complete web-based game where users can play against each other      | Ongoing  | Major |  |
+| Remote players                                                                   | Ongoing  | Major |  |
+| Multiplayer game (more than two players)                                         | Ongoing  | Major |  |
+| Add another game with user history and matchmaking                               | ?        | Major |  |
+| Advanced chat features                                                           | Ongoing  | Minor |  |
+| Tournament system                                                                | ?        | Minor |  |
+| Game customization                                                               | Ongoing  | Minor |  |
+| A gamification system to reward users for their actions                          | Ongoing  | Minor |  |
+| Implement spectator mode for games                                               | ?        | Minor |  |
+| Backend as microservices                                                         | ?        | Major |  |
+|  Advanced analytics dashboard with data visualization                            | ?        | Major |  |
+|||	
+| **TOTAL** | 25pts | 7 / 14 (*19) |
 
-<!-- 
-- Major : Implement real-time features using WebSockets or similar technology.
-- Major : Allow users to interact with other users.
-- Major : A public API ...
-- Minor : Support for multiple languages (at least 3 languages).
-- Minor : Support for additional browsers. 
-- Major : Standard user management and authentication. Profile page, avatar, friends and status.
-- Minor : Game statistics and match history.
-- Major : Remote players ...
-- Major : Implement a complete web-based game ...
-- Major : Multiplayer game ...
-- Minor : A gamification system to reward users for their actions.
-- Major : Backend as microservices.
-
-- (Major : WCAG 2.1 AA)
-- (Minor : Implement a complete 2FA)
-- (Major : Add another game with user history and matchmaking.)
-- (Minor : Advanced chat features ...)
-- (Minor : Implement a tournament system.)
-- (Minor : Game customization options.)
-- (Minor : Implement spectator mode for games.)
-- (Major : Advanced analytics dashboard with data visualization.)
-- (Minor : Data export and import functionality.)
-- (Minor : GDPR compliance features.)
--->
 <!-- TODO : List of all chosen modules -->
 <!-- TODO : Point calculation -->
 <!-- TODO : Module choice justification -->
