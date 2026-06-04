@@ -7,6 +7,7 @@ import {
     Body,
     UseGuards,
     Query,
+    Param,
     UseInterceptors,
     UploadedFile,
     BadRequestException,
@@ -23,6 +24,11 @@ import type { JwtPayload } from "../common/dto/auth.dto";
 @Controller("users")
 export class UsersController {
     constructor(private readonly usersService: UsersService) {}
+
+    @Get()
+    getAllUsers() {
+        return this.usersService.getAllUsers();
+    }
 
     @Get("me")
     @UseGuards(JwtAuthGuard)
@@ -77,6 +83,21 @@ export class UsersController {
     @UseGuards(JwtAuthGuard)
     deleteUser(@GetUser() payload: JwtPayload) {
         return this.usersService.deleteUser(payload.sub);
+    }
+
+    @Patch(":id/ban")
+    @UseGuards(JwtAuthGuard)
+    banUser(@Param("id") id: string) {
+        return this.usersService.banUser(id);
+    }
+
+    @Patch(":id")
+    @UseGuards(JwtAuthGuard)
+    adminUpdateUser(
+        @Param("id") id: string,
+        @Body() updateUserDto: UpdateUserDto,
+    ) {
+        return this.usersService.adminUpdateUser(id, updateUserDto);
     }
 
     @Get("search")

@@ -6,6 +6,7 @@ import Profile from "./pages/Profile";
 import Art from "./pages/Art";
 import Friends from "./pages/Friends";
 import About from "./pages/About";
+import Users from "./pages/Users";
 
 export const router = createBrowserRouter([
     {
@@ -35,6 +36,10 @@ export const router = createBrowserRouter([
             {
                 path: "profile",
                 element: <Profile />,
+            },
+            {
+                path: "users",
+                element: <Users />,
             },
         ],
     },

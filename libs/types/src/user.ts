@@ -8,6 +8,11 @@ export enum UserRole {
     ADMIN = "admin",
 }
 
+export enum AccountStatus {
+    ACTIVE = "active",
+    BANNED = "banned",
+}
+
 export interface User {
     id: string;
     username: string;
@@ -15,6 +20,7 @@ export interface User {
     avatarUrl?: string;
     bio?: string;
     status: UserStatus;
+    accountStatus: AccountStatus;
     role: UserRole;
     score: number;
     rankId?: string;
