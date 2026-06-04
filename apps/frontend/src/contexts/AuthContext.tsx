@@ -21,11 +21,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             try {
                 const userData = await getMe();
                 setUser(userData);
-            } catch (error) {
-                console.error(
-                    "Erreur lors de la récupération de l'utilisateur",
-                    error,
-                );
+            } catch (_error) {
                 setUser(null);
             } finally {
                 setIsLoading(false);
