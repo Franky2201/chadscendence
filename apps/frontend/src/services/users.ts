@@ -1,9 +1,9 @@
 import api from "./api";
-import { UserStatus, UserRole } from "@chad/types";
+import { UserStatus } from "@chad/types";
 import type { User } from "@chad/types";
 
 export type { User };
-export { UserStatus, UserRole };
+export { UserStatus };
 
 interface UpdateMe {
     username?: string;

@@ -6,9 +6,8 @@ import {
     Matches,
     IsOptional,
 } from "class-validator";
-import { UserRole, JwtPayload, OAuthProfile } from "@chad/types";
+import { JwtPayload, OAuthProfile } from "@chad/types";
 
-export { UserRole };
 export type { JwtPayload, OAuthProfile };
 
 export class LoginUserDto {

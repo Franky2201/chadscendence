@@ -1,6 +1,6 @@
 import type { InputHTMLAttributes, ReactNode } from "react";
 import { useId } from "react";
-import { type ThemeName, useTheme } from "../../contexts/theme-context";
+import { type ThemeName, useTheme } from "../../contexts/ThemeContext";
 
 type InputSize = "small" | "medium" | "large";
 

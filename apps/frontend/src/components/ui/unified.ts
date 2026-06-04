@@ -12,7 +12,8 @@ export type ItemColor =
     | "purple"
     | "pink"
     | "violet"
-    | "white";
+    | "white"
+    | "black";
 
 const colorVariables: Record<ItemColor, string> = {
     grey: "var(--color-grey)",
@@ -25,15 +26,30 @@ const colorVariables: Record<ItemColor, string> = {
     pink: "var(--color-pink)",
     violet: "var(--color-violet)",
     white: "var(--color-white)",
+    black: "var(--color-black)",
 };
 
 export function getItemColorVariable(color: ItemColor) {
     return colorVariables[color];
 }
 
-export function getItemColorStyle(color: ItemColor): CSSProperties {
+export function getItemColorStyle(
+    color: ItemColor,
+    name: string = "--ui-color",
+): CSSProperties {
     return {
-        "--ui-color": getItemColorVariable(color),
+        [name]: getItemColorVariable(color),
+    } as CSSProperties;
+}
+
+export function getItemMixedColorStyle(
+    color: ItemColor,
+    name: string,
+    percentage: number = 80,
+    color2: ItemColor = "black",
+): CSSProperties {
+    return {
+        [name]: `color-mix(in srgb, ${getItemColorVariable(color)} ${percentage}%, ${getItemColorVariable(color2)})`,
     } as CSSProperties;
 }
 

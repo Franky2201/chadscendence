@@ -4,7 +4,7 @@ import {
     getItemColorMix,
     getItemColorVariable,
 } from "./unified";
-import { type ThemeName, useTheme } from "../../contexts/theme-context";
+import { type ThemeName, useTheme } from "../../contexts/ThemeContext";
 
 type AnimatedBackground = {
     speed?: number;

@@ -1,6 +1,7 @@
 import {
     ConflictException,
     Injectable,
+    InternalServerErrorException,
     UnauthorizedException,
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
@@ -16,6 +17,7 @@ import {
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { RanksService } from "../ranks/ranks.service";
+import { Role } from "../common/entities/role.entity";
 
 @Injectable()
 export class AuthService {
@@ -27,6 +29,8 @@ export class AuthService {
         private readonly configService: ConfigService,
         private readonly jwtService: JwtService,
         private readonly ranksService: RanksService,
+        @InjectRepository(Role)
+        private readonly roleRepository: Repository<Role>,
     ) {
         const frontendUrl =
             this.configService.get<string>("FRONTEND_URL") ||
@@ -68,6 +72,14 @@ export class AuthService {
 
         const hashedPassword = await bcrypt.hash(password, 10);
         const defaultRank = await this.ranksService.getRankForScore(0);
+        const defaultRole = await this.roleRepository.findOne({
+            where: { name: "USER" },
+        });
+
+        if (!defaultRole)
+            throw new InternalServerErrorException(
+                "Role USER is missing in database",
+            );
 
         const user = this.userRepository.create({
             email,
@@ -76,6 +88,7 @@ export class AuthService {
             avatarUrl: this.defaultAvatar,
             score: 0,
             rankId: defaultRank.id,
+            role: defaultRole,
         });
 
         await this.userRepository.save(user);
@@ -123,6 +136,14 @@ export class AuthService {
 
         const finalUsername = await this.generateUniqueUsername(safeUsername);
         const defaultRank = await this.ranksService.getRankForScore(0);
+        const defaultRole = await this.roleRepository.findOne({
+            where: { name: "USER" },
+        });
+
+        if (!defaultRole)
+            throw new InternalServerErrorException(
+                "Role USER is missing in database",
+            );
 
         user = this.userRepository.create({
             ...(provider === "github"
@@ -133,6 +154,7 @@ export class AuthService {
             avatarUrl: safeAvatarUrl,
             score: 0,
             rankId: defaultRank.id,
+            role: defaultRole,
         });
 
         await this.userRepository.save(user);
@@ -157,7 +179,6 @@ export class AuthService {
             sub: user.id,
             email: user.email,
             username: user.username,
-            role: user.role,
         };
 
         const access_token = this.jwtService.sign(payload, {

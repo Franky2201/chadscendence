@@ -8,6 +8,7 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
     img?: string;
     borderRadius?: string;
     buttonClassName?: string;
+    imgClassName?: string;
 };
 
 export function IconButton({
@@ -17,6 +18,7 @@ export function IconButton({
     borderRadius = "rounded-xl",
     children,
     className = "",
+    imgClassName = "",
     style,
     ...props
 }: ButtonProps) {
@@ -31,7 +33,7 @@ export function IconButton({
         >
             <span
                 aria-hidden="true"
-                className="mb-1 block h-15 w-15 bg-current"
+                className={`block bg-current h-15 w-15 ${imgClassName}`}
                 style={{
                     maskImage: `url('/${img}')`,
                     WebkitMaskImage: `url('/${img}')`,
