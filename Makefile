@@ -58,6 +58,7 @@ fclean:
 	@printf "$(GREEN)Docker environment cleaned (volumes and images removed).$(NO_COLOR)\n"
 
 sprune: fclean
+	@printf "$(GREEN)Pruning in progress...$(NO_COLOR)\n"
 	@docker system prune --volumes -f
 
 re: fclean all
