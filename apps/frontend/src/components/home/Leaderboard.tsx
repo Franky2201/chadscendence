@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import { getLeaderboard, type LeaderboardType } from "../../services/users";
+import { getLeaderboard, getMyLeaderboardRank } from "../../services/users";
+import type { LeaderboardType } from "../../services/users";
+import { useAuth } from "../../contexts/AuthContext";
 import { Card } from "../ui/index";
 
 export function Leaderboard({
@@ -9,9 +11,13 @@ export function Leaderboard({
     count: number;
     className?: string;
 }) {
-    const [topUsers, setTopUsers] = useState<LeaderboardType>([]);
+    type DisplayUser = LeaderboardType[number] & { rank?: number };
+    const [topUsers, setTopUsers] = useState<DisplayUser[]>([]);
+    const [appendedCurrent, setAppendedCurrent] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+
+    const { user } = useAuth();
 
     useEffect(() => {
         let isMounted = true;
@@ -19,11 +25,40 @@ export function Leaderboard({
         const fetchLeaderboard = async () => {
             try {
                 const data = await getLeaderboard(count);
-                setTopUsers(data);
+                const displayData: DisplayUser[] = data.map((u) => ({ ...u }));
+                setAppendedCurrent(false);
+                if (user) {
+                    const alreadyIncluded = displayData.some(
+                        (u) => String(u.id) === String(user.id),
+                    );
+
+                    if (!alreadyIncluded) {
+                        try {
+                            const myRank = await getMyLeaderboardRank();
+                            displayData.push({
+                                id: user.id,
+                                username: user.username,
+                                avatarUrl: user.avatarUrl || "/avatar.jpg",
+                                score: user.score,
+                                rank: myRank,
+                            });
+                            setAppendedCurrent(true);
+                        } catch {
+                            displayData.push({
+                                id: user.id,
+                                username: user.username,
+                                avatarUrl: user.avatarUrl || "/avatar.jpg",
+                                score: user.score,
+                            });
+                            setAppendedCurrent(true);
+                        }
+                    }
+                }
+                if (isMounted) setTopUsers(displayData);
             } catch (err) {
                 console.log(err);
                 if (isMounted)
-                    setError("Erreur lors du chargement du classement.");
+                    setError("Error while loading the leaderboard ...");
             } finally {
                 setIsLoading(false);
             }
@@ -34,7 +69,7 @@ export function Leaderboard({
         return () => {
             isMounted = false;
         };
-    }, [count]);
+    }, [count, user?.id, user?.score]);
 
     return (
         <Card
@@ -48,30 +83,35 @@ export function Leaderboard({
                 ) : error ? (
                     <p className="text-[color:var(--color-red)]">{error}</p>
                 ) : (
-                    topUsers.map((user, index) => (
-                        <div
-                            key={user.id}
-                            className="flex flex-row items-center justify-between w-full"
-                        >
-                            <div className="flex flex-row items-center min-w-0">
-                                <span className="text-xl mr-4 w-5 text-right font-energy">
-                                    {index + 1}.
-                                </span>
+                    topUsers.map((item, index) => (
+                        <div key={item.id} className="w-full">
+                            {appendedCurrent &&
+                                item.rank !== undefined &&
+                                index === topUsers.length - 1 && (
+                                    <span className="block w-full border-t border-dashed my-2" />
+                                )}
 
-                                <img
-                                    src={user.avatarUrl}
-                                    alt={`${user.username} avatar`}
-                                    className="w-10 h-10 mr-2 mb-1 rounded-xl border"
-                                />
+                            <div className="flex flex-row items-center justify-between w-full">
+                                <div className="flex flex-row items-center min-w-0">
+                                    <span className="text-xl mr-4 w-5 text-right font-energy">
+                                        {item.rank ?? index + 1}.
+                                    </span>
 
-                                <span className="block truncate text-xl font-bold max-w-[14rem] sm:max-w-[18rem]">
-                                    {user.username}
+                                    <img
+                                        src={item.avatarUrl}
+                                        alt={`${item.username} avatar`}
+                                        className="w-10 h-10 mr-2 mb-1 rounded-xl border"
+                                    />
+
+                                    <span className="block truncate text-xl font-bold max-w-[14rem] sm:max-w-[18rem]">
+                                        {item.username}
+                                    </span>
+                                </div>
+
+                                <span className="text-lg font-energy">
+                                    {item.score}
                                 </span>
                             </div>
-
-                            <span className="text-lg font-energy">
-                                {user.score}
-                            </span>
                         </div>
                     ))
                 )}
