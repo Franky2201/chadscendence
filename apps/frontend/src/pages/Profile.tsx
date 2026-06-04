@@ -80,7 +80,7 @@ export default function ProfilePage() {
                             {user.bio}
                         </p>
                     )}
-                    {user.role === "admin" && (
+                    {user?.role?.name === "SUPERADMIN" && (
                         <Badge
                             color="black"
                             className="text-xs font-bold uppercase mt-1"
