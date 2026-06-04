@@ -74,7 +74,7 @@ export class AuthService {
         const hashedPassword = await bcrypt.hash(password, 10);
         const defaultRank = await this.ranksService.getRankForScore(0);
         const defaultRole = await this.roleRepository.findOne({
-            where: { name: "USER" },
+            where: { name: "User" },
         });
 
         if (!defaultRole)
@@ -138,7 +138,7 @@ export class AuthService {
         const finalUsername = await this.generateUniqueUsername(safeUsername);
         const defaultRank = await this.ranksService.getRankForScore(0);
         const defaultRole = await this.roleRepository.findOne({
-            where: { name: "USER" },
+            where: { name: "User" },
         });
 
         if (!defaultRole)
