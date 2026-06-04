@@ -76,19 +76,19 @@ const About: React.FC = () => {
             <Card
                 className="relative max-w-250 mx-auto p-6"
                 title="Who's is the Chad ?"
-                titleClassName="text-4xl"
                 description="Back"
                 size="large"
                 onClick={() => navigate(-1)}
             >
-                <div className="flex flex-row mb-3">
+                <div className="flex flex-wrap gap-1 mb-3">
                     {badges.map((badge) => {
                         if (badge.requires42 && !adminOr42) return null;
                         return (
                             <a
                                 href={badge.link}
-                                className="mr-2 flex"
+                                className="flex"
                                 key={badge.name}
+                                target="_blank"
                             >
                                 <Badge className="text-xs">{badge.name}</Badge>
                             </a>
@@ -110,9 +110,8 @@ const About: React.FC = () => {
                 <div className="p-3 mb-3">
                     <div className="flex flex-wrap justify-center gap-3">
                         {developers.map((dev, index) => (
-                            <a href={dev.link} target="_blank">
+                            <a key={index} href={dev.link} target="_blank">
                                 <div
-                                    key={index}
                                     className="rounded-2xl border border-neutral-400
                                 		hover:bg-neutral-500 h-16,5 w-60"
                                 >

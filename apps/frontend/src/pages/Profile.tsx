@@ -126,7 +126,6 @@ export default function ProfilePage() {
                 className="relative max-w-250 mx-auto p-6"
                 title="Profile"
                 href="/"
-                titleClassName="text-4xl"
                 description="Back"
                 size="large"
             >

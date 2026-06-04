@@ -35,7 +35,7 @@ export function Window({
     const location = useLocation();
     const classes = `min-h-screen relative overflow-hidden font-sans p-8 transition-all \
 		duration-500 ease-in-out ${className}`;
-    const footerClasses = `flex justify-center mt-4 items-center text-sm \
+    const footerClasses = `flex justify-center mt-4 items-center text-sm gap-1 \
 		transition-colors duration-300 ease-in-out ${footerThemeClasses[theme]}`;
     const linkClasses = `transition-colors duration-300 ease-in-out hover:underline \
 		uppercase font-semibold text-center ${footerLinkClasses[theme]}`;
@@ -53,13 +53,13 @@ export function Window({
                     <a href="" className={linkClasses}>
                         Privacy Policy
                     </a>
-                    <span className="mx-2 select-none">|</span>
+                    <span className={linkClasses}>|</span>
                     <a href="" className={linkClasses}>
                         Terms of Service
                     </a>
                     {location.pathname !== "/about" && (
                         <>
-                            <span className="mx-2 select-none">|</span>
+                            <span className={linkClasses}>|</span>
                             <Link to="/about" className={linkClasses}>
                                 About Us
                             </Link>

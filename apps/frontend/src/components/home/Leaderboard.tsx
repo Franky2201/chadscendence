@@ -69,7 +69,7 @@ export function Leaderboard({
         return () => {
             isMounted = false;
         };
-    }, [count, user?.id, user?.score]);
+    }, [count, user]);
 
     return (
         <Card

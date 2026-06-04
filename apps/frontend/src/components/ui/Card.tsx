@@ -37,7 +37,7 @@ export function Card({
     description = "",
     contentClassName = "",
     size = "medium",
-    color = "grey",
+    color = "white",
     ...props
 }: CardProps) {
     const classes = [
@@ -48,7 +48,7 @@ export function Card({
 		${className}`,
     ];
     const clickable = props.href || props.onClick;
-    const commonLinkClass = `ml-auto shrink-0 whitespace-nowrap self-start font-semibold
+    const commonLinkClass = ` shrink-0 whitespace-nowrap self-start font-semibold
 		${clickable ? "hover:underline hover:cursor-pointer" : ""} text-[var(--ui-color)]`;
     return (
         <div
