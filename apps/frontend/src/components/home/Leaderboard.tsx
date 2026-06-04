@@ -3,6 +3,7 @@ import { getLeaderboard, getMyLeaderboardRank } from "../../services/users";
 import type { LeaderboardType } from "../../services/users";
 import { useAuth } from "../../contexts/AuthContext";
 import { Card } from "../ui/index";
+import { toast } from "sonner";
 
 export function Leaderboard({
     count,
@@ -15,7 +16,6 @@ export function Leaderboard({
     const [topUsers, setTopUsers] = useState<DisplayUser[]>([]);
     const [appendedCurrent, setAppendedCurrent] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
 
     const { user } = useAuth();
 
@@ -55,12 +55,9 @@ export function Leaderboard({
                     }
                 }
                 if (isMounted) setTopUsers(displayData);
-            } catch (err) {
-                console.log(err);
-                if (isMounted)
-                    setError("Error while loading the leaderboard ...");
-            } finally {
                 setIsLoading(false);
+            } catch (_err) {
+                toast.error("Error while loading the leaderboard");
             }
         };
 
@@ -80,8 +77,6 @@ export function Leaderboard({
             <div className="flex flex-col w-full border-none">
                 {isLoading ? (
                     <p className="text-lg">Loading ...</p>
-                ) : error ? (
-                    <p className="text-[color:var(--color-red)]">{error}</p>
                 ) : (
                     topUsers.map((item, index) => (
                         <div key={item.id} className="w-full">

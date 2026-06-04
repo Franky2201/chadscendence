@@ -2,31 +2,27 @@ import { useState } from "react";
 import { register } from "../../services/auth";
 import { getMe } from "../../services/users";
 import { useAuth } from "../../contexts/AuthContext";
-import { extractErrorMessage } from "../../services/error";
 import { Button, Input, Card } from "../ui/index";
+import { toast } from "sonner";
 
 interface RegisterModalProps {
     isOpen: boolean;
     onClose: () => void;
-    prefilledEmail?: string;
 }
 
 export default function RegisterModal({
     isOpen,
     onClose,
-    prefilledEmail = "",
 }: RegisterModalProps) {
     const { login } = useAuth();
-    const [email, setEmail] = useState(prefilledEmail);
+    const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
 
     if (!isOpen) return null;
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError("");
 
         try {
             await register({ email, username, password });
@@ -34,8 +30,10 @@ export default function RegisterModal({
             const userResponse = await getMe();
             login(userResponse);
             onClose();
-        } catch (err) {
-            setError(extractErrorMessage(err));
+        } catch (error) {
+            if (error instanceof Error) {
+                toast.error(error.message);
+            }
         }
     };
 
@@ -45,12 +43,6 @@ export default function RegisterModal({
             onMouseDown={onClose}
         >
             <Card className="max-w-md w-full" title="Register">
-                {error && (
-                    <p className="text-[color:var(--color-red)] text-center mb-4 font-medium">
-                        {error}
-                    </p>
-                )}
-
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                     <Input
                         size="large"
