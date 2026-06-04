@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { Button, Input, Card } from "../../components/ui";
 import { updateMe } from "../../services/users";
+import { toast } from "sonner";
 
 export function Password() {
     const { user, isLoading, login } = useAuth();
@@ -10,8 +11,7 @@ export function Password() {
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [saving, setSaving] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (!isLoading && !user) {
@@ -32,12 +32,11 @@ export function Password() {
 
     const handleSave = async () => {
         if (newPassword && newPassword !== confirmPassword) {
-            setError("Passwords differ");
+            toast.error("Les mots de passe sont differents.");
             return;
         }
 
-        setSaving(true);
-        setError(null);
+        setLoading(true);
         try {
             const updated = await updateMe({
                 oldPassword: newPassword ? oldPassword : undefined,
@@ -48,18 +47,11 @@ export function Password() {
             setOldPassword("");
             setNewPassword("");
             setConfirmPassword("");
-            setError(null);
-        } catch (err: unknown) {
-            if (err && typeof err === "object" && "response" in err) {
-                const res = (
-                    err as { response: { data?: { message?: string } } }
-                ).response;
-                setError(res.data?.message ?? "Erreur lors de la mise à jour.");
-            } else {
-                setError("Erreur lors de la mise à jour.");
-            }
+            toast.success("Mot de passe mis à jour avec succès.");
+        } catch {
+            toast.error("Erreur lors de la mise à jour.");
         } finally {
-            setSaving(false);
+            setLoading(false);
         }
     };
 
@@ -91,8 +83,6 @@ export function Password() {
                         />
                     </>
                 )}
-
-                {error && <p className="text-red-400 text-sm">{error}</p>}
             </div>
 
             <div className="w-full">
@@ -101,10 +91,10 @@ export function Password() {
                         className="mt-2"
                         color="green"
                         onClick={handleSave}
-                        disabled={saving}
+                        disabled={loading}
                         size="medium"
                     >
-                        {saving ? "Saving ..." : "Save"}
+                        {loading ? "Loading..." : "Save"}
                     </Button>
                 )}
             </div>
