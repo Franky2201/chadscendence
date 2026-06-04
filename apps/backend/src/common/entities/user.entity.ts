@@ -7,11 +7,12 @@ import {
     ManyToOne,
     JoinColumn,
 } from "typeorm";
-import { UserStatus, UserRole, AccountStatus } from "@chad/types";
+import { UserStatus, AccountStatus } from "@chad/types";
 import type { Rank as IRank } from "@chad/types";
 import { Rank } from "./rank.entity";
+import { Role } from "./role.entity";
 
-export { UserStatus, UserRole, AccountStatus };
+export { UserStatus, AccountStatus };
 
 @Entity("users")
 export class User {
@@ -40,12 +41,12 @@ export class User {
     })
     status: UserStatus;
 
-    @Column({
-        type: "enum",
-        enum: UserRole,
-        default: UserRole.USER,
+    @ManyToOne(() => Role, (role) => role.users, {
+        nullable: true,
+        onDelete: "SET NULL",
     })
-    role: UserRole;
+    @JoinColumn({ name: "role_id" })
+    role: Role;
 
     @Column({
         name: "account_status",
