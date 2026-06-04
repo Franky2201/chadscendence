@@ -31,7 +31,7 @@ export class AuthService {
         private readonly ranksService: RanksService,
         @InjectRepository(Role)
         private readonly roleRepository: Repository<Role>,
-    ) {}
+    ) { }
 
     async login({ authlogin }: { authlogin: LoginUserDto }) {
         const { identifier, password } = authlogin;
@@ -74,7 +74,7 @@ export class AuthService {
         const hashedPassword = await bcrypt.hash(password, 10);
         const defaultRank = await this.ranksService.getRankForScore(0);
         const defaultRole = await this.roleRepository.findOne({
-            where: { name: "USER" },
+            where: { name: "User" },
         });
 
         if (!defaultRole)
@@ -111,8 +111,8 @@ export class AuthService {
             typeof username === "string"
                 ? username
                 : typeof email === "string" && email.includes("@")
-                  ? (email.split("@")[0] ?? "user")
-                  : "user";
+                    ? (email.split("@")[0] ?? "user")
+                    : "user";
 
         const safeAvatarUrl = avatarUrl ?? undefined;
 
@@ -138,7 +138,7 @@ export class AuthService {
         const finalUsername = await this.generateUniqueUsername(safeUsername);
         const defaultRank = await this.ranksService.getRankForScore(0);
         const defaultRole = await this.roleRepository.findOne({
-            where: { name: "USER" },
+            where: { name: "User" },
         });
 
         if (!defaultRole)
