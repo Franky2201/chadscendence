@@ -42,8 +42,8 @@ export class User {
     status: UserStatus;
 
     @ManyToOne(() => Role, (role) => role.users, {
-        nullable: true,
-        onDelete: "SET NULL",
+        nullable: false,
+        onDelete: "RESTRICT",
     })
     @JoinColumn({ name: "role_id" })
     role: Role;
