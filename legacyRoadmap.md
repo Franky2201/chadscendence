@@ -100,10 +100,10 @@ _Focus: Distributed logic and high-speed updates._
 
 ### Feature 7: Advanced Auth (42 OAuth & 2FA)
 
-| ID      | Status | Task Name          | Technical Strategy                                                  |
-| :------ | :----- | :----------------- | :------------------------------------------------------------------ |
-| **7.1** | [ ]    | 42 Intra OAuth     | Passport strategy for 42 authentication.                            |
+| ID      | Status | Task Name      | Technical Strategy                       |
+| :------ | :----- | :------------- | :--------------------------------------- |
+| **7.1** | [ ]    | 42 Intra OAuth | Passport strategy for 42 authentication. |
 
 |**OPTIONAL**|
-| **7.2** | [ ]    | 2FA Implementation | TOTP via `otplib`; storage of secrets in DB.                        |
-| **7.3** | [ ]    | 2FA Auth Flow      | "Pre-auth" token state; 2FA verification endpoint before final JWT. |
+| **7.2** | [ ] | 2FA Implementation | TOTP via `otplib`; storage of secrets in DB. |
+| **7.3** | [ ] | 2FA Auth Flow | "Pre-auth" token state; 2FA verification endpoint before final JWT. |

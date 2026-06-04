@@ -5,11 +5,14 @@ WORKDIR /app
 # Copy root package files
 COPY package*.json ./
 
-# Copy all workspace package.json files (needed for monorepo npm ci)
+# Copy necessary workspace package.json files
 COPY apps/backend/package*.json ./apps/backend/
-COPY apps/frontend/package*.json ./apps/frontend/
+COPY libs/types/package*.json ./libs/types/
 
-# Install all dependencies
+# Prune other workspaces from root package.json to satisfy npm ci
+RUN node -e "const p = require('./package.json'); p.workspaces = p.workspaces.filter(w => w === 'apps/backend' || w.startsWith('libs/')); require('fs').writeFileSync('./package.json', JSON.stringify(p))"
+
+# Install dependencies
 RUN npm ci
 
 # 2. Development stage (Stops here for dev)
@@ -20,9 +23,11 @@ CMD ["npm", "run", "start:dev", "-w", "backend"]
 # 3. Build stage
 FROM base AS build
 COPY . .
+# Build both the types library and the backend
+RUN npm run build -w @chad/types
 RUN npm run build -w backend
 
-# Prune devDependencies to keep the final image small
+# Prune devDependencies
 RUN npm prune --omit=dev
 
 # 4. Final stage
@@ -37,6 +42,8 @@ USER nestjs
 COPY --from=build --chown=nestjs:nodejs /app/node_modules ./node_modules
 COPY --from=build --chown=nestjs:nodejs /app/apps/backend/dist ./apps/backend/dist
 COPY --from=build --chown=nestjs:nodejs /app/apps/backend/package.json ./apps/backend/package.json
+# Materialize the workspace dependency by copying the types library
+COPY --from=build --chown=nestjs:nodejs /app/libs/types ./libs/types
 
 EXPOSE 3000
 CMD ["node", "apps/backend/dist/main"]

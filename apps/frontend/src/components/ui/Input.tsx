@@ -1,56 +1,45 @@
-import type { InputHTMLAttributes } from 'react';
-import { type ThemeName, useTheme } from '../../contexts/theme-context';
+import type { InputHTMLAttributes } from "react";
+import { getItemColorStyle, type ItemSize, type ItemColor } from "./unified";
 
-type InputSize = 'small' | 'medium' | 'large';
-
-type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> & {
-  size?: InputSize;
+type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, "size"> & {
+    size?: ItemSize;
+    color?: ItemColor;
 };
 
-const baseClasses =
-  '\
-	inline-flex \
-	items-center \
-	justify-center \
-	rounded-xl \
-	font-bold \
-	transition-all \
-	shadow-lg \
-	border \
-	focus-visible:outline-none \
-	focus-visible:ring-2 \
-	focus-visible:ring-offset-2 \
-	active:scale-95 \
-	disabled:cursor-not-allowed \
-	disabled:opacity-60';
-
-const sizeClasses: Record<InputSize, string> = {
-  small: 'px-4 py-2 text-sm',
-  medium: 'px-6 py-3 text-base',
-  large: 'px-8 py-4 text-lg',
-};
-
-const themeClasses: Record<ThemeName, string> = {
-  light:
-    'bg-zinc-50 text-zinc-900 border-zinc-200 placeholder:text-zinc-400 focus-visible:ring-zinc-300 focus-visible:ring-offset-zinc-50',
-  dark: 'bg-zinc-900 text-zinc-100 border-zinc-700 placeholder:text-zinc-500 focus-visible:ring-zinc-500 focus-visible:ring-offset-zinc-950',
+const sizeClasses: Record<ItemSize, string> = {
+    small: "px-2 py-1 text-sm",
+    medium: "px-3 py-2 text-md",
+    large: "px-4 py-3 text-lg",
 };
 
 export function Input({
-  size = 'medium',
-  className = '',
-  type = 'text',
-  ...props
+    size = "medium",
+    color = "grey",
+    className = "",
+    type = "text",
+    style,
+    ...props
 }: InputProps) {
-  const { theme } = useTheme();
-  const classes = [
-    baseClasses,
-    themeClasses[theme],
-    sizeClasses[size],
-    className,
-  ]
-    .filter(Boolean)
-    .join(' ');
-
-  return <input type={type} className={classes} {...props} />;
+    const inputClasses = [
+        "relative inline-flex items-center justify-center rounded-xl font-bold \
+	text-center focus-visible:outline-none disabled:cursor-not-allowed \
+    focus-visible:ring-2 translate-y-[-2px] active:scale-95 \
+	transition-all duration-100 ease-in-out select-none hover:ring-1 \
+    bg-[color:var(--ui-color)]/50 ring-[color:var(--ui-color)]",
+        sizeClasses[size],
+        className,
+    ]
+        .filter(Boolean)
+        .join(" ");
+    return (
+        <input
+            type={type}
+            className={inputClasses}
+            style={{
+                ...style,
+                ...getItemColorStyle(color),
+            }}
+            {...props}
+        />
+    );
 }

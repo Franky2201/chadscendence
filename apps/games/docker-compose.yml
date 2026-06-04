@@ -1,0 +1,22 @@
+services:
+    math:
+        container_name: ft_math
+        build:
+            context: ../../
+            dockerfile: apps/games/math/Dockerfile
+            #change target from development to final for production build
+            target: development
+            #target: final
+        env_file: ../../.env
+        environment:
+            - PORT=3001
+            - REDIS_HOST=redis
+            - REDIS_PORT=6379
+        depends_on:
+            redis:
+                condition: service_healthy
+        volumes:
+            - ../../:/app
+        networks:
+            - ft_network
+        restart: unless-stopped
