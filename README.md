@@ -61,7 +61,7 @@ This command will:
 
 **Access the application:**
 
-- Frontend: `http://localhost:5173` (Nginx)
+- Frontend: `https://localhost` (Nginx)
 - Backend API: `http://localhost:3000` (NestJS)
 
 ### Development Mode
@@ -69,7 +69,6 @@ This command will:
 For active development with **hot-reloading** enabled via [Docker Compose Watch](https://docs.docker.com/compose/file-watch/):
 
 ```bash
-# During development, 'make' currently defaults to 'make dev'
 make dev
 ```
 
