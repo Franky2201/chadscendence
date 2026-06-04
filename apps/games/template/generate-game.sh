@@ -220,11 +220,9 @@ if [ -f "$GAMES_PAGE" ]; then
     "
 fi
 
-# 8. Run npm install
-echo "Running npm install..."
-(cd "$ROOT_DIR" && npm install)
+echo "Game logic and frontend registration complete."
 
-# 9. Register game in Backend (GamesModule & GamesService)
+# 8. Register game in Backend (GamesModule & GamesService)
 # Backend is now generic and uses GAMES_CLIENT for all games.
 # No manual registration needed in GamesModule or GamesService.
 
