@@ -9,8 +9,7 @@ import { Message } from "src/common/entities/message.entity";
         credentials: true,
     },
 })
-export class MessagesGateway
- {
+export class MessagesGateway {
     @WebSocketServer()
     server: Server;
 

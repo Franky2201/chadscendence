@@ -67,6 +67,9 @@ ci: check
 	@printf "$(GREEN)Step 1: Docker Build & Up$(NO_COLOR)\n"
 	@$(COMPOSE) up -d --build --wait --quiet-pull    || \
 	  (printf "$(RED)Step 1 failed. Logs:$(NO_COLOR)\n"; $(COMPOSE) logs; $(COMPOSE) down -v; exit 1)
+	@printf "$(GREEN)Step 2: Linting & Formatting$(NO_COLOR)\n"
+	@$(COMPOSE) exec -T backend npm run lint -w backend || (printf "$(RED)Backend linting failed.$(NO_COLOR)\n"; $(COMPOSE) down -v; exit 1)
+	@$(COMPOSE) exec -T frontend npm run lint -w frontend || (printf "$(RED)Frontend linting failed.$(NO_COLOR)\n"; $(COMPOSE) down -v; exit 1)
 	@$(COMPOSE) down -v > /dev/null 2>&1
 	@printf "$(GREEN)--- CI passed ---$(NO_COLOR)\n"
 
