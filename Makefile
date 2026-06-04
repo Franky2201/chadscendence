@@ -11,22 +11,20 @@ NO_COLOR := \033[0m
 all: dev #replace with `prod` for final evaluation
 
 # Development mode with hot-reloading (Docker Compose Watch)
-# Usage: make dev [service=name]
 dev: check
 	@printf "$(GREEN)Starting in development mode (hot-reloading enabled)...$(NO_COLOR)\n"
-	@$(COMPOSE) up --watch $(service)
+	@$(COMPOSE) up --watch
 
 # Production mode for evaluation (Final build stage)
-# Usage: make prod [service=name]
 prod: check
 	@printf "$(GREEN)Starting in production mode (evaluation)...$(NO_COLOR)\n"
-	@$(COMPOSE) up -d --build --remove-orphans $(service)
+	@$(COMPOSE) up -d --build --remove-orphans
 
 help:
 	@printf "$(GREEN)Available targets:$(NO_COLOR)\n"
 	@printf "  all (default)  Start in default mode\n"
-	@printf "  dev            Start in development mode (hot-reloading). Use 'service=name' for single service.\n"
-	@printf "  prod           Start in production mode (evaluation). Use 'service=name' for single service.\n"
+	@printf "  dev            Start in development mode (hot-reloading)\n"
+	@printf "  prod           Start in production mode (evaluation)\n"
 	@printf "  down           Stop and remove containers\n"
 	@printf "  status         Check container status\n"
 	@printf "  logs           Follow container logs\n"
@@ -38,9 +36,8 @@ check:
 	@test -f $(ENV_FILE) || cp .env.example $(ENV_FILE)
 	@mkdir -p $(BACKEND_UPLOADS_PATH)
 
-# Usage: make build [service=name]
 build: check
-	@DOCKER_BUILDKIT=1 $(COMPOSE) build $(service)
+	@DOCKER_BUILDKIT=1 $(COMPOSE) build
 
 up: dev
 
