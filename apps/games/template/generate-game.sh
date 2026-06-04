@@ -229,10 +229,29 @@ echo "Game logic and frontend registration complete."
 
 echo "Done! New game created and registered."
 echo "Port assigned: $NEW_PORT"
+
+# 9. Update package-lock.json to include the new workspace
+if [ -f "$ROOT_PACKAGE" ]; then
+    echo "Updating package-lock.json..."
+    if command -v docker > /dev/null 2>&1; then
+        echo "Using a temporary Docker container to update lockfile (ensures compatibility)..."
+        # We use node:22-alpine to match the microservices' environment
+        docker run --rm -v "$ROOT_DIR:/app" -w /app node:22-alpine npm install --package-lock-only
+        echo "Lockfile updated successfully."
+    elif command -v npm > /dev/null 2>&1; then
+        echo "Docker not found, falling back to host npm..."
+        (cd "$ROOT_DIR" && npm install --package-lock-only)
+        echo "Lockfile updated successfully."
+    else
+        echo "Warning: Neither 'docker' nor 'npm' found. You must update the lockfile manually."
+    fi
+fi
+
 echo ""
 echo "Next steps:"
-echo "1. Run 'make up' to see the new game service in the frontend."
-echo "2. Implement your game logic in apps/games/$GAME_ID/src/."
-echo "3. Define your shared types in libs/types/src/game.ts"
-echo "4. Add your unit tests in apps/games/$GAME_ID/test/."
+echo "1. Run 'make' to see the new game service in the frontend."
+echo "   Docker will automatically detect, build, and start your new game."
+echo "2. Check the frontend at https://${DOMAIN_NAME:-localhost}:5173/games"
+echo "3. Implement your game logic in apps/games/$GAME_ID/src/"
+echo "4. Define your shared types in libs/types/src/game.ts"
 echo "5. Customize your UI in ${UI_COMPONENT_PATH:-apps/frontend/src/components/games/}"
