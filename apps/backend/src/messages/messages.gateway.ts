@@ -5,11 +5,12 @@ import { Message } from "src/common/entities/message.entity";
 
 @WebSocketGateway({
     cors: {
-        origin: "http://localhost:5173",
+        origin: process.env.FRONTEND_URL || "http://localhost:5173",
         credentials: true,
     },
 })
-export class MessagesGateway {
+export class MessagesGateway
+ {
     @WebSocketServer()
     server: Server;
 

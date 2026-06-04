@@ -64,7 +64,8 @@ export class AuthController {
             sameSite: "lax",
         });
 
-        return res.redirect("http://localhost:5173/");
+        const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+        return res.redirect(frontendUrl);
     }
 
     @Get("github")
@@ -85,7 +86,8 @@ export class AuthController {
             sameSite: "lax",
         });
 
-        return res.redirect("http://localhost:5173/");
+        const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+        return res.redirect(frontendUrl);
     }
 
     @Post("logout")

@@ -7,7 +7,7 @@ services:
         image: postgres:17-alpine
         restart: unless-stopped
         ports:
-            - "5432:5432"
+            - "${POSTGRES_PORT:-5432}:5432"
         environment:
             POSTGRES_USER: ${POSTGRES_USER}
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -31,7 +31,7 @@ services:
         image: redis:7-alpine
         restart: unless-stopped
         ports:
-            - "6379:6379"
+            - "${REDIS_PORT:-6379}:6379"
         volumes:
             - redisdata:/data
         networks:
@@ -51,13 +51,17 @@ services:
             target: development
             #target: final
         env_file: .env
+        environment:
+            - PORT=3000
+            - FRONTEND_URL=${FRONTEND_URL:-http://localhost:5173}
+            - BACKEND_URL=${BACKEND_URL:-http://localhost:3000}
         depends_on:
             db:
                 condition: service_healthy
             redis:
                 condition: service_healthy
         ports:
-            - "3000:3000"
+            - "${BACKEND_PORT:-3000}:3000"
         volumes:
             - ./apps/backend/uploads:/app/apps/backend/uploads
         develop:
@@ -85,10 +89,12 @@ services:
             args:
                 DOMAIN_NAME: ${DOMAIN_NAME}
         env_file: .env
+        environment:
+            - VITE_BACKEND_URL=${BACKEND_URL:-http://localhost:3000}
         depends_on:
             - backend
         ports:
-            - "5173:5173"
+            - "${FRONTEND_PORT:-5173}:5173"
         develop:
             watch:
                 - action: sync

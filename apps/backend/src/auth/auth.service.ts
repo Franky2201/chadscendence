@@ -17,17 +17,22 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { RanksService } from "../ranks/ranks.service";
 
-const DEFAULT_AVATAR = "http://localhost:5173/public/avatar.jpg";
-
 @Injectable()
 export class AuthService {
+    private readonly defaultAvatar: string;
+
     constructor(
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
         private readonly configService: ConfigService,
         private readonly jwtService: JwtService,
         private readonly ranksService: RanksService,
-    ) {}
+    ) {
+        const frontendUrl =
+            this.configService.get<string>("FRONTEND_URL") ||
+            "http://localhost:5173";
+        this.defaultAvatar = `${frontendUrl}/public/avatar.jpg`;
+    }
 
     async login({ authlogin }: { authlogin: LoginUserDto }) {
         const { email, password } = authlogin;
@@ -68,7 +73,7 @@ export class AuthService {
             email,
             username,
             password: hashedPassword,
-            avatarUrl: DEFAULT_AVATAR,
+            avatarUrl: this.defaultAvatar,
             score: 0,
             rankId: defaultRank.id,
         });
