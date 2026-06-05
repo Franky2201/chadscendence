@@ -16,8 +16,8 @@ if [[ -z "$GAME_ID" ]]; then
 fi
 
 # Check for required tools
-if ! command -v docker > /dev/null 2>&1; then
-    echo "Error: 'docker' is required to run this script."
+if ! command -v docker > /dev/null 2>&1 && ! command -v node > /dev/null 2>&1; then
+    echo "Error: Either 'docker' or 'node' is required to run this script."
     exit 1
 fi
 

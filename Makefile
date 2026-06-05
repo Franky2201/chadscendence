@@ -25,10 +25,15 @@ help:
 	@printf "  up             Start services (detached)\n"
 	@printf "  build          Build or rebuild images\n"
 	@printf "  down           Stop and remove containers\n"
+	@printf "  start          Start stopped containers\n"
+	@printf "  stop           Stop running containers\n"
+	@printf "  restart        Restart containers\n"
 	@printf "  status         Check container status\n"
 	@printf "  logs           Follow container logs\n"
 	@printf "  re             Full clean and restart\n"
 	@printf "  fclean         Deep clean (removes images and volumes)\n"
+	@printf "  sprune         Deep clean and system prune\n"
+	@printf "  ci             Run local CI checks (linting)\n"
 
 check:
 	@command -v docker > /dev/null 2>&1 || (printf "$(RED)Docker is not installed.$(NO_COLOR)\n"; exit 1)

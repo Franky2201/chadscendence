@@ -56,29 +56,30 @@ make
 This command will:
 
 1. Copy `.env.example` to `.env` if it doesn't exist.
-2. Build the optimized production stages of the Docker images.
-3. Start the application in a stable environment.
+2. Build the Docker images.
+3. Start the application in a development environment with hot-reloading (via bind mounts).
 
 **Access the application:**
 
 - Frontend: `https://localhost` (Nginx)
 - Backend API: `http://localhost:3000` (NestJS)
 
-### Development Mode
-
-For active development with **hot-reloading** enabled via [Docker Compose Watch](https://docs.docker.com/compose/file-watch/):
-
-```bash
-make dev
-```
-
 ### Useful Commands
 
-- `make prod`: Start the production environment (Evaluation ready).
-- `make dev`: Start the development environment with hot-reloading enabled.
-- `make down`: Stop and remove the containers.
-- `make logs`: Follow the container logs.
-- `make fclean`: Deep clean (removes Docker images and volumes).
+- `make help`: Show available commands.
+- `make`: Start the project (alias for `make up`).
+- `make up`: Start services in detached mode.
+- `make build`: Build or rebuild images.
+- `make down`: Stop and remove containers.
+- `make start`: Start stopped containers.
+- `make stop`: Stop running containers.
+- `make restart`: Restart containers.
+- `make status`: Check container status.
+- `make logs`: Follow container logs.
+- `make re`: Full clean and restart.
+- `make fclean`: Deep clean (removes images and volumes).
+- `make sprune`: Deep clean and system prune.
+- `make ci`: Run local CI checks (linting).
 
 ### Environment variables
 
@@ -151,7 +152,7 @@ At first we used a Slack group, which felt not versatile enough to organize ours
 
 <!-- TEMPLATE : <a href="" title=""><img src=""></a> -->
 
-|              | Framworks / Technologies                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+|              | Frameworks / Technologies                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | :----------: | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Frontend** | <a href="https://www.typescriptlang.org/" title="TypeScript"><img src="https://skillicons.dev/icons?i=ts"></a> <a href="https://react.dev/" title="React"><img src="https://skillicons.dev/icons?i=react"></a> <a href="https://vite.dev/" title="Vite"><img src="https://skillicons.dev/icons?i=vite"></a> <a href="https://tailwindcss.com/" title="Tailwind"><img src="https://skillicons.dev/icons?i=tailwind"></a>                                                                                                                                                                                                                   |
 | **Backend**  | <a href="https://www.typescriptlang.org/" title="TypeScript"><img src="https://skillicons.dev/icons?i=ts"></a> <a href="https://nestjs.com/" title="NestJS"><img src="https://skillicons.dev/icons?i=nest"></a>                                                                                                                                                                                                                                                                                                                                                                                                                           |

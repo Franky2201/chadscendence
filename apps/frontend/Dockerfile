@@ -13,8 +13,7 @@ COPY libs/types/package*.json ./libs/types/
 RUN node -e "const p = require('./package.json'); p.workspaces = ['apps/frontend', ...p.workspaces.filter(w => w.startsWith('libs/'))]; require('fs').writeFileSync('./package.json', JSON.stringify(p))"
 
 # Install dependencies
-# If npm ci fails (e.g. lockfile out of sync), fall back to npm install to allow the build to proceed
-RUN npm ci || npm install
+RUN npm ci
 
 # 2. Development stage
 FROM base AS development
