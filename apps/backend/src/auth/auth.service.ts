@@ -19,10 +19,10 @@ import { Repository } from "typeorm";
 import { RanksService } from "../ranks/ranks.service";
 import { Role } from "../common/entities/role.entity";
 
-const DEFAULT_AVATAR = "http://localhost:5173/public/avatar.jpg";
-
 @Injectable()
 export class AuthService {
+    private readonly defaultAvatar: string;
+
     constructor(
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
@@ -31,7 +31,12 @@ export class AuthService {
         private readonly ranksService: RanksService,
         @InjectRepository(Role)
         private readonly roleRepository: Repository<Role>,
-    ) {}
+    ) {
+        const frontendUrl =
+            this.configService.get<string>("FRONTEND_URL") ||
+            "http://localhost:5173";
+        this.defaultAvatar = `${frontendUrl}/public/avatar.jpg`;
+    }
 
     async login({ authlogin }: { authlogin: LoginUserDto }) {
         const { identifier, password } = authlogin;
@@ -86,7 +91,7 @@ export class AuthService {
             email,
             username,
             password: hashedPassword,
-            avatarUrl: DEFAULT_AVATAR,
+            avatarUrl: this.defaultAvatar,
             score: 0,
             rankId: defaultRank.id,
             role: defaultRole,

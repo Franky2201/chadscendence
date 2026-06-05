@@ -93,11 +93,15 @@ export class UsersService implements OnModuleInit {
         const hashedPassword = await hash(adminPassword, 10);
         const defaultRank = await this.ranksService.getRankForScore(5000);
 
+        const frontendUrl =
+            this.configService.get<string>("FRONTEND_URL") ||
+            "http://localhost:5173";
+
         const adminUser = this.userRepository.create({
             email: adminEmail,
             username: adminUsername,
             password: hashedPassword,
-            avatarUrl: "http://localhost:5173/public/admin.png",
+            avatarUrl: `${frontendUrl}/public/admin.png`,
             score: 5000,
             rankId: defaultRank.id,
             role: adminRole,
@@ -166,9 +170,13 @@ export class UsersService implements OnModuleInit {
     }
 
     async uploadAvatar(id: string, filename: string) {
+        const backendUrl =
+            this.configService.get<string>("BACKEND_URL") ||
+            "http://localhost:3000";
+
         await this.userRepository.save({
             id,
-            avatarUrl: `http://localhost:3000/uploads/${filename}`,
+            avatarUrl: `${backendUrl}/uploads/${filename}`,
         });
         return this.getUser(id);
     }
