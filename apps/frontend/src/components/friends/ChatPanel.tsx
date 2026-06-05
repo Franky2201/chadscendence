@@ -136,29 +136,49 @@ export default function ChatPanel() {
                             </div>
                             <div className="relative flex items-center">
                                 <button
-                                    onClick={() => setShowSettings(!showSettings)}
+                                    onClick={() =>
+                                        setShowSettings(!showSettings)
+                                    }
                                     className="text-white/60 hover:text-white p-2 rounded-full hover:bg-white/10 transition-colors"
                                     title="Paramètres"
                                 >
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                                    <svg
+                                        className="w-5 h-5"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
+                                        />
                                     </svg>
                                 </button>
                                 {showSettings && (
                                     <>
                                         <div
                                             className="fixed inset-0 z-40"
-                                            onClick={() => setShowSettings(false)}
+                                            onClick={() =>
+                                                setShowSettings(false)
+                                            }
                                         />
                                         <div className="absolute right-0 top-full mt-1 w-48 bg-[#1e1e23] rounded-xl shadow-xl py-2 border border-white/10 z-50 overflow-hidden">
                                             <button
-                                                onClick={() => { handleRemoveFriend(); setShowSettings(false); }}
+                                                onClick={() => {
+                                                    handleRemoveFriend();
+                                                    setShowSettings(false);
+                                                }}
                                                 className="w-full text-left px-4 py-2.5 text-red-400 hover:bg-white/5 text-sm font-medium transition-colors flex items-center gap-2"
                                             >
                                                 <span>✕</span> Retirer l'ami
                                             </button>
                                             <button
-                                                onClick={() => { handleBlockUser(); setShowSettings(false); }}
+                                                onClick={() => {
+                                                    handleBlockUser();
+                                                    setShowSettings(false);
+                                                }}
                                                 className="w-full text-left px-4 py-2.5 text-red-500 hover:bg-white/5 text-sm font-medium transition-colors flex items-center gap-2"
                                             >
                                                 <span>Ø</span> Bloquer
@@ -182,13 +202,16 @@ export default function ChatPanel() {
                                         className={`flex flex-col max-w-[80%] ${isMe ? "self-end items-end" : "self-start items-start"}`}
                                     >
                                         <div
-                                            className={`px-4 py-2 rounded-2xl ${isMe
-                                                ? "bg-slate-600 text-white rounded-br-sm"
-                                                : `text-${theme === "white" ? "black" : "white"} rounded-bl-sm`
-                                                }`}
+                                            className={`px-4 py-2 rounded-2xl ${
+                                                isMe
+                                                    ? "bg-slate-600 text-white rounded-br-sm"
+                                                    : `text-${theme === "white" ? "black" : "white"} rounded-bl-sm`
+                                            }`}
                                             style={{
                                                 wordBreak: "break-word",
-                                                backgroundColor: isMe ? undefined : `var(--color-${theme})`
+                                                backgroundColor: isMe
+                                                    ? undefined
+                                                    : `var(--color-${theme})`,
                                             }}
                                         >
                                             {msg.content}
