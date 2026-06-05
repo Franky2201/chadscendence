@@ -81,7 +81,7 @@ const About: React.FC = () => {
                                 key={badge.name}
                                 target="_blank"
                             >
-                                <Badge className="text-xs hover:ring-2">
+                                <Badge className="text-xs border-1 hover:ring-1">
                                     {badge.name}
                                 </Badge>
                             </a>
@@ -109,9 +109,7 @@ const About: React.FC = () => {
                                     color2="white"
                                     type="translation"
                                     freq="3"
-                                    rgb={true}
-                                    angle="320"
-                                    className="flex rounded-xl w-64 border-1 hover:ring-2"
+                                    className="flex rounded-xl w-64 border-1 hover:ring-1"
                                 >
                                     <div className="flex flex-wrap">
                                         <img

@@ -2,9 +2,9 @@ import type { HTMLAttributes } from "react";
 import { getItemMixedColorStyle, type ItemColor } from "./unified";
 import { getItemColorStyle } from "./unified";
 
-export type BadgeType = "default" | "translation" | "rotation";
+export type BadgeType = "default" | "translation";
 
-type BadgeProps = HTMLAttributes<HTMLSpanElement> & {
+type BadgeProps = HTMLAttributes<HTMLDivElement> & {
     text?: string;
     color?: ItemColor;
     color2?: ItemColor;
@@ -13,9 +13,7 @@ type BadgeProps = HTMLAttributes<HTMLSpanElement> & {
     textColor?: ItemColor | null;
     textBright?: number;
     type?: BadgeType;
-    angle?: string;
     freq?: string;
-    rgb?: boolean;
 };
 
 export function Badge({
@@ -28,9 +26,7 @@ export function Badge({
     textColor = null,
     textBright = 60,
     type = "default",
-    angle = "0",
     freq = "3",
-    rgb = false,
     style,
     ...props
 }: BadgeProps) {
@@ -43,6 +39,7 @@ export function Badge({
                 bg-[var(--bg-color)] ring-[var(--border-color)]
                 text-[var(--text-color)]
                 ${color === "black" ? (textColor = "white") : ""}
+                ${color === "black" ? (textBright = 100) : ""}
                 ${className}
             `}
             {...props}
@@ -62,30 +59,14 @@ export function Badge({
                 ),
             }}
         >
-            {type === "rotation" && (
-                <div
-                    className={`${commonClasses}
-                        bg-conic${rgb ? "/increasing" : ""}
-						w-full h-[225%]
-                        from-[var(--bg-color)]
-                        via-[var(--bg-color2)]
-                        to-[var(--bg-color)]
-                        rotate-${angle}
-                        scale-200
-                        `}
-                    style={{
-                        animation: `rotation ${freq}s linear infinite`,
-                    }}
-                />
-            )}
             {type === "translation" && (
                 <div
                     className={`${commonClasses}
-                        bg-linear-to-r${rgb ? "/increasing" : ""}
+                        bg-linear-to-r
                         from-[var(--bg-color)]
                         via-[var(--bg-color2)]
                         to-[var(--bg-color)]
-                        rotate-${angle}
+                        rotate-320
                         scale-300
                         `}
                     style={{
