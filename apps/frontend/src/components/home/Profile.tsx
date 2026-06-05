@@ -1,4 +1,4 @@
-import { Card, Button, Badge } from "../ui";
+import { Card, Button } from "../ui";
 import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useChat } from "../../contexts/ChatContext";
