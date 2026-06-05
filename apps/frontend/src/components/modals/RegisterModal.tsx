@@ -4,6 +4,7 @@ import { getMe } from "../../services/users";
 import { useAuth } from "../../contexts/AuthContext";
 import { Button, Input, Card } from "../ui/index";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 interface RegisterModalProps {
     isOpen: boolean;
@@ -11,10 +12,11 @@ interface RegisterModalProps {
 }
 
 export default function RegisterModal({ isOpen, onClose }: RegisterModalProps) {
-    const { login } = useAuth();
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const { login } = useAuth();
+    const { t } = useTranslation();
 
     if (!isOpen) return null;
 
@@ -27,10 +29,8 @@ export default function RegisterModal({ isOpen, onClose }: RegisterModalProps) {
             const userResponse = await getMe();
             login(userResponse);
             onClose();
-        } catch (error) {
-            if (error instanceof Error) {
-                toast.error(error.message);
-            }
+        } catch {
+            toast.error(t("home.identification.register.error"));
         }
     };
 
@@ -39,12 +39,15 @@ export default function RegisterModal({ isOpen, onClose }: RegisterModalProps) {
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
             onMouseDown={onClose}
         >
-            <Card className="max-w-md w-full" title="Register">
+            <Card
+                className="max-w-md w-full"
+                title={t("home.identification.register.title")}
+            >
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                     <Input
                         size="large"
                         type="email"
-                        placeholder="Email"
+                        placeholder={t("home.identification.register.email")}
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         className="w-full"
@@ -53,7 +56,7 @@ export default function RegisterModal({ isOpen, onClose }: RegisterModalProps) {
                     <Input
                         size="large"
                         type="text"
-                        placeholder="Username"
+                        placeholder={t("home.identification.register.username")}
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         className="w-full"
@@ -62,14 +65,14 @@ export default function RegisterModal({ isOpen, onClose }: RegisterModalProps) {
                     <Input
                         size="large"
                         type="password"
-                        placeholder="Mot de passe"
+                        placeholder={t("home.identification.register.password")}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         className="w-full"
                         required
                     />
                     <Button type="submit" className="w-full" size="large">
-                        Créer un compte
+                        {t("home.identification.register.register")}
                     </Button>
                 </form>
             </Card>

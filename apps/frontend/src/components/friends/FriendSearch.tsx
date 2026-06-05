@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { searchUsers, type UserSearchResult } from "../../services/users";
 import { useFriends } from "../../contexts/FriendsContext";
 import { Input, Button } from "../ui";
+import { useTranslation } from "react-i18next";
 
 interface FriendSearchProps {
     onSearchActive: (isActive: boolean) => void;
@@ -9,6 +10,7 @@ interface FriendSearchProps {
 
 export default function FriendSearch({ onSearchActive }: FriendSearchProps) {
     const { sendRequest, friends, sentRequests } = useFriends();
+    const { t } = useTranslation();
     const [query, setQuery] = useState("");
     const [results, setResults] = useState<UserSearchResult[]>([]);
     const [isSearching, setIsSearching] = useState(false);
@@ -51,7 +53,7 @@ export default function FriendSearch({ onSearchActive }: FriendSearchProps) {
         <div className="flex flex-col gap-4 w-full">
             <Input
                 type="text"
-                placeholder="Rechercher un joueur..."
+                placeholder={t("friends.search")}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 className="w-full !bg-white/10 !border-white/20 !text-white !rounded-xl !px-4 !py-3 focus:!outline-none focus-visible:!ring-2 focus-visible:!ring-pink-500 placeholder:!text-white/40"
@@ -60,7 +62,9 @@ export default function FriendSearch({ onSearchActive }: FriendSearchProps) {
             {query.length > 0 && (
                 <div className="flex flex-col gap-3">
                     {isSearching ? (
-                        <p className="text-white/60 text-sm">Recherche...</p>
+                        <p className="text-white/60 text-sm">
+                            {t("friends.searching")}
+                        </p>
                     ) : results.length > 0 ? (
                         results.map((user) => {
                             const isAlreadyFriend = friends.some(
@@ -92,7 +96,7 @@ export default function FriendSearch({ onSearchActive }: FriendSearchProps) {
                                             size="small"
                                             className="!bg-white/5 !border-white/10 !text-white/40 !rounded-lg"
                                         >
-                                            Ami
+                                            {t("friends.friend")}
                                         </Button>
                                     ) : isRequestSent ? (
                                         <Button
@@ -100,7 +104,7 @@ export default function FriendSearch({ onSearchActive }: FriendSearchProps) {
                                             size="small"
                                             className="!bg-slate-700 !text-slate-300 !rounded-lg"
                                         >
-                                            Attente
+                                            {t("friends.waiting")}
                                         </Button>
                                     ) : (
                                         <Button
@@ -110,7 +114,7 @@ export default function FriendSearch({ onSearchActive }: FriendSearchProps) {
                                             size="small"
                                             className="!bg-pink-600 hover:!bg-pink-700 !text-white !rounded-lg"
                                         >
-                                            Ajouter
+                                            {t("friends.add")}
                                         </Button>
                                     )}
                                 </div>
@@ -118,7 +122,7 @@ export default function FriendSearch({ onSearchActive }: FriendSearchProps) {
                         })
                     ) : (
                         <p className="text-white/60 text-sm">
-                            Aucun joueur trouvé.
+                            {t("friends.noResults")}
                         </p>
                     )}
                 </div>

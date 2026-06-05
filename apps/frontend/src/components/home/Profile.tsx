@@ -2,8 +2,10 @@ import { Card, Button } from "../ui";
 import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useChat } from "../../contexts/ChatContext";
+import { useTranslation } from "react-i18next";
 
 export function Profile({ className = "" }: { className?: string }) {
+    const { t } = useTranslation();
     const { user, logout } = useAuth();
     const { openPanel } = useChat();
     const navigate = useNavigate();
@@ -34,10 +36,10 @@ export function Profile({ className = "" }: { className?: string }) {
             </div>
             <div className="flex flex-col gap-3">
                 <Button color="green" onClick={openPanel} size="medium">
-                    Friends
+                    {t("home.profile.friends")}
                 </Button>
                 <Button color="red" onClick={handleLogout} size="medium">
-                    Logout
+                    {t("home.profile.logout")}
                 </Button>
             </div>
         </Card>

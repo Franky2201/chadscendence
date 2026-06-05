@@ -4,6 +4,7 @@ import type { LeaderboardType } from "../../services/users";
 import { useAuth } from "../../contexts/AuthContext";
 import { Card } from "../ui/index";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 export function Leaderboard({
     count,
@@ -16,7 +17,7 @@ export function Leaderboard({
     const [topUsers, setTopUsers] = useState<DisplayUser[]>([]);
     const [appendedCurrent, setAppendedCurrent] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(true);
-
+    const { t } = useTranslation();
     const { user } = useAuth();
 
     useEffect(() => {
@@ -72,7 +73,7 @@ export function Leaderboard({
         <Card
             className={className}
             contentClassName="justify-start"
-            title="Leaderboard"
+            title={t("home.leaderboard")}
         >
             <div className="flex flex-col w-full border-none">
                 {isLoading ? (
