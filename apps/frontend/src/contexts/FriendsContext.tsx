@@ -53,15 +53,12 @@ export function FriendsProvider({ children }: { children: ReactNode }) {
 
         try {
             setIsLoading(true);
-            const [
-                friendsData,
-                requestsData,
-                sentRequestsData,
-            ] = await Promise.all([
-                getFriends(),
-                getPendingRequests(),
-                getSentRequests(),
-            ]);
+            const [friendsData, requestsData, sentRequestsData] =
+                await Promise.all([
+                    getFriends(),
+                    getPendingRequests(),
+                    getSentRequests(),
+                ]);
             setFriends(friendsData);
             setRequests(requestsData);
             setSentRequests(sentRequestsData);
