@@ -11,27 +11,23 @@ GREEN    := \033[0;32m
 RED      := \033[0;31m
 NO_COLOR := \033[0m
 
-all: dev #replace with `prod` for final evaluation
+all: up
 
-# Development mode with hot-reloading (Bind Volumes)
-dev: check
-	@printf "$(GREEN)Starting in development mode (hot-reloading enabled)...$(NO_COLOR)\n"
-	@$(COMPOSE) up
-
-# Production mode for evaluation (Final build stage)
-prod: check
-	@printf "$(GREEN)Starting in production mode (evaluation)...$(NO_COLOR)\n"
-	@$(COMPOSE) up -d --build --remove-orphans
+# Start services in detached mode with hot-reloading (Bind Volumes)
+up: check
+	@printf "$(GREEN)Starting services in detached mode...$(NO_COLOR)\n"
+	@$(COMPOSE) up -d --remove-orphans
+	@printf "$(GREEN)Services started. Use 'make logs' to follow output or 'make down' to stop.$(NO_COLOR)\n"
 
 help:
 	@printf "$(GREEN)Available targets:$(NO_COLOR)\n"
-	@printf "  all (default)  Start in default mode\n"
-	@printf "  dev            Start in development mode (hot-reloading)\n"
-	@printf "  prod           Start in production mode (evaluation)\n"
+	@printf "  all (default)  Start the project\n"
+	@printf "  up             Start services (detached)\n"
+	@printf "  build          Build or rebuild images\n"
 	@printf "  down           Stop and remove containers\n"
 	@printf "  status         Check container status\n"
 	@printf "  logs           Follow container logs\n"
-	@printf "  re             Full rebuild and restart (dev)\n"
+	@printf "  re             Full clean and restart\n"
 	@printf "  fclean         Deep clean (removes images and volumes)\n"
 
 check:
@@ -41,8 +37,6 @@ check:
 
 build: check
 	@$(COMPOSE) build
-
-up: dev
 
 down:
 	@$(COMPOSE) down --remove-orphans
@@ -85,4 +79,4 @@ ci: check
 	@$(COMPOSE) down -v > /dev/null 2>&1
 	@printf "$(GREEN)--- CI passed ---$(NO_COLOR)\n"
 
-.PHONY: all dev prod help check build up down start stop restart status logs clean fclean sprune re ci
+.PHONY: all help check build up down start stop restart status logs clean fclean sprune re ci
