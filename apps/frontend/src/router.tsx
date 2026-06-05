@@ -4,7 +4,6 @@ import Home from "./pages/Home";
 import Games from "./pages/Games";
 import Profile from "./pages/Profile";
 import About from "./pages/About";
-import Settings from "./pages/Settings";
 
 export const router = createBrowserRouter([
     {
@@ -26,10 +25,6 @@ export const router = createBrowserRouter([
             {
                 path: "profile",
                 element: <Profile />,
-            },
-            {
-                path: "settings",
-                element: <Settings />,
             },
         ],
     },
