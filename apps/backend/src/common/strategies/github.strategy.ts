@@ -16,7 +16,7 @@ export class GithubStrategy extends PassportStrategy(Strategy, "github") {
                 "MISSING_CLIENT_SECRET",
             callbackURL:
                 configService.get<string>("GITHUB_CALLBACK_URL") ||
-                "http://localhost:3000/auth/github/callback",
+                `${configService.get<string>("BACKEND_URL", "http://localhost:3000")}/auth/github/callback`,
             scope: ["user:email"],
         });
     }

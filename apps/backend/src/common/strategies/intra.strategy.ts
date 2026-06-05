@@ -27,7 +27,7 @@ export class IntraStrategy extends PassportStrategy(Strategy as any, "42") {
                 "MISSING_CLIENT_SECRET",
             callbackURL:
                 configService.get<string>("INTRA_CALLBACK_URL") ||
-                "http://localhost:3000/auth/42/callback",
+                `${configService.get<string>("BACKEND_URL", "http://localhost:3000")}/auth/42/callback`,
             scope: ["public"],
         });
     }
