@@ -15,6 +15,16 @@ if [[ -z "$GAME_ID" ]]; then
     exit 1
 fi
 
+# Check for required tools
+if ! command -v docker > /dev/null 2>&1; then
+    echo "Error: 'docker' is required to run this script."
+    exit 1
+fi
+
+if ! command -v node > /dev/null 2>&1; then
+    echo "Warning: 'node' not found on host. Falling back to Docker for node-based operations."
+fi
+
 # 2. Validation on GAME_ID format (alphanumeric with hyphens as separators only)
 if [[ ! "$GAME_ID" =~ ^[a-z0-9]+(-[a-z0-9]+)*$ ]]; then
     echo "Error: GAME_ID must be lowercase alphanumeric with hyphens only as separators (e.g., 'pong-game')."
@@ -148,12 +158,18 @@ fi
 # 5. Automate root package.json update
 if [ -f "$ROOT_PACKAGE" ]; then
     echo "Updating root package.json scripts..."
-    PACKAGE_PATH="$ROOT_PACKAGE" GAME_ID="$GAME_ID" node -e "
+    UPDATE_PKG_CMD="
       const fs = require('fs');
-      const pkg = JSON.parse(fs.readFileSync(process.env.PACKAGE_PATH));
-      pkg.scripts[process.env.GAME_ID + ':dev'] = 'npm run start:dev -w ' + process.env.GAME_ID;
-      fs.writeFileSync(process.env.PACKAGE_PATH, JSON.stringify(pkg, null, 2) + '\n');
+      const pkgPath = process.env.PKG_PATH;
+      const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+      pkg.scripts['$GAME_ID:dev'] = 'npm run start:dev -w $GAME_ID';
+      fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n');
     "
+    if command -v node > /dev/null 2>&1; then
+        PKG_PATH="$ROOT_PACKAGE" node -e "$UPDATE_PKG_CMD"
+    else
+        docker run --rm -v "$ROOT_DIR:/app" -e PKG_PATH="/app/package.json" -w /app node:22-alpine node -e "$UPDATE_PKG_CMD"
+    fi
 fi
 
 # 6. Create UI Component in Frontend
@@ -170,6 +186,8 @@ if [ -f "$UI_TEMPLATE_SRC" ]; then
         -e "s/template-id/$GAME_ID/g" \
         -e "s/Template/$COMPONENT_NAME/g" \
         "$UI_COMPONENT_PATH"
+    # Ensure file is readable by others (avoids some lchown/sync issues)
+    chmod 644 "$UI_COMPONENT_PATH"
 fi
 
 # 7. Register Component in Games.tsx
@@ -177,14 +195,17 @@ GAMES_PAGE="$ROOT_DIR/apps/frontend/src/pages/Games.tsx"
 if [ -f "$GAMES_PAGE" ]; then
     echo "Registering game in $GAMES_PAGE..."
     # Add import (using node for safer multi-line/insertion logic)
-    GAME_ID="$GAME_ID" COMPONENT_NAME="$COMPONENT_NAME" GAMES_PAGE="$GAMES_PAGE" node -e "
+    REG_SCRIPT="
       const fs = require('fs');
-      let content = fs.readFileSync(process.env.GAMES_PAGE, 'utf8');
+      const gamesPagePath = process.env.GAMES_PAGE;
+      let content = fs.readFileSync(gamesPagePath, 'utf8');
+
+      const gameId = '$GAME_ID';
+      const componentName = '$COMPONENT_NAME';
 
       // Add import if not exists
-      const importLine = \`import \${process.env.COMPONENT_NAME}UI from \"../components/games/\${process.env.COMPONENT_NAME}UI\";\n\`;
+      const importLine = \`import \${componentName}UI from \"../components/games/\${componentName}UI\";\n\`;
       if (!content.includes(importLine)) {
-          // Find last import to preserve 'use client' or header safety
           const lastImportIndex = content.lastIndexOf('\nimport ');
           if (lastImportIndex !== -1) {
               const insertAt = content.indexOf('\n', lastImportIndex + 1) + 1;
@@ -197,27 +218,25 @@ if [ -f "$GAMES_PAGE" ]; then
       // Add switch case
       const switchMarker = 'const renderActiveGame = () => {';
       const switchIndex = content.indexOf(switchMarker);
-      if (switchIndex === -1) {
-          console.error('Could not find renderActiveGame in Games.tsx — skipping case registration.');
-          process.exit(1);
+      if (switchIndex !== -1) {
+          const switchBodyMarker = 'switch (activeGameId) {';
+          const switchBodyIndex = content.indexOf(switchBodyMarker, switchIndex);
+          if (switchBodyIndex !== -1) {
+              const caseBlock = \`            case \"\${gameId}\":\n                return <\${componentName}UI />;\n\`;
+              if (!content.includes(\`case \"\${gameId}\":\`)) {
+                  const index = switchBodyIndex + switchBodyMarker.length;
+                  content = content.slice(0, index) + '\n' + caseBlock + content.slice(index);
+              }
+          }
       }
 
-      const switchBodyMarker = 'switch (activeGameId) {';
-      const switchBodyIndex = content.indexOf(switchBodyMarker, switchIndex);
-      if (switchBodyIndex === -1) {
-          console.error('Could not find switch (activeGameId) in renderActiveGame — skipping.');
-          process.exit(1);
-      }
-
-      const caseBlock = \`            case \"\${process.env.GAME_ID}\":\n                return <\${process.env.COMPONENT_NAME}UI />;\n\`;
-
-      if (!content.includes(\`case \"\${process.env.GAME_ID}\":\`)) {
-          const index = switchBodyIndex + switchBodyMarker.length;
-          content = content.slice(0, index) + '\n' + caseBlock + content.slice(index);
-      }
-
-      fs.writeFileSync(process.env.GAMES_PAGE, content);
+      fs.writeFileSync(gamesPagePath, content);
     "
+    if command -v node > /dev/null 2>&1; then
+        GAMES_PAGE="$GAMES_PAGE" node -e "$REG_SCRIPT"
+    else
+        docker run --rm -v "$ROOT_DIR:/app" -e GAMES_PAGE="/app/apps/frontend/src/pages/Games.tsx" -w /app node:22-alpine node -e "$REG_SCRIPT"
+    fi
 fi
 
 echo "Game logic and frontend registration complete."
