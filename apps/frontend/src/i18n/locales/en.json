@@ -1,0 +1,16 @@
+{
+	"home": {
+		"play": {
+			"title": "Play",
+			"solo": "Solo",
+			"multiplayer": "Multiplayer",
+			"colorTheme": "Color theme"
+		},
+		"profile": {
+			"title": "Profil",
+			"friends": "Friends",
+			"logout": "Logout"
+		},
+		"leaderboard": "Leaderboard"
+	}
+}

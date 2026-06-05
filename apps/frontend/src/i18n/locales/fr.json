@@ -1,0 +1,16 @@
+{
+	"home": {
+		"play": {
+			"title": "Jouer",
+			"solo": "Solo",
+			"multiplayer": "Multijoueur",
+			"colorTheme": "Personnalisation"
+		},
+		"profile": {
+			"title": "Profil",
+			"friends": "Mes amis",
+			"logout": "Déconnexion"
+		},
+		"leaderboard": "Classement"
+	}
+}
