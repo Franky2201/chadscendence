@@ -45,7 +45,9 @@ export function Play({ className = "" }: { className?: string }) {
                     {t("home.play.multiplayer")}
                 </IconButton>
             </div>
-            <p className="text-xs uppercase text-center">{t("home.play.colorTheme")}</p>
+            <p className="text-xs uppercase text-center">
+                {t("home.play.colorTheme")}
+            </p>
             <div className="flex flex-wrap gap-x-1 gap-y-2 justify-center">
                 {colorThemes.map((cTheme) => (
                     <Button
@@ -58,7 +60,7 @@ export function Play({ className = "" }: { className?: string }) {
                             ...getItemColorStyle(cTheme.name),
                         }}
                     >
-                        { }
+                        {}
                     </Button>
                 ))}
             </div>

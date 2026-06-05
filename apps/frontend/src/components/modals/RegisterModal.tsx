@@ -29,8 +29,8 @@ export default function RegisterModal({ isOpen, onClose }: RegisterModalProps) {
             const userResponse = await getMe();
             login(userResponse);
             onClose();
-        } catch (error) {
-            toast.error(t("home.identification.register.error"))
+        } catch {
+            toast.error(t("home.identification.register.error"));
         }
     };
 
@@ -39,7 +39,10 @@ export default function RegisterModal({ isOpen, onClose }: RegisterModalProps) {
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
             onMouseDown={onClose}
         >
-            <Card className="max-w-md w-full" title={t("home.identification.register.title")}>
+            <Card
+                className="max-w-md w-full"
+                title={t("home.identification.register.title")}
+            >
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                     <Input
                         size="large"

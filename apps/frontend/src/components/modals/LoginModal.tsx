@@ -37,11 +37,16 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
             onClick={onClose}
         >
-            <Card className="max-w-md w-full" title={t("home.identification.login.title")}>
+            <Card
+                className="max-w-md w-full"
+                title={t("home.identification.login.title")}
+            >
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                     <Input
                         type="text"
-                        placeholder={t("home.identification.login.emailOrUsername")}
+                        placeholder={t(
+                            "home.identification.login.emailOrUsername",
+                        )}
                         value={identifier}
                         onChange={(e) => setIdentifier(e.target.value)}
                         className="w-full"

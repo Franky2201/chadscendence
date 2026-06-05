@@ -62,7 +62,9 @@ export default function FriendSearch({ onSearchActive }: FriendSearchProps) {
             {query.length > 0 && (
                 <div className="flex flex-col gap-3">
                     {isSearching ? (
-                        <p className="text-white/60 text-sm">{t("friends.searching")}</p>
+                        <p className="text-white/60 text-sm">
+                            {t("friends.searching")}
+                        </p>
                     ) : results.length > 0 ? (
                         results.map((user) => {
                             const isAlreadyFriend = friends.some(

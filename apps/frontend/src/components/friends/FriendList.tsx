@@ -15,9 +15,7 @@ export default function FriendList() {
     const { openChat, unreadCounts } = useChat();
 
     if (isLoading)
-        return (
-            <p className="text-white/60 text-[16px]">{t("loading")}</p>
-        );
+        return <p className="text-white/60 text-[16px]">{t("loading")}</p>;
 
     return (
         <div className="flex flex-col gap-6 w-full">
@@ -91,9 +89,7 @@ export default function FriendList() {
                     {t("friends.title")}
                 </h3>
                 {friends.length === 0 ? (
-                    <p className="text-white/40 italic">
-                        {t("friends.blank")}
-                    </p>
+                    <p className="text-white/40 italic">{t("friends.blank")}</p>
                 ) : (
                     friends.map((friend) => {
                         const unreadCount = unreadCounts[friend.id] || 0;
@@ -114,10 +110,11 @@ export default function FriendList() {
                                         <img
                                             src={friend.avatarUrl}
                                             alt={friend.username}
-                                            className={`w-[50px] h-[50px] rounded-full object-cover border-2 transition-colors ${friend.status === "online"
-                                                ? "border-green-500"
-                                                : "border-transparent"
-                                                }`}
+                                            className={`w-[50px] h-[50px] rounded-full object-cover border-2 transition-colors ${
+                                                friend.status === "online"
+                                                    ? "border-green-500"
+                                                    : "border-transparent"
+                                            }`}
                                         />
                                         {friend.status === "online" && (
                                             <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-[#1E1E1E] rounded-full"></span>
