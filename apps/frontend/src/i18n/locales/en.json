@@ -4,13 +4,48 @@
 			"title": "Play",
 			"solo": "Solo",
 			"multiplayer": "Multiplayer",
-			"colorTheme": "Color theme"
+			"colorTheme": "Customization"
+		},
+		"identification": {
+			"title": "Identification",
+			"login": {
+				"title": "Login",
+				"emailOrUsername": "Email or username",
+				"password": "Password",
+				"login": "Login",
+				"error": "Invalid credentials"
+			},
+			"register": {
+				"title": "Register",
+				"email": "Email",
+				"username": "Username",
+				"password": "Password",
+				"register": "Register",
+				"error": "Invalid credentials"
+			}
 		},
 		"profile": {
-			"title": "Profil",
+			"title": "Profile",
 			"friends": "Friends",
 			"logout": "Logout"
 		},
 		"leaderboard": "Leaderboard"
+	},
+	"friends": {
+		"title": "Friends",
+		"search": "Search a player",
+		"blank": "You don't have any friends yet.",
+		"noResults": "No player found.",
+		"message": "Your message",
+		"send": "Send",
+		"remove": "Remove",
+		"block": "Block",
+		"add": "Add",
+		"friend": "Friend",
+		"pendingRequests": "Pending requests",
+		"waiting": "Waiting",
+		"close": "Close",
+		"back": "Back",
+		"settings": "Settings"
 	}
 }

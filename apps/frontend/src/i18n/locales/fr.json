@@ -1,4 +1,5 @@
 {
+	"loading": "Chargement",
 	"home": {
 		"play": {
 			"title": "Jouer",
@@ -6,11 +7,46 @@
 			"multiplayer": "Multijoueur",
 			"colorTheme": "Personnalisation"
 		},
+		"identification": {
+			"title": "Identification",
+			"login": {
+				"title": "Connexion",
+				"emailOrUsername": "Email ou nom d'utilisateur",
+				"password": "Mot de passe",
+				"login": "Se connecter",
+				"error": "Identifiants invalides"
+			},
+			"register": {
+				"title": "Création de compte",
+				"email": "Email",
+				"username": "Nom d'utilisateur",
+				"password": "Mot de passe",
+				"register": "S'inscrire",
+				"error": "Identifiants invalides"
+			}
+		},
 		"profile": {
 			"title": "Profil",
 			"friends": "Mes amis",
 			"logout": "Déconnexion"
 		},
 		"leaderboard": "Classement"
+	},
+	"friends": {
+		"title": "Mes amis",
+		"search": "Rechercher un joueur",
+		"blank": "Vous n'avez pas encore d'amis.",
+		"noResults": "Aucun joueur trouvé.",
+		"message": "Votre message",
+		"send": "Envoyer",
+		"remove": "Retirer",
+		"block": "Bloquer",
+		"add": "Ajouter",
+		"friend": "Ami",
+		"pendingRequests": "Demandes en attente",
+		"waiting": "En attente",
+		"close": "Fermer",
+		"back": "Retour",
+		"settings": "Paramètres"
 	}
 }
