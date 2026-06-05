@@ -12,7 +12,6 @@ import { UpdateUserDto } from "../common/dto/users.dto";
 import { hash, compare } from "bcrypt";
 import { RanksService } from "../ranks/ranks.service";
 import { ConfigService } from "@nestjs/config";
-import { Block } from "../common/entities/block.entity";
 import { PresenceService } from "../presence/presence.service";
 import { Role } from "src/common/entities/role.entity";
 import { Permission } from "src/common/entities/permission.entity";
@@ -24,8 +23,6 @@ export class UsersService implements OnModuleInit {
         private readonly configService: ConfigService,
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
-        @InjectRepository(Block)
-        private readonly blockRepository: Repository<Block>,
         @InjectRepository(Role)
         private readonly roleRepository: Repository<Role>,
         @InjectRepository(Permission)
@@ -217,33 +214,10 @@ export class UsersService implements OnModuleInit {
     }
 
     async searchUsers(query: string, currentUserId: string) {
-        const blockedRelations = await this.blockRepository.find({
-            where: [
-                { blocker: { id: currentUserId } },
-                { blocked: { id: currentUserId } },
-            ],
-            relations: { blocker: true, blocked: true },
-        });
-
-        const excludedIds = blockedRelations.map((b) =>
-            b.blocker.id === currentUserId ? b.blocked.id : b.blocker.id,
-        );
-        excludedIds.push(currentUserId);
-
-        let queryBuilder = this.userRepository
+        const users = await this.userRepository
             .createQueryBuilder("user")
-            .where("user.username ILIKE :query", { query: `%${query}%` });
-
-        if (excludedIds.length > 0) {
-            queryBuilder = queryBuilder.andWhere(
-                "user.id NOT IN (:...excludedIds)",
-                {
-                    excludedIds,
-                },
-            );
-        }
-
-        const users = await queryBuilder
+            .where("user.username ILIKE :query", { query: `%${query}%` })
+            .andWhere("user.id != :currentUserId", { currentUserId })
             .select(["user.id", "user.username", "user.avatarUrl"])
             .take(10)
             .getMany();
