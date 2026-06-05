@@ -7,7 +7,7 @@ export interface RegisterData {
 }
 
 export interface LoginData {
-    email: string;
+    identifier: string;
     password: string;
 }
 
@@ -30,10 +30,12 @@ export const logout = async (): Promise<AuthResponse> => {
     return res.data;
 };
 
+const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+
 export const withIntra = (): void => {
-    window.location.href = "http://localhost:3000/auth/42";
+    window.location.href = `${backendUrl}/auth/42`;
 };
 
 export const withGithub = (): void => {
-    window.location.href = "http://localhost:3000/auth/github";
+    window.location.href = `${backendUrl}/auth/github`;
 };

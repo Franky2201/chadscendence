@@ -8,15 +8,17 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
     img?: string;
     borderRadius?: string;
     buttonClassName?: string;
+    imgClassName?: string;
 };
 
 export function IconButton({
     size = "medium",
-    color = "grey",
+    color = "white",
     img = "",
     borderRadius = "rounded-xl",
     children,
     className = "",
+    imgClassName = "w-15 h-15",
     style,
     ...props
 }: ButtonProps) {
@@ -25,13 +27,13 @@ export function IconButton({
             size={size}
             color={color}
             borderRadius={borderRadius}
-            className={`${className} flex flex-col justify-center`}
+            className={`${className} flex justify-center`}
             style={style}
             {...props}
         >
             <span
                 aria-hidden="true"
-                className="mb-1 block h-15 w-15 bg-current"
+                className={`block bg-current ${imgClassName}`}
                 style={{
                     maskImage: `url('/${img}')`,
                     WebkitMaskImage: `url('/${img}')`,

@@ -1,6 +1,5 @@
 import type { InputHTMLAttributes, ReactNode } from "react";
 import { useId } from "react";
-import { type ThemeName, useTheme } from "../../contexts/theme-context";
 
 type InputSize = "small" | "medium" | "large";
 
@@ -67,27 +66,6 @@ const iconToggleClasses =
 
 const iconImageClasses = "h-full w-full scale-150 transition";
 
-const iconUncheckedColorClasses: Record<ThemeName, string> = {
-    light: "filter brightness-0",
-    dark: "filter brightness-0 invert",
-};
-
-const iconCheckedColorClasses: Record<ThemeName, string> = {
-    light: "filter brightness-0 invert",
-    dark: "filter brightness-0",
-};
-
-const checkboxThemeClasses: Record<ThemeName, string> = {
-    light: "bg-zinc-200 text-zinc-900 border-zinc-300 \
-    ring-zinc-300 peer-checked:bg-zinc-900 \
-    peer-checked:text-zinc-50 peer-checked:border-zinc-900 \
-    peer-checked:ring-zinc-500",
-    dark: "bg-zinc-800 text-zinc-100 border-zinc-700 \
-    hover:text-white ring-zinc-500 peer-checked:bg-zinc-100 \
-    peer-checked:text-zinc-900 peer-checked:border-zinc-200 \
-    peer-checked:ring-zinc-400",
-};
-
 export function Checkbox({
     size = "medium",
     label = "",
@@ -97,7 +75,6 @@ export function Checkbox({
     id,
     ...props
 }: CheckboxProps) {
-    const { theme } = useTheme();
     const reactId = useId();
     const resolvedId = id ?? reactId;
     const containerClasses = ["inline-flex items-center", containerClassName]
@@ -109,7 +86,6 @@ export function Checkbox({
         iconInsetClasses[size],
         stateClasses,
         iconToggleClasses,
-        checkboxThemeClasses[theme],
         className,
     ]
         .filter(Boolean)
@@ -125,8 +101,8 @@ export function Checkbox({
     const resolvedLabelClasses = ["flex-1 text-center", labelClassName]
         .filter(Boolean)
         .join(" ");
-    const iconUncheckedClasses = `${iconImageClasses} ${iconUncheckedColorClasses[theme]}`;
-    const iconCheckedClasses = `${iconImageClasses} ${iconCheckedColorClasses[theme]}`;
+    const iconUncheckedClasses = `${iconImageClasses}`;
+    const iconCheckedClasses = `${iconImageClasses}`;
 
     return (
         <label htmlFor={resolvedId} className={containerClasses}>

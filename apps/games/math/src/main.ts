@@ -19,6 +19,8 @@ async function bootstrap() {
 
     app.useGlobalPipes(new ValidationPipe());
 
+    app.enableShutdownHooks();
+
     const httpPort = process.env.PORT ?? 3001;
     await app.startAllMicroservices();
     await app.listen(httpPort);

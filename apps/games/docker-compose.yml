@@ -16,7 +16,8 @@ services:
             redis:
                 condition: service_healthy
         volumes:
-            - ../../:/app
+            - ../../apps/games/math/src:/app/apps/games/math/src
+            - ../../libs/types/src:/app/libs/types/src
         networks:
             - ft_network
         restart: unless-stopped

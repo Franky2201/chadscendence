@@ -1,48 +1,65 @@
-import { Card, IconButton } from "../ui";
+import { Card, IconButton, Button } from "../ui";
 import { useModal } from "../../contexts/ModalContext";
-import { useAuth } from "../../contexts/AuthContext";
+import { useTheme } from "../../contexts/ThemeContext";
+import { getItemColorStyle, type ItemColor } from "../ui/unified";
+
+const colorThemes: { name: ItemColor }[] = [
+    { name: "grey" },
+    { name: "red" },
+    { name: "orange" },
+    { name: "yellow" },
+    { name: "green" },
+    { name: "blue" },
+    { name: "purple" },
+    { name: "pink" },
+    { name: "violet" },
+];
 
 export function Play({ className = "" }: { className?: string }) {
-    const { user } = useAuth();
+    const { theme, setTheme } = useTheme();
     const { openModal } = useModal();
 
     return (
         <Card
             className={className}
-            contentClassName={`flex flex-wrap justify-center items-center gap-3`}
+            contentClassName={`flex flex-col justify-center items-center gap-3`}
             title="Play"
+            description="More info"
             onClick={() => openModal("PLAY")}
         >
-            <IconButton className="h-24" size="small" img="game_party.svg">
-                Party
-            </IconButton>
-            <IconButton className="h-24" size="small" img="game_solo.svg">
-                Solo
-            </IconButton>
-            {user && (
-                <IconButton className="h-24" size="small" img="game_multi.svg">
-                    Multi
-                </IconButton>
-            )}
-            {user && (
-                <IconButton className="h-24" size="small" img="game_custom.svg">
-                    Custom
-                </IconButton>
-            )}
-            {user && (
+            <div className="flex flex-wrap justify-center gap-3">
                 <IconButton
-                    className="h-24"
-                    size="small"
-                    img="game_tournament.svg"
+                    color={theme}
+                    className="h-25 w-25 flex flex-col"
+                    img="game_solo.svg"
                 >
-                    Cup
+                    Solo
                 </IconButton>
-            )}
-            {user && (
-                <IconButton className="h-24" size="small" img="game_online.svg">
-                    Online
+                <IconButton
+                    color={theme}
+                    className="h-25 w-25 flex flex-col"
+                    img="game_party.svg"
+                >
+                    Multiplayer
                 </IconButton>
-            )}
+            </div>
+            <p className="text-xs uppercase text-center">Color theme</p>
+            <div className="flex flex-wrap gap-x-1 gap-y-2 justify-center">
+                {colorThemes.map((cTheme) => (
+                    <Button
+                        className="h-7 w-7 bg-[var(--ui-color)]"
+                        color={cTheme.name}
+                        key={cTheme.name}
+                        disabled={theme === cTheme.name}
+                        onClick={() => setTheme(cTheme.name)}
+                        style={{
+                            ...getItemColorStyle(cTheme.name),
+                        }}
+                    >
+                        {}
+                    </Button>
+                ))}
+            </div>
         </Card>
     );
 }

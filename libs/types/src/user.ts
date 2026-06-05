@@ -42,7 +42,7 @@ export interface User {
     bio?: string;
     status: UserStatus;
     accountStatus: AccountStatus;
-    role?: Role;
+    role: Role;
     score: number;
     rankId?: string;
     rank?: Rank;
