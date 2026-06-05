@@ -27,7 +27,10 @@ export function Profile({ className = "" }: { className?: string }) {
                 />
                 <div className="flex flex-col">
                     <p className="ml-2 text-3xl font-bold">{user?.username}</p>
-                    <p className="ml-2 text-2xl font-medium">{user?.role.name === 'User' ? '' : user?.role.name} {user?.score}</p>
+                    <p className="ml-2 text-2xl font-medium">
+                        {user?.role.name === "User" ? "" : user?.role.name}{" "}
+                        {user?.score}
+                    </p>
                 </div>
             </div>
             <div className="flex flex-col gap-3">
