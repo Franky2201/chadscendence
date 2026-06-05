@@ -53,10 +53,8 @@ const badges: { name: string; link: string; requires42?: boolean }[] = [
 
 const About: React.FC = () => {
     const { theme } = useTheme();
-    const { isLoading, user } = useAuth();
+    const { isLoading } = useAuth();
     const navigate = useNavigate();
-
-    const adminOr42 = Boolean(user?.intraId || user?.role?.name === "Admin");
 
     if (isLoading)
         return (
@@ -76,7 +74,6 @@ const About: React.FC = () => {
             >
                 <div className="flex flex-wrap gap-1 mb-3">
                     {badges.map((badge) => {
-                        if (badge.requires42 && !adminOr42) return null;
                         return (
                             <a
                                 href={badge.link}
@@ -163,33 +160,29 @@ const About: React.FC = () => {
                     ))}
                 </div>
 
-                {adminOr42 && (
-                    <>
-                        <p className="text-md font-semibold tracking-widest uppercase">
-                            Project Modules
-                        </p>
-                        <div className="p-3">
-                            <div className="flex flex-col gap-1">
-                                {modules.map((mod) => (
-                                    <div
-                                        key={mod.name}
-                                        className="border flex items-center justify-between rounded-xl px-1.5 py-1"
-                                    >
-                                        <span className="text-sm ml-1.5">
-                                            {mod.name}
-                                        </span>
-                                        <Badge
-                                            className="text-xs font-medium rounded-full ring-2"
-                                            color={`${mod.type === "Major" ? "red" : "green"}`}
-                                        >
-                                            {mod.type}
-                                        </Badge>
-                                    </div>
-                                ))}
+                <p className="text-md font-semibold tracking-widest uppercase">
+                    Project Modules
+                </p>
+                <div className="p-3">
+                    <div className="flex flex-col gap-1">
+                        {modules.map((mod) => (
+                            <div
+                                key={mod.name}
+                                className="border flex items-center justify-between rounded-xl px-1.5 py-1"
+                            >
+                                <span className="text-sm ml-1.5">
+                                    {mod.name}
+                                </span>
+                                <Badge
+                                    className="text-xs font-medium rounded-full ring-2"
+                                    color={`${mod.type === "Major" ? "red" : "green"}`}
+                                >
+                                    {mod.type}
+                                </Badge>
                             </div>
-                        </div>
-                    </>
-                )}
+                        ))}
+                    </div>
+                </div>
                 <p className="flex items-center justify-center text-sm uppercase tracking-widest mt-3">
                     Made with ❤️ at 42 Belgium
                 </p>

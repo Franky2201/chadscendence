@@ -2,14 +2,16 @@ import { useState, useRef, useEffect } from "react";
 import { useChat } from "../../contexts/ChatContext";
 import { useAuth } from "../../contexts/AuthContext";
 import { useFriends } from "../../contexts/FriendsContext";
+import { useTheme } from "../../contexts/ThemeContext";
 import { useNavigate } from "react-router-dom";
 import FriendSearch from "./FriendSearch";
 import FriendList from "./FriendList";
+import { Button } from "../ui";
 
 export default function ChatPanel() {
     const { user } = useAuth();
     const { friends, removeFriend, blockUser } = useFriends();
-    const navigate = useNavigate();
+    const { theme } = useTheme();
     const {
         isOpen,
         activeChat,
@@ -20,8 +22,10 @@ export default function ChatPanel() {
         loadMore,
         isLoading,
     } = useChat();
+    const navigate = useNavigate();
     const [inputValue, setInputValue] = useState("");
     const [isSearching, setIsSearching] = useState(false);
+    const [showSettings, setShowSettings] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -130,22 +134,38 @@ export default function ChatPanel() {
                                     {activeChat.username}
                                 </span>
                             </div>
-                            <div className="flex gap-2 items-center">
+                            <div className="relative flex items-center">
                                 <button
-                                    onClick={handleRemoveFriend}
-                                    className="text-red-400/70 hover:text-red-400 text-sm font-medium transition-colors"
-                                    title="Retirer des amis"
+                                    onClick={() => setShowSettings(!showSettings)}
+                                    className="text-white/60 hover:text-white p-2 rounded-full hover:bg-white/10 transition-colors"
+                                    title="Paramètres"
                                 >
-                                    ✕ Retirer
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                                    </svg>
                                 </button>
-                                <span className="text-white/20">|</span>
-                                <button
-                                    onClick={handleBlockUser}
-                                    className="text-slate-400/70 hover:text-red-600 text-sm font-medium transition-colors"
-                                    title="Bloquer l'utilisateur"
-                                >
-                                    Ø Bloquer
-                                </button>
+                                {showSettings && (
+                                    <>
+                                        <div
+                                            className="fixed inset-0 z-40"
+                                            onClick={() => setShowSettings(false)}
+                                        />
+                                        <div className="absolute right-0 top-full mt-1 w-48 bg-[#1e1e23] rounded-xl shadow-xl py-2 border border-white/10 z-50 overflow-hidden">
+                                            <button
+                                                onClick={() => { handleRemoveFriend(); setShowSettings(false); }}
+                                                className="w-full text-left px-4 py-2.5 text-red-400 hover:bg-white/5 text-sm font-medium transition-colors flex items-center gap-2"
+                                            >
+                                                <span>✕</span> Retirer l'ami
+                                            </button>
+                                            <button
+                                                onClick={() => { handleBlockUser(); setShowSettings(false); }}
+                                                className="w-full text-left px-4 py-2.5 text-red-500 hover:bg-white/5 text-sm font-medium transition-colors flex items-center gap-2"
+                                            >
+                                                <span>Ø</span> Bloquer
+                                            </button>
+                                        </div>
+                                    </>
+                                )}
                             </div>
                         </div>
 
@@ -162,12 +182,14 @@ export default function ChatPanel() {
                                         className={`flex flex-col max-w-[80%] ${isMe ? "self-end items-end" : "self-start items-start"}`}
                                     >
                                         <div
-                                            className={`px-4 py-2 rounded-2xl ${
-                                                isMe
-                                                    ? "bg-pink-600 text-white rounded-br-sm"
-                                                    : "bg-white/10 text-white/90 rounded-bl-sm border border-white/5"
-                                            }`}
-                                            style={{ wordBreak: "break-word" }}
+                                            className={`px-4 py-2 rounded-2xl ${isMe
+                                                ? "bg-slate-600 text-white rounded-br-sm"
+                                                : `text-${theme === "white" ? "black" : "white"} rounded-bl-sm`
+                                                }`}
+                                            style={{
+                                                wordBreak: "break-word",
+                                                backgroundColor: isMe ? undefined : `var(--color-${theme})`
+                                            }}
                                         >
                                             {msg.content}
                                         </div>
@@ -201,15 +223,16 @@ export default function ChatPanel() {
                                         setInputValue(e.target.value)
                                     }
                                     placeholder="Votre message..."
-                                    className="flex-1 bg-white/5 border border-white/10 text-white rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-pink-500 transition-all placeholder:text-white/40"
+                                    className="flex-1 bg-white/5 border border-white text-white rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white transition-all placeholder:text-white/40"
                                 />
-                                <button
+                                <Button
                                     type="submit"
                                     disabled={!inputValue.trim()}
-                                    className="bg-pink-600 disabled:bg-pink-600/50 hover:bg-pink-700 text-white font-bold py-3 px-6 rounded-xl transition-colors"
+                                    color={theme}
+                                    size="medium"
                                 >
                                     Envoyer
-                                </button>
+                                </Button>
                             </div>
                         </form>
                     </div>
