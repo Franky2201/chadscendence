@@ -39,19 +39,25 @@ export class AuthService {
     }
 
     async login({ authlogin }: { authlogin: LoginUserDto }) {
-        const { email, password } = authlogin;
+        const { identifier, password } = authlogin;
 
         const user = await this.userRepository
             .createQueryBuilder("user")
-            .where("user.email = :email", { email })
+            .where("user.email = :identifier OR user.username = :identifier", {
+                identifier,
+            })
             .addSelect("user.password")
             .getOne();
 
-        if (!user || !user.password)
-            throw new UnauthorizedException("Account not found");
+        if (!user || !user.password) {
+            throw new UnauthorizedException("Invalid credentials");
+        }
 
-        const isValid = await bcrypt.compare(password, user.password);
-        if (!isValid) throw new UnauthorizedException("Invalid password");
+        const isValidPassword = await bcrypt.compare(password, user.password);
+
+        if (!isValidPassword) {
+            throw new UnauthorizedException("Invalid credentials");
+        }
 
         return this.generateTokens(user);
     }
@@ -73,7 +79,7 @@ export class AuthService {
         const hashedPassword = await bcrypt.hash(password, 10);
         const defaultRank = await this.ranksService.getRankForScore(0);
         const defaultRole = await this.roleRepository.findOne({
-            where: { name: "USER" },
+            where: { name: "User" },
         });
 
         if (!defaultRole)
@@ -137,7 +143,7 @@ export class AuthService {
         const finalUsername = await this.generateUniqueUsername(safeUsername);
         const defaultRank = await this.ranksService.getRankForScore(0);
         const defaultRole = await this.roleRepository.findOne({
-            where: { name: "USER" },
+            where: { name: "User" },
         });
 
         if (!defaultRole)

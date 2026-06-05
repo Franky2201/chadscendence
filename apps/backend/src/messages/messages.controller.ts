@@ -19,6 +19,11 @@ import * as types from "@chad/types";
 export class MessagesController {
     constructor(private readonly messagesService: MessagesService) {}
 
+    @Get("unread-counts")
+    getUnreadCounts(@GetUser() user: types.JwtPayload) {
+        return this.messagesService.getUnreadCounts(user.sub);
+    }
+
     @Get(":friendId")
     getConversation(
         @GetUser() user: types.JwtPayload,

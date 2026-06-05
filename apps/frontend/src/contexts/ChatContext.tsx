@@ -11,6 +11,7 @@ import {
     getConversation,
     sendMessage as apiSendMessage,
     markAsRead,
+    getUnreadCounts,
 } from "../services/message";
 import { useAuth } from "./AuthContext";
 import { socket } from "../services/socket";
@@ -26,6 +27,9 @@ interface ChatContextType {
     activeChat: ActiveChat | null;
     messages: Message[];
     isLoading: boolean;
+    unreadCounts: Record<string, number>;
+    openPanel: () => void;
+    closePanel: () => void;
     openChat: (friend: ActiveChat) => void;
     closeChat: () => void;
     sendMessage: (content: string) => Promise<void>;
@@ -42,6 +46,18 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     const [page, setPage] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
+    const [unreadCounts, setUnreadCounts] = useState<Record<string, number>>(
+        {},
+    );
+
+    useEffect(() => {
+        if (!user) {
+            Promise.resolve().then(() => setUnreadCounts({}));
+            return;
+        }
+
+        getUnreadCounts().then(setUnreadCounts).catch(console.error);
+    }, [user]);
 
     const fetchMessages = useCallback(
         async (friendId: string, pageNum: number, append: boolean = false) => {
@@ -61,18 +77,33 @@ export function ChatProvider({ children }: { children: ReactNode }) {
         [],
     );
 
+    const openPanel = () => {
+        setIsOpen(true);
+    };
+
+    const closePanel = () => {
+        setIsOpen(false);
+        setActiveChat(null);
+        setMessages([]);
+    };
+
     const openChat = (friend: ActiveChat) => {
-        console.log("Opening chat with", friend);
         setActiveChat(friend);
         setIsOpen(true);
         setPage(1);
         setHasMore(true);
+        setUnreadCounts((prev) => {
+            if (prev[friend.id]) {
+                const newCounts = { ...prev };
+                delete newCounts[friend.id];
+                return newCounts;
+            }
+            return prev;
+        });
         fetchMessages(friend.id, 1);
-        console.log("Messages loaded", messages);
     };
 
     const closeChat = () => {
-        setIsOpen(false);
         setActiveChat(null);
         setMessages([]);
     };
@@ -95,12 +126,17 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     };
 
     useEffect(() => {
-        if (!user || !isOpen || !activeChat) return;
+        if (!user) return;
 
         const handleNewMessage = (message: Message) => {
-            if (message.sender.id === activeChat.id) {
+            if (activeChat && message.sender.id === activeChat.id) {
                 setMessages((prev) => [message, ...prev]);
                 markAsRead(activeChat.id).catch(console.error);
+            } else {
+                setUnreadCounts((prev) => ({
+                    ...prev,
+                    [message.sender.id]: (prev[message.sender.id] || 0) + 1,
+                }));
             }
         };
 
@@ -109,7 +145,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
         return () => {
             socket.off("new_message", handleNewMessage);
         };
-    }, [user, isOpen, activeChat]);
+    }, [user, activeChat]);
 
     return (
         <ChatContext.Provider
@@ -118,6 +154,9 @@ export function ChatProvider({ children }: { children: ReactNode }) {
                 activeChat,
                 messages,
                 isLoading,
+                unreadCounts,
+                openPanel,
+                closePanel,
                 openChat,
                 closeChat,
                 sendMessage,
