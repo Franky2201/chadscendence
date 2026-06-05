@@ -39,13 +39,6 @@ export default function ProfilePage() {
 
     return (
         <Window className="relative min-h-screen w-full overflow-hidden bg-cover bg-center">
-            <header className="justify-self-center">
-                <img
-                    className="select-none w-auto drop-shadow-lg max-h-30 mb-8"
-                    src="/game_banner.png"
-                    alt="GameLogo"
-                />
-            </header>
             <Card
                 className="relative max-w-250 mx-auto p-6"
                 title="Profile"

@@ -43,12 +43,12 @@ export function Card({
     const classes = [
         `rounded-3xl transition-colors duration-300 ease-in-out 
 		justify-center bg-black/60 backdrop-blur-sm
-		${color === "grey" ? "border-none" : "border-[var(--ui-color)]"}
+		bg-white/5 backdrop-blur-[8px] border-1 border-white/20
 		${sizeClasses[size]} \
 		${className}`,
     ];
     const clickable = props.href || props.onClick;
-    const commonLinkClass = ` shrink-0 whitespace-nowrap self-start font-semibold
+    const commonLinkClass = `shrink-0 whitespace-nowrap self-start font-semibold
 		${clickable ? "hover:underline hover:cursor-pointer" : ""} text-[var(--ui-color)]`;
     return (
         <div
@@ -58,13 +58,12 @@ export function Card({
             style={{
                 ...getItemMixedColorStyle(color, "--alt-color"),
                 ...getItemColorStyle(color),
-                boxShadow: "0px 0px 8px 0px var(--alt-color)",
             }}
         >
             {title && (
                 <div className="flex w-full items-start gap-2">
                     <Title
-                        className={`min-w-0 flex-1 mb-2 ${titleSizeClasses[size]}`}
+                        className={`min-w-0 flex-1 ${titleSizeClasses[size]}`}
                         color={color}
                     >
                         {title}
@@ -86,7 +85,11 @@ export function Card({
                         ))}
                 </div>
             )}
-            <div className={`w-full h-full p-2 ${contentClassName} `}>
+            <hr
+                className={`w-full mt-2 mb-4 text-[var(--ui-color)]/80`}
+                style={{ ...getItemColorStyle(color) }}
+            />
+            <div className={`w-full h-full ${contentClassName} `}>
                 {children}
             </div>
         </div>

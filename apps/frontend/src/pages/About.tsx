@@ -3,6 +3,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { Card, Window, Badge } from "../components/ui";
 import { developers } from "../contexts/AboutContext";
 import { type ItemColor } from "../components/ui/unified";
+import { useTheme } from "../contexts/ThemeContext";
 
 const stackLayers = [
     {
@@ -51,6 +52,7 @@ const badges: { name: string; link: string; requires42?: boolean }[] = [
 ];
 
 const About: React.FC = () => {
+    const { theme } = useTheme();
     const { isLoading, user } = useAuth();
     const navigate = useNavigate();
 
@@ -66,15 +68,10 @@ const About: React.FC = () => {
         );
 
     return (
-        <Window className="relative min-h-screen w-full overflow-hidden bg-cover bg-center">
-            <header className="justify-self-center">
-                <img
-                    className="select-none w-auto drop-shadow-lg max-h-30 mb-8"
-                    src="/game_banner.png"
-                    alt="GameLogo"
-                />
-            </header>
-
+        <Window
+            color={theme}
+            className="relative min-h-screen w-full overflow-hidden bg-cover bg-center"
+        >
             <Card
                 className="relative max-w-250 mx-auto p-6"
                 title="Who's is the Chad ?"

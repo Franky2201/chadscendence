@@ -1,7 +1,6 @@
 import type { InputHTMLAttributes } from "react";
 import type { ItemColor, ItemSize } from "./unified";
 import { getItemColorStyle } from "./unified";
-import { type ThemeName, useTheme } from "../../contexts/ThemeContext";
 
 type CheckboxProps = Omit<InputHTMLAttributes<HTMLInputElement>, "size"> & {
     size?: ItemSize;
@@ -21,10 +20,6 @@ const spanSizeClasses: Record<ItemSize, string> = {
     large: "text-lg",
 };
 
-const themeClasses: Record<ThemeName, string> = {
-    light: "after:bg-neutral-200",
-    dark: "after:bg-neutral-800",
-};
 
 export function Toggle({
     size = "medium",
@@ -34,16 +29,14 @@ export function Toggle({
     style,
     ...props
 }: CheckboxProps) {
-    const { theme } = useTheme();
     const topClass = [
         className,
         'relative peer peer-checked:after:border-buffer after:content-[""] \
-    after:absolute after:rounded-full after:top-[2px] active:scale-95 \
-    after:start-[2px] after:transition-all after:duration-100 transition-all \
-    duration-100 rounded-full after:translate-y-[2px] after:translate-x-[2px] \
-	peer-checked:bg-[color:var(--ui-color)] bg-[color:var(--color-grey)] \
-	transition-[background-color,color,border-color,box-shadow,transform] ease-in-out',
-        themeClasses[theme],
+    	after:absolute after:rounded-full after:top-[2px] active:scale-95 \
+    	after:start-[2px] after:transition-all after:duration-100 transition-all \
+    	duration-100 rounded-full after:translate-y-[2px] after:translate-x-[2px] \
+		peer-checked:bg-[color:var(--ui-color)] bg-[color:var(--color-grey)] \
+		transition-[background-color,color,border-color,box-shadow,transform] ease-in-out',
         sizeClasses[size],
     ]
         .filter(Boolean)

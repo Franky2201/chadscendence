@@ -23,16 +23,16 @@ export default function HomePage() {
             </header>
             <div
                 className={`grid w-full max-w-300 justify-self-center grid-cols-1 
-					md:grid-cols-2 ${user ? " lg:grid-cols-3" : "lg:grid-cols-2"} gap-3`}
+					md:grid-cols-3 "lg:grid-cols-3" gap-3`}
             >
-                {!user && <board.Identification />}
                 <board.Play />
-                <board.Settings />
+                {!user && <board.Identification />}
                 {user && <board.Profile />}
-                {user && <board.Leaderboard count={5} />}
-                {user && <board.Friends />}
+                <board.Leaderboard count={10} className="row-span-2" />
+                {/* <board.Settings /> */}
+                {/* user && <board.Friends className="col-span-2" /> */}
                 {/* user && <board.Clan /> */}
-                {user && <board.Achievements />}
+                {/* user && <board.Achievements /> */}
                 {/* <board.About className="md:col-span-2" /> */}
             </div>
         </Window>

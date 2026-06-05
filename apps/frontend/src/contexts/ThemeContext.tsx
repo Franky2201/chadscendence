@@ -8,24 +8,41 @@ import {
     useState,
 } from "react";
 
-export type ThemeName = "light" | "dark";
+export type ThemeName =
+    | "grey"
+    | "red"
+    | "orange"
+    | "yellow"
+    | "green"
+    | "blue"
+    | "purple"
+    | "pink"
+    | "violet"
+    | "white"
+    | "black";
+
+const themeList: ThemeName[] = [
+    "grey",
+    "red",
+    "orange",
+    "yellow",
+    "green",
+    "blue",
+    "purple",
+    "pink",
+    "violet",
+    "white",
+    "black",
+];
+
+const themeStorageKey = "theme";
 
 interface ThemeContextType {
     theme: ThemeName;
     setTheme: (theme: ThemeName) => void;
-    toggleTheme: () => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
-
-const themeOrder: ThemeName[] = ["light", "dark"];
-
-function getNextTheme(theme: ThemeName): ThemeName {
-    const currentIndex = themeOrder.indexOf(theme);
-    const nextIndex =
-        currentIndex === -1 ? 0 : (currentIndex + 1) % themeOrder.length;
-    return themeOrder[nextIndex];
-}
 
 interface ThemeProviderProps {
     children: ReactNode;
@@ -34,27 +51,31 @@ interface ThemeProviderProps {
 
 export function ThemeProvider({
     children,
-    defaultTheme = "light",
+    defaultTheme = "grey",
 }: ThemeProviderProps) {
     const [theme, setTheme] = useState<ThemeName>(() => {
-        const stored = localStorage.getItem("theme");
-        if (stored === "light" || stored === "dark") {
-            return stored as ThemeName;
+        if (typeof window === "undefined") {
+            return defaultTheme;
         }
-        return defaultTheme;
+
+        const stored = window.localStorage.getItem(themeStorageKey);
+        return (
+            themeList.includes(stored as ThemeName) ? stored : defaultTheme
+        ) as ThemeName;
     });
 
     useEffect(() => {
-        localStorage.setItem("theme", theme);
+        document.documentElement.dataset.theme = theme;
+        window.localStorage.setItem(themeStorageKey, theme);
     }, [theme]);
 
-    const toggleTheme = useCallback(() => {
-        setTheme((current) => getNextTheme(current));
+    const updateTheme = useCallback((nextTheme: ThemeName) => {
+        setTheme(nextTheme);
     }, []);
 
     const value = useMemo(
-        () => ({ theme, setTheme, toggleTheme }),
-        [theme, toggleTheme],
+        () => ({ theme, setTheme: updateTheme }),
+        [theme, updateTheme],
     );
 
     return (

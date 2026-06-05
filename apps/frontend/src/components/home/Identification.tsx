@@ -22,13 +22,13 @@ export function Identification({ className = "" }: { className?: string }) {
                 <IconButton
                     className="w-full h-10 bg-[var(--color-github)]"
                     img="github_logo.svg"
-                    imgClassName="bg-white"
+                    imgClassName="w-full h-full bg-white"
                     onClick={withGithub}
                 ></IconButton>
                 <IconButton
                     className="w-full h-10 bg-[var(--color-github)]"
                     img="42_logo.svg"
-                    imgClassName="translate-x-[-1px] bg-white"
+                    imgClassName="w-full h-full translate-x-[-1px] bg-white"
                     onClick={withIntra}
                 ></IconButton>
             </div>

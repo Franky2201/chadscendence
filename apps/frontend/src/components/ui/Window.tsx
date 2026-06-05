@@ -1,8 +1,8 @@
 import { type ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { type ThemeName, useTheme } from "../../contexts/ThemeContext";
 import { type ItemColor } from "./unified";
 import AnimatedBackground from "./AnimatedBackground";
+import { useTheme } from "../../contexts/ThemeContext";
 
 type WindowProps = {
     children: ReactNode;
@@ -10,17 +10,7 @@ type WindowProps = {
     speed?: number;
     angle?: number;
     size?: number;
-    color?: ItemColor;
-};
-
-const footerThemeClasses: Record<ThemeName, string> = {
-    light: "text-neutral-500",
-    dark: "text-neutral-400",
-};
-
-const footerLinkClasses: Record<ThemeName, string> = {
-    light: "text-neutral-700 hover:text-neutral-950",
-    dark: "text-neutral-300 hover:text-white",
+    color?: ItemColor | null;
 };
 
 export function Window({
@@ -29,20 +19,20 @@ export function Window({
     speed = 3,
     angle = 45,
     size = 30,
-    color = "grey",
+    color = null,
 }: WindowProps) {
     const { theme } = useTheme();
     const location = useLocation();
     const classes = `min-h-screen relative overflow-hidden font-sans p-8 transition-all \
 		duration-500 ease-in-out ${className}`;
     const footerClasses = `flex justify-center mt-4 items-center text-sm gap-1 \
-		transition-colors duration-300 ease-in-out ${footerThemeClasses[theme]}`;
-    const linkClasses = `transition-colors duration-300 ease-in-out hover:underline \
-		uppercase font-semibold text-center ${footerLinkClasses[theme]}`;
+		transition-colors duration-50 ease-in-out`;
+    const linkClasses = `transition-all duration-300 ease-in-out \
+		uppercase text-center hover:font-bold`;
     return (
         <div className={classes}>
             <AnimatedBackground
-                color={color}
+                color={color === null ? theme : color}
                 speed={speed}
                 angle={angle}
                 size={size}

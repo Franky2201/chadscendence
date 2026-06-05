@@ -12,7 +12,7 @@ type BadgeProps = HTMLAttributes<HTMLSpanElement> & {
 export type BadgeType = "default" | "shine" | "gradient" | "animated";
 
 const defaultStyles: Record<string, string> = {
-    "--badge-fg": "color-mix(in srgb, var(--ui-color) 20%, var(--color-black))",
+    "--badge-fg": "color-mix(in srgb, var(--ui-color) 50%, var(--color-black))",
     "--badge-border":
         "color-mix(in srgb, var(--ui-color) 70%, var(--color-black))",
 };
@@ -50,7 +50,7 @@ export function Badge({
     const color2Style = getItemColorStyle(color2, "--ui-color2");
     return (
         <span
-            className={`rounded-lg ${type === "default" ? "border-2" : ""} px-2 py-1 shadow-sm font-lexend 
+            className={`rounded-lg ${type === "default" ? "border-2" : ""} px-2 py-1 shadow-sm font-mona-sans
 				border-[var(--badge-border)] bg-[color:var(--ui-color)] 
 				text-[var(--badge-fg)] ${className} ${color === "black" ? "text-white" : ""}`}
             {...props}

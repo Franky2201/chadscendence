@@ -93,7 +93,7 @@ export function Leaderboard({
 
                             <div className="flex flex-row items-center justify-between w-full">
                                 <div className="flex flex-row items-center min-w-0">
-                                    <span className="text-xl mr-4 w-5 text-right font-energy">
+                                    <span className="text-xl mr-4 w-5 text-right font-mona-sans">
                                         {item.rank ?? index + 1}.
                                     </span>
 
@@ -108,7 +108,7 @@ export function Leaderboard({
                                     </span>
                                 </div>
 
-                                <span className="text-lg font-energy">
+                                <span className="text-lg font-mona-sans">
                                     {item.score}
                                 </span>
                             </div>
