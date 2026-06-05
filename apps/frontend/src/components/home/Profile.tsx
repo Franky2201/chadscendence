@@ -27,12 +27,11 @@ export function Profile({ className = "" }: { className?: string }) {
                     className="rounded-xl w-20 h-20 border"
                     src={user ? user.avatarUrl : "/avatar.jpg"}
                 />
-                <div className="flex flex-col">
-                    <p className="ml-2 text-3xl font-bold">{user?.username}</p>
-                    <p className="ml-2 text-2xl font-medium">
-                        {user?.role.name === "User" ? "" : user?.role.name}{" "}
-                        {user?.score}
-                    </p>
+                <div className="flex flex-col ml-2">
+                    <div className="flex flex-wrap gap-2">
+                        <p className="text-3xl font-bold">{user?.username}</p>
+                    </div>
+                    Rating : {user?.score}
                 </div>
             </div>
             <div className="flex flex-col gap-3">

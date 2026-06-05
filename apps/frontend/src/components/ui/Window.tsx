@@ -16,7 +16,7 @@ type WindowProps = {
 export function Window({
     children,
     className = "",
-    speed = 3,
+    speed = 8,
     angle = 45,
     size = 30,
     color = null,

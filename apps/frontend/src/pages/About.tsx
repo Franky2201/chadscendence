@@ -108,8 +108,9 @@ const About: React.FC = () => {
                                     color={theme}
                                     color2="white"
                                     type="translation"
-                                    freq={2}
-                                    angle={320}
+                                    freq="3"
+                                    rgb={true}
+                                    angle="320"
                                     className="flex rounded-xl w-64 border-1 hover:ring-2"
                                 >
                                     <div className="flex flex-wrap">
