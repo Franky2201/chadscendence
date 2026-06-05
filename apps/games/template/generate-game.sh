@@ -161,14 +161,15 @@ if [ -f "$ROOT_PACKAGE" ]; then
     UPDATE_PKG_CMD="
       const fs = require('fs');
       const pkgPath = process.env.PKG_PATH;
+      const gameId = process.env.GAME_ID;
       const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
-      pkg.scripts['$GAME_ID:dev'] = 'npm run start:dev -w $GAME_ID';
+      pkg.scripts[gameId + ':dev'] = 'npm run start:dev -w ' + gameId;
       fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n');
     "
     if command -v node > /dev/null 2>&1; then
-        PKG_PATH="$ROOT_PACKAGE" node -e "$UPDATE_PKG_CMD"
+        PKG_PATH="$ROOT_PACKAGE" GAME_ID="$GAME_ID" node -e "$UPDATE_PKG_CMD"
     else
-        docker run --rm -v "$ROOT_DIR:/app" -e PKG_PATH="/app/package.json" -w /app node:22-alpine node -e "$UPDATE_PKG_CMD"
+        docker run --rm -u "$(id -u):$(id -g)" -v "$ROOT_DIR:/app" -e PKG_PATH="/app/package.json" -e GAME_ID="$GAME_ID" -w /app node:22-alpine node -e "$UPDATE_PKG_CMD"
     fi
 fi
 
@@ -186,7 +187,7 @@ if [ -f "$UI_TEMPLATE_SRC" ]; then
         -e "s/template-id/$GAME_ID/g" \
         -e "s/Template/$COMPONENT_NAME/g" \
         "$UI_COMPONENT_PATH"
-    # Ensure file is readable by others (avoids some lchown/sync issues)
+    # Ensure file is readable and owned by the user if created via docker later
     chmod 644 "$UI_COMPONENT_PATH"
 fi
 
@@ -198,44 +199,59 @@ if [ -f "$GAMES_PAGE" ]; then
     REG_SCRIPT="
       const fs = require('fs');
       const gamesPagePath = process.env.GAMES_PAGE;
+      const gameId = process.env.GAME_ID;
+      const componentName = process.env.COMPONENT_NAME;
       let content = fs.readFileSync(gamesPagePath, 'utf8');
-
-      const gameId = '$GAME_ID';
-      const componentName = '$COMPONENT_NAME';
 
       // Add import if not exists
       const importLine = \`import \${componentName}UI from \"../components/games/\${componentName}UI\";\n\`;
       if (!content.includes(importLine)) {
-          const lastImportIndex = content.lastIndexOf('\nimport ');
-          if (lastImportIndex !== -1) {
-              const insertAt = content.indexOf('\n', lastImportIndex + 1) + 1;
+          const lastImportMatch = content.match(/\\nimport\\s+.*\\n/g);
+          if (lastImportMatch) {
+              const lastImportIndex = content.lastIndexOf(lastImportMatch[lastImportMatch.length - 1]);
+              const insertAt = content.indexOf('\\n', lastImportIndex + 1) + 1;
               content = content.slice(0, insertAt) + importLine + content.slice(insertAt);
           } else {
               content = importLine + content;
           }
       }
 
-      // Add switch case
-      const switchMarker = 'const renderActiveGame = () => {';
-      const switchIndex = content.indexOf(switchMarker);
-      if (switchIndex !== -1) {
-          const switchBodyMarker = 'switch (activeGameId) {';
-          const switchBodyIndex = content.indexOf(switchBodyMarker, switchIndex);
-          if (switchBodyIndex !== -1) {
-              const caseBlock = \`            case \"\${gameId}\":\n                return <\${componentName}UI />;\n\`;
-              if (!content.includes(\`case \"\${gameId}\":\`)) {
-                  const index = switchBodyIndex + switchBodyMarker.length;
-                  content = content.slice(0, index) + '\n' + caseBlock + content.slice(index);
-              }
-          }
+      // Add switch case with robust regex
+      const switchMarker = /const\\s+renderActiveGame\\s*=\\s*\\(\\)\\s*=>\\s*\\{/;
+      const switchMatch = content.match(switchMarker);
+      if (!switchMatch) {
+          console.error('Error: Could not find renderActiveGame function in Games.tsx');
+          process.exit(1);
+      }
+
+      const switchBodyMarker = /switch\\s*\\(\\s*activeGameId\\s*\\)\\s*\\{/;
+      const restOfContent = content.slice(switchMatch.index);
+      const bodyMatch = restOfContent.match(switchBodyMarker);
+      if (!bodyMatch) {
+          console.error('Error: Could not find switch (activeGameId) block in Games.tsx');
+          process.exit(1);
+      }
+
+      const bodyIndex = switchMatch.index + bodyMatch.index + bodyMatch[0].length;
+      const caseBlock = \`\\n            case \"\${gameId}\":\\n                return <\${componentName}UI />;\`;
+
+      if (!content.includes(\`case \"\${gameId}\":\`)) {
+          content = content.slice(0, bodyIndex) + caseBlock + content.slice(bodyIndex);
+          console.log(\`Successfully registered case \"\${gameId}\"\`);
+      } else {
+          console.log(\`Case \"\${gameId}\" already exists, skipping.\`);
       }
 
       fs.writeFileSync(gamesPagePath, content);
     "
     if command -v node > /dev/null 2>&1; then
-        GAMES_PAGE="$GAMES_PAGE" node -e "$REG_SCRIPT"
+        GAMES_PAGE="$GAMES_PAGE" GAME_ID="$GAME_ID" COMPONENT_NAME="$COMPONENT_NAME" node -e "$REG_SCRIPT"
     else
-        docker run --rm -v "$ROOT_DIR:/app" -e GAMES_PAGE="/app/apps/frontend/src/pages/Games.tsx" -w /app node:22-alpine node -e "$REG_SCRIPT"
+        docker run --rm -u "$(id -u):$(id -g)" -v "$ROOT_DIR:/app" \
+            -e GAMES_PAGE="/app/apps/frontend/src/pages/Games.tsx" \
+            -e GAME_ID="$GAME_ID" \
+            -e COMPONENT_NAME="$COMPONENT_NAME" \
+            -w /app node:22-alpine node -e "$REG_SCRIPT"
     fi
 fi
 
