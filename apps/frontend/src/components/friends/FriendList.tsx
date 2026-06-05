@@ -1,7 +1,9 @@
 import { useFriends } from "../../contexts/FriendsContext";
 import { useChat } from "../../contexts/ChatContext";
+import { useTranslation } from "react-i18next";
 
 export default function FriendList() {
+    const { t } = useTranslation();
     const {
         friends,
         requests,
@@ -14,7 +16,7 @@ export default function FriendList() {
 
     if (isLoading)
         return (
-            <p className="text-white/60 text-[16px]">Chargement des amis...</p>
+            <p className="text-white/60 text-[16px]">{t("loading")}</p>
         );
 
     return (
@@ -22,7 +24,7 @@ export default function FriendList() {
             {(requests.length > 0 || sentRequests.length > 0) && (
                 <div className="flex flex-col gap-3">
                     <h3 className="text-white/60 text-sm uppercase font-bold tracking-wider">
-                        Demandes en attente
+                        {t("friends.pendingRequests")}
                     </h3>
                     {requests.map((req) => (
                         <div
@@ -76,7 +78,7 @@ export default function FriendList() {
                             </div>
                             <div className="flex gap-2 pr-2">
                                 <span className="text-white/50 text-sm italic">
-                                    En attente...
+                                    {t("friends.waiting")}
                                 </span>
                             </div>
                         </div>
@@ -86,11 +88,11 @@ export default function FriendList() {
 
             <div className="flex flex-col gap-4">
                 <h3 className="text-white/60 text-sm uppercase font-bold tracking-wider">
-                    Mes Amis
+                    {t("friends.title")}
                 </h3>
                 {friends.length === 0 ? (
                     <p className="text-white/40 italic">
-                        Vous n'avez pas encore d'amis.
+                        {t("friends.blank")}
                     </p>
                 ) : (
                     friends.map((friend) => {
@@ -112,11 +114,10 @@ export default function FriendList() {
                                         <img
                                             src={friend.avatarUrl}
                                             alt={friend.username}
-                                            className={`w-[50px] h-[50px] rounded-full object-cover border-2 transition-colors ${
-                                                friend.status === "online"
-                                                    ? "border-green-500"
-                                                    : "border-transparent"
-                                            }`}
+                                            className={`w-[50px] h-[50px] rounded-full object-cover border-2 transition-colors ${friend.status === "online"
+                                                ? "border-green-500"
+                                                : "border-transparent"
+                                                }`}
                                         />
                                         {friend.status === "online" && (
                                             <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-[#1E1E1E] rounded-full"></span>
