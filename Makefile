@@ -33,7 +33,7 @@ help:
 	@printf "  re             Full clean and restart\n"
 	@printf "  fclean         Deep clean (removes images and volumes)\n"
 	@printf "  sprune         Deep clean and system prune\n"
-	@printf "  ci             Run local CI checks (linting)\n"
+	@printf "  ci             Run local CI checks (lint, test, build)\n"
 
 check:
 	@command -v docker > /dev/null 2>&1 || (printf "$(RED)Docker is not installed.$(NO_COLOR)\n"; exit 1)
@@ -78,9 +78,15 @@ ci: check
 	@printf "$(GREEN)Step 1: Docker Build & Up$(NO_COLOR)\n"
 	@$(COMPOSE) up -d --build --wait --quiet-pull    || \
 	  (printf "$(RED)Step 1 failed. Logs:$(NO_COLOR)\n"; $(COMPOSE) logs; $(COMPOSE) down -v; exit 1)
-	@printf "$(GREEN)Step 2: Linting & Formatting$(NO_COLOR)\n"
+	@printf "$(GREEN)Step 2: Linting$(NO_COLOR)\n"
 	@$(COMPOSE) exec -T backend npm run lint -w backend || (printf "$(RED)Backend linting failed.$(NO_COLOR)\n"; $(COMPOSE) down -v; exit 1)
 	@$(COMPOSE) exec -T frontend npm run lint -w frontend || (printf "$(RED)Frontend linting failed.$(NO_COLOR)\n"; $(COMPOSE) down -v; exit 1)
+	@printf "$(GREEN)Step 3: Testing$(NO_COLOR)\n"
+	@$(COMPOSE) exec -T backend npm run test -w backend || (printf "$(RED)Backend tests failed.$(NO_COLOR)\n"; $(COMPOSE) down -v; exit 1)
+	@$(COMPOSE) exec -T frontend npm run test -w frontend || (printf "$(RED)Frontend tests failed.$(NO_COLOR)\n"; $(COMPOSE) down -v; exit 1)
+	@printf "$(GREEN)Step 4: Building$(NO_COLOR)\n"
+	@$(COMPOSE) exec -T backend npm run build -w backend || (printf "$(RED)Backend build failed.$(NO_COLOR)\n"; $(COMPOSE) down -v; exit 1)
+	@$(COMPOSE) exec -T frontend npm run build -w frontend || (printf "$(RED)Frontend build failed.$(NO_COLOR)\n"; $(COMPOSE) down -v; exit 1)
 	@$(COMPOSE) down -v > /dev/null 2>&1
 	@printf "$(GREEN)--- CI passed ---$(NO_COLOR)\n"
 
