@@ -13,9 +13,9 @@ type BadgeProps = HTMLAttributes<HTMLSpanElement> & {
     textColor?: ItemColor | null;
     textBright?: number;
     type?: BadgeType;
-    angle?: number;
-    freq?: number;
-    interpolation?: string;
+    angle?: string;
+    freq?: string;
+    rgb?: boolean;
 };
 
 export function Badge({
@@ -28,9 +28,9 @@ export function Badge({
     textColor = null,
     textBright = 60,
     type = "default",
-    angle = 0,
-    freq = 3,
-    interpolation = "srgb",
+    angle = "0",
+    freq = "3",
+    rgb = false,
     style,
     ...props
 }: BadgeProps) {
@@ -65,7 +65,8 @@ export function Badge({
             {type === "rotation" && (
                 <div
                     className={`${commonClasses}
-                        bg-conic/${interpolation} w-full h-[225%]
+                        bg-conic${rgb ? "/increasing" : ""}
+						w-full h-[225%]
                         from-[var(--bg-color)]
                         via-[var(--bg-color2)]
                         to-[var(--bg-color)]
@@ -80,7 +81,7 @@ export function Badge({
             {type === "translation" && (
                 <div
                     className={`${commonClasses}
-                        bg-linear-to-r/${interpolation}
+                        bg-linear-to-r${rgb ? "/increasing" : ""}
                         from-[var(--bg-color)]
                         via-[var(--bg-color2)]
                         to-[var(--bg-color)]
