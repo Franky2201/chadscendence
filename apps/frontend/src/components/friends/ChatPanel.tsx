@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next";
 
 export default function ChatPanel() {
     const { user } = useAuth();
-    const { friends, removeFriend, blockUser } = useFriends();
+    const { friends, removeFriend } = useFriends();
     const { t } = useTranslation();
     const { theme } = useTheme();
     const {
@@ -61,12 +61,6 @@ export default function ChatPanel() {
             await removeFriend(currentFriend.friendshipId);
             closeChat();
         }
-    };
-
-    const handleBlockUser = async () => {
-        if (!activeChat) return;
-        await blockUser(activeChat.id);
-        closeChat();
     };
 
     if (!isOpen || !user) return null;
@@ -177,16 +171,6 @@ export default function ChatPanel() {
                                                 <span>✕</span>{" "}
                                                 {t("friends.remove")}
                                             </button>
-                                            <button
-                                                onClick={() => {
-                                                    handleBlockUser();
-                                                    setShowSettings(false);
-                                                }}
-                                                className="w-full text-left px-4 py-2.5 text-red-500 hover:bg-white/5 text-sm font-medium transition-colors flex items-center gap-2"
-                                            >
-                                                <span>Ø</span>{" "}
-                                                {t("friends.block")}
-                                            </button>
                                         </div>
                                     </>
                                 )}
@@ -206,11 +190,10 @@ export default function ChatPanel() {
                                         className={`flex flex-col max-w-[80%] ${isMe ? "self-end items-end" : "self-start items-start"}`}
                                     >
                                         <div
-                                            className={`px-4 py-2 rounded-2xl ${
-                                                isMe
+                                            className={`px-4 py-2 rounded-2xl ${isMe
                                                     ? "bg-slate-600 text-white rounded-br-sm"
                                                     : `text-${theme === "white" ? "black" : "white"} rounded-bl-sm`
-                                            }`}
+                                                }`}
                                             style={{
                                                 wordBreak: "break-word",
                                                 backgroundColor: isMe
