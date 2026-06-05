@@ -10,7 +10,7 @@ COPY apps/frontend/package*.json ./apps/frontend/
 COPY libs/types/package*.json ./libs/types/
 
 # Prune other workspaces from root package.json to satisfy npm ci
-RUN node -e "const p = require('./package.json'); p.workspaces = p.workspaces.filter(w => w === 'apps/frontend' || w.startsWith('libs/')); require('fs').writeFileSync('./package.json', JSON.stringify(p))"
+RUN node -e "const p = require('./package.json'); p.workspaces = ['apps/frontend', ...p.workspaces.filter(w => w.startsWith('libs/'))]; require('fs').writeFileSync('./package.json', JSON.stringify(p))"
 
 # Install dependencies
 # If npm ci fails (e.g. lockfile out of sync), fall back to npm install to allow the build to proceed
