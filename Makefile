@@ -34,8 +34,16 @@ check:
 	@test -f $(ENV_FILE) || cp .env.example $(ENV_FILE)
 	@mkdir -p $(BACKEND_UPLOADS_PATH)
 	@if command -v npm > /dev/null 2>&1; then \
+		if [ ! -d "node_modules" ]; then \
+			printf "$(GREEN)Installing local dependencies for host-side tooling...$(NO_COLOR)\n"; \
+			npm install --quiet; \
+		fi; \
+		if [ ! -d "libs/types/dist" ]; then \
+			printf "$(GREEN)Building shared types library for host-side tooling...$(NO_COLOR)\n"; \
+			npm run build -w @chad/types --quiet; \
+		fi; \
 		printf "$(GREEN)Proactively fixing linting errors (host-side)...$(NO_COLOR)\n"; \
-		npm run lint -ws || true; \
+		npm run lint --workspaces --quiet || true; \
 	fi
 
 build: check
