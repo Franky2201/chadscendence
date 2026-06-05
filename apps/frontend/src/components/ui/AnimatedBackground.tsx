@@ -29,7 +29,7 @@ export default function AnimatedBackground({
         "--ab-size": `${Math.max(size, 10)}px`,
         "--ab-speed": `${Math.max(speed, 0.2)}s`,
         "--ab-base": getItemColorVariable(color),
-        "--ab-stripe": getItemColorMix(color, 80),
+        "--ab-stripe": getItemColorMix(color, 95),
     };
 
     return (
