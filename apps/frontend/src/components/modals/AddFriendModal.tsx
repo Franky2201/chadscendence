@@ -33,7 +33,9 @@ export function AddFriendModal({ user, onClose }: AddFriendModalProps) {
                 <h2 className="text-lg font-bold text-white">Ajouter en ami</h2>
                 <p className="text-slate-300 text-sm">
                     Envoyer une demande d'ami à{" "}
-                    <span className="font-bold text-white">{user.username}</span>{" "}
+                    <span className="font-bold text-white">
+                        {user.username}
+                    </span>{" "}
                     ?
                 </p>
 
@@ -43,7 +45,12 @@ export function AddFriendModal({ user, onClose }: AddFriendModalProps) {
                 )}
 
                 <div className="flex gap-2 justify-end">
-                    <Button color="grey" size="small" onClick={onClose} disabled={isLoading}>
+                    <Button
+                        color="grey"
+                        size="small"
+                        onClick={onClose}
+                        disabled={isLoading}
+                    >
                         Annuler
                     </Button>
                     <Button

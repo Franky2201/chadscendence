@@ -22,7 +22,9 @@ export function UserCard({ user, actions }: UserCardProps) {
                 )}
                 <span
                     className={`absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full border-2 border-slate-800 ${
-                        user.status === "online" ? "bg-green-400" : "bg-slate-500"
+                        user.status === "online"
+                            ? "bg-green-400"
+                            : "bg-slate-500"
                     }`}
                 />
             </div>

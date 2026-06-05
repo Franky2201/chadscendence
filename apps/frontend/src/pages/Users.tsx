@@ -25,12 +25,16 @@ export default function UsersPage() {
     useEffect(() => {
         getAllUsers()
             .then(setUsers)
-            .catch(() => setError("Impossible de charger la liste des joueurs."))
+            .catch(() =>
+                setError("Impossible de charger la liste des joueurs."),
+            )
             .finally(() => setIsLoading(false));
     }, []);
 
     const updateUserInList = (updated: UserListItem) => {
-        setUsers((prev) => prev.map((u) => (u.id === updated.id ? updated : u)));
+        setUsers((prev) =>
+            prev.map((u) => (u.id === updated.id ? updated : u)),
+        );
     };
 
     const updateUserStatus = (userId: string, accountStatus: AccountStatus) => {
@@ -93,28 +97,52 @@ export default function UsersPage() {
                                     key={user.id}
                                     user={user}
                                     actions={
-                                        currentUser && currentUser.id !== user.id ? (
+                                        currentUser &&
+                                        currentUser.id !== user.id ? (
                                             <>
                                                 <Button
                                                     color="green"
                                                     size="small"
-                                                    onClick={() => setActiveModal({ type: "friend", user })}
+                                                    onClick={() =>
+                                                        setActiveModal({
+                                                            type: "friend",
+                                                            user,
+                                                        })
+                                                    }
                                                 >
                                                     Ami +
                                                 </Button>
                                                 <Button
                                                     color="blue"
                                                     size="small"
-                                                    onClick={() => setActiveModal({ type: "edit", user })}
+                                                    onClick={() =>
+                                                        setActiveModal({
+                                                            type: "edit",
+                                                            user,
+                                                        })
+                                                    }
                                                 >
                                                     Modifier
                                                 </Button>
                                                 <Button
-                                                    color={user.accountStatus === AccountStatus.BANNED ? "orange" : "red"}
+                                                    color={
+                                                        user.accountStatus ===
+                                                        AccountStatus.BANNED
+                                                            ? "orange"
+                                                            : "red"
+                                                    }
                                                     size="small"
-                                                    onClick={() => setActiveModal({ type: "ban", user })}
+                                                    onClick={() =>
+                                                        setActiveModal({
+                                                            type: "ban",
+                                                            user,
+                                                        })
+                                                    }
                                                 >
-                                                    {user.accountStatus === AccountStatus.BANNED ? "Débannir" : "Bannir"}
+                                                    {user.accountStatus ===
+                                                    AccountStatus.BANNED
+                                                        ? "Débannir"
+                                                        : "Bannir"}
                                                 </Button>
                                             </>
                                         ) : undefined

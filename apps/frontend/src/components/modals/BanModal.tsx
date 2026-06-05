@@ -37,7 +37,9 @@ export function BanModal({ user, onClose, onSuccess }: BanModalProps) {
                 </h2>
                 <p className="text-slate-300 text-sm">
                     {isBanned ? "Débannir" : "Bannir"}{" "}
-                    <span className="font-bold text-white">{user.username}</span>{" "}
+                    <span className="font-bold text-white">
+                        {user.username}
+                    </span>{" "}
                     ?
                     {!isBanned && (
                         <span className="block mt-1 text-slate-400">
@@ -49,7 +51,12 @@ export function BanModal({ user, onClose, onSuccess }: BanModalProps) {
                 {error && <p className="text-red-400 text-sm">{error}</p>}
 
                 <div className="flex gap-2 justify-end">
-                    <Button color="grey" size="small" onClick={onClose} disabled={isLoading}>
+                    <Button
+                        color="grey"
+                        size="small"
+                        onClick={onClose}
+                        disabled={isLoading}
+                    >
                         Annuler
                     </Button>
                     <Button

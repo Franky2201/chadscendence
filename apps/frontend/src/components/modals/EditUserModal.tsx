@@ -9,7 +9,11 @@ interface EditUserModalProps {
     onSuccess: (updated: UserListItem) => void;
 }
 
-export function EditUserModal({ user, onClose, onSuccess }: EditUserModalProps) {
+export function EditUserModal({
+    user,
+    onClose,
+    onSuccess,
+}: EditUserModalProps) {
     const [username, setUsername] = useState(user.username);
     const [avatarUrl, setAvatarUrl] = useState(user.avatarUrl ?? "");
     const [bio, setBio] = useState(user.bio ?? "");
@@ -57,7 +61,9 @@ export function EditUserModal({ user, onClose, onSuccess }: EditUserModalProps) 
                     </div>
 
                     <div className="flex flex-col gap-1">
-                        <label className="text-xs text-slate-400">Avatar URL</label>
+                        <label className="text-xs text-slate-400">
+                            Avatar URL
+                        </label>
                         <Input
                             value={avatarUrl}
                             onChange={(e) => setAvatarUrl(e.target.value)}
@@ -94,7 +100,12 @@ export function EditUserModal({ user, onClose, onSuccess }: EditUserModalProps) 
                 {error && <p className="text-red-400 text-sm">{error}</p>}
 
                 <div className="flex gap-2 justify-end">
-                    <Button color="grey" size="small" onClick={onClose} disabled={isLoading}>
+                    <Button
+                        color="grey"
+                        size="small"
+                        onClick={onClose}
+                        disabled={isLoading}
+                    >
                         Annuler
                     </Button>
                     <Button
