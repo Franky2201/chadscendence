@@ -21,7 +21,7 @@ export function Title({
     color = "grey",
 }: TitleProps) {
     const classes = [
-        "font-bold font-energy text-transparent bg-clip-text bg-[color:var(--ui-color)] select-none drop-shadow-[1px_2px_0_rgba(0,0,0,1)]",
+        "font-bold font-mona-sans-title text-transparent bg-clip-text bg-[color:var(--ui-color)] select-none",
         sizeClasses[size],
         className,
     ]

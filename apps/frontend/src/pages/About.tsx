@@ -3,6 +3,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { Card, Window, Badge } from "../components/ui";
 import { developers } from "../contexts/AboutContext";
 import { type ItemColor } from "../components/ui/unified";
+import { useTheme } from "../contexts/ThemeContext";
 
 const stackLayers = [
     {
@@ -51,6 +52,7 @@ const badges: { name: string; link: string; requires42?: boolean }[] = [
 ];
 
 const About: React.FC = () => {
+    const { theme } = useTheme();
     const { isLoading, user } = useAuth();
     const navigate = useNavigate();
 
@@ -65,14 +67,6 @@ const About: React.FC = () => {
 
     return (
         <Window className="relative min-h-screen w-full overflow-hidden bg-cover bg-center">
-            <header className="justify-self-center">
-                <img
-                    className="select-none w-auto drop-shadow-lg max-h-30 mb-8"
-                    src="/game_banner.png"
-                    alt="GameLogo"
-                />
-            </header>
-
             <Card
                 className="relative max-w-250 mx-auto p-6"
                 title="Who's is the Chad ?"
@@ -90,7 +84,9 @@ const About: React.FC = () => {
                                 key={badge.name}
                                 target="_blank"
                             >
-                                <Badge className="text-xs">{badge.name}</Badge>
+                                <Badge className="text-xs hover:ring-2">
+                                    {badge.name}
+                                </Badge>
                             </a>
                         );
                     })}
@@ -107,21 +103,25 @@ const About: React.FC = () => {
                 <p className="text-md font-semibold tracking-widest justify-self-center uppercase">
                     The Team
                 </p>
-                <div className="p-3 mb-3">
+                <div className="p-2 mb-3">
                     <div className="flex flex-wrap justify-center gap-3">
                         {developers.map((dev, index) => (
                             <a key={index} href={dev.link} target="_blank">
-                                <div
-                                    className="rounded-2xl border border-neutral-400
-                                		hover:bg-neutral-500 h-16,5 w-60"
+                                <Badge
+                                    color={theme}
+                                    color2="white"
+                                    type="translation"
+                                    freq={2}
+                                    angle={320}
+                                    className="flex rounded-xl w-64 border-1 hover:ring-2"
                                 >
-                                    <div className="flex m-1">
+                                    <div className="flex flex-wrap">
                                         <img
                                             src={dev.pic}
                                             alt={`${dev.name} profile`}
-                                            className="w-22 h-22 rounded-xl"
+                                            className="w-18 h-18 rounded-lg translate-x-[-2px]"
                                         />
-                                        <div className="ml-2 self-center">
+                                        <div className=" ml-2 self-center">
                                             <h2 className="font-bold text-sm mb-0.5">
                                                 {dev.name}
                                             </h2>
@@ -133,7 +133,7 @@ const About: React.FC = () => {
                                             </p>
                                         </div>
                                     </div>
-                                </div>
+                                </Badge>
                             </a>
                         ))}
                     </div>
@@ -153,7 +153,7 @@ const About: React.FC = () => {
                                     <Badge
                                         key={layer.name}
                                         color={layer.color as ItemColor}
-                                        className={`text-xs font-medium`}
+                                        className={`text-xs font-medium border-2`}
                                     >
                                         {layer.name}
                                     </Badge>
@@ -179,7 +179,7 @@ const About: React.FC = () => {
                                             {mod.name}
                                         </span>
                                         <Badge
-                                            className="text-xs font-medium rounded-full"
+                                            className="text-xs font-medium rounded-full ring-2"
                                             color={`${mod.type === "Major" ? "red" : "green"}`}
                                         >
                                             {mod.type}

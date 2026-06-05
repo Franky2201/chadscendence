@@ -1,40 +1,21 @@
 import type { HTMLAttributes } from "react";
-import { type ItemColor } from "./unified";
+import { getItemMixedColorStyle, type ItemColor } from "./unified";
 import { getItemColorStyle } from "./unified";
+
+export type BadgeType = "default" | "translation" | "rotation";
 
 type BadgeProps = HTMLAttributes<HTMLSpanElement> & {
     text?: string;
     color?: ItemColor;
     color2?: ItemColor;
+    borderColor?: ItemColor | null;
+    borderBright?: number;
+    textColor?: ItemColor | null;
+    textBright?: number;
     type?: BadgeType;
-};
-
-export type BadgeType = "default" | "shine" | "gradient" | "animated";
-
-const defaultStyles: Record<string, string> = {
-    "--badge-fg": "color-mix(in srgb, var(--ui-color) 20%, var(--color-black))",
-    "--badge-border":
-        "color-mix(in srgb, var(--ui-color) 70%, var(--color-black))",
-};
-
-const themeStyles: Record<BadgeType, Record<string, string>> = {
-    default: {},
-    shine: {
-        background:
-            "radial-gradient(var(--ui-color) 0%, var(--ui-color2) 100%)",
-    },
-    gradient: {
-        background:
-            "linear-gradient(var(--ui-color) 0%, var(--ui-color2) 100%)",
-        "background-position": "0px -2px",
-        "background-size": "100% 115%",
-    },
-    animated: {
-        background:
-            "linear-gradient(var(--ui-color) 18%, var(--ui-color2) 50%, var(--ui-color) 82%)",
-        animation: "3s linear infinite top-down",
-        "background-size": "100% 1000%",
-    },
+    angle?: number;
+    freq?: number;
+    interpolation?: string;
 };
 
 export function Badge({
@@ -42,27 +23,79 @@ export function Badge({
     className = "",
     color = "grey",
     color2 = "white",
+    borderColor = null,
+    borderBright = 75,
+    textColor = null,
+    textBright = 60,
     type = "default",
+    angle = 0,
+    freq = 3,
+    interpolation = "srgb",
     style,
     ...props
 }: BadgeProps) {
-    const colorStyle = getItemColorStyle(color);
-    const color2Style = getItemColorStyle(color2, "--ui-color2");
+    const commonClasses = "absolute pointer-events-none inset-0";
     return (
-        <span
-            className={`rounded-lg ${type === "default" ? "border-2" : ""} px-2 py-1 shadow-sm font-lexend 
-				border-[var(--badge-border)] bg-[color:var(--ui-color)] 
-				text-[var(--badge-fg)] ${className} ${color === "black" ? "text-white" : ""}`}
+        <div
+            className={`
+                relative overflow-hidden rounded-lg px-2 py-1 shadow-sm
+                font-mona-sans border-[var(--border-color)]
+                bg-[var(--bg-color)] ring-[var(--border-color)]
+                text-[var(--text-color)]
+                ${color === "black" ? (textColor = "white") : ""}
+                ${className}
+            `}
             {...props}
             style={{
                 ...style,
-                ...colorStyle,
-                ...color2Style,
-                ...defaultStyles,
-                ...themeStyles[type],
+                ...getItemColorStyle(color, "--bg-color"),
+                ...getItemColorStyle(color2, "--bg-color2"),
+                ...getItemMixedColorStyle(
+                    borderColor ? borderColor : color,
+                    "--border-color",
+                    borderBright,
+                ),
+                ...getItemMixedColorStyle(
+                    textColor ? textColor : color,
+                    "--text-color",
+                    textBright,
+                ),
             }}
         >
-            <p className={`${type !== "default" ? "p-0.5" : ""}`}>{children}</p>
-        </span>
+            {type === "rotation" && (
+                <div
+                    className={`${commonClasses}
+                        bg-conic/${interpolation} w-full h-[225%]
+                        from-[var(--bg-color)]
+                        via-[var(--bg-color2)]
+                        to-[var(--bg-color)]
+                        rotate-${angle}
+                        scale-200
+                        `}
+                    style={{
+                        animation: `rotation ${freq}s linear infinite`,
+                    }}
+                />
+            )}
+            {type === "translation" && (
+                <div
+                    className={`${commonClasses}
+                        bg-linear-to-r/${interpolation}
+                        from-[var(--bg-color)]
+                        via-[var(--bg-color2)]
+                        to-[var(--bg-color)]
+                        rotate-${angle}
+                        scale-300
+                        `}
+                    style={{
+                        animation: `translation ${freq}s linear infinite`,
+                    }}
+                />
+            )}
+
+            <div className={`${type !== "default" ? "p-0.5" : ""} relative`}>
+                {children}
+            </div>
+        </div>
     );
 }

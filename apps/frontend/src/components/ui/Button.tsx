@@ -17,7 +17,7 @@ const sizeClasses: Record<ItemSize, string> = {
 
 export function Button({
     size = "medium",
-    color = "grey",
+    color = "white",
     borderRadius = "rounded-xl",
     children,
     className = "",
@@ -33,7 +33,7 @@ export function Button({
         .join(" ");
     const buttonClasses = [
         "items-center justify-center transition-all duration-100 ease-in-out h-full w-full\
-		select-none group-active:translate-y-0 font-bold bg-[color:var(--ui-color)]",
+		select-none group-active:translate-y-0 font-bold bg-[color:var(--ui-color)] font-mona-sans",
         borderRadius,
         sizeClasses[size],
         className,
@@ -44,7 +44,7 @@ export function Button({
         .filter(Boolean)
         .join(" ");
     const spanBotClasses = [
-        "absolute inset-0 bg-[color:var(--ui-color)]",
+        "absolute inset-0 bg-[color:var(--ui-color)] transition-all duration-100",
         borderRadius,
         sizeClasses[size],
         className,

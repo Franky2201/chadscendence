@@ -1,19 +1,7 @@
 @import "tailwindcss";
 
-@font-face {
-    font-family: "Energy";
-    src: url("/Energy.ttf") format("truetype");
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-}
-
-.font-energy {
-    font-family: "Energy", sans-serif;
-}
-
 :root {
-    --color-grey: #bbbbbb;
+    --color-grey: #cacaca;
     --color-red: #ff9191;
     --color-orange: #ffc780;
     --color-yellow: #f7f08c;
@@ -27,18 +15,26 @@
     --color-black: #000000;
 }
 
-.font-lexend {
-  font-family: "Lexend", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 500;
-  font-style: normal;
+.font-mona-sans {
+    font-family: "Mona Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
 }
 
-@keyframes  top-down{
-    0% {
-        background-position: 0% 120%;
-    }
-    100% {
-        background-position: 0% 0%;
-    }
+.font-mona-sans-title {
+    font-family: "Mona Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 900;
+    font-style: normal;
+}
+
+@keyframes translation {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+@keyframes rotation {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }

@@ -4,7 +4,6 @@ import {
     getItemColorMix,
     getItemColorVariable,
 } from "./unified";
-import { type ThemeName, useTheme } from "../../contexts/ThemeContext";
 
 type AnimatedBackground = {
     speed?: number;
@@ -13,18 +12,12 @@ type AnimatedBackground = {
     color?: ItemColor;
 };
 
-const themeClasses: Record<ThemeName, string> = {
-    light: "brightness(1)",
-    dark: "brightness(0.5)",
-};
-
 export default function AnimatedBackground({
     speed = 3,
     angle = 45,
     size = 20,
     color = "grey",
 }: AnimatedBackground) {
-    const { theme } = useTheme();
     const backgroundVars: CSSProperties & {
         "--ab-angle": string;
         "--ab-size": string;
@@ -47,7 +40,7 @@ export default function AnimatedBackground({
                 backgroundColor: "var(--ab-base)",
                 transition:
                     "background-color 450ms ease, filter 450ms ease, --ab-size 450ms ease",
-                filter: themeClasses[theme],
+                filter: "brightness(0.65)",
             }}
         >
             <style>
