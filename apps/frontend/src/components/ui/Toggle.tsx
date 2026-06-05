@@ -20,7 +20,6 @@ const spanSizeClasses: Record<ItemSize, string> = {
     large: "text-lg",
 };
 
-
 export function Toggle({
     size = "medium",
     color = "grey",
