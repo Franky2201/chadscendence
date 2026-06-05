@@ -22,7 +22,7 @@ export class FriendsService {
         private readonly userRepository: Repository<User>,
         @Inject()
         private readonly presenceService: PresenceService,
-    ) { }
+    ) {}
 
     async getFriends(userId: string) {
         const friendships = await this.friendshipRepository.find({

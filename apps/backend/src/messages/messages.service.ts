@@ -21,7 +21,7 @@ export class MessagesService {
         @InjectRepository(Friendship)
         private readonly friendshipRepository: Repository<Friendship>,
         private readonly messagesGateway: MessagesGateway,
-    ) { }
+    ) {}
 
     async checkCanMessage(senderId: string, receiverId: string) {
         const friendship = await this.friendshipRepository.findOne({
