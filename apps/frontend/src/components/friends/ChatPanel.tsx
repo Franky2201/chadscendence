@@ -7,10 +7,12 @@ import { useNavigate } from "react-router-dom";
 import FriendSearch from "./FriendSearch";
 import FriendList from "./FriendList";
 import { Button } from "../ui";
+import { useTranslation } from "react-i18next";
 
 export default function ChatPanel() {
     const { user } = useAuth();
     const { friends, removeFriend, blockUser } = useFriends();
+    const { t } = useTranslation();
     const { theme } = useTheme();
     const {
         isOpen,
@@ -91,12 +93,12 @@ export default function ChatPanel() {
                     <div className="flex flex-col h-full overflow-hidden">
                         <div className="flex items-center justify-between p-5 border-b border-white/10 shrink-0">
                             <h2 className="text-white text-xl font-semibold m-0 p-0 tracking-wide">
-                                Amis
+                                {t("friends.title")}
                             </h2>
                             <button
                                 onClick={closePanel}
                                 className="text-white/60 hover:text-white transition-colors"
-                                title="Fermer"
+                                title={t("friends.close")}
                             >
                                 ✕
                             </button>
@@ -115,7 +117,7 @@ export default function ChatPanel() {
                                 <button
                                     onClick={closeChat}
                                     className="text-white/60 hover:text-white transition-colors text-xl font-bold pr-2"
-                                    title="Retour à la liste"
+                                    title={t("friends.back")}
                                 >
                                     ←
                                 </button>
@@ -140,7 +142,7 @@ export default function ChatPanel() {
                                         setShowSettings(!showSettings)
                                     }
                                     className="text-white/60 hover:text-white p-2 rounded-full hover:bg-white/10 transition-colors"
-                                    title="Paramètres"
+                                    title={t("friends.settings")}
                                 >
                                     <svg
                                         className="w-5 h-5"
@@ -172,7 +174,8 @@ export default function ChatPanel() {
                                                 }}
                                                 className="w-full text-left px-4 py-2.5 text-red-400 hover:bg-white/5 text-sm font-medium transition-colors flex items-center gap-2"
                                             >
-                                                <span>✕</span> Retirer l'ami
+                                                <span>✕</span>{" "}
+                                                {t("friends.remove")}
                                             </button>
                                             <button
                                                 onClick={() => {
@@ -181,7 +184,8 @@ export default function ChatPanel() {
                                                 }}
                                                 className="w-full text-left px-4 py-2.5 text-red-500 hover:bg-white/5 text-sm font-medium transition-colors flex items-center gap-2"
                                             >
-                                                <span>Ø</span> Bloquer
+                                                <span>Ø</span>{" "}
+                                                {t("friends.block")}
                                             </button>
                                         </div>
                                     </>
@@ -229,7 +233,7 @@ export default function ChatPanel() {
                             })}
                             {isLoading && (
                                 <p className="text-center text-white/40 text-sm py-4">
-                                    Chargement...
+                                    {t("loading")}
                                 </p>
                             )}
                         </div>
@@ -245,7 +249,7 @@ export default function ChatPanel() {
                                     onChange={(e) =>
                                         setInputValue(e.target.value)
                                     }
-                                    placeholder="Votre message..."
+                                    placeholder={t("friends.message")}
                                     className="flex-1 bg-white/5 border border-white text-white rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white transition-all placeholder:text-white/40"
                                 />
                                 <Button
@@ -254,7 +258,7 @@ export default function ChatPanel() {
                                     color={theme}
                                     size="medium"
                                 >
-                                    Envoyer
+                                    {t("friends.send")}
                                 </Button>
                             </div>
                         </form>

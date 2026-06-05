@@ -1,7 +1,9 @@
 import { useFriends } from "../../contexts/FriendsContext";
 import { useChat } from "../../contexts/ChatContext";
+import { useTranslation } from "react-i18next";
 
 export default function FriendList() {
+    const { t } = useTranslation();
     const {
         friends,
         requests,
@@ -13,16 +15,14 @@ export default function FriendList() {
     const { openChat, unreadCounts } = useChat();
 
     if (isLoading)
-        return (
-            <p className="text-white/60 text-[16px]">Chargement des amis...</p>
-        );
+        return <p className="text-white/60 text-[16px]">{t("loading")}</p>;
 
     return (
         <div className="flex flex-col gap-6 w-full">
             {(requests.length > 0 || sentRequests.length > 0) && (
                 <div className="flex flex-col gap-3">
                     <h3 className="text-white/60 text-sm uppercase font-bold tracking-wider">
-                        Demandes en attente
+                        {t("friends.pendingRequests")}
                     </h3>
                     {requests.map((req) => (
                         <div
@@ -76,7 +76,7 @@ export default function FriendList() {
                             </div>
                             <div className="flex gap-2 pr-2">
                                 <span className="text-white/50 text-sm italic">
-                                    En attente...
+                                    {t("friends.waiting")}
                                 </span>
                             </div>
                         </div>
@@ -86,12 +86,10 @@ export default function FriendList() {
 
             <div className="flex flex-col gap-4">
                 <h3 className="text-white/60 text-sm uppercase font-bold tracking-wider">
-                    Mes Amis
+                    {t("friends.title")}
                 </h3>
                 {friends.length === 0 ? (
-                    <p className="text-white/40 italic">
-                        Vous n'avez pas encore d'amis.
-                    </p>
+                    <p className="text-white/40 italic">{t("friends.blank")}</p>
                 ) : (
                     friends.map((friend) => {
                         const unreadCount = unreadCounts[friend.id] || 0;
