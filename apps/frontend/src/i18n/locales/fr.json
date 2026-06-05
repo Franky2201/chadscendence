@@ -47,5 +47,28 @@
 		"close": "Fermer",
 		"back": "Retour",
 		"settings": "Paramètres"
+	},
+	"profilePage": {
+		"title": "Profil",
+		"back": "Retour",
+		"modify": "Modifier",
+		"admin": "Admin",
+		"rating": "Rating",
+		"username": "Nom d'utilisateur",
+		"bio": "Bio",
+		"bioPlaceholder": "Une petite bio...",
+		"changePassword": "Changer de mot de passe",
+		"hide": "Cacher",
+		"show": "Afficher",
+		"oldPassword": "Ancien mot de passe",
+		"newPassword": "Nouveau mot de passe",
+		"save": "Enregistrer les modifications",
+		"saving": "Sauvegarde...",
+		"errorBothPasswords": "Veuillez remplir l'ancien ET le nouveau mot de passe.",
+		"successProfile": "Profil mis à jour avec succès",
+		"errorProfile": "Erreur lors de la mise à jour du profil",
+		"successAvatar": "Avatar mis à jour avec succès",
+		"errorAvatar": "Erreur lors de la mise à jour de l'avatar",
+		"loading": "Chargement ..."
 	}
 }
