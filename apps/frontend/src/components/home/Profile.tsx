@@ -2,12 +2,10 @@ import { Card, Button } from "../ui";
 import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useChat } from "../../contexts/ChatContext";
-import { useTheme } from "../../contexts/ThemeContext";
 
 export function Profile({ className = "" }: { className?: string }) {
     const { user, logout } = useAuth();
     const { openPanel } = useChat();
-    const { theme } = useTheme();
     const navigate = useNavigate();
 
     const handleLogout = async () => {
