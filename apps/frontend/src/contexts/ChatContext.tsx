@@ -83,8 +83,6 @@ export function ChatProvider({ children }: { children: ReactNode }) {
 
     const closePanel = () => {
         setIsOpen(false);
-        setActiveChat(null);
-        setMessages([]);
     };
 
     const openChat = (friend: ActiveChat) => {
