@@ -3,6 +3,7 @@ import { searchUsers, type UserSearchResult } from "../../services/users";
 import { useFriends } from "../../contexts/FriendsContext";
 import { Input, Button } from "../ui";
 import { useTranslation } from "react-i18next";
+import { useTheme } from "../../contexts/ThemeContext";
 
 interface FriendSearchProps {
     onSearchActive: (isActive: boolean) => void;
@@ -10,6 +11,7 @@ interface FriendSearchProps {
 
 export default function FriendSearch({ onSearchActive }: FriendSearchProps) {
     const { sendRequest, friends, sentRequests } = useFriends();
+    const { theme } = useTheme();
     const { t } = useTranslation();
     const [query, setQuery] = useState("");
     const [results, setResults] = useState<UserSearchResult[]>([]);
@@ -56,7 +58,8 @@ export default function FriendSearch({ onSearchActive }: FriendSearchProps) {
                 placeholder={t("friends.search")}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                className="w-full !bg-white/10 !border-white/20 !text-white !rounded-xl !px-4 !py-3 focus:!outline-none focus-visible:!ring-2 focus-visible:!ring-pink-500 placeholder:!text-white/40"
+                color={theme}
+                className="w-full !bg-white/10 !border-white/20 !text-white !rounded-xl !px-4 !py-3 focus:!outline-none focus-visible:!ring-2 focus-visible:!ring-[color:var(--ui-color)] placeholder:!text-white/40"
             />
 
             {query.length > 0 && (
@@ -112,7 +115,8 @@ export default function FriendSearch({ onSearchActive }: FriendSearchProps) {
                                                 handleSendRequest(user.id)
                                             }
                                             size="small"
-                                            className="!bg-pink-600 hover:!bg-pink-700 !text-white !rounded-lg"
+                                            color={theme}
+                                            className="!rounded-lg"
                                         >
                                             {t("friends.add")}
                                         </Button>
