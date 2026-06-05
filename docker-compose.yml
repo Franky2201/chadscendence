@@ -63,17 +63,9 @@ services:
         ports:
             - "${BACKEND_PORT:-3000}:3000"
         volumes:
+            - ./apps/backend/src:/app/apps/backend/src
             - ./apps/backend/uploads:/app/apps/backend/uploads
-        develop:
-            watch:
-                - action: sync
-                  path: ./apps/backend/src
-                  target: /app/apps/backend/src
-                - action: sync
-                  path: ./libs/types/src
-                  target: /app/libs/types/src
-                - action: rebuild
-                  path: ./apps/backend/package.json
+            - ./libs/types/src:/app/libs/types/src
         networks:
             - ft_network
         restart: unless-stopped
@@ -95,16 +87,9 @@ services:
             - backend
         ports:
             - "${FRONTEND_PORT:-5173}:5173"
-        develop:
-            watch:
-                - action: sync
-                  path: ./apps/frontend/src
-                  target: /app/apps/frontend/src
-                - action: sync
-                  path: ./libs/types/src
-                  target: /app/libs/types/src
-                - action: rebuild
-                  path: ./apps/frontend/package.json
+        volumes:
+            - ./apps/frontend/src:/app/apps/frontend/src
+            - ./libs/types/src:/app/libs/types/src
         networks:
             - ft_network
         restart: unless-stopped

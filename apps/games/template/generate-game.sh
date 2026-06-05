@@ -127,16 +127,9 @@ if [ -f "$DOCKER_COMPOSE" ]; then
         depends_on:
             redis:
                 condition: service_healthy
-        develop:
-            watch:
-                - action: sync
-                  path: ../../apps/games/$GAME_ID/src
-                  target: /app/apps/games/$GAME_ID/src
-                - action: sync
-                  path: ../../libs/types/src
-                  target: /app/libs/types/src
-                - action: rebuild
-                  path: ../../apps/games/$GAME_ID/package.json
+        volumes:
+            - ../../apps/games/$GAME_ID/src:/app/apps/games/$GAME_ID/src
+            - ../../libs/types/src:/app/libs/types/src
         networks:
             - ft_network
         restart: unless-stopped

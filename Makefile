@@ -4,16 +4,19 @@ COMPOSE_FILE     := docker-compose.yml
 COMPOSE          := docker compose -f $(COMPOSE_FILE)
 BACKEND_UPLOADS_PATH ?= ./apps/backend/uploads
 
+export COMPOSE_BAKE := true
+export DOCKER_BUILDKIT := 1
+
 GREEN    := \033[0;32m
 RED      := \033[0;31m
 NO_COLOR := \033[0m
 
 all: dev #replace with `prod` for final evaluation
 
-# Development mode with hot-reloading (Docker Compose Watch)
+# Development mode with hot-reloading (Bind Volumes)
 dev: check
 	@printf "$(GREEN)Starting in development mode (hot-reloading enabled)...$(NO_COLOR)\n"
-	@$(COMPOSE) up --watch
+	@$(COMPOSE) up
 
 # Production mode for evaluation (Final build stage)
 prod: check
@@ -37,12 +40,21 @@ check:
 	@mkdir -p $(BACKEND_UPLOADS_PATH)
 
 build: check
-	@DOCKER_BUILDKIT=1 $(COMPOSE) build
+	@$(COMPOSE) build
 
 up: dev
 
-down start stop restart:
-	@$(COMPOSE) $(MAKECMDGOALS) --remove-orphans 2>/dev/null || $(COMPOSE) $(MAKECMDGOALS)
+down:
+	@$(COMPOSE) down --remove-orphans
+
+start:
+	@$(COMPOSE) start
+
+stop:
+	@$(COMPOSE) stop
+
+restart:
+	@$(COMPOSE) restart
 
 status:
 	@$(COMPOSE) ps
@@ -50,8 +62,7 @@ status:
 logs:
 	@$(COMPOSE) logs -f
 
-clean:
-	@$(COMPOSE) down --remove-orphans
+clean: down
 
 fclean:
 	@$(COMPOSE) down -v --rmi all --remove-orphans
