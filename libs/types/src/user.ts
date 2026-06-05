@@ -36,7 +36,7 @@ export interface User {
     avatarUrl?: string;
     bio?: string;
     status: UserStatus;
-    role?: Role;
+    role: Role;
     score: number;
     rankId?: string;
     rank?: Rank;

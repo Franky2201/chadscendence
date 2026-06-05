@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { Button, Input, Card } from "../../components/ui";
 import { updateMe, uploadAvatar } from "../../services/users";
+import { toast } from "sonner";
 
 export function Profile() {
     const { user, isLoading, login } = useAuth();
@@ -11,8 +12,7 @@ export function Profile() {
     const [avatarFile, setAvatarFile] = useState<File | null>(null);
     const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
     const [bio, setBio] = useState(user?.bio ?? "");
-    const [saving, setSaving] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
@@ -46,8 +46,7 @@ export function Profile() {
     };
 
     const handleSave = async () => {
-        setSaving(true);
-        setError(null);
+        setLoading(true);
         try {
             let updated = await updateMe({
                 username: username !== "" ? username : undefined,
@@ -63,18 +62,10 @@ export function Profile() {
             setBio(updated.bio ?? "");
             setAvatarFile(null);
             setAvatarPreview(null);
-            setError(null);
-        } catch (err: unknown) {
-            if (err && typeof err === "object" && "response" in err) {
-                const res = (
-                    err as { response: { data?: { message?: string } } }
-                ).response;
-                setError(res.data?.message ?? "Erreur lors de la mise à jour.");
-            } else {
-                setError("Erreur lors de la mise à jour.");
-            }
+        } catch {
+            toast.error("Failed to update profile");
         } finally {
-            setSaving(false);
+            setLoading(false);
         }
     };
 
@@ -136,21 +127,16 @@ export function Profile() {
                     />
                 </div>
             </div>
-            {error && (
-                <p className="text-[color:var(--color-red)] text-sm text-center mt-2">
-                    {error}
-                </p>
-            )}
             <div className="w-full">
                 {hasChanges && (
                     <Button
                         className="mt-1"
                         color="green"
                         onClick={handleSave}
-                        disabled={saving}
+                        disabled={loading}
                         size="medium"
                     >
-                        {saving ? "Saving ..." : "Save"}
+                        {loading ? "Loading..." : "Save"}
                     </Button>
                 )}
             </div>

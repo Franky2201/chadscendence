@@ -8,6 +8,7 @@ import "./index.css";
 import { ModalProvider } from "./contexts/ModalContext";
 import { FriendsProvider } from "./contexts/FriendsContext";
 import { ChatProvider } from "./contexts/ChatContext";
+import { Toaster } from "sonner";
 
 createRoot(document.getElementById("root")!).render(
     <StrictMode>
@@ -17,6 +18,7 @@ createRoot(document.getElementById("root")!).render(
                     <FriendsProvider>
                         <ChatProvider>
                             <RouterProvider router={router} />
+                            <Toaster richColors position="top-right" />
                         </ChatProvider>
                     </FriendsProvider>
                 </ModalProvider>
