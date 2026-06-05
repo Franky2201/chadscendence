@@ -9,7 +9,6 @@ import { RanksModule } from "./ranks/ranks.module";
 import { GamesModule } from "./games/games.module";
 import { FriendsModule } from "./friends/friends.module";
 import { PresenceModule } from "./presence/presence.module";
-import { BlocksModule } from "./blocks/blocks.module";
 import { MessagesModule } from "./messages/messages.module";
 
 @Module({
@@ -36,10 +35,9 @@ import { MessagesModule } from "./messages/messages.module";
         RanksModule,
         GamesModule,
         FriendsModule,
-        BlocksModule,
         MessagesModule,
     ],
     controllers: [AppController],
     providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
