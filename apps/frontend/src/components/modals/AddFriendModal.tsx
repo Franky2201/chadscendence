@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "../ui";
 import { sendFriendRequest } from "../../services/friends";
 import type { UserListItem } from "../../services/users";
+import { toast } from "sonner";
 
 interface AddFriendModalProps {
     user: UserListItem;
@@ -10,18 +11,15 @@ interface AddFriendModalProps {
 
 export function AddFriendModal({ user, onClose }: AddFriendModalProps) {
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const [success, setSuccess] = useState(false);
 
     const handleConfirm = async () => {
         setIsLoading(true);
-        setError(null);
         try {
             await sendFriendRequest(user.id);
-            setSuccess(true);
             setTimeout(onClose, 1200);
+            toast.success("Demande envoyee.");
         } catch {
-            setError("Impossible d'envoyer la demande.");
+            toast.error("Impossible d'envoyer la demande.");
         } finally {
             setIsLoading(false);
         }
@@ -39,11 +37,6 @@ export function AddFriendModal({ user, onClose }: AddFriendModalProps) {
                     ?
                 </p>
 
-                {error && <p className="text-red-400 text-sm">{error}</p>}
-                {success && (
-                    <p className="text-green-400 text-sm">Demande envoyée !</p>
-                )}
-
                 <div className="flex gap-2 justify-end">
                     <Button
                         color="grey"
@@ -57,7 +50,7 @@ export function AddFriendModal({ user, onClose }: AddFriendModalProps) {
                         color="green"
                         size="small"
                         onClick={handleConfirm}
-                        disabled={isLoading || success}
+                        disabled={isLoading}
                     >
                         {isLoading ? "Envoi..." : "Envoyer"}
                     </Button>
