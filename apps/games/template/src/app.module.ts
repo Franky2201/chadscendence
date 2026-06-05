@@ -51,7 +51,9 @@ export class AppModule
             void register();
         }, 5000);
 
-        this.logger.log(`Game registered in Redis with heartbeat (15s TTL): ${this.gameId}`);
+        this.logger.log(
+            `Game registered in Redis with heartbeat (15s TTL): ${this.gameId}`,
+        );
     }
 
     async onApplicationShutdown() {

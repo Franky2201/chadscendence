@@ -13,12 +13,6 @@ NO_COLOR := \033[0m
 
 all: up
 
-# Start services in detached mode with hot-reloading (Bind Volumes)
-up: check
-	@printf "$(GREEN)Starting services in detached mode...$(NO_COLOR)\n"
-	@$(COMPOSE) up -d --remove-orphans
-	@printf "$(GREEN)Services started. Use 'make logs' to follow output or 'make down' to stop.$(NO_COLOR)\n"
-
 help:
 	@printf "$(GREEN)Available targets:$(NO_COLOR)\n"
 	@printf "  all (default)  Start the project\n"
@@ -39,9 +33,19 @@ check:
 	@command -v docker > /dev/null 2>&1 || (printf "$(RED)Docker is not installed.$(NO_COLOR)\n"; exit 1)
 	@test -f $(ENV_FILE) || cp .env.example $(ENV_FILE)
 	@mkdir -p $(BACKEND_UPLOADS_PATH)
+	@if command -v npm > /dev/null 2>&1; then \
+		printf "$(GREEN)Proactively fixing linting errors (host-side)...$(NO_COLOR)\n"; \
+		npm run lint -ws || true; \
+	fi
 
 build: check
 	@$(COMPOSE) build
+
+# Start services in detached mode with hot-reloading (Bind Volumes)
+up: check
+	@printf "$(GREEN)Starting services in detached mode...$(NO_COLOR)\n"
+	@$(COMPOSE) up -d --remove-orphans
+	@printf "$(GREEN)Services started. Use 'make logs' to follow output or 'make down' to stop.$(NO_COLOR)\n"
 
 down:
 	@$(COMPOSE) down --remove-orphans
