@@ -1,10 +1,13 @@
 import { Card, Button } from "../ui";
 import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useChat } from "../../contexts/ChatContext";
 
 export function Profile({ className = "" }: { className?: string }) {
     const { user, logout } = useAuth();
+    const { openPanel } = useChat();
     const navigate = useNavigate();
+
     const handleLogout = async () => {
         await logout();
         navigate("/");
@@ -28,7 +31,7 @@ export function Profile({ className = "" }: { className?: string }) {
                 <Button color="red" onClick={handleLogout} size="medium">
                     Logout
                 </Button>
-                <Button color="green" size="medium">
+                <Button color="green" onClick={openPanel} size="medium">
                     Friends
                 </Button>
             </div>
