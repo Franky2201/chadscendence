@@ -89,7 +89,10 @@ export default function GameModal({ isOpen, onClose }: LoginModalProps) {
                     </div>
                 )}
 
-                <form className="flex flex-col gap-4 mb-6" onSubmit={handleJoin}>
+                <form
+                    className="flex flex-col gap-4 mb-6"
+                    onSubmit={handleJoin}
+                >
                     <input
                         type="text"
                         placeholder="Entrer un code de salle"

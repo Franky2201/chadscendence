@@ -55,7 +55,9 @@ export class RoomsService {
 
     joinRoom(code: string, user: JwtPayload) {
         const room = this.getRoomOrThrow(code);
-        const existingPlayer = room.players.find((player) => player.id === user.sub);
+        const existingPlayer = room.players.find(
+            (player) => player.id === user.sub,
+        );
 
         if (existingPlayer) {
             existingPlayer.username = user.username;
@@ -74,11 +76,7 @@ export class RoomsService {
         return this.cloneRoom(room);
     }
 
-    updateSelectedGames(
-        code: string,
-        userId: string,
-        selectedGames: string[],
-    ) {
+    updateSelectedGames(code: string, userId: string, selectedGames: string[]) {
         const room = this.getRoomOrThrow(code);
 
         if (room.hostId !== userId) {

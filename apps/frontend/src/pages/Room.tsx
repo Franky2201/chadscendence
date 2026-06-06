@@ -125,7 +125,10 @@ export default function LobbyCreator() {
         setError(null);
 
         try {
-            const nextRoom = await updateRoomGames(room.code, nextSelectedGames);
+            const nextRoom = await updateRoomGames(
+                room.code,
+                nextSelectedGames,
+            );
             setRoom(nextRoom);
         } catch {
             setError("Impossible de mettre à jour les mini-jeux.");
@@ -199,8 +202,8 @@ export default function LobbyCreator() {
                             No room code provided
                         </h2>
                         <p className="text-gray-500">
-                            Use the multiplayer button on the home page to create
-                            a room or join one with a code.
+                            Use the multiplayer button on the home page to
+                            create a room or join one with a code.
                         </p>
                         <Link to="/">
                             <Button>Back home</Button>
@@ -247,7 +250,10 @@ export default function LobbyCreator() {
                                     onClick={launch}
                                     color="red"
                                     disabled={
-                                        isSubmitting || roomLoading || selectedGames.length === 0 || !isHost
+                                        isSubmitting ||
+                                        roomLoading ||
+                                        selectedGames.length === 0 ||
+                                        !isHost
                                     }
                                     className="text-black disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed flex items-center gap-2"
                                 >
@@ -273,22 +279,32 @@ export default function LobbyCreator() {
                                 </div>
 
                                 <Card className="m-5">
-                                     <div className="grid grid-cols-3 gap-5">
+                                    <div className="grid grid-cols-3 gap-5">
                                         {GAMES.map((g) => {
-                                            const test = testStyles[g.type] ?? testStyles.default;
+                                            const test =
+                                                testStyles[g.type] ??
+                                                testStyles.default;
                                             return (
                                                 <Button
                                                     key={g.id}
                                                     color={test as ItemColor}
-                                                    onClick={() => void toggleGame(g.id)}
+                                                    onClick={() =>
+                                                        void toggleGame(g.id)
+                                                    }
                                                     size="small"
                                                     className="flex flex-col"
-                                                    disabled={isSubmitting || roomLoading || !isHost}
+                                                    disabled={
+                                                        isSubmitting ||
+                                                        roomLoading ||
+                                                        !isHost
+                                                    }
                                                 >
                                                     {g.name}
                                                     <p className="text-xs m-1">
                                                         {g.type[0].toUpperCase() +
-                                                            g.type.substring(1).toLowerCase()}
+                                                            g.type
+                                                                .substring(1)
+                                                                .toLowerCase()}
                                                     </p>
                                                 </Button>
                                             );
@@ -303,12 +319,16 @@ export default function LobbyCreator() {
                                         </p>
                                         <div className="mt-3 flex flex-wrap gap-2">
                                             {selectedGames.map((id, i) => {
-                                                const game = GAMES.find((entry) => entry.id === id);
+                                                const game = GAMES.find(
+                                                    (entry) => entry.id === id,
+                                                );
                                                 if (!game) return null;
                                                 return (
                                                     <button
                                                         key={id}
-                                                        onClick={() => void toggleGame(id)}
+                                                        onClick={() =>
+                                                            void toggleGame(id)
+                                                        }
                                                         disabled={!isHost}
                                                         className="flex items-center gap-2 bg-pink-50 border border-pink-200 rounded-full px-3 py-1 text-sm text-pink-500 hover:bg-pink-100 transition disabled:cursor-not-allowed disabled:opacity-70"
                                                     >
@@ -332,7 +352,7 @@ export default function LobbyCreator() {
                                         {players.length} / {maxPlayers}
                                     </div>
                                 </div>
-                                <Button 
+                                <Button
                                     color="green"
                                     onClick={openPanel}
                                     size="medium"
@@ -348,7 +368,9 @@ export default function LobbyCreator() {
                                         >
                                             <span>{player.username}</span>
                                             {player.host && (
-                                                <span className="text-xs">Host</span>
+                                                <span className="text-xs">
+                                                    Host
+                                                </span>
                                             )}
                                             <div
                                                 className={`w-2 h-2 rounded-full ${player.status === "online" ? "bg-green-500" : "bg-orange-500"}`}
@@ -356,7 +378,6 @@ export default function LobbyCreator() {
                                         </div>
                                     ))}
                                 </div>
-
                             </Card>
                         </div>
                     </div>
