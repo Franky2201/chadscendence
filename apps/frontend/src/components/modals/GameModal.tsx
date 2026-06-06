@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useModal } from '../../contexts/ModalContext';
+
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -11,6 +13,7 @@ export default function GameModal({ isOpen, onClose }: LoginModalProps) {
   const { user } = useAuth();
   const { openModal } = useModal();
   const [code, setCode] = useState('');
+  const navigate = useNavigate();
 
   if (!isOpen) return null;
 
@@ -46,7 +49,7 @@ export default function GameModal({ isOpen, onClose }: LoginModalProps) {
 
         <div className="flex flex-col gap-3">
           <button
-            onClick={user ? () => {} : () => openModal('LOGIN')}
+            onClick={user ? () => { navigate('/room') } : () => openModal('LOGIN')}
             className="w-full bg-pink-600 text-white rounded-xl py-3 font-bold hover:bg-pink-700 transition"
           >
             Créer une partie

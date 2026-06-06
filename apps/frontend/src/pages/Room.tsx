@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Card, Button, Input} from '../components/ui';
 import type { ItemColor } from '../components/ui/unified';
 import { useAuth } from '../contexts/AuthContext';
-import { removeFriend } from '../services/friends';
+// import { removeFriend } from '../services/friends';
 
 
 const GAMES = [
@@ -45,7 +45,6 @@ const testStyles: Record<string, string> = {
   culture: 'green',
   default: 'grey',
 }
-
 
 const maxRounds = 10;
 const maxPlayers = 10;
