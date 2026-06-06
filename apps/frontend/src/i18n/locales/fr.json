@@ -1,0 +1,74 @@
+{
+	"loading": "Chargement",
+	"home": {
+		"play": {
+			"title": "Jouer",
+			"solo": "Solo",
+			"multiplayer": "Multijoueur",
+			"colorTheme": "Personnalisation"
+		},
+		"identification": {
+			"title": "Identification",
+			"login": {
+				"title": "Connexion",
+				"emailOrUsername": "Email ou nom d'utilisateur",
+				"password": "Mot de passe",
+				"login": "Se connecter",
+				"error": "Identifiants invalides"
+			},
+			"register": {
+				"title": "Création de compte",
+				"email": "Email",
+				"username": "Nom d'utilisateur",
+				"password": "Mot de passe",
+				"register": "S'inscrire",
+				"error": "Identifiants invalides"
+			}
+		},
+		"profile": {
+			"title": "Profil",
+			"friends": "Mes amis",
+			"logout": "Déconnexion"
+		},
+		"leaderboard": "Classement"
+	},
+	"friends": {
+		"title": "Mes amis",
+		"search": "Rechercher un joueur",
+		"blank": "Vous n'avez pas encore d'amis.",
+		"noResults": "Aucun joueur trouvé.",
+		"message": "Votre message",
+		"send": "Envoyer",
+		"remove": "Retirer",
+		"add": "Ajouter",
+		"friend": "Ami",
+		"pendingRequests": "Demandes en attente",
+		"waiting": "En attente",
+		"close": "Fermer",
+		"back": "Retour",
+		"settings": "Paramètres"
+	},
+	"profilePage": {
+		"title": "Profil",
+		"back": "Retour",
+		"modify": "Modifier",
+		"admin": "Admin",
+		"rating": "Rating",
+		"username": "Nom d'utilisateur",
+		"bio": "Bio",
+		"bioPlaceholder": "Une petite bio...",
+		"changePassword": "Changer de mot de passe",
+		"hide": "Cacher",
+		"show": "Afficher",
+		"oldPassword": "Ancien mot de passe",
+		"newPassword": "Nouveau mot de passe",
+		"save": "Enregistrer les modifications",
+		"saving": "Sauvegarde...",
+		"errorBothPasswords": "Veuillez remplir l'ancien ET le nouveau mot de passe.",
+		"successProfile": "Profil mis à jour avec succès",
+		"errorProfile": "Erreur lors de la mise à jour du profil",
+		"successAvatar": "Avatar mis à jour avec succès",
+		"errorAvatar": "Erreur lors de la mise à jour de l'avatar",
+		"loading": "Chargement ..."
+	}
+}

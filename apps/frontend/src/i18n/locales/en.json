@@ -1,0 +1,73 @@
+{
+	"home": {
+		"play": {
+			"title": "Play",
+			"solo": "Solo",
+			"multiplayer": "Multiplayer",
+			"colorTheme": "Customization"
+		},
+		"identification": {
+			"title": "Identification",
+			"login": {
+				"title": "Login",
+				"emailOrUsername": "Email or username",
+				"password": "Password",
+				"login": "Login",
+				"error": "Invalid credentials"
+			},
+			"register": {
+				"title": "Register",
+				"email": "Email",
+				"username": "Username",
+				"password": "Password",
+				"register": "Register",
+				"error": "Invalid credentials"
+			}
+		},
+		"profile": {
+			"title": "Profile",
+			"friends": "Friends",
+			"logout": "Logout"
+		},
+		"leaderboard": "Leaderboard"
+	},
+	"friends": {
+		"title": "Friends",
+		"search": "Search a player",
+		"blank": "You don't have any friends yet.",
+		"noResults": "No player found.",
+		"message": "Your message",
+		"send": "Send",
+		"remove": "Remove",
+		"add": "Add",
+		"friend": "Friend",
+		"pendingRequests": "Pending requests",
+		"waiting": "Waiting",
+		"close": "Close",
+		"back": "Back",
+		"settings": "Settings"
+	},
+	"profilePage": {
+		"title": "Profile",
+		"back": "Back",
+		"modify": "Edit",
+		"admin": "Admin",
+		"rating": "Rating",
+		"username": "Username",
+		"bio": "Bio",
+		"bioPlaceholder": "A short bio...",
+		"changePassword": "Change password",
+		"hide": "Hide",
+		"show": "Show",
+		"oldPassword": "Old password",
+		"newPassword": "New password",
+		"save": "Save changes",
+		"saving": "Saving...",
+		"errorBothPasswords": "Please fill in both the old and new password.",
+		"successProfile": "Profile updated successfully",
+		"errorProfile": "Error updating profile",
+		"successAvatar": "Avatar updated successfully",
+		"errorAvatar": "Error updating avatar",
+		"loading": "Loading ..."
+	}
+}

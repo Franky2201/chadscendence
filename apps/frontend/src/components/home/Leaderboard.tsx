@@ -1,89 +1,117 @@
-import { useEffect, useState } from 'react';
-import { getLeaderboard, type LeaderboardType } from '../../services/users';
+import { useEffect, useState } from "react";
+import { getLeaderboard, getMyLeaderboardRank } from "../../services/users";
+import type { LeaderboardType } from "../../services/users";
+import { useAuth } from "../../contexts/AuthContext";
+import { Card } from "../ui/index";
+import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
-export default function Leaderboard({ count }: { count: number }) {
-  const [topUsers, setTopUsers] = useState<LeaderboardType>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+export function Leaderboard({
+    count,
+    className = "",
+}: {
+    count: number;
+    className?: string;
+}) {
+    type DisplayUser = LeaderboardType[number] & { rank?: number };
+    const [topUsers, setTopUsers] = useState<DisplayUser[]>([]);
+    const [appendedCurrent, setAppendedCurrent] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const { t } = useTranslation();
+    const { user } = useAuth();
 
-  useEffect(() => {
-    let isMounted = true;
+    useEffect(() => {
+        let isMounted = true;
 
-    const fetchLeaderboard = async () => {
-      try {
-        const data = await getLeaderboard(count);
-        setTopUsers(data);
-      } catch (err) {
-        console.log(err);
-        if (isMounted) setError('Erreur lors du chargement du classement.');
-      } finally {
-        setIsLoading(false);
-      }
-    };
+        const fetchLeaderboard = async () => {
+            try {
+                const data = await getLeaderboard(count);
+                const displayData: DisplayUser[] = data.map((u) => ({ ...u }));
+                setAppendedCurrent(false);
+                if (user) {
+                    const alreadyIncluded = displayData.some(
+                        (u) => String(u.id) === String(user.id),
+                    );
 
-    fetchLeaderboard();
+                    if (!alreadyIncluded) {
+                        try {
+                            const myRank = await getMyLeaderboardRank();
+                            displayData.push({
+                                id: user.id,
+                                username: user.username,
+                                avatarUrl: user.avatarUrl || "/avatar.jpg",
+                                score: user.score,
+                                rank: myRank,
+                            });
+                            setAppendedCurrent(true);
+                        } catch {
+                            displayData.push({
+                                id: user.id,
+                                username: user.username,
+                                avatarUrl: user.avatarUrl || "/avatar.jpg",
+                                score: user.score,
+                            });
+                            setAppendedCurrent(true);
+                        }
+                    }
+                }
+                if (isMounted) setTopUsers(displayData);
+                setIsLoading(false);
+            } catch {
+                toast.error("Error while loading the leaderboard");
+            }
+        };
 
-    return () => {
-      isMounted = false;
-    };
-  }, [count]);
+        fetchLeaderboard();
 
-  return (
-    <div
-      className="flex flex-col items-start p-[20px] gap-[20px] w-full max-w-[450px] overflow-hidden rounded-[32px]"
-      style={{
-        background:
-          'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)',
-        backdropFilter: 'blur(40px)',
-        WebkitBackdropFilter: 'blur(40px)',
-        border: '1px solid rgba(255, 255, 255, 0.2)',
-        boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.2)',
-        fontFamily: "'Lexend', sans-serif",
-      }}
-    >
-      <h2 className="text-[#F8F3F5] text-[20px] font-medium m-0 p-0 leading-none">
-        Classement
-      </h2>
+        return () => {
+            isMounted = false;
+        };
+    }, [count, user]);
 
-      <div className="flex flex-col gap-[16px] w-full">
-        {isLoading ? (
-          <p className="text-white/60 text-[16px]">
-            Chargement des légendes...
-          </p>
-        ) : error ? (
-          <p className="text-red-400 text-[16px]">{error}</p>
-        ) : (
-          topUsers.map((user, index) => (
-            <div
-              key={user.id}
-              className="flex flex-row items-center justify-between w-full"
-            >
-              <div className="flex flex-row items-center gap-[16px]">
-                <span
-                  className="font-semibold text-[24px] min-w-[36px]"
-                  style={{ color: '#FFD931' }}
-                >
-                  #{index + 1}
-                </span>
+    return (
+        <Card
+            className={className}
+            contentClassName="justify-start"
+            title={t("home.leaderboard")}
+        >
+            <div className="flex flex-col w-full border-none">
+                {isLoading ? (
+                    <p className="text-lg">Loading ...</p>
+                ) : (
+                    topUsers.map((item, index) => (
+                        <div key={item.id} className="w-full">
+                            {appendedCurrent &&
+                                item.rank !== undefined &&
+                                index === topUsers.length - 1 && (
+                                    <span className="block w-full border-t border-dashed my-2" />
+                                )}
 
-                <img
-                  src={user.avatarUrl}
-                  alt={`${user.username} avatar`}
-                  className="w-[55px] h-[55px] rounded-full object-cover border border-white/10"
-                />
+                            <div className="flex flex-row items-center justify-between w-full">
+                                <div className="flex flex-row items-center min-w-0">
+                                    <span className="text-xl mr-4 w-5 text-right font-mona-sans">
+                                        {item.rank ?? index + 1}.
+                                    </span>
 
-                <span className="text-white text-[24px] font-medium">
-                  {user.username}
-                </span>
-              </div>
+                                    <img
+                                        src={item.avatarUrl}
+                                        alt={`${item.username} avatar`}
+                                        className="w-10 h-10 mr-2 mb-1 rounded-xl border"
+                                    />
 
-              <span className="text-white text-[24px] font-medium">
-                {user.score}
-              </span>
+                                    <span className="block truncate text-xl font-bold max-w-[14rem] sm:max-w-[18rem]">
+                                        {item.username}
+                                    </span>
+                                </div>
+
+                                <span className="text-lg font-mona-sans">
+                                    {item.score}
+                                </span>
+                            </div>
+                        </div>
+                    ))
+                )}
             </div>
-          ))
-        )}
-      </div>
-    </div>
-  );
+        </Card>
+    );
 }

@@ -1,139 +1,148 @@
 name: CI Pipeline
 
 on:
-  pull_request:
-    branches: ["main"]
+    pull_request:
+        branches: ["main"]
 
 jobs:
-  # Job for the Backend Gateway
-  backend:
-    name: Backend (NestJS)
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+    # Job for the Backend Gateway
+    backend:
+        name: Backend (NestJS)
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-          cache: "npm"
-          cache-dependency-path: "package-lock.json"
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "22"
+                  cache: "npm"
+                  cache-dependency-path: "package-lock.json"
 
-      - name: Install Dependencies
-        run: npm ci
+            - name: Install Dependencies
+              run: npm ci
 
-      - name: Lint
-        run: npm run lint -w backend
+            - name: Build shared types
+              run: npm run build -w @chad/types
 
-      - name: Test
-        run: npm run test -w backend
+            - name: Lint
+              run: npm run lint -w backend
 
-      - name: Build
-        run: npm run build -w backend
+            - name: Test
+              run: npm run test -w backend
 
-  # Job for the Frontend SPA
-  frontend:
-    name: Frontend (React/Vite)
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+            - name: Build
+              run: npm run build -w backend
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-          cache: "npm"
-          cache-dependency-path: "package-lock.json"
+    # Job for the Frontend SPA
+    frontend:
+        name: Frontend (React/Vite)
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v4
 
-      - name: Install Dependencies
-        run: npm ci
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "22"
+                  cache: "npm"
+                  cache-dependency-path: "package-lock.json"
 
-      - name: Lint
-        run: npm run lint -w frontend
+            - name: Install Dependencies
+              run: npm ci
 
-      - name: Test
-        run: npm run test -w frontend
+            - name: Build shared types
+              run: npm run build -w @chad/types
 
-      - name: Build
-        run: npm run build -w frontend
+            - name: Lint
+              run: npm run lint -w frontend
 
-  # Job for Game Microservices (Dynamic Matrix)
-  games-discovery:
-    name: Discover Games
-    runs-on: ubuntu-latest
-    outputs:
-      games: ${{ steps.set-games.outputs.games }}
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-      - id: set-games
-        run: |
-          GAMES=$(find apps/games -mindepth 1 -maxdepth 1 -type d -exec test -e "{}/package.json" \; -print | xargs -n1 basename | jq -R -s -c 'split("\n")[:-1]')
-          echo "games=$GAMES" >> $GITHUB_OUTPUT
+            - name: Test
+              run: npm run test -w frontend
 
-  games:
-    name: Game (${{ matrix.game }})
-    needs: games-discovery
-    if: ${{ needs.games-discovery.outputs.games != '[]' && needs.games-discovery.outputs.games != '' }}
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        game: ${{ fromJson(needs.games-discovery.outputs.games) }}
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+            - name: Build
+              run: npm run build -w frontend
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-          cache: "npm"
-          cache-dependency-path: "package-lock.json"
+    # Job for Game Microservices (Dynamic Matrix)
+    games-discovery:
+        name: Discover Games
+        runs-on: ubuntu-latest
+        outputs:
+            games: ${{ steps.set-games.outputs.games }}
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v4
+            - id: set-games
+              run: |
+                  GAMES=$(find apps/games -mindepth 1 -maxdepth 1 -type d -not -name "template" -exec test -e "{}/package.json" \; -print | xargs -n1 basename | jq -R -s -c 'split("\n")[:-1]')
+                  echo "games=$GAMES" >> $GITHUB_OUTPUT
 
-      - name: Install Dependencies
-        run: npm ci
+    games:
+        name: Game (${{ matrix.game }})
+        needs: games-discovery
+        if: ${{ needs.games-discovery.outputs.games != '[]' && needs.games-discovery.outputs.games != '' }}
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                game: ${{ fromJson(needs.games-discovery.outputs.games) }}
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v4
 
-      - name: Lint
-        run: npm run lint -w ${{ matrix.game }}
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "22"
+                  cache: "npm"
+                  cache-dependency-path: "package-lock.json"
 
-      - name: Test
-        run: npm run test -w ${{ matrix.game }}
+            - name: Install Dependencies
+              run: npm ci
 
-      - name: Build
-        run: npm run build -w ${{ matrix.game }}
+            - name: Build shared types
+              run: npm run build -w @chad/types
 
-  # Job for Docker Test with Layer Caching
-  docker-test:
-    name: Docker Test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+            - name: Lint
+              run: npm run lint -w ${{ matrix.game }}
 
-      # Set up Docker Buildx for advanced caching
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+            - name: Test
+              run: npm run test -w ${{ matrix.game }}
 
-      - name: Setup Environment
-        run: cp .env.example .env
+            - name: Build
+              run: npm run build -w ${{ matrix.game }}
 
-      - name: Create Data Directories
-        run: mkdir -p apps/backend/uploads
+    # Job for Docker Test with Layer Caching
+    docker-test:
+        name: Docker Test
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v4
 
-      - name: Build and Start Stack
-        # By using Buildx, Docker Compose will automatically try to use local caches.
-        # To truly leverage GitHub Actions cache with 'docker compose',
-        # we rely on the Buildx driver which handles layer caching more efficiently than standard Docker.
-        run: docker compose up -d --build --wait
+            # Set up Docker Buildx for advanced caching
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v3
 
-      - name: Check Container Status
-        run: docker compose ps
+            - name: Setup Environment
+              run: cp .env.example .env
 
-      - name: Logs on Failure
-        if: failure()
-        run: docker compose logs
+            - name: Create Data Directories
+              run: mkdir -p apps/backend/uploads
 
-      - name: Shutdown
-        run: docker compose down -v
+            - name: Build and Start Stack
+              # By using Buildx, Docker Compose will automatically try to use local caches.
+              # To truly leverage GitHub Actions cache with 'docker compose',
+              # we rely on the Buildx driver which handles layer caching more efficiently than standard Docker.
+              run: docker compose up -d --build --wait
+
+            - name: Check Container Status
+              run: docker compose ps
+
+            - name: Logs on Failure
+              if: failure()
+              run: docker compose logs
+
+            - name: Shutdown
+              run: docker compose down -v

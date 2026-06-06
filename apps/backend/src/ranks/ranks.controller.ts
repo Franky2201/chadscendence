@@ -1,52 +1,52 @@
 import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-  UseGuards,
-} from '@nestjs/common';
-import { RanksService } from './ranks.service';
-import { JwtAuthGuard } from 'src/common/guards/jwt.guard';
-import { UserRole } from 'src/common/entities/user.entity';
-import { RolesGuard } from 'src/common/guards/roles.guard';
-import { Roles } from 'src/common/decorators/roles.decorator';
-import { CreateRankDto, UpdateRankDto } from 'src/common/dto/ranks.dto';
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Param,
+    Patch,
+    Post,
+    UseGuards,
+} from "@nestjs/common";
+import { RanksService } from "./ranks.service";
+import { JwtAuthGuard } from "../common/guards/jwt.guard";
+import { CreateRankDto, UpdateRankDto } from "../common/dto/ranks.dto";
+import { PermissionsGuard } from "src/common/guards/permissions.guard";
+import { Permissions } from "src/common/decorators/permissions.decorator";
+import { PermissionAction } from "@chad/types";
 
-@Controller('ranks')
+@Controller("ranks")
 export class RanksController {
-  constructor(private readonly ranksService: RanksService) {}
+    constructor(private readonly ranksService: RanksService) {}
 
-  @Get('')
-  getRanks() {
-    return this.ranksService.getRanks();
-  }
+    @Get("")
+    getRanks() {
+        return this.ranksService.getRanks();
+    }
 
-  @Get(':id')
-  getRank(@Param('id') id: string) {
-    return this.ranksService.getRank(id);
-  }
+    @Get(":id")
+    getRank(@Param("id") id: string) {
+        return this.ranksService.getRank(id);
+    }
 
-  @Post()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
-  createRank(@Body() body: CreateRankDto) {
-    return this.ranksService.createRank(body);
-  }
+    @Post()
+    @UseGuards(JwtAuthGuard, PermissionsGuard)
+    @Permissions(PermissionAction.CREATE_RANK)
+    createRank(@Body() body: CreateRankDto) {
+        return this.ranksService.createRank(body);
+    }
 
-  @Patch(':id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
-  updateRank(@Param('id') id: string, @Body() body: UpdateRankDto) {
-    return this.ranksService.updateRank(id, body);
-  }
+    @Patch(":id")
+    @UseGuards(JwtAuthGuard, PermissionsGuard)
+    @Permissions(PermissionAction.EDIT_RANK)
+    updateRank(@Param("id") id: string, @Body() body: UpdateRankDto) {
+        return this.ranksService.updateRank(id, body);
+    }
 
-  @Delete(':id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
-  deleteRank(@Param('id') id: string) {
-    return this.ranksService.deleteRank(id);
-  }
+    @Delete(":id")
+    @UseGuards(JwtAuthGuard, PermissionsGuard)
+    @Permissions(PermissionAction.DELETE_RANK)
+    deleteRank(@Param("id") id: string) {
+        return this.ranksService.deleteRank(id);
+    }
 }
