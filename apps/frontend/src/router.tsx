@@ -28,8 +28,12 @@ export const router = createBrowserRouter([
                 element: <Profile />,
             },
             {
-              path: 'room',
-              element: <Room />,
+                path: "room",
+                element: <Room />,
+            },
+            {
+                path: "room/:code",
+                element: <Room />,
             },
         ],
     },
