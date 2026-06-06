@@ -3,6 +3,7 @@ import { useModal } from "../../contexts/ModalContext";
 import { useTheme } from "../../contexts/ThemeContext";
 import { getItemColorStyle, type ItemColor } from "../ui/unified";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 const colorThemes: { name: ItemColor }[] = [
     { name: "grey" },
@@ -20,6 +21,7 @@ export function Play({ className = "" }: { className?: string }) {
     const { theme, setTheme } = useTheme();
     const { openModal } = useModal();
     const { t } = useTranslation();
+    const navigate = useNavigate();
 
     return (
         <Card
@@ -29,7 +31,7 @@ export function Play({ className = "" }: { className?: string }) {
         >
             <div className="flex flex-wrap justify-center gap-3">
                 <IconButton
-                    onClick={() => openModal("GAME")}
+                    onClick={() => navigate("/games")}
                     color={theme}
                     className="h-25 w-25 flex flex-col"
                     img="game_solo.svg"

@@ -10,6 +10,7 @@ import { GamesModule } from "./games/games.module";
 import { FriendsModule } from "./friends/friends.module";
 import { PresenceModule } from "./presence/presence.module";
 import { MessagesModule } from "./messages/messages.module";
+import { RoomsModule } from "./rooms/rooms.module";
 
 @Module({
     imports: [
@@ -36,6 +37,7 @@ import { MessagesModule } from "./messages/messages.module";
         GamesModule,
         FriendsModule,
         MessagesModule,
+        RoomsModule,
     ],
     controllers: [AppController],
     providers: [AppService],
