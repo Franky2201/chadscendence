@@ -7,6 +7,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { useFriends } from "../contexts/FriendsContext";
 import { Header } from "../components/Header";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 
 export default function UsersPage() {
     const { t } = useTranslation();
@@ -15,7 +16,6 @@ export default function UsersPage() {
     const [users, setUsers] = useState<UserListItem[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
 
     const filteredUsers = users.filter((u) =>
         u.username.toLowerCase().includes(searchQuery.toLowerCase()),
@@ -24,11 +24,9 @@ export default function UsersPage() {
     useEffect(() => {
         getAllUsers()
             .then(setUsers)
-            .catch(() =>
-                setError(t("users.error")),
-            )
+            .catch(() => toast.error(t("users.error")))
             .finally(() => setIsLoading(false));
-    }, []);
+    }, [t]);
 
     return (
         <Window>
@@ -48,7 +46,9 @@ export default function UsersPage() {
                     <p className="text-slate-400 text-sm">
                         {isLoading
                             ? t("users.loading")
-                            : t("users.playersCount", { count: filteredUsers.length })}
+                            : t("users.playersCount", {
+                                  count: filteredUsers.length,
+                              })}
                     </p>
                 </div>
 
@@ -59,13 +59,7 @@ export default function UsersPage() {
                         </div>
                     )}
 
-                    {error && (
-                        <div className="flex items-center justify-center h-64 text-red-400">
-                            {error}
-                        </div>
-                    )}
-
-                    {!isLoading && !error && (
+                    {!isLoading && (
                         <div className="flex flex-wrap gap-6 justify-start">
                             {filteredUsers.map((user) => (
                                 <UserCard
@@ -73,47 +67,71 @@ export default function UsersPage() {
                                     user={user}
                                     actions={
                                         currentUser &&
-                                            currentUser.id !== user.id ? (
-                                            (() => {
-                                                const isFriend = friends.some((f) => f.id === user.id);
-                                                const isPending = sentRequests.some((r) => r.addresseeId === user.id);
-                                                
-                                                if (isFriend) {
-                                                    return (
-                                                        <Button color="grey" size="small" className="w-full" disabled>
-                                                            {t("users.friend")}
-                                                        </Button>
-                                                    );
-                                                }
-                                                
-                                                if (isPending) {
-                                                    return (
-                                                        <Button color="orange" size="small" className="w-full" disabled>
-                                                            {t("users.pending")}
-                                                        </Button>
-                                                    );
-                                                }
-                                                
-                                                return (
-                                                    <Button
-                                                        color="green"
-                                                        size="small"
-                                                        className="w-full"
-                                                        onClick={() => sendRequest(user.id)}
-                                                    >
-                                                        {t("users.addFriend")}
-                                                    </Button>
-                                                );
-                                            })()
-                                        ) : undefined
+                                        currentUser.id !== user.id
+                                            ? (() => {
+                                                  const isFriend = friends.some(
+                                                      (f) => f.id === user.id,
+                                                  );
+                                                  const isPending =
+                                                      sentRequests.some(
+                                                          (r) =>
+                                                              r.addresseeId ===
+                                                              user.id,
+                                                      );
+
+                                                  if (isFriend) {
+                                                      return (
+                                                          <Button
+                                                              color="grey"
+                                                              size="small"
+                                                              className="w-full"
+                                                              disabled
+                                                          >
+                                                              {t(
+                                                                  "users.friend",
+                                                              )}
+                                                          </Button>
+                                                      );
+                                                  }
+
+                                                  if (isPending) {
+                                                      return (
+                                                          <Button
+                                                              color="orange"
+                                                              size="small"
+                                                              className="w-full"
+                                                              disabled
+                                                          >
+                                                              {t(
+                                                                  "users.pending",
+                                                              )}
+                                                          </Button>
+                                                      );
+                                                  }
+
+                                                  return (
+                                                      <Button
+                                                          color="green"
+                                                          size="small"
+                                                          className="w-full"
+                                                          onClick={() =>
+                                                              sendRequest(
+                                                                  user.id,
+                                                              )
+                                                          }
+                                                      >
+                                                          {t("users.addFriend")}
+                                                      </Button>
+                                                  );
+                                              })()
+                                            : undefined
                                     }
                                 />
                             ))}
                         </div>
                     )}
                 </div>
-
             </div>
-        </Window >
+        </Window>
     );
 }

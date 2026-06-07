@@ -29,12 +29,13 @@ export const useAdmin = () => {
             setIsLoading(true);
 
             try {
-                const [rolesData, permsData, ranksData, usersData] = await Promise.all([
-                    getRoles(),
-                    getPermissions(),
-                    getRanks(),
-                    getAllUsers(),
-                ]);
+                const [rolesData, permsData, ranksData, usersData] =
+                    await Promise.all([
+                        getRoles(),
+                        getPermissions(),
+                        getRanks(),
+                        getAllUsers(),
+                    ]);
 
                 setRoles(rolesData);
                 setPermissions(permsData);
@@ -86,7 +87,11 @@ export const useAdmin = () => {
         }
     };
 
-    const handleUpdateUser = async (id: string, data: AdminUpdateData, avatarFile?: File | null) => {
+    const handleUpdateUser = async (
+        id: string,
+        data: AdminUpdateData,
+        avatarFile?: File | null,
+    ) => {
         try {
             if (avatarFile) {
                 await uploadAvatarForUser(id, avatarFile);
@@ -105,8 +110,10 @@ export const useAdmin = () => {
             const result = await banUser(id);
             setUsers((prev) =>
                 prev.map((u) =>
-                    u.id === id ? { ...u, accountStatus: result.accountStatus } : u
-                )
+                    u.id === id
+                        ? { ...u, accountStatus: result.accountStatus }
+                        : u,
+                ),
             );
             toast.success("Statut mis à jour");
         } catch {

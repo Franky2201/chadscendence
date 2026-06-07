@@ -7,6 +7,7 @@ import type { UserListItem, AdminUpdateData } from "../../services/users";
 import { useAuth } from "../../contexts/AuthContext";
 import { Link } from "react-router-dom";
 import type { Role } from "@chad/types";
+import { useTranslation } from "react-i18next";
 
 type ActiveModal =
     | { type: "edit"; user: UserListItem }
@@ -16,23 +17,37 @@ type ActiveModal =
 interface UserManagerProps {
     users: UserListItem[];
     roles: Role[];
-    onUpdateUser: (id: string, data: AdminUpdateData, avatarFile?: File | null) => Promise<void>;
+    onUpdateUser: (
+        id: string,
+        data: AdminUpdateData,
+        avatarFile?: File | null,
+    ) => Promise<void>;
     onBanUser: (id: string) => Promise<void>;
 }
 
-export default function UserManager({ users, roles, onUpdateUser, onBanUser }: UserManagerProps) {
+export default function UserManager({
+    users,
+    roles,
+    onUpdateUser,
+    onBanUser,
+}: UserManagerProps) {
+    const { t } = useTranslation();
     const { user: currentUser } = useAuth();
     const [searchQuery, setSearchQuery] = useState("");
     const [roleFilter, setRoleFilter] = useState("ALL");
     const [activeModal, setActiveModal] = useState<ActiveModal>(null);
 
     const uniqueRoles = useMemo(() => {
-        const rolesNames = new Set(users.map((u) => u.role?.name).filter(Boolean));
+        const rolesNames = new Set(
+            users.map((u) => u.role?.name).filter(Boolean),
+        );
         return Array.from(rolesNames);
     }, [users]);
 
     const filteredUsers = users.filter((u) => {
-        const matchSearch = u.username.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchSearch = u.username
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase());
         const matchRole = roleFilter === "ALL" || u.role?.name === roleFilter;
         return matchSearch && matchRole;
     });
@@ -46,13 +61,13 @@ export default function UserManager({ users, roles, onUpdateUser, onBanUser }: U
 
     return (
         <div className="flex flex-col gap-6 w-full">
-            <Title color="white" className="text-2xl font-bold">
-                Gestion des Utilisateurs
+            <Title color="white" className="text-3xl text-left">
+                {t("admin.usersManager.title")}
             </Title>
 
             <div className="flex flex-col md:flex-row items-stretch gap-4 w-full">
                 <Input
-                    placeholder="Rechercher un joueur..."
+                    placeholder={t("admin.usersManager.search")}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="flex-1 !bg-white/10 !border-white/20 !text-white !text-left !font-normal placeholder:!text-white/40 !text-lg !py-3"
@@ -63,7 +78,7 @@ export default function UserManager({ users, roles, onUpdateUser, onBanUser }: U
                     className="flex-1 !h-full !bg-white/10 !border-white/20 !text-white"
                 >
                     <option value="ALL" className="text-black">
-                        Tous les rôles
+                        {t("admin.usersManager.allRoles")}
                     </option>
                     {uniqueRoles.map((role) => (
                         <option key={role} value={role} className="text-black">
@@ -104,9 +119,7 @@ export default function UserManager({ users, roles, onUpdateUser, onBanUser }: U
                                     </span>
                                 </Link>
                                 {user.role && (
-                                    <Badge color="blue">
-                                        {user.role.name}
-                                    </Badge>
+                                    <Badge color="blue">{user.role.name}</Badge>
                                 )}
                             </div>
                         </div>
@@ -117,24 +130,39 @@ export default function UserManager({ users, roles, onUpdateUser, onBanUser }: U
                                         value={user.role?.id || ""}
                                         onChange={async (e) => {
                                             const roleId = e.target.value;
-                                            await onUpdateUser(user.id, { roleId });
+                                            await onUpdateUser(user.id, {
+                                                roleId,
+                                            });
                                         }}
                                         className="!bg-blue-500/20 !border-blue-500/50 hover:!bg-blue-500/30 text-blue-400 font-bold"
                                     >
-                                        <option value="" disabled className="text-black">Sélectionner un rôle</option>
+                                        <option
+                                            value=""
+                                            disabled
+                                            className="text-black"
+                                        >
+                                            {t("admin.usersManager.selectRole")}
+                                        </option>
                                         {roles.map((r) => (
-                                            <option key={r.id} value={r.id} className="text-black">
+                                            <option
+                                                key={r.id}
+                                                value={r.id}
+                                                className="text-black"
+                                            >
                                                 {r.name}
                                             </option>
                                         ))}
-                                    </Select><Button
+                                    </Select>
+                                    <Button
                                         color="blue"
-                                        onClick={() => setActiveModal({
-                                            type: "edit",
-                                            user,
-                                        })}
+                                        onClick={() =>
+                                            setActiveModal({
+                                                type: "edit",
+                                                user,
+                                            })
+                                        }
                                     >
-                                        Modifier
+                                        {t("admin.usersManager.modify")}
                                     </Button>
                                 </>
                             )}
@@ -142,7 +170,7 @@ export default function UserManager({ users, roles, onUpdateUser, onBanUser }: U
                                 <Button
                                     color={
                                         user.accountStatus ===
-                                            AccountStatus.BANNED
+                                        AccountStatus.BANNED
                                             ? "orange"
                                             : "red"
                                     }
@@ -153,10 +181,9 @@ export default function UserManager({ users, roles, onUpdateUser, onBanUser }: U
                                         })
                                     }
                                 >
-                                    {user.accountStatus ===
-                                        AccountStatus.BANNED
-                                        ? "Débannir"
-                                        : "Bannir"}
+                                    {user.accountStatus === AccountStatus.BANNED
+                                        ? t("admin.usersManager.unban")
+                                        : t("admin.usersManager.ban")}
                                 </Button>
                             )}
                         </div>
@@ -164,7 +191,7 @@ export default function UserManager({ users, roles, onUpdateUser, onBanUser }: U
                 ))}
                 {filteredUsers.length === 0 && (
                     <div className="text-white/60 italic text-center py-4">
-                        Aucun joueur trouvé.
+                        {t("admin.usersManager.noPlayers")}
                     </div>
                 )}
             </div>

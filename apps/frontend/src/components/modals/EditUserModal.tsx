@@ -1,11 +1,16 @@
 import { useState, useRef } from "react";
 import { Button, Input } from "../ui";
 import type { UserListItem, AdminUpdateData } from "../../services/users";
+import { useTranslation } from "react-i18next";
 
 interface EditUserModalProps {
     user: UserListItem;
     onClose: () => void;
-    onUpdateUser: (id: string, data: AdminUpdateData, avatarFile?: File | null) => Promise<void>;
+    onUpdateUser: (
+        id: string,
+        data: AdminUpdateData,
+        avatarFile?: File | null,
+    ) => Promise<void>;
 }
 
 export function EditUserModal({
@@ -13,6 +18,7 @@ export function EditUserModal({
     onClose,
     onUpdateUser,
 }: EditUserModalProps) {
+    const { t } = useTranslation();
     const [username, setUsername] = useState(user.username);
     const [avatarPreview, setAvatarPreview] = useState(user.avatarUrl ?? "");
     const [avatarFile, setAvatarFile] = useState<File | null>(null);
@@ -32,11 +38,15 @@ export function EditUserModal({
     const handleSubmit = async () => {
         setIsLoading(true);
         try {
-            await onUpdateUser(user.id, {
-                username: username.trim() || undefined,
-                bio: bio.trim() || null,
-                score: score !== "" ? Number(score) : undefined,
-            }, avatarFile);
+            await onUpdateUser(
+                user.id,
+                {
+                    username: username.trim() || undefined,
+                    bio: bio.trim() || null,
+                    score: score !== "" ? Number(score) : undefined,
+                },
+                avatarFile,
+            );
             onClose();
         } catch {
             // error handled in useAdmin
@@ -49,14 +59,14 @@ export function EditUserModal({
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
             <div className="bg-slate-800 border border-slate-700 rounded-3xl p-10 w-full max-w-lg shadow-2xl flex flex-col gap-6">
                 <h2 className="text-2xl font-bold text-white">
-                    Modifier{" "}
+                    {t("admin.usersManager.editModal.title")}{" "}
                     <span className="text-blue-400">{user.username}</span>
                 </h2>
 
-                <div className="flex flex-col gap-3">
-                    <div className="flex flex-col gap-1 items-center">
-                        <label className="text-xs text-slate-400 self-start">
-                            Avatar
+                <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-2">
+                        <label className="text-sm font-bold text-slate-400">
+                            {t("admin.usersManager.editModal.avatar")}
                         </label>
                         <div
                             className="relative group cursor-pointer"
@@ -69,7 +79,7 @@ export function EditUserModal({
                             />
                             <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                 <span className="text-white text-xs font-bold bg-black/60 px-2 py-1 rounded-lg">
-                                    Modifier
+                                    {t("admin.usersManager.editModal.modify")}
                                 </span>
                             </div>
                         </div>
@@ -83,7 +93,9 @@ export function EditUserModal({
                     </div>
 
                     <div className="flex flex-col gap-1">
-                        <label className="text-sm font-bold text-slate-400">Pseudo</label>
+                        <label className="text-sm font-bold text-slate-400">
+                            {t("admin.usersManager.editModal.username")}
+                        </label>
                         <Input
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
@@ -93,7 +105,9 @@ export function EditUserModal({
                     </div>
 
                     <div className="flex flex-col gap-1">
-                        <label className="text-sm font-bold text-slate-400">Bio</label>
+                        <label className="text-sm font-bold text-slate-400">
+                            {t("admin.usersManager.editModal.bio")}
+                        </label>
                         <textarea
                             value={bio}
                             onChange={(e) => setBio(e.target.value)}
@@ -103,7 +117,9 @@ export function EditUserModal({
                     </div>
 
                     <div className="flex flex-col gap-1">
-                        <label className="text-sm font-bold text-slate-400">Score</label>
+                        <label className="text-sm font-bold text-slate-400">
+                            {t("admin.usersManager.editModal.score")}
+                        </label>
                         <Input
                             value={score}
                             onChange={(e) => setScore(e.target.value)}
@@ -116,19 +132,17 @@ export function EditUserModal({
                 </div>
 
                 <div className="flex gap-4 justify-end mt-4">
-                    <Button
-                        color="grey"
-                        onClick={onClose}
-                        disabled={isLoading}
-                    >
-                        Annuler
+                    <Button color="grey" onClick={onClose} disabled={isLoading}>
+                        {t("admin.usersManager.editModal.cancel")}
                     </Button>
                     <Button
                         color="blue"
                         onClick={handleSubmit}
                         disabled={isLoading}
                     >
-                        {isLoading ? "Enregistrement..." : "Enregistrer"}
+                        {isLoading
+                            ? t("admin.usersManager.editModal.saving")
+                            : t("admin.usersManager.editModal.save")}
                     </Button>
                 </div>
             </div>
