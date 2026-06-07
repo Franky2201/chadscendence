@@ -51,9 +51,8 @@ export function Button({
     ]
         .filter(Boolean)
         .join(" ");
-    const resolvedColor = props.disabled ? "grey" : color;
-    const colorStyle = getItemColorStyle(resolvedColor);
-    const textStyle = getItemColorTextStyle(resolvedColor, 65);
+    const colorStyle = getItemColorStyle(color);
+    const textStyle = getItemColorTextStyle(color, 65);
     return (
         <div className={divClasses}>
             <span
