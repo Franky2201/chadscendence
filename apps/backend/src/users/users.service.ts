@@ -202,6 +202,7 @@ export class UsersService implements OnModuleInit {
                 updatedAt: true,
                 accountStatus: true,
             },
+            relations: { role: true },
             order: { username: "ASC" },
         });
 
@@ -213,6 +214,7 @@ export class UsersService implements OnModuleInit {
             score: u.score,
             updatedAt: u.updatedAt,
             accountStatus: u.accountStatus,
+            role: u.role,
             status: this.presenceService.isUserOnline(u.id)
                 ? "online"
                 : "offline",

@@ -7,15 +7,9 @@ export enum UserStatus {
 
 export enum PermissionAction {
     BAN_USER = 'BAN_USER',
-    UNBAN_USER = 'UNBAN_USER',
-    EDIT_USER_AVATAR = 'EDIT_USER_AVATAR',
-    EDIT_USER_USERNAME = 'EDIT_USER_USERNAME',
-    EDIT_USER_BIO = 'EDIT_USER_BIO',
-    EDIT_USER_SCORE = 'EDIT_USER_SCORE',
+    MANAGE_USERS = 'MANAGE_USERS',
     MANAGE_ROLES = 'MANAGE_ROLES',
-    CREATE_RANK = 'CREATE_RANK',
-    EDIT_RANK = 'EDIT_RANK',
-    DELETE_RANK = 'DELETE_RANK',
+    MANAGE_RANKS = 'MANAGE_RANKS',
 }
 
 export interface Permission {
