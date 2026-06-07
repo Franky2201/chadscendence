@@ -11,6 +11,7 @@ import { FriendsModule } from "./friends/friends.module";
 import { PresenceModule } from "./presence/presence.module";
 import { MessagesModule } from "./messages/messages.module";
 import { RoomsModule } from "./rooms/rooms.module";
+import { RolesModule } from "./roles/roles.module";
 
 @Module({
     imports: [
@@ -32,6 +33,7 @@ import { RoomsModule } from "./rooms/rooms.module";
         }),
         UsersModule,
         AuthModule,
+        RolesModule,
         PresenceModule,
         RanksModule,
         GamesModule,

@@ -1,4 +1,5 @@
 {
+	"loading": "Loading",
 	"home": {
 		"play": {
 			"title": "Play",
@@ -69,5 +70,26 @@
 		"successAvatar": "Avatar updated successfully",
 		"errorAvatar": "Error updating avatar",
 		"loading": "Loading ..."
+	},
+	"admin": {
+		"title": "Administration",
+		"loading": "Loading...",
+		"tabs": {
+			"users": "Users",
+			"ranks": "Rating",
+			"roles": "Roles"
+		},
+		"roles": {
+			"title": "Role Management",
+			"editTitle": "Edit role",
+			"modify": "Edit",
+			"delete": "Delete",
+			"newRole": "New role",
+			"roleName": "Role name",
+			"create": "Create",
+			"cancel": "Cancel",
+			"addRole": "Add role",
+			"validate": "Confirm"
+		}
 	}
 }

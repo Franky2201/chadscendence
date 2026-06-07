@@ -24,7 +24,11 @@ import type { JwtPayload } from "../common/dto/auth.dto";
 const avatarUploadOptions = {
     storage: diskStorage({
         destination: "./uploads",
-        filename: (_req: Express.Request, file: Express.Multer.File, cb: (err: Error | null, name: string) => void) => {
+        filename: (
+            _req: Express.Request,
+            file: Express.Multer.File,
+            cb: (err: Error | null, name: string) => void,
+        ) => {
             const unique = Date.now() + "-" + Math.round(Math.random() * 1e9);
             cb(null, unique + extname(file.originalname));
         },
