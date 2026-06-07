@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAdmin } from "../hooks/useAdmin";
 import RoleManager from "../components/admin/RoleManager";
+import UserManager from "../components/admin/UserManager";
 import { Window, Title, Button } from "../components/ui";
 import { Header } from "../components/Header";
 import { useTranslation } from "react-i18next";
@@ -13,10 +14,13 @@ export default function AdminPage() {
     const {
         roles,
         permissions,
+        users,
         isLoading,
         handleCreateRole,
         handleUpdateRole,
         handleDeleteRole,
+        handleUpdateUser,
+        handleBanUser,
     } = useAdmin();
 
     if (isLoading)
@@ -74,9 +78,12 @@ export default function AdminPage() {
                 )}
 
                 {activeTab === "users" && (
-                    <div className="text-white/50 italic">
-                        Composant UserManager à insérer ici
-                    </div>
+                    <UserManager
+                        users={users}
+                        roles={roles}
+                        onUpdateUser={handleUpdateUser}
+                        onBanUser={handleBanUser}
+                    />
                 )}
             </div>
         </Window>
