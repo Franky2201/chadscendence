@@ -61,34 +61,36 @@ export function Card({
             }}
         >
             {title && (
-                <div className="flex w-full items-start gap-2">
-                    <Title
-                        className={`min-w-0 flex-1 ${titleSizeClasses[size]}`}
-                        color={color}
-                    >
-                        {title}
-                    </Title>
-                    {clickable &&
-                        (props.href && !props.href.startsWith("http") ? (
-                            <Link
-                                className={commonLinkClass}
-                                {...props}
-                                to={props.href}
-                                ref={undefined}
-                            >
-                                {description} ⮕
-                            </Link>
-                        ) : (
-                            <a className={commonLinkClass} {...props}>
-                                {description} ⮕
-                            </a>
-                        ))}
-                </div>
+                <>
+                    <div className="flex w-full items-start gap-2">
+                        <Title
+                            className={`min-w-0 flex-1 ${titleSizeClasses[size]}`}
+                            color={color}
+                        >
+                            {title}
+                        </Title>
+                        {clickable &&
+                            (props.href && !props.href.startsWith("http") ? (
+                                <Link
+                                    className={commonLinkClass}
+                                    {...props}
+                                    to={props.href}
+                                    ref={undefined}
+                                >
+                                    {description} ⮕
+                                </Link>
+                            ) : (
+                                <a className={commonLinkClass} {...props}>
+                                    {description} ⮕
+                                </a>
+                            ))}
+                    </div>
+                    <hr
+                        className={`w-full mt-2 mb-4 text-[var(--ui-color)]/80`}
+                        style={{ ...getItemColorStyle(color) }}
+                    />
+                </>
             )}
-            <hr
-                className={`w-full mt-2 mb-4 text-[var(--ui-color)]/80`}
-                style={{ ...getItemColorStyle(color) }}
-            />
             <div className={`w-full h-full ${contentClassName} `}>
                 {children}
             </div>
