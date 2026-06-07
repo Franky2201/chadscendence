@@ -16,6 +16,19 @@ export default function AdminPage() {
     const [activeTab, setActiveTab] = useState<"users" | "ranks" | "roles">(
         "users",
     );
+    const hasPermissions =
+        user?.role?.permissions && user.role.permissions.length > 0;
+
+    const canManageRanks =
+        user?.role?.permissions?.some((p) => p.action === "MANAGE_RANKS") ??
+        false;
+    const canManageRoles =
+        user?.role?.permissions?.some((p) => p.action === "MANAGE_ROLES") ??
+        false;
+    const canManageUsers =
+        user?.role?.permissions?.some((p) => p.action === "MANAGE_USERS") ??
+        false;
+
     const {
         roles,
         permissions,
@@ -26,10 +39,7 @@ export default function AdminPage() {
         handleDeleteRole,
         handleUpdateUser,
         handleBanUser,
-    } = useAdmin();
-
-    const hasPermissions =
-        user?.role?.permissions && user.role.permissions.length > 0;
+    } = useAdmin(canManageRoles, canManageRanks, canManageUsers);
 
     useEffect(() => {
         if (!hasPermissions) {
@@ -63,21 +73,25 @@ export default function AdminPage() {
                     >
                         {t("admin.tabs.users")}
                     </Button>
-                    <Button
-                        color={activeTab === "ranks" ? "pink" : "grey"}
-                        onClick={() => setActiveTab("ranks")}
-                    >
-                        {t("admin.tabs.ranks")}
-                    </Button>
-                    <Button
-                        color={activeTab === "roles" ? "pink" : "grey"}
-                        onClick={() => setActiveTab("roles")}
-                    >
-                        {t("admin.tabs.roles")}
-                    </Button>
+                    {canManageRanks && (
+                        <Button
+                            color={activeTab === "ranks" ? "pink" : "grey"}
+                            onClick={() => setActiveTab("ranks")}
+                        >
+                            {t("admin.tabs.ranks")}
+                        </Button>
+                    )}
+                    {canManageRoles && (
+                        <Button
+                            color={activeTab === "roles" ? "pink" : "grey"}
+                            onClick={() => setActiveTab("roles")}
+                        >
+                            {t("admin.tabs.roles")}
+                        </Button>
+                    )}
                 </div>
 
-                {activeTab === "roles" && (
+                {activeTab === "roles" && canManageRoles && (
                     <RoleManager
                         roles={roles}
                         permissions={permissions}
@@ -87,7 +101,7 @@ export default function AdminPage() {
                     />
                 )}
 
-                {activeTab === "ranks" && (
+                {activeTab === "ranks" && canManageRanks && (
                     <div className="text-white/50 italic">
                         Composant RankManager à insérer ici
                     </div>

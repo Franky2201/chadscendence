@@ -17,7 +17,11 @@ import {
 } from "../services/users";
 import type { UserListItem, AdminUpdateData } from "../services/users";
 
-export const useAdmin = () => {
+export const useAdmin = (
+    canManageRoles: boolean,
+    canManageRanks: boolean,
+    canManageUsers: boolean,
+) => {
     const [roles, setRoles] = useState<Role[]>([]);
     const [permissions, setPermissions] = useState<Permission[]>([]);
     const [ranks, setRanks] = useState<Rank[]>([]);
@@ -31,9 +35,11 @@ export const useAdmin = () => {
             try {
                 const [rolesData, permsData, ranksData, usersData] =
                     await Promise.all([
-                        getRoles(),
-                        getPermissions(),
-                        getRanks(),
+                        canManageRoles || canManageUsers
+                            ? getRoles()
+                            : Promise.resolve([]),
+                        canManageRoles ? getPermissions() : Promise.resolve([]),
+                        canManageRanks ? getRanks() : Promise.resolve([]),
                         getAllUsers(),
                     ]);
 
@@ -49,7 +55,7 @@ export const useAdmin = () => {
         };
 
         void loadData();
-    }, []);
+    }, [canManageRoles, canManageRanks, canManageUsers]);
 
     const handleCreateRole = async (name: string, perms: string[]) => {
         try {
