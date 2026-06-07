@@ -15,6 +15,9 @@ export function Profile({ className = "" }: { className?: string }) {
         navigate("/");
     };
 
+    const hasAdminAccess =
+        user?.role?.permissions && user.role.permissions.length > 0;
+
     return (
         <Card
             className={className}
@@ -38,6 +41,15 @@ export function Profile({ className = "" }: { className?: string }) {
                 <Button color="green" onClick={openPanel} size="medium">
                     {t("home.profile.friends")}
                 </Button>
+                {hasAdminAccess && (
+                    <Button
+                        color="blue"
+                        onClick={() => navigate("/admin")}
+                        size="medium"
+                    >
+                        {t("home.profile.admin")}
+                    </Button>
+                )}
                 <Button color="red" onClick={handleLogout} size="medium">
                     {t("home.profile.logout")}
                 </Button>

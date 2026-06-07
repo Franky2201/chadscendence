@@ -1,20 +1,24 @@
 import { useState, useRef } from "react";
 import { Button, Input } from "../ui";
-import { adminUpdateUser, uploadAvatarForUser } from "../../services/users";
-import type { UserListItem } from "../../services/users";
-import { toast } from "sonner";
+import type { UserListItem, AdminUpdateData } from "../../services/users";
+import { useTranslation } from "react-i18next";
 
 interface EditUserModalProps {
     user: UserListItem;
     onClose: () => void;
-    onSuccess: (updated: UserListItem) => void;
+    onUpdateUser: (
+        id: string,
+        data: AdminUpdateData,
+        avatarFile?: File | null,
+    ) => Promise<void>;
 }
 
 export function EditUserModal({
     user,
     onClose,
-    onSuccess,
+    onUpdateUser,
 }: EditUserModalProps) {
+    const { t } = useTranslation();
     const [username, setUsername] = useState(user.username);
     const [avatarPreview, setAvatarPreview] = useState(user.avatarUrl ?? "");
     const [avatarFile, setAvatarFile] = useState<File | null>(null);
@@ -34,18 +38,18 @@ export function EditUserModal({
     const handleSubmit = async () => {
         setIsLoading(true);
         try {
-            if (avatarFile) {
-                await uploadAvatarForUser(user.id, avatarFile);
-            }
-            const updated = await adminUpdateUser(user.id, {
-                username: username.trim() || undefined,
-                bio: bio.trim() || null,
-                score: score !== "" ? Number(score) : undefined,
-            });
-            onSuccess(updated);
+            await onUpdateUser(
+                user.id,
+                {
+                    username: username.trim() || undefined,
+                    bio: bio.trim() || null,
+                    score: score !== "" ? Number(score) : undefined,
+                },
+                avatarFile,
+            );
             onClose();
         } catch {
-            toast.error("Impossible de modifier le profil.");
+            // error handled in useAdmin
         } finally {
             setIsLoading(false);
         }
@@ -53,16 +57,16 @@ export function EditUserModal({
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-            <div className="bg-slate-800 border border-slate-700 rounded-2xl p-6 w-full max-w-sm shadow-2xl flex flex-col gap-4">
-                <h2 className="text-lg font-bold text-white">
-                    Modifier{" "}
+            <div className="bg-slate-800 border border-slate-700 rounded-3xl p-10 w-full max-w-lg shadow-2xl flex flex-col gap-6">
+                <h2 className="text-2xl font-bold text-white">
+                    {t("admin.usersManager.editModal.title")}{" "}
                     <span className="text-blue-400">{user.username}</span>
                 </h2>
 
-                <div className="flex flex-col gap-3">
-                    <div className="flex flex-col gap-1 items-center">
-                        <label className="text-xs text-slate-400 self-start">
-                            Avatar
+                <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-2">
+                        <label className="text-sm font-bold text-slate-400">
+                            {t("admin.usersManager.editModal.avatar")}
                         </label>
                         <div
                             className="relative group cursor-pointer"
@@ -75,7 +79,7 @@ export function EditUserModal({
                             />
                             <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                 <span className="text-white text-xs font-bold bg-black/60 px-2 py-1 rounded-lg">
-                                    Modifier
+                                    {t("admin.usersManager.editModal.modify")}
                                 </span>
                             </div>
                         </div>
@@ -89,56 +93,56 @@ export function EditUserModal({
                     </div>
 
                     <div className="flex flex-col gap-1">
-                        <label className="text-xs text-slate-400">Pseudo</label>
+                        <label className="text-sm font-bold text-slate-400">
+                            {t("admin.usersManager.editModal.username")}
+                        </label>
                         <Input
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
                             color="blue"
-                            size="small"
                             className="w-full text-left"
                         />
                     </div>
 
                     <div className="flex flex-col gap-1">
-                        <label className="text-xs text-slate-400">Bio</label>
+                        <label className="text-sm font-bold text-slate-400">
+                            {t("admin.usersManager.editModal.bio")}
+                        </label>
                         <textarea
                             value={bio}
                             onChange={(e) => setBio(e.target.value)}
-                            rows={2}
-                            className="w-full rounded-xl px-3 py-2 text-sm bg-slate-700 text-white border border-slate-600 focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"
+                            rows={3}
+                            className="w-full rounded-2xl px-4 py-3 text-base bg-slate-700 text-white border border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                         />
                     </div>
 
                     <div className="flex flex-col gap-1">
-                        <label className="text-xs text-slate-400">Score</label>
+                        <label className="text-sm font-bold text-slate-400">
+                            {t("admin.usersManager.editModal.score")}
+                        </label>
                         <Input
                             value={score}
                             onChange={(e) => setScore(e.target.value)}
                             type="number"
                             min={0}
                             color="blue"
-                            size="small"
                             className="w-full text-left"
                         />
                     </div>
                 </div>
 
-                <div className="flex gap-2 justify-end">
-                    <Button
-                        color="grey"
-                        size="small"
-                        onClick={onClose}
-                        disabled={isLoading}
-                    >
-                        Annuler
+                <div className="flex gap-4 justify-end mt-4">
+                    <Button color="grey" onClick={onClose} disabled={isLoading}>
+                        {t("admin.usersManager.editModal.cancel")}
                     </Button>
                     <Button
                         color="blue"
-                        size="small"
                         onClick={handleSubmit}
                         disabled={isLoading}
                     >
-                        {isLoading ? "Enregistrement..." : "Enregistrer"}
+                        {isLoading
+                            ? t("admin.usersManager.editModal.saving")
+                            : t("admin.usersManager.editModal.save")}
                     </Button>
                 </div>
             </div>

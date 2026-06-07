@@ -28,6 +28,7 @@
 		"profile": {
 			"title": "Profile",
 			"friends": "Friends",
+			"admin": "Management",
 			"logout": "Logout"
 		},
 		"leaderboard": "Leaderboard"
@@ -90,6 +91,48 @@
 			"cancel": "Cancel",
 			"addRole": "Add role",
 			"validate": "Confirm"
+		},
+		"usersManager": {
+			"title": "User Management",
+			"search": "Search a player...",
+			"allRoles": "All roles",
+			"noPlayers": "No player found.",
+			"selectRole": "Select a role",
+			"modify": "Edit",
+			"unban": "Unban",
+			"ban": "Ban",
+			"editModal": {
+				"title": "Edit",
+				"avatar": "Avatar",
+				"username": "Username",
+				"bio": "Bio",
+				"score": "Score",
+				"cancel": "Cancel",
+				"saving": "Saving...",
+				"save": "Save"
+			},
+			"banModal": {
+				"unbanTitle": "Unban player",
+				"banTitle": "Ban player",
+				"unban": "Unban",
+				"ban": "Ban",
+				"warning": "The player will no longer be able to log in.",
+				"cancel": "Cancel",
+				"loading": "...",
+				"confirm": "Confirm"
+			}
 		}
+	},
+	"users": {
+		"title": "Players",
+		"search": "Search a player...",
+		"loading": "Loading...",
+		"error": "Unable to load player list.",
+		"addFriend": "Add Friend",
+		"pending": "Pending",
+		"friend": "Friend",
+		"playersCount_zero": "0 players",
+		"playersCount_one": "1 player",
+		"playersCount_other": "{{count}} players"
 	}
 }

@@ -1,23 +1,53 @@
 import { useState } from "react";
 import { useAdmin } from "../hooks/useAdmin";
 import RoleManager from "../components/admin/RoleManager";
+import UserManager from "../components/admin/UserManager";
 import { Window, Title, Button } from "../components/ui";
 import { Header } from "../components/Header";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 export default function AdminPage() {
     const { t } = useTranslation();
+    const { user } = useAuth();
+    const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState<"users" | "ranks" | "roles">(
         "users",
     );
+    const hasPermissions =
+        user?.role?.permissions && user.role.permissions.length > 0;
+
+    const canManageRanks =
+        user?.role?.permissions?.some((p) => p.action === "MANAGE_RANKS") ??
+        false;
+    const canManageRoles =
+        user?.role?.permissions?.some((p) => p.action === "MANAGE_ROLES") ??
+        false;
+    const canManageUsers =
+        user?.role?.permissions?.some((p) => p.action === "MANAGE_USERS") ??
+        false;
+
     const {
         roles,
         permissions,
+        users,
         isLoading,
         handleCreateRole,
         handleUpdateRole,
         handleDeleteRole,
-    } = useAdmin();
+        handleUpdateUser,
+        handleBanUser,
+    } = useAdmin(canManageRoles, canManageRanks, canManageUsers);
+
+    useEffect(() => {
+        if (!hasPermissions) {
+            navigate("/");
+        }
+    }, [hasPermissions, navigate]);
+
+    if (!hasPermissions) return null;
 
     if (isLoading)
         return (
@@ -43,21 +73,25 @@ export default function AdminPage() {
                     >
                         {t("admin.tabs.users")}
                     </Button>
-                    <Button
-                        color={activeTab === "ranks" ? "pink" : "grey"}
-                        onClick={() => setActiveTab("ranks")}
-                    >
-                        {t("admin.tabs.ranks")}
-                    </Button>
-                    <Button
-                        color={activeTab === "roles" ? "pink" : "grey"}
-                        onClick={() => setActiveTab("roles")}
-                    >
-                        {t("admin.tabs.roles")}
-                    </Button>
+                    {canManageRanks && (
+                        <Button
+                            color={activeTab === "ranks" ? "pink" : "grey"}
+                            onClick={() => setActiveTab("ranks")}
+                        >
+                            {t("admin.tabs.ranks")}
+                        </Button>
+                    )}
+                    {canManageRoles && (
+                        <Button
+                            color={activeTab === "roles" ? "pink" : "grey"}
+                            onClick={() => setActiveTab("roles")}
+                        >
+                            {t("admin.tabs.roles")}
+                        </Button>
+                    )}
                 </div>
 
-                {activeTab === "roles" && (
+                {activeTab === "roles" && canManageRoles && (
                     <RoleManager
                         roles={roles}
                         permissions={permissions}
@@ -67,16 +101,19 @@ export default function AdminPage() {
                     />
                 )}
 
-                {activeTab === "ranks" && (
+                {activeTab === "ranks" && canManageRanks && (
                     <div className="text-white/50 italic">
                         Composant RankManager à insérer ici
                     </div>
                 )}
 
                 {activeTab === "users" && (
-                    <div className="text-white/50 italic">
-                        Composant UserManager à insérer ici
-                    </div>
+                    <UserManager
+                        users={users}
+                        roles={roles}
+                        onUpdateUser={handleUpdateUser}
+                        onBanUser={handleBanUser}
+                    />
                 )}
             </div>
         </Window>

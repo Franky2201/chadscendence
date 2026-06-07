@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { getLeaderboard, getMyLeaderboardRank } from "../../services/users";
 import type { LeaderboardType } from "../../services/users";
 import { useAuth } from "../../contexts/AuthContext";
-import { Card } from "../ui/index";
+import { Card, Button } from "../ui/index";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+import { useTheme } from "../../contexts/ThemeContext";
 
 export function Leaderboard({
     count,
@@ -19,6 +21,8 @@ export function Leaderboard({
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const { t } = useTranslation();
     const { user } = useAuth();
+    const navigate = useNavigate();
+    const { theme } = useTheme();
 
     useEffect(() => {
         let isMounted = true;
@@ -111,6 +115,14 @@ export function Leaderboard({
                         </div>
                     ))
                 )}
+
+                <Button
+                    color={theme}
+                    className="w-full mt-6"
+                    onClick={() => navigate("/users")}
+                >
+                    {t("users.title")}
+                </Button>
             </div>
         </Card>
     );
