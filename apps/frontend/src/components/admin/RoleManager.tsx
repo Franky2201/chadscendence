@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { Role, Permission } from "@chad/types";
 import { Card, Button, Input, Checkbox, Badge, Title } from "../ui";
+import { useTranslation } from "react-i18next";
 
 interface RoleManagerProps {
 	roles: Role[];
@@ -11,6 +12,7 @@ interface RoleManagerProps {
 }
 
 export default function RoleManager({ roles, permissions, onCreate, onUpdate, onDelete }: RoleManagerProps) {
+	const { t } = useTranslation();
 	const [editingId, setEditingId] = useState<string | null>(null);
 	const [editName, setEditName] = useState("");
 	const [editPerms, setEditPerms] = useState<string[]>([]);
@@ -49,7 +51,7 @@ export default function RoleManager({ roles, permissions, onCreate, onUpdate, on
 
 	return (
 		<div className="flex flex-col gap-6 w-full">
-			<Title color="white" className="text-2xl font-bold">Gestion des Rôles</Title>
+			<Title color="white" className="text-2xl font-bold">{t("admin.roles.title")}</Title>
 			<div className="flex flex-col gap-4">
 				{roles.map((role) => {
 					const isImmutable = immutableRoles.includes(role.name);
@@ -57,7 +59,7 @@ export default function RoleManager({ roles, permissions, onCreate, onUpdate, on
 					const roleName = role.name + " - " + (role.userCount);
 
 					return (
-						<Card key={role.id} title={isEditing ? "Modification du rôle" : roleName} className="w-full" contentClassName="w-full">
+						<Card key={role.id} title={isEditing ? t("admin.roles.editTitle") : roleName} className="w-full" contentClassName="w-full">
 							{isEditing ? (
 								<div className="flex flex-col gap-4">
 									<Input
@@ -77,8 +79,8 @@ export default function RoleManager({ roles, permissions, onCreate, onUpdate, on
 										))}
 									</div>
 									<div className="flex gap-4 w-full">
-										<Button color="pink" className="flex-1" onClick={submitEdit}>Valider</Button>
-										<Button color="grey" className="flex-1" onClick={() => setEditingId(null)}>Annuler</Button>
+										<Button color="pink" className="flex-1" onClick={submitEdit}>{t("admin.roles.validate")}</Button>
+										<Button color="grey" className="flex-1" onClick={() => setEditingId(null)}>{t("admin.roles.cancel")}</Button>
 									</div>
 								</div>
 							) : (
@@ -90,8 +92,8 @@ export default function RoleManager({ roles, permissions, onCreate, onUpdate, on
 									</div>
 									{!isImmutable && (
 										<div className="flex gap-4 w-full mt-2">
-											<Button color="blue" className="flex-1" onClick={() => startEdit(role)}>Modifier</Button>
-											<Button color="red" className="flex-1" onClick={() => onDelete(role.id)}>Supprimer</Button>
+											<Button color="blue" className="flex-1" onClick={() => startEdit(role)}>{t("admin.roles.modify")}</Button>
+											<Button color="red" className="flex-1" onClick={() => onDelete(role.id)}>{t("admin.roles.delete")}</Button>
 										</div>
 									)}
 								</div>
@@ -104,9 +106,9 @@ export default function RoleManager({ roles, permissions, onCreate, onUpdate, on
 			{isCreating ? (
 				<Card className="w-full mt-4" color="pink">
 					<div className="flex flex-col gap-4">
-						<Title color="pink" className="text-xl">Nouveau rôle</Title>
+						<Title color="pink" className="text-xl">{t("admin.roles.newRole")}</Title>
 						<Input
-							placeholder="Nom du rôle"
+							placeholder={t("admin.roles.roleName")}
 							value={newName}
 							onChange={(e) => setNewName(e.target.value)}
 							color="white"
@@ -123,15 +125,15 @@ export default function RoleManager({ roles, permissions, onCreate, onUpdate, on
 							))}
 						</div>
 						<div className="flex gap-4 w-full mt-4">
-							<Button color="pink" className="flex-1" onClick={submitCreate}>Créer</Button>
-							<Button color="grey" className="flex-1" onClick={() => { setIsCreating(false); setNewName(""); setNewPerms([]); }}>Annuler</Button>
+							<Button color="pink" className="flex-1" onClick={submitCreate}>{t("admin.roles.create")}</Button>
+							<Button color="grey" className="flex-1" onClick={() => { setIsCreating(false); setNewName(""); setNewPerms([]); }}>{t("admin.roles.cancel")}</Button>
 						</div>
 					</div>
 				</Card>
 			) : (
 				<div className="flex justify-center mt-6 w-full">
 					<Button color="pink" size="large" className="w-full" onClick={() => setIsCreating(true)}>
-						Ajouter un rôle
+						{t("admin.roles.addRole")}
 					</Button>
 				</div>
 			)}

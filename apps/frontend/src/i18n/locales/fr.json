@@ -70,5 +70,26 @@
 		"successAvatar": "Avatar mis à jour avec succès",
 		"errorAvatar": "Erreur lors de la mise à jour de l'avatar",
 		"loading": "Chargement ..."
+	},
+	"admin": {
+		"title": "Administration",
+		"loading": "Chargement...",
+		"tabs": {
+			"users": "Utilisateurs",
+			"ranks": "Classements",
+			"roles": "Rôles"
+		},
+		"roles": {
+			"title": "Gestion des Rôles",
+			"editTitle": "Modification du rôle",
+			"modify": "Modifier",
+			"delete": "Supprimer",
+			"newRole": "Nouveau rôle",
+			"roleName": "Nom du rôle",
+			"create": "Créer",
+			"cancel": "Annuler",
+			"addRole": "Ajouter un rôle",
+			"validate": "Valider"
+		}
 	}
 }
