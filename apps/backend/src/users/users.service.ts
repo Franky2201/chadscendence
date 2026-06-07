@@ -24,7 +24,7 @@ export class UsersService implements OnModuleInit {
         private readonly rolesService: RolesService,
         private readonly presenceService: PresenceService,
         private readonly ranksService: RanksService,
-    ) { }
+    ) {}
 
     async onModuleInit() {
         await this.seedAdmin();
