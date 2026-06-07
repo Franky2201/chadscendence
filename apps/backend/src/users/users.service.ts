@@ -8,7 +8,7 @@ import {
 import { InjectRepository } from "@nestjs/typeorm";
 import { MoreThan, Repository } from "typeorm";
 import { User, AccountStatus } from "../common/entities/user.entity";
-import { UpdateUserDto } from "../common/dto/users.dto";
+import { UpdateAdminUserDto, UpdateUserDto } from "../common/dto/users.dto";
 import { hash, compare } from "bcrypt";
 import { RanksService } from "../ranks/ranks.service";
 import { ConfigService } from "@nestjs/config";
@@ -24,7 +24,7 @@ export class UsersService implements OnModuleInit {
         private readonly rolesService: RolesService,
         private readonly presenceService: PresenceService,
         private readonly ranksService: RanksService,
-    ) {}
+    ) { }
 
     async onModuleInit() {
         await this.seedAdmin();
@@ -234,11 +234,20 @@ export class UsersService implements OnModuleInit {
         return { accountStatus: user.accountStatus };
     }
 
-    async adminUpdateUser(id: string, dto: UpdateUserDto) {
+    async adminUpdateUser(id: string, dto: UpdateAdminUserDto) {
         const user = await this.userRepository.findOne({ where: { id } });
         if (!user) throw new NotFoundException("User not found");
 
-        await this.userRepository.save({ id, ...dto });
+        const { roleId, ...rest } = dto as any;
+        const updateData: any = { id, ...rest };
+
+        if (roleId) {
+            const role = await this.rolesService.findOne(roleId);
+            if (!role) throw new NotFoundException("Role not found");
+            updateData.role = role;
+        }
+
+        await this.userRepository.save(updateData);
         return this.getUser(id);
     }
 

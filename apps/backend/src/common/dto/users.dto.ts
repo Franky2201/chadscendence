@@ -27,3 +27,27 @@ export class UpdateUserDto {
     @IsOptional()
     score?: number;
 }
+
+export class UpdateAdminUserDto {
+    @IsString()
+    @IsOptional()
+    username?: string;
+
+    @IsString()
+    @IsOptional()
+    avatarUrl?: string;
+
+    @IsString()
+    @IsOptional()
+    @Allow()
+    bio?: string | null;
+
+    @IsInt()
+    @Min(0)
+    @IsOptional()
+    score?: number;
+
+    @IsString()
+    @IsOptional()
+    roleId?: string;
+}
