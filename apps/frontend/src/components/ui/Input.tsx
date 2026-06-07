@@ -22,10 +22,10 @@ export function Input({
 }: InputProps) {
     const inputClasses = [
         "relative inline-flex items-center justify-center rounded-xl font-bold \
-	text-center focus-visible:outline-none disabled:cursor-not-allowed \
-    focus-visible:ring-2 translate-y-[-2px] active:scale-95 \
-	transition-all duration-100 ease-in-out select-none hover:ring-1 \
-    bg-[color:var(--ui-color)]/50 ring-[color:var(--ui-color)]",
+        text-center focus-visible:outline-none disabled:cursor-not-allowed \
+        focus-visible:ring-2 translate-y-[-2px] active:scale-95 \
+        transition-all duration-100 ease-in-out select-none hover:ring-1 \
+        bg-[color:var(--ui-color)]/50 ring-[color:var(--ui-color)]",
         sizeClasses[size],
         className,
     ]
