@@ -13,9 +13,7 @@ import { hash, compare } from "bcrypt";
 import { RanksService } from "../ranks/ranks.service";
 import { ConfigService } from "@nestjs/config";
 import { PresenceService } from "../presence/presence.service";
-import { Role } from "src/common/entities/role.entity";
-import { Permission } from "src/common/entities/permission.entity";
-import { PermissionAction } from "@chad/types";
+import { RolesService } from "src/roles/roles.service";
 
 @Injectable()
 export class UsersService implements OnModuleInit {
@@ -23,13 +21,10 @@ export class UsersService implements OnModuleInit {
         private readonly configService: ConfigService,
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
-        @InjectRepository(Role)
-        private readonly roleRepository: Repository<Role>,
-        @InjectRepository(Permission)
-        private readonly permissionRepository: Repository<Permission>,
+        private readonly rolesService: RolesService,
         private readonly presenceService: PresenceService,
         private readonly ranksService: RanksService,
-    ) {}
+    ) { }
 
     async onModuleInit() {
         await this.seedAdmin();
@@ -44,42 +39,7 @@ export class UsersService implements OnModuleInit {
             throw new Error("Missing admin credentials");
         }
 
-        const allPermissions: Permission[] = [];
-        for (const action of Object.values(PermissionAction)) {
-            let permission = await this.permissionRepository.findOne({
-                where: { action },
-            });
-            if (!permission) {
-                permission = this.permissionRepository.create({ action });
-                await this.permissionRepository.save(permission);
-            }
-            allPermissions.push(permission);
-        }
-
-        let userRole = await this.roleRepository.findOne({
-            where: { name: "User" },
-        });
-        if (!userRole) {
-            userRole = this.roleRepository.create({
-                name: "User",
-                permissions: [],
-            });
-            await this.roleRepository.save(userRole);
-        }
-
-        let adminRole = await this.roleRepository.findOne({
-            where: { name: "Admin" },
-        });
-        if (!adminRole) {
-            adminRole = this.roleRepository.create({
-                name: "Admin",
-                permissions: allPermissions,
-            });
-            await this.roleRepository.save(adminRole);
-        } else {
-            adminRole.permissions = allPermissions;
-            await this.roleRepository.save(adminRole);
-        }
+        const { adminRole } = await this.rolesService.seedRoles();
 
         const admin = await this.userRepository.findOne({
             where: { email: adminEmail },
@@ -105,7 +65,6 @@ export class UsersService implements OnModuleInit {
         });
 
         await this.userRepository.save(adminUser);
-        console.log("Roles and Admin user seeded successfully!");
     }
 
     async getUser(id: string) {
