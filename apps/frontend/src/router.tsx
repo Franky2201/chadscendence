@@ -3,9 +3,9 @@ import RootWrapper from "./components/RootWrapper";
 import Home from "./pages/Home";
 import Games from "./pages/Games";
 import Profile from "./pages/Profile";
-import Friends from "./pages/Friends";
 import About from "./pages/About";
-import Settings from "./pages/Settings";
+import Users from "./pages/Users";
+import Room from "./pages/Room";
 
 export const router = createBrowserRouter([
     {
@@ -21,10 +21,6 @@ export const router = createBrowserRouter([
                 element: <Games />,
             },
             {
-                path: "friends",
-                element: <Friends />,
-            },
-            {
                 path: "about",
                 element: <About />,
             },
@@ -33,8 +29,16 @@ export const router = createBrowserRouter([
                 element: <Profile />,
             },
             {
-                path: "settings",
-                element: <Settings />,
+                path: "users",
+                element: <Users />,
+            },
+            {
+                path: "room",
+                element: <Room />,
+            },
+            {
+                path: "room/:code",
+                element: <Room />,
             },
         ],
     },

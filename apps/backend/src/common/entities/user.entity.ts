@@ -7,12 +7,12 @@ import {
     ManyToOne,
     JoinColumn,
 } from "typeorm";
-import { UserStatus } from "@chad/types";
+import { UserStatus, AccountStatus } from "@chad/types";
 import type { Rank as IRank } from "@chad/types";
 import { Rank } from "./rank.entity";
 import { Role } from "./role.entity";
 
-export { UserStatus };
+export { UserStatus, AccountStatus };
 
 @Entity("users")
 export class User {
@@ -47,6 +47,14 @@ export class User {
     })
     @JoinColumn({ name: "role_id" })
     role: Role;
+
+    @Column({
+        name: "account_status",
+        type: "enum",
+        enum: AccountStatus,
+        default: AccountStatus.ACTIVE,
+    })
+    accountStatus: AccountStatus;
 
     @Column({ type: "int", default: 0 })
     score: number;

@@ -1,8 +1,8 @@
 import { Card } from "../ui";
 
-export function Achievements({ className = "" }: { className?: string }) {
+export function Achievements() {
     return (
-        <Card className={className} title="Achievements">
+        <Card title="Achievements">
             <></>
         </Card>
     );

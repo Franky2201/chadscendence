@@ -6,7 +6,6 @@ import {
     Friendship,
     FriendshipStatus,
 } from "../common/entities/friendship.entity";
-import { Block } from "../common/entities/block.entity";
 import { MessagesGateway } from "./messages.gateway";
 
 type UnreadCountRow = {
@@ -21,23 +20,10 @@ export class MessagesService {
         private readonly messageRepository: Repository<Message>,
         @InjectRepository(Friendship)
         private readonly friendshipRepository: Repository<Friendship>,
-        @InjectRepository(Block)
-        private readonly blockRepository: Repository<Block>,
         private readonly messagesGateway: MessagesGateway,
     ) {}
 
     async checkCanMessage(senderId: string, receiverId: string) {
-        const block = await this.blockRepository.findOne({
-            where: [
-                { blocker: { id: senderId }, blocked: { id: receiverId } },
-                { blocker: { id: receiverId }, blocked: { id: senderId } },
-            ],
-        });
-
-        if (block) {
-            throw new ForbiddenException();
-        }
-
         const friendship = await this.friendshipRepository.findOne({
             where: [
                 {

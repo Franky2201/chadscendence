@@ -1,9 +1,9 @@
 import api from "./api";
-import { UserStatus } from "@chad/types";
+import { UserStatus, AccountStatus } from "@chad/types";
 import type { User } from "@chad/types";
 
 export type { User };
-export { UserStatus };
+export { UserStatus, AccountStatus };
 
 interface UpdateMe {
     username?: string;
@@ -27,6 +27,17 @@ export interface UserSearchResult {
     status: "online" | "offline";
 }
 
+export interface UserListItem {
+    id: string;
+    username: string;
+    avatarUrl?: string;
+    bio?: string | null;
+    score: number;
+    updatedAt: string;
+    status: "online" | "offline";
+    accountStatus: AccountStatus;
+}
+
 export const getMe = async (): Promise<User> => {
     const res = await api.get<User>("/users/me");
     return res.data;
@@ -43,6 +54,20 @@ export const uploadAvatar = async (file: File): Promise<User> => {
     const res = await api.post<User>("/users/me/avatar", formData, {
         headers: { "Content-Type": "multipart/form-data" },
     });
+    return res.data;
+};
+
+export const uploadAvatarForUser = async (
+    userId: string,
+    file: File,
+): Promise<UserListItem> => {
+    const formData = new FormData();
+    formData.append("file", file);
+    const res = await api.post<UserListItem>(
+        `/users/${userId}/avatar`,
+        formData,
+        { headers: { "Content-Type": "multipart/form-data" } },
+    );
     return res.data;
 };
 
@@ -70,5 +95,34 @@ export const searchUsers = async (
 ): Promise<UserSearchResult[]> => {
     if (!query) return [];
     const res = await api.get<UserSearchResult[]>(`/users/search?q=${query}`);
+    return res.data;
+};
+
+export const getAllUsers = async (): Promise<UserListItem[]> => {
+    const res = await api.get<UserListItem[]>("/users");
+    return res.data;
+};
+
+export const banUser = async (
+    userId: string,
+): Promise<{ accountStatus: AccountStatus }> => {
+    const res = await api.patch<{ accountStatus: AccountStatus }>(
+        `/users/${userId}/ban`,
+    );
+    return res.data;
+};
+
+interface AdminUpdateData {
+    username?: string;
+    avatarUrl?: string;
+    bio?: string | null;
+    score?: number;
+}
+
+export const adminUpdateUser = async (
+    userId: string,
+    data: AdminUpdateData,
+): Promise<UserListItem> => {
+    const res = await api.patch<UserListItem>(`/users/${userId}`, data);
     return res.data;
 };

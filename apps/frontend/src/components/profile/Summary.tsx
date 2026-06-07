@@ -1,304 +1,261 @@
-import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
-import { Button, Input, Card, Badge } from "../../components/ui";
-import {
-    updateMe,
-    uploadAvatar,
-    getMyLeaderboardRank,
-} from "../../services/users";
+import { useTranslation } from "react-i18next";
 import { useTheme } from "../../contexts/ThemeContext";
+import { Card, Badge, Input, Button } from "../../components/ui";
+import { useProfileForm } from "../../hooks/useProfileForm";
 
 export function Summary() {
-    const { user, isLoading, login } = useAuth();
-    const navigate = useNavigate();
-    const [editing, setEditing] = useState(false);
-    const [username, setUsername] = useState("");
-    const [avatarFile, setAvatarFile] = useState<File | null>(null);
-    const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
-    const [bio, setBio] = useState("");
-    const [oldPassword, setOldPassword] = useState("");
-    const [newPassword, setNewPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const [saving, setSaving] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const [leaderboardRank, setLeaderboardRank] = useState<number | null>(null);
-    const fileInputRef = useRef<HTMLInputElement>(null);
+    const { t } = useTranslation();
     const { theme } = useTheme();
-
-    useEffect(() => {
-        if (!isLoading && !user) {
-            navigate("/");
-        }
-    }, [isLoading, user, navigate]);
-
-    useEffect(() => {
-        if (user) {
-            getMyLeaderboardRank()
-                .then(setLeaderboardRank)
-                .catch(() => {});
-        }
-    }, [user]);
-
-    if (isLoading || !user)
-        return (
-            <div className="min-h-screen flex items-center justify-center">
-                Loading ...
-            </div>
-        );
-
-    const isSSO = !!(user.intraId || user.githubId);
-
-    const handleEdit = () => {
-        setUsername(user.username);
-        setAvatarFile(null);
-        setAvatarPreview(null);
-        setBio(user.bio ?? "");
-        setOldPassword("");
-        setNewPassword("");
-        setConfirmPassword("");
-        setError(null);
-        setEditing(true);
-    };
-
-    const handleAvatarClick = () => {
-        if (editing && !isSSO) fileInputRef.current?.click();
-    };
-
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
-        setAvatarFile(file);
-        setAvatarPreview(URL.createObjectURL(file));
-    };
-
-    const handleSave = async () => {
-        if (newPassword && newPassword !== confirmPassword) {
-            setError("Les deux mots de passe ne correspondent pas.");
-            return;
-        }
-
-        setSaving(true);
-        setError(null);
-        try {
-            let updated = await updateMe({
-                username: username || undefined,
-                bio: bio !== "" ? bio : null,
-                oldPassword: newPassword ? oldPassword : undefined,
-                password: newPassword || undefined,
-            });
-
-            if (avatarFile) {
-                updated = await uploadAvatar(avatarFile);
-            }
-
-            login(updated);
-            setEditing(false);
-        } catch (err: unknown) {
-            if (err && typeof err === "object" && "response" in err) {
-                const res = (
-                    err as { response: { data?: { message?: string } } }
-                ).response;
-                setError(res.data?.message ?? "Erreur lors de la mise à jour.");
-            } else {
-                setError("Erreur lors de la mise à jour.");
-            }
-        } finally {
-            setSaving(false);
-        }
-    };
-
-    const formatDate = (date: Date | string) =>
-        new Date(date).toLocaleDateString("fr-FR", {
-            day: "2-digit",
-            month: "long",
-            year: "numeric",
-        });
+    const {
+        user,
+        leaderboardRank,
+        editUsername,
+        setEditUsername,
+        editBio,
+        setEditBio,
+        oldPassword,
+        setOldPassword,
+        newPassword,
+        setNewPassword,
+        isChangingPassword,
+        setIsChangingPassword,
+        showPassword,
+        setShowPassword,
+        isSaving,
+        fileInputRef,
+        isSSO,
+        hasChanges,
+        handleSave,
+        handleAvatarChange,
+    } = useProfileForm();
 
     return (
         <Card
-            title="Profile"
-            href={editing ? "" : "/"}
-            description={editing ? "" : "Back"}
+            title={t("profilePage.title")}
+            href="/"
+            description={t("profilePage.back")}
+            size="large"
         >
-            <div className="relative group">
-                <img
-                    src={
-                        editing
-                            ? (avatarPreview ?? user.avatarUrl)
-                            : user.avatarUrl
-                    }
-                    alt="avatar"
-                    onClick={handleAvatarClick}
-                    className={`w-36 h-36 rounded-xl justify-self-center mb-4 
-                        object-cover border-4 border-white/20 shadow-xl transition-opacity"
-                        ${
-                            editing && !isSSO
-                                ? "cursor-pointer group-hover:opacity-70"
-                                : ""
-                        }
-                    `}
-                />
-                {editing && !isSSO && (
-                    <span
-                        className="absolute inset-0 flex items-center 
-                        justify-center text-xs font-bold opacity-0 
-                        group-hover:opacity-100 transition-opacity 
-                        pointer-events-none"
+            <div className="flex flex-col md:flex-row gap-8 items-center md:items-start w-full mt-4">
+                <div className="flex flex-col items-center gap-4 md:w-1/3">
+                    <div
+                        className="relative group cursor-pointer"
+                        onClick={() => fileInputRef.current?.click()}
                     >
-                        Edti
-                    </span>
-                )}
-                <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={handleFileChange}
-                />
-            </div>
-
-            {!editing ? (
-                <>
-                    <div className="flex flex-col items-center gap-2 text-center">
-                        <h1 className="text-4xl font-black">{user.username}</h1>
-                        <p className="text-lg">{user.email}</p>
-                        <p className="text-2xl mt-1">
-                            {user.rank?.icon} {user.rank?.name}
-                        </p>
-                        <p className="text-3xl font-bold">
-                            {user.score} pts{" "}
-                            <span className="text-2xl font-semibold/70">
-                                #{leaderboardRank ?? "…"}
-                            </span>
-                        </p>
-                        {user.bio && (
-                            <p
-                                className="text-base text-center 
-                                max-w-sm mt-1 italic"
-                            >
-                                {user.bio}
-                            </p>
-                        )}
-                        {user.role.name === "admin" && (
-                            <Badge
-                                color="black"
-                                className="text-xs font-bold uppercase mt-1"
-                            >
-                                Admin
-                            </Badge>
-                        )}
-                        <div className="mt-3 flex flex-col gap-1 text-xs">
-                            <span>
-                                Membre since {formatDate(user.createdAt)}
-                            </span>
-                            <span>
-                                Last updated on {formatDate(user.updatedAt)}
+                        <img
+                            src={user.avatarUrl}
+                            alt="avatar"
+                            className="w-40 h-40 rounded-xl object-cover border-4 border-white/20 shadow-xl transition-all group-hover:opacity-50"
+                        />
+                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                            <span className="text-white font-bold bg-black/60 px-3 py-1 rounded-lg">
+                                {t("profilePage.modify")}
                             </span>
                         </div>
                     </div>
+                    <input
+                        type="file"
+                        ref={fileInputRef}
+                        className="hidden"
+                        accept="image/*"
+                        onChange={handleAvatarChange}
+                    />
 
-                    <Button color={theme} className="mt-2" onClick={handleEdit}>
-                        Edit profile
-                    </Button>
-                </>
-            ) : (
-                <>
-                    <div className="flex flex-col gap-4 w-full">
+                    <div className="flex flex-col items-center text-center gap-1 mt-2">
+                        <h2 className="text-2xl font-black flex items-center gap-2">
+                            #{leaderboardRank ?? "..."}
+                            {user?.role?.name === "Admin" && (
+                                <Badge color="black" className="text-xs">
+                                    {t("profilePage.admin")}
+                                </Badge>
+                            )}
+                        </h2>
+                        <p className="text-sm font-medium text-white/50 mb-1">
+                            {user.email}
+                        </p>
+                        <p className="text-lg font-bold text-white/80 mt-1">
+                            {user.rank?.icon} {user.rank?.name}
+                        </p>
+                        <p className="text-xl font-black text-white">
+                            {t("profilePage.rating")} : {user.score}
+                        </p>
+                    </div>
+                </div>
+
+                <div className="flex flex-col gap-4 flex-1 w-full mt-4 md:mt-0">
+                    <div className="flex flex-col gap-1 items-start w-full">
+                        <label className="text-sm font-bold text-white/70 ml-1">
+                            {t("profilePage.username")}
+                        </label>
                         <Input
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            placeholder="Nom d'utilisateur"
-                            className="w-full"
+                            value={editUsername}
+                            onChange={(e) => setEditUsername(e.target.value)}
+                            placeholder={t("profilePage.username")}
+                            className="w-full !text-white text-left"
+                            color="white"
                         />
-                        {isSSO && (
-                            <p className="text-xs text-center">
-                                Avatar géré par{" "}
-                                {user.intraId ? "42 Intra" : "GitHub"}
-                            </p>
-                        )}
-                        <textarea
-                            value={bio}
-                            onChange={(e) => setBio(e.target.value)}
-                            placeholder="Biography"
-                            rows={2}
-                            className="items-center text-start p-3
-                                rounded-xl font-bold text-center
-                                focus-visible:outline-none
-                                disabled:cursor-not-allowed focus-visible:ring-2 
-                                translate-y-[-2px] active:scale-95 
-                                transition-all duration-100 ease-in-out 
-                                select-none hover:ring-1 
-                                bg-[color:var(--color-grey)]/50 
-                                ring-[color:var(--color-grey)]"
-                        />
-
-                        {!isSSO && (
-                            <>
-                                <hr className="border-white/20" />
-                                <p className="text-sm">Change password</p>
-                                <Input
-                                    type="password"
-                                    value={oldPassword}
-                                    onChange={(e) =>
-                                        setOldPassword(e.target.value)
-                                    }
-                                    placeholder="Old Password"
-                                    className="w-full"
-                                />
-                                <Input
-                                    type="password"
-                                    value={newPassword}
-                                    onChange={(e) =>
-                                        setNewPassword(e.target.value)
-                                    }
-                                    placeholder="New password"
-                                    className="w-full"
-                                />
-                                <Input
-                                    type="password"
-                                    value={confirmPassword}
-                                    onChange={(e) =>
-                                        setConfirmPassword(e.target.value)
-                                    }
-                                    placeholder="Confirm new password"
-                                    className="w-full"
-                                />
-                            </>
-                        )}
-
-                        {error && (
-                            <p className="text-red-400 text-sm">{error}</p>
-                        )}
                     </div>
 
-                    <div
-                        className="grid w-full justify-self-center grid-cols-1 
-                            md:grid-cols-2 lg:grid-cols-2 gap-4 mt-4 flex-wrap 
-                            justify-center"
-                    >
+                    <div className="flex flex-col gap-1 items-start w-full">
+                        <label className="text-sm font-bold text-white/70 ml-1">
+                            {t("profilePage.bio")}
+                        </label>
+                        <Input
+                            value={editBio}
+                            onChange={(e) => setEditBio(e.target.value)}
+                            placeholder={t("profilePage.bioPlaceholder")}
+                            className="w-full !text-white text-left"
+                            color="white"
+                        />
+                    </div>
+
+                    {!isSSO && (
+                        <>
+                            <hr className="border-white/10 my-2 w-full" />
+                            <div className="flex flex-col gap-3 w-full relative">
+                                <div className="flex justify-between items-center w-full">
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setIsChangingPassword(
+                                                !isChangingPassword,
+                                            );
+                                            if (isChangingPassword) {
+                                                setOldPassword("");
+                                                setNewPassword("");
+                                            }
+                                        }}
+                                        className="text-sm font-bold text-white/70 hover:text-white transition-colors flex items-center gap-2"
+                                    >
+                                        {t("profilePage.changePassword")}
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="16"
+                                            height="16"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            strokeWidth="2"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            className={`transition-transform duration-300 ${isChangingPassword ? "rotate-180" : ""}`}
+                                        >
+                                            <polyline points="6 9 12 15 18 9"></polyline>
+                                        </svg>
+                                    </button>
+
+                                    {isChangingPassword && (
+                                        <button
+                                            type="button"
+                                            onClick={() =>
+                                                setShowPassword(!showPassword)
+                                            }
+                                            className="text-xs text-white/50 hover:text-white transition-colors flex items-center gap-1"
+                                        >
+                                            {showPassword ? (
+                                                <>
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        width="14"
+                                                        height="14"
+                                                        viewBox="0 0 24 24"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        strokeWidth="2"
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                    >
+                                                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                                        <line
+                                                            x1="1"
+                                                            y1="1"
+                                                            x2="23"
+                                                            y2="23"
+                                                        ></line>
+                                                    </svg>
+                                                    {t("profilePage.hide")}
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        width="14"
+                                                        height="14"
+                                                        viewBox="0 0 24 24"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        strokeWidth="2"
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                    >
+                                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                        <circle
+                                                            cx="12"
+                                                            cy="12"
+                                                            r="3"
+                                                        ></circle>
+                                                    </svg>
+                                                    {t("profilePage.show")}
+                                                </>
+                                            )}
+                                        </button>
+                                    )}
+                                </div>
+
+                                {isChangingPassword && (
+                                    <div className="flex flex-col gap-3 mt-1 animate-in slide-in-from-top-2 fade-in duration-300">
+                                        <Input
+                                            type={
+                                                showPassword
+                                                    ? "text"
+                                                    : "password"
+                                            }
+                                            value={oldPassword}
+                                            onChange={(e) =>
+                                                setOldPassword(e.target.value)
+                                            }
+                                            placeholder={t(
+                                                "profilePage.oldPassword",
+                                            )}
+                                            className="w-full !text-white text-left"
+                                            color="white"
+                                        />
+                                        <Input
+                                            type={
+                                                showPassword
+                                                    ? "text"
+                                                    : "password"
+                                            }
+                                            value={newPassword}
+                                            onChange={(e) =>
+                                                setNewPassword(e.target.value)
+                                            }
+                                            placeholder={t(
+                                                "profilePage.newPassword",
+                                            )}
+                                            className="w-full !text-white text-left"
+                                            color="white"
+                                        />
+                                    </div>
+                                )}
+                            </div>
+                        </>
+                    )}
+
+                    <div className="flex justify-center mt-6 w-full">
                         <Button
-                            className="w-full"
                             onClick={handleSave}
-                            disabled={saving}
-                            size="medium"
-                            color="green"
+                            disabled={!hasChanges || isSaving}
+                            color={hasChanges ? theme : "grey"}
+                            className="w-full"
                         >
-                            {saving ? "Saving ..." : "Save"}
-                        </Button>
-                        <Button
-                            onClick={() => {
-                                setAvatarFile(null);
-                                setAvatarPreview(null);
-                                setEditing(false);
-                            }}
-                            color="red"
-                        >
-                            Cancel
+                            {isSaving
+                                ? t("profilePage.saving")
+                                : t("profilePage.save")}
                         </Button>
                     </div>
-                </>
-            )}
+                </div>
+            </div>
         </Card>
     );
 }

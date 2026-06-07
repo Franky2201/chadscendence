@@ -1,5 +1,13 @@
 import type { Response } from "express";
-import { Controller, Post, Body, Get, Res, UseGuards } from "@nestjs/common";
+import {
+    Controller,
+    Post,
+    Body,
+    Get,
+    Res,
+    UseGuards,
+    ForbiddenException,
+} from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { GetUser } from "../common/decorators/get-user.decorator";
 import type { OAuthProfile } from "../common/dto/auth.dto";
@@ -53,19 +61,25 @@ export class AuthController {
         @GetUser() user: OAuthProfile,
         @Res() res: Response,
     ) {
-        const token = await this.authService.registerOAuth({
-            ...user,
-            provider: "42",
-        });
-
-        res.cookie("access_token", token.access_token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "lax",
-        });
-
         const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
-        return res.redirect(frontendUrl);
+        try {
+            const token = await this.authService.registerOAuth({
+                ...user,
+                provider: "42",
+            });
+
+            res.cookie("access_token", token.access_token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "lax",
+            });
+
+            return res.redirect(frontendUrl);
+        } catch (err) {
+            if (err instanceof ForbiddenException)
+                return res.redirect(`${frontendUrl}?error=banned`);
+            throw err;
+        }
     }
 
     @Get("github")
@@ -75,19 +89,25 @@ export class AuthController {
     @Get("github/callback")
     @UseGuards(GithubAuthGuard)
     async githubCallback(@GetUser() user: OAuthProfile, @Res() res: Response) {
-        const token = await this.authService.registerOAuth({
-            ...user,
-            provider: "github",
-        });
-
-        res.cookie("access_token", token.access_token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "lax",
-        });
-
         const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
-        return res.redirect(frontendUrl);
+        try {
+            const token = await this.authService.registerOAuth({
+                ...user,
+                provider: "github",
+            });
+
+            res.cookie("access_token", token.access_token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "lax",
+            });
+
+            return res.redirect(frontendUrl);
+        } catch (err) {
+            if (err instanceof ForbiddenException)
+                return res.redirect(`${frontendUrl}?error=banned`);
+            throw err;
+        }
     }
 
     @Post("logout")

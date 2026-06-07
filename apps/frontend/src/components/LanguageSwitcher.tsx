@@ -13,7 +13,7 @@ export default function LanguageSwitcher() {
                 onClick={() => handleLanguageChange("fr")}
                 className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
                     i18n.resolvedLanguage === "fr"
-                        ? "bg-pink-600 text-white"
+                        ? `text-white`
                         : "text-white/60 hover:text-white hover:bg-white/10"
                 }`}
             >
@@ -23,7 +23,7 @@ export default function LanguageSwitcher() {
                 onClick={() => handleLanguageChange("en")}
                 className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
                     i18n.resolvedLanguage === "en"
-                        ? "bg-pink-600 text-white"
+                        ? `text-white`
                         : "text-white/60 hover:text-white hover:bg-white/10"
                 }`}
             >
