@@ -5,9 +5,14 @@ import UserManager from "../components/admin/UserManager";
 import { Window, Title, Button } from "../components/ui";
 import { Header } from "../components/Header";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 export default function AdminPage() {
     const { t } = useTranslation();
+    const { user } = useAuth();
+    const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState<"users" | "ranks" | "roles">(
         "users",
     );
@@ -22,6 +27,17 @@ export default function AdminPage() {
         handleUpdateUser,
         handleBanUser,
     } = useAdmin();
+
+    const hasPermissions =
+        user?.role?.permissions && user.role.permissions.length > 0;
+
+    useEffect(() => {
+        if (!hasPermissions) {
+            navigate("/");
+        }
+    }, [hasPermissions, navigate]);
+
+    if (!hasPermissions) return null;
 
     if (isLoading)
         return (
