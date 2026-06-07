@@ -28,6 +28,7 @@
 		"profile": {
 			"title": "Profil",
 			"friends": "Mes amis",
+			"admin": "Gestion",
 			"logout": "Déconnexion"
 		},
 		"leaderboard": "Classement"
@@ -76,7 +77,7 @@
 		"loading": "Chargement...",
 		"tabs": {
 			"users": "Utilisateurs",
-			"ranks": "Classements",
+			"ranks": "Gestion des ranks",
 			"roles": "Rôles"
 		},
 		"roles": {

@@ -28,6 +28,7 @@
 		"profile": {
 			"title": "Profile",
 			"friends": "Friends",
+			"admin": "Management",
 			"logout": "Logout"
 		},
 		"leaderboard": "Leaderboard"
