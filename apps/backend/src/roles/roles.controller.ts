@@ -22,19 +22,16 @@ export class RolesController {
     constructor(private readonly rolesService: RolesService) {}
 
     @Get()
-    @Permissions(PermissionAction.MANAGE_ROLES)
     findAll() {
         return this.rolesService.findAll();
     }
 
     @Get("permissions")
-    @Permissions(PermissionAction.MANAGE_ROLES)
     getPermissions() {
         return this.rolesService.getPermissions();
     }
 
     @Get(":id")
-    @Permissions(PermissionAction.MANAGE_ROLES)
     findOne(@Param("id") id: string) {
         return this.rolesService.findOne(id);
     }
