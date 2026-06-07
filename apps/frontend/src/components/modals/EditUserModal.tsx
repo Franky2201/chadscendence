@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button, Input } from "../ui";
 import { adminUpdateUser } from "../../services/users";
 import type { UserListItem } from "../../services/users";
+import { toast } from "sonner";
 
 interface EditUserModalProps {
     user: UserListItem;
@@ -34,7 +35,7 @@ export function EditUserModal({
             onSuccess(updated);
             onClose();
         } catch {
-            setError("Impossible de modifier le profil.");
+            toast.error("Impossible de modifier le profil.");
         } finally {
             setIsLoading(false);
         }

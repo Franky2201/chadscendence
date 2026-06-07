@@ -8,6 +8,7 @@ import { BanModal } from "../components/modals/BanModal";
 import { getAllUsers, AccountStatus } from "../services/users";
 import type { UserListItem } from "../services/users";
 import { useAuth } from "../contexts/AuthContext";
+import { useFriends } from "../contexts/FriendsContext";
 
 type ActiveModal =
     | { type: "friend"; user: UserListItem }
@@ -17,6 +18,7 @@ type ActiveModal =
 
 export default function UsersPage() {
     const { user: currentUser } = useAuth();
+    const { friends, sentRequests } = useFriends();
     const [users, setUsers] = useState<UserListItem[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -100,21 +102,32 @@ export default function UsersPage() {
                                         currentUser &&
                                         currentUser.id !== user.id ? (
                                             <>
-                                                <Button
-                                                    color="green"
-                                                    size="small"
-                                                    onClick={() =>
-                                                        setActiveModal({
-                                                            type: "friend",
-                                                            user,
-                                                        })
-                                                    }
-                                                >
-                                                    Ami +
-                                                </Button>
+                                                {!friends.some(
+                                                    (f) => f.id === user.id,
+                                                ) &&
+                                                    !sentRequests.some(
+                                                        (r) =>
+                                                            r.addresseeId ===
+                                                            user.id,
+                                                    ) && (
+                                                        <Button
+                                                            color="green"
+                                                            size="small"
+                                                            className="w-full"
+                                                            onClick={() =>
+                                                                setActiveModal({
+                                                                    type: "friend",
+                                                                    user,
+                                                                })
+                                                            }
+                                                        >
+                                                            Ajouter comme ami
+                                                        </Button>
+                                                    )}
                                                 <Button
                                                     color="blue"
                                                     size="small"
+                                                    className="w-full"
                                                     onClick={() =>
                                                         setActiveModal({
                                                             type: "edit",
@@ -132,6 +145,7 @@ export default function UsersPage() {
                                                             : "red"
                                                     }
                                                     size="small"
+                                                    className="w-full"
                                                     onClick={() =>
                                                         setActiveModal({
                                                             type: "ban",

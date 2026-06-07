@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "../ui";
 import { banUser, AccountStatus } from "../../services/users";
 import type { UserListItem } from "../../services/users";
+import { toast } from "sonner";
 
 interface BanModalProps {
     user: UserListItem;
@@ -21,9 +22,10 @@ export function BanModal({ user, onClose, onSuccess }: BanModalProps) {
         try {
             const result = await banUser(user.id);
             onSuccess(result.accountStatus);
+            toast.success("Statut mis a jour.");
             onClose();
         } catch {
-            setError("Impossible d'effectuer cette action.");
+            toast.error("Impossible d'effectuer cette action.");
         } finally {
             setIsLoading(false);
         }

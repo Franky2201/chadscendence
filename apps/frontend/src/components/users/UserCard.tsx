@@ -32,14 +32,11 @@ export function UserCard({ user, actions }: UserCardProps) {
             <div className="text-center">
                 <p className="font-bold text-white">{user.username}</p>
                 <p className="text-xs text-slate-400">{user.score} pts</p>
-                {user.bio && (
-                    <p className="text-xs text-slate-400 mt-1 line-clamp-2 max-w-[160px]">
-                        {user.bio}
-                    </p>
-                )}
             </div>
 
-            {actions && <div className="flex gap-2 mt-1">{actions}</div>}
+            {actions && (
+                <div className="flex flex-col w-full gap-2 mt-1">{actions}</div>
+            )}
         </div>
     );
 }
