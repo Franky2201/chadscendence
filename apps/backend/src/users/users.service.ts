@@ -24,7 +24,7 @@ export class UsersService implements OnModuleInit {
         private readonly rolesService: RolesService,
         private readonly presenceService: PresenceService,
         private readonly ranksService: RanksService,
-    ) { }
+    ) {}
 
     async onModuleInit() {
         await this.seedAdmin();
@@ -238,16 +238,24 @@ export class UsersService implements OnModuleInit {
         const user = await this.userRepository.findOne({ where: { id } });
         if (!user) throw new NotFoundException("User not found");
 
-        const { roleId, ...rest } = dto as any;
-        const updateData: any = { id, ...rest };
+        const { roleId, ...rest } = dto;
 
-        if (roleId) {
-            const role = await this.rolesService.findOne(roleId);
-            if (!role) throw new NotFoundException("Role not found");
-            updateData.role = role;
+        const role = roleId
+            ? await this.rolesService.findOne(roleId)
+            : undefined;
+
+        if (roleId && !role) {
+            throw new NotFoundException("Role not found");
         }
 
-        await this.userRepository.save(updateData);
+        const updatedUser = {
+            ...user,
+            ...rest,
+            ...(role ? { role } : {}),
+        };
+
+        await this.userRepository.save(updatedUser);
+
         return this.getUser(id);
     }
 

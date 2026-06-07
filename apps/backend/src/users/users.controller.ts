@@ -54,7 +54,7 @@ const avatarUploadOptions = {
 
 @Controller("users")
 export class UsersController {
-    constructor(private readonly usersService: UsersService) { }
+    constructor(private readonly usersService: UsersService) {}
 
     @Get()
     getAllUsers() {
@@ -121,7 +121,6 @@ export class UsersController {
     banUser(@Param("id") id: string) {
         return this.usersService.banUser(id);
     }
-
 
     @Get("search")
     @UseGuards(JwtAuthGuard)
