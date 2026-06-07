@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Button } from "../components/ui";
+import { Button, Input } from "../components/ui";
 import { UserCard } from "../components/users/UserCard";
 import { AddFriendModal } from "../components/modals/AddFriendModal";
 import { EditUserModal } from "../components/modals/EditUserModal";
@@ -20,9 +20,14 @@ export default function UsersPage() {
     const { user: currentUser } = useAuth();
     const { friends, sentRequests } = useFriends();
     const [users, setUsers] = useState<UserListItem[]>([]);
+    const [searchQuery, setSearchQuery] = useState("");
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [activeModal, setActiveModal] = useState<ActiveModal>(null);
+
+    const filteredUsers = users.filter((u) =>
+        u.username.toLowerCase().includes(searchQuery.toLowerCase()),
+    );
 
     useEffect(() => {
         getAllUsers()
@@ -71,11 +76,17 @@ export default function UsersPage() {
                     </div>
                 </div>
 
-                <div className="relative z-10 px-10 pb-4">
+                <div className="relative z-10 px-10 pb-4 flex items-center gap-6">
+                    <Input
+                        placeholder="Rechercher un joueur..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-72 !bg-white/10 !border-white/20 !text-white !text-left !font-normal placeholder:!text-white/40"
+                    />
                     <p className="text-slate-400 text-sm">
                         {isLoading
                             ? "Chargement..."
-                            : `${users.length} joueur${users.length !== 1 ? "s" : ""}`}
+                            : `${filteredUsers.length} joueur${filteredUsers.length !== 1 ? "s" : ""}`}
                     </p>
                 </div>
 
@@ -94,7 +105,7 @@ export default function UsersPage() {
 
                     {!isLoading && !error && (
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-                            {users.map((user) => (
+                            {filteredUsers.map((user) => (
                                 <UserCard
                                     key={user.id}
                                     user={user}
