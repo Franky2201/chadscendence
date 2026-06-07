@@ -91,5 +91,17 @@
 			"addRole": "Ajouter un rôle",
 			"validate": "Valider"
 		}
+	},
+	"users": {
+		"title": "Joueurs",
+		"search": "Rechercher un joueur...",
+		"loading": "Chargement...",
+		"error": "Impossible de charger la liste des joueurs.",
+		"addFriend": "Demander en ami",
+		"pending": "En attente",
+		"friend": "Ami",
+		"playersCount_zero": "0 joueur",
+		"playersCount_one": "1 joueur",
+		"playersCount_other": "{{count}} joueurs"
 	}
 }

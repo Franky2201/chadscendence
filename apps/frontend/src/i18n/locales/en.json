@@ -91,5 +91,17 @@
 			"addRole": "Add role",
 			"validate": "Confirm"
 		}
+	},
+	"users": {
+		"title": "Players",
+		"search": "Search a player...",
+		"loading": "Loading...",
+		"error": "Unable to load player list.",
+		"addFriend": "Add Friend",
+		"pending": "Pending",
+		"friend": "Friend",
+		"playersCount_zero": "0 players",
+		"playersCount_one": "1 player",
+		"playersCount_other": "{{count}} players"
 	}
 }
