@@ -7,7 +7,7 @@ import {
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { MoreThan, Repository } from "typeorm";
-import { User } from "../common/entities/user.entity";
+import { User, AccountStatus } from "../common/entities/user.entity";
 import { UpdateUserDto } from "../common/dto/users.dto";
 import { hash, compare } from "bcrypt";
 import { RanksService } from "../ranks/ranks.service";
@@ -230,6 +230,55 @@ export class UsersService implements OnModuleInit {
                 ? "online"
                 : "offline",
         }));
+    }
+
+    async getAllUsers() {
+        const users = await this.userRepository.find({
+            select: {
+                id: true,
+                username: true,
+                avatarUrl: true,
+                bio: true,
+                score: true,
+                updatedAt: true,
+                accountStatus: true,
+            },
+            order: { username: "ASC" },
+        });
+
+        return users.map((u) => ({
+            id: u.id,
+            username: u.username,
+            avatarUrl: u.avatarUrl,
+            bio: u.bio,
+            score: u.score,
+            updatedAt: u.updatedAt,
+            accountStatus: u.accountStatus,
+            status: this.presenceService.isUserOnline(u.id)
+                ? "online"
+                : "offline",
+        }));
+    }
+
+    async banUser(id: string) {
+        const user = await this.userRepository.findOne({ where: { id } });
+        if (!user) throw new NotFoundException("User not found");
+
+        user.accountStatus =
+            user.accountStatus === AccountStatus.BANNED
+                ? AccountStatus.ACTIVE
+                : AccountStatus.BANNED;
+
+        await this.userRepository.save(user);
+        return { accountStatus: user.accountStatus };
+    }
+
+    async adminUpdateUser(id: string, dto: UpdateUserDto) {
+        const user = await this.userRepository.findOne({ where: { id } });
+        if (!user) throw new NotFoundException("User not found");
+
+        await this.userRepository.save({ id, ...dto });
+        return this.getUser(id);
     }
 
     async findById(id: string) {

@@ -5,6 +5,7 @@ import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtPayload } from "../dto/auth.dto";
 import { UsersService } from "../../users/users.service";
+import { AccountStatus } from "../entities/user.entity";
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -37,6 +38,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         const user = await this.usersService.findById(payload.sub);
         if (!user) {
             throw new UnauthorizedException("User not found");
+        }
+        if (user.accountStatus === AccountStatus.BANNED) {
+            throw new UnauthorizedException("Account banned");
         }
         return payload;
     }

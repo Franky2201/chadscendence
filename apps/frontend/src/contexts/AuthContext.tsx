@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { createContext, useContext, useState, useEffect } from "react";
+import { toast } from "sonner";
 import { logout as logoutAuth } from "../services/auth";
 import { type User, getMe } from "../services/users";
 
@@ -17,6 +18,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get("error") === "banned") {
+            toast.error("Vous ne pouvez pas vous connecter.");
+            window.history.replaceState({}, "", window.location.pathname);
+        }
+
         const checkAuth = async () => {
             try {
                 const userData = await getMe();

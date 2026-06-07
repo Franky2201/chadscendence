@@ -1,5 +1,6 @@
 import {
     ConflictException,
+    ForbiddenException,
     Injectable,
     InternalServerErrorException,
     UnauthorizedException,
@@ -7,7 +8,7 @@ import {
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
-import { User } from "../common/entities/user.entity";
+import { User, AccountStatus } from "../common/entities/user.entity";
 import {
     CreateUserDto,
     OAuthProfile,
@@ -126,10 +127,16 @@ export class AuthService {
         let user = await this.userRepository.findOne({
             where: { [providerKey]: providerId },
         });
-        if (user) return this.generateTokens(user);
+        if (user) {
+            if (user.accountStatus === AccountStatus.BANNED)
+                throw new ForbiddenException("Account is banned");
+            return this.generateTokens(user);
+        }
 
         user = await this.userRepository.findOne({ where: { email } });
         if (user) {
+            if (user.accountStatus === AccountStatus.BANNED)
+                throw new ForbiddenException("Account is banned");
             if (provider === "github") {
                 user.githubId = providerId;
             } else {

@@ -1,4 +1,4 @@
-import { IsString, IsOptional, Allow } from "class-validator";
+import { IsString, IsOptional, Allow, IsInt, Min } from "class-validator";
 
 export class UpdateUserDto {
     @IsString()
@@ -21,4 +21,9 @@ export class UpdateUserDto {
     @IsOptional()
     @Allow()
     bio?: string | null;
+
+    @IsInt()
+    @Min(0)
+    @IsOptional()
+    score?: number;
 }

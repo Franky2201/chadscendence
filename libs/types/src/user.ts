@@ -29,6 +29,11 @@ export interface Role {
     permissions: Permission[];
 }
 
+export enum AccountStatus {
+    ACTIVE = "active",
+    BANNED = "banned",
+}
+
 export interface User {
     id: string;
     username: string;
@@ -36,6 +41,7 @@ export interface User {
     avatarUrl?: string;
     bio?: string;
     status: UserStatus;
+    accountStatus: AccountStatus;
     role: Role;
     score: number;
     rankId?: string;
