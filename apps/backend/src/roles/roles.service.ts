@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, In } from 'typeorm';
 import { Role } from 'src/common/entities/role.entity';
 import { Permission } from 'src/common/entities/permission.entity';
+import { User } from 'src/common/entities/user.entity';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { PermissionAction } from '@chad/types';
@@ -16,6 +17,8 @@ export class RolesService {
 		private readonly roleRepository: Repository<Role>,
 		@InjectRepository(Permission)
 		private readonly permissionRepository: Repository<Permission>,
+		@InjectRepository(User)
+		private readonly userRepository: Repository<User>,
 	) { }
 
 	async onModuleInit() {
@@ -65,9 +68,21 @@ export class RolesService {
 	}
 
 	async findAll() {
-		return this.roleRepository.find({
+		const roles = await this.roleRepository.find({
 			relations: { permissions: true },
 		});
+
+		return Promise.all(
+			roles.map(async (role) => {
+				const userCount = await this.userRepository.count({
+					where: { role: { id: role.id } },
+				});
+				return {
+					...role,
+					userCount,
+				};
+			})
+		);
 	}
 
 	async findOne(id: string) {
@@ -130,6 +145,14 @@ export class RolesService {
 
 		if (this.IMMUTABLE_ROLES.includes(role.name.toUpperCase())) {
 			throw new ForbiddenException();
+		}
+
+		const userCount = await this.userRepository.count({ where: { role: { id } } });
+		if (userCount > 0) {
+			const defaultUserRole = await this.roleRepository.findOne({ where: { name: 'User' } });
+			if (!defaultUserRole) throw new ConflictException('Default User role not found');
+
+			await this.userRepository.update({ role: { id } }, { role: defaultUserRole });
 		}
 
 		return this.roleRepository.remove(role);

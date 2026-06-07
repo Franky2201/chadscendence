@@ -27,6 +27,7 @@ export interface Role {
     id: string;
     name: string;
     permissions: Permission[];
+    userCount?: number;
 }
 
 export enum AccountStatus {
