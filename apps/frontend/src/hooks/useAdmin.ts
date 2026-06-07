@@ -9,11 +9,19 @@ import {
     deleteRole,
     getRanks,
 } from "../services/admin";
+import {
+    getAllUsers,
+    adminUpdateUser,
+    banUser,
+    uploadAvatarForUser,
+} from "../services/users";
+import type { UserListItem, AdminUpdateData } from "../services/users";
 
 export const useAdmin = () => {
     const [roles, setRoles] = useState<Role[]>([]);
     const [permissions, setPermissions] = useState<Permission[]>([]);
     const [ranks, setRanks] = useState<Rank[]>([]);
+    const [users, setUsers] = useState<UserListItem[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -21,15 +29,17 @@ export const useAdmin = () => {
             setIsLoading(true);
 
             try {
-                const [rolesData, permsData, ranksData] = await Promise.all([
+                const [rolesData, permsData, ranksData, usersData] = await Promise.all([
                     getRoles(),
                     getPermissions(),
                     getRanks(),
+                    getAllUsers(),
                 ]);
 
                 setRoles(rolesData);
                 setPermissions(permsData);
                 setRanks(ranksData);
+                setUsers(usersData);
             } catch {
                 toast.error("Erreur de chargement des données");
             } finally {
@@ -76,13 +86,45 @@ export const useAdmin = () => {
         }
     };
 
+    const handleUpdateUser = async (id: string, data: AdminUpdateData, avatarFile?: File | null) => {
+        try {
+            if (avatarFile) {
+                await uploadAvatarForUser(id, avatarFile);
+            }
+            const updated = await adminUpdateUser(id, data);
+            setUsers((prev) => prev.map((u) => (u.id === id ? updated : u)));
+            toast.success("Profil mis à jour");
+        } catch {
+            toast.error("Impossible de modifier le profil");
+            throw new Error("Update failed");
+        }
+    };
+
+    const handleBanUser = async (id: string) => {
+        try {
+            const result = await banUser(id);
+            setUsers((prev) =>
+                prev.map((u) =>
+                    u.id === id ? { ...u, accountStatus: result.accountStatus } : u
+                )
+            );
+            toast.success("Statut mis à jour");
+        } catch {
+            toast.error("Impossible d'effectuer cette action");
+            throw new Error("Ban failed");
+        }
+    };
+
     return {
         roles,
         permissions,
         ranks,
+        users,
         isLoading,
         handleCreateRole,
         handleUpdateRole,
         handleDeleteRole,
+        handleUpdateUser,
+        handleBanUser,
     };
 };
