@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Button, Input } from "../ui";
-import { adminUpdateUser } from "../../services/users";
+import { adminUpdateUser, uploadAvatarForUser } from "../../services/users";
 import type { UserListItem } from "../../services/users";
 import { toast } from "sonner";
 
@@ -16,19 +16,29 @@ export function EditUserModal({
     onSuccess,
 }: EditUserModalProps) {
     const [username, setUsername] = useState(user.username);
-    const [avatarUrl, setAvatarUrl] = useState(user.avatarUrl ?? "");
+    const [avatarPreview, setAvatarPreview] = useState(user.avatarUrl ?? "");
+    const [avatarFile, setAvatarFile] = useState<File | null>(null);
     const [bio, setBio] = useState(user.bio ?? "");
     const [score, setScore] = useState(String(user.score));
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setAvatarFile(file);
+            setAvatarPreview(URL.createObjectURL(file));
+        }
+    };
 
     const handleSubmit = async () => {
         setIsLoading(true);
-        setError(null);
         try {
+            if (avatarFile) {
+                await uploadAvatarForUser(user.id, avatarFile);
+            }
             const updated = await adminUpdateUser(user.id, {
                 username: username.trim() || undefined,
-                avatarUrl: avatarUrl.trim() || undefined,
                 bio: bio.trim() || null,
                 score: score !== "" ? Number(score) : undefined,
             });
@@ -50,24 +60,39 @@ export function EditUserModal({
                 </h2>
 
                 <div className="flex flex-col gap-3">
+                    <div className="flex flex-col gap-1 items-center">
+                        <label className="text-xs text-slate-400 self-start">
+                            Avatar
+                        </label>
+                        <div
+                            className="relative group cursor-pointer"
+                            onClick={() => fileInputRef.current?.click()}
+                        >
+                            <img
+                                src={avatarPreview || "/default-avatar.png"}
+                                alt="avatar"
+                                className="w-20 h-20 rounded-xl object-cover border-2 border-white/20 shadow-lg transition-all group-hover:opacity-50"
+                            />
+                            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                <span className="text-white text-xs font-bold bg-black/60 px-2 py-1 rounded-lg">
+                                    Modifier
+                                </span>
+                            </div>
+                        </div>
+                        <input
+                            type="file"
+                            ref={fileInputRef}
+                            className="hidden"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                        />
+                    </div>
+
                     <div className="flex flex-col gap-1">
                         <label className="text-xs text-slate-400">Pseudo</label>
                         <Input
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
-                            color="blue"
-                            size="small"
-                            className="w-full text-left"
-                        />
-                    </div>
-
-                    <div className="flex flex-col gap-1">
-                        <label className="text-xs text-slate-400">
-                            Avatar URL
-                        </label>
-                        <Input
-                            value={avatarUrl}
-                            onChange={(e) => setAvatarUrl(e.target.value)}
                             color="blue"
                             size="small"
                             className="w-full text-left"
@@ -97,8 +122,6 @@ export function EditUserModal({
                         />
                     </div>
                 </div>
-
-                {error && <p className="text-red-400 text-sm">{error}</p>}
 
                 <div className="flex gap-2 justify-end">
                     <Button

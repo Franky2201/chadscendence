@@ -57,6 +57,20 @@ export const uploadAvatar = async (file: File): Promise<User> => {
     return res.data;
 };
 
+export const uploadAvatarForUser = async (
+    userId: string,
+    file: File,
+): Promise<UserListItem> => {
+    const formData = new FormData();
+    formData.append("file", file);
+    const res = await api.post<UserListItem>(
+        `/users/${userId}/avatar`,
+        formData,
+        { headers: { "Content-Type": "multipart/form-data" } },
+    );
+    return res.data;
+};
+
 export const deleteMe = async (): Promise<{ message: string }> => {
     const res = await api.delete<{ message: string }>("/users/me");
     return res.data;
