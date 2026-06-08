@@ -1,28 +1,21 @@
 import type { SelectHTMLAttributes } from "react";
-
-type SelectSize = "small" | "medium" | "large";
-
-type SelectProps = Omit<SelectHTMLAttributes<HTMLSelectElement>, "size"> & {
-    size?: SelectSize;
-};
-
-const sizeClasses: Record<SelectSize, string> = {
-    small: "pl-4 pr-12 py-2 text-sm",
-    medium: "pl-6 pr-14 py-3 text-base",
-    large: "pl-8 pr-16 py-4 text-lg",
-};
+import { useTheme } from "../../contexts/ThemeContext";
+import { getItemColorStyle, getItemMixedColorStyle } from "./unified";
 
 export function Select({
-    size = "medium",
     className = "",
     ...props
-}: SelectProps) {
+}: SelectHTMLAttributes<HTMLSelectElement>) {
+    const { theme } = useTheme();
     return (
-        <div className={`flex flex-row items-center`}>
-            <select
-                className={`rounded-xl bg-black/70 hover:cursor-pointer font-bold ${sizeClasses[size]} ${className}`}
-                {...props}
-            />
-        </div>
+        <select
+            className={`hover:cursor-pointer bg-[var(--ui-color)] font-bold 
+				font-mona-sans-light  text-[var(--text-color)] ${className}`}
+            style={{
+                ...getItemColorStyle(theme),
+                ...getItemMixedColorStyle(theme, "--text-color", 50),
+            }}
+            {...props}
+        />
     );
 }

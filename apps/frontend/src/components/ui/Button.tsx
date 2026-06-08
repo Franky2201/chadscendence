@@ -33,13 +33,13 @@ export function Button({
         .join(" ");
     const buttonClasses = [
         "items-center justify-center transition-all duration-100 ease-in-out h-full w-full text-center\
-		select-none active:translate-y-0 font-bold bg-[color:var(--ui-color)] border-1 font-mona-sans",
+		select-none active:translate-y-0 font-bold bg-[color:var(--ui-color)] font-mona-sans",
         borderRadius,
         sizeClasses[size],
         className,
         props.disabled
             ? "translate-y-0 cursor-not-allowed"
-            : "translate-y-[-5px] hover:translate-y-[-7px] cursor-pointer",
+            : "translate-y-[-3px] hover:translate-y-[-5px] cursor-pointer",
     ]
         .filter(Boolean)
         .join(" ");

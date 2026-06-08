@@ -28,6 +28,7 @@ export default function ProfilePage() {
                 <div className="flex flex-col gap-4 w-full max-w-250">
                     <pannel.Summary></pannel.Summary>
                     <pannel.History></pannel.History>
+                    <pannel.Statistics></pannel.Statistics>
                     <pannel.Achievements></pannel.Achievements>
                 </div>
             </div>
