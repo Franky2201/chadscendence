@@ -25,21 +25,21 @@ export function Button({
     ...props
 }: ButtonProps) {
     const divClasses = [
-        "group relative border-none select-none",
+        "relative border-none select-none",
         borderRadius,
         className,
     ]
         .filter(Boolean)
         .join(" ");
     const buttonClasses = [
-        "items-center justify-center transition-all duration-100 ease-in-out h-full w-full\
-		select-none group-active:translate-y-0 font-bold bg-[color:var(--ui-color)] font-mona-sans",
+        "items-center justify-center transition-all duration-100 ease-in-out h-full w-full text-center\
+		select-none active:translate-y-0 font-bold bg-[color:var(--ui-color)] border-1 font-mona-sans",
         borderRadius,
         sizeClasses[size],
         className,
         props.disabled
             ? "translate-y-0 cursor-not-allowed"
-            : "translate-y-[-5px] group-hover:translate-y-[-7px] cursor-pointer",
+            : "translate-y-[-5px] hover:translate-y-[-7px] cursor-pointer",
     ]
         .filter(Boolean)
         .join(" ");
