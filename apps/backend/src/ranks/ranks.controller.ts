@@ -10,14 +10,14 @@ import {
 } from "@nestjs/common";
 import { RanksService } from "./ranks.service";
 import { JwtAuthGuard } from "../common/guards/jwt.guard";
-import { CreateRankDto, UpdateRankDto } from "../common/dto/ranks.dto";
+import { CreateRankDto, UpdateRankDto } from "./ranks.dto";
 import { PermissionsGuard } from "src/common/guards/permissions.guard";
 import { Permissions } from "src/common/decorators/permissions.decorator";
 import { PermissionAction } from "@chad/types";
 
 @Controller("ranks")
 export class RanksController {
-    constructor(private readonly ranksService: RanksService) {}
+    constructor(private readonly ranksService: RanksService) { }
 
     @Get("")
     getRanks() {
