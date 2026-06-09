@@ -264,7 +264,7 @@ if [ -f "$ROOT_PACKAGE" ]; then
     if command -v docker > /dev/null 2>&1; then
         echo "Using a temporary Docker container to update lockfile (ensures compatibility)..."
         # We use node:22-alpine to match the microservices' environment
-        docker run --rm -u "$(id -u):$(id -g)" -v "$ROOT_DIR:/app" -w /app node:22-alpine npm install --package-lock-only
+        docker run --rm -u "$(id -u):$(id -g)" -v "$ROOT_DIR:/app" -w /app -e npm_config_cache=/tmp/.npm node:22-alpine npm install --package-lock-only
         echo "Lockfile updated successfully."
     elif command -v npm > /dev/null 2>&1; then
         echo "Docker not found, falling back to host npm..."
