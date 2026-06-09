@@ -1,13 +1,19 @@
-import type { TooltipContentProps } from "recharts/types/component/Tooltip";
-
-type ValueType = string | number;
-type NameType = string;
+type CustomTooltipProps = {
+    active?: boolean;
+    label?: string | number;
+    payload?: Array<{
+        name?: string;
+        value?: string | number;
+        color?: string;
+        dataKey?: string;
+    }>;
+};
 
 export const CustomTooltip = ({
     active,
     payload,
     label,
-}: TooltipContentProps<ValueType, NameType>) => {
+}: CustomTooltipProps) => {
     if (!active || !payload?.length) return null;
 
     return (
@@ -40,31 +46,3 @@ export const CustomTooltip = ({
         </div>
     );
 };
-
-/*
-import type { TooltipContentProps } from "recharts";
-
-type ValueType = number | string;
-type NameType = string;
-
-function CustomTooltip(props: TooltipContentProps<ValueType, NameType>) {
-    const { active, payload, label } = props;
-
-    if (!active || !payload?.length) {
-        return null;
-    }
-
-    return (
-        <div>
-            <div>{label}</div>
-            {payload.map((item, index) => (
-                <div key={index}>
-                    {item.name}: {item.value}
-                </div>
-            ))}
-        </div>
-    );
-}
-
-export default CustomTooltip;
-*/
