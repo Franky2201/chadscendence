@@ -1,6 +1,6 @@
 import { Card, Button } from "../ui";
 import { useAuth } from "../../contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useChat } from "../../contexts/ChatContext";
 import { useTranslation } from "react-i18next";
 
@@ -26,15 +26,19 @@ export function Profile({ className = "" }: { className?: string }) {
             href="/profile"
         >
             <div className="flex flex-wrap mb-4">
-                <img
-                    className="rounded-xl w-20 h-20 border"
-                    src={user ? user.avatarUrl : "/avatar.jpg"}
-                />
+                <Link to="/profile">
+                    <img
+                        className="rounded-xl w-20 h-20 border"
+                        src={user ? user.avatarUrl : "/avatar.jpg"}
+                    />
+                </Link>
                 <div className="flex flex-col ml-2">
-                    <div className="flex flex-wrap gap-2">
-                        <p className="text-3xl font-bold">{user?.username}</p>
-                    </div>
-                    Rating : {user?.rating}
+                    <Link to="/profile">
+                        <div className="flex flex-wrap gap-2">
+                            <p className="text-3xl font-bold">{user?.username}</p>
+                        </div>
+                    </Link>
+                    {user?.rank.icon} {user?.rank.name} - {user?.rating}
                 </div>
             </div>
             <div className="flex flex-col gap-3">
