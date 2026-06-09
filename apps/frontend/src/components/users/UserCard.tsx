@@ -11,7 +11,7 @@ export function UserCard({ user, actions }: UserCardProps) {
         <div className="flex flex-col items-center justify-between w-56 h-64 bg-slate-800/70 border border-slate-700 rounded-2xl p-5 backdrop-blur-sm shadow-xl">
             <div className="flex flex-col items-center gap-3">
                 <Link
-                    to={`/profile/${user.username}`}
+                    to={`/users/${user.username}`}
                     className="relative group"
                 >
                     {user.avatarUrl ? (
@@ -26,16 +26,15 @@ export function UserCard({ user, actions }: UserCardProps) {
                         </div>
                     )}
                     <span
-                        className={`absolute bottom-0 right-0 w-4 h-4 rounded-full border-2 border-slate-800 ${
-                            user.status === "online"
-                                ? "bg-green-400"
-                                : "bg-slate-500"
-                        }`}
+                        className={`absolute bottom-0 right-0 w-4 h-4 rounded-full border-2 border-slate-800 ${user.status === "online"
+                            ? "bg-green-400"
+                            : "bg-slate-500"
+                            }`}
                     />
                 </Link>
 
                 <div className="text-center mt-2">
-                    <Link to={`/profile/${user.username}`}>
+                    <Link to={`/users/${user.username}`}>
                         <p className="font-bold text-lg text-white hover:text-pink-400 transition-colors">
                             {user.username}
                         </p>
