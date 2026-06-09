@@ -1,9 +1,8 @@
 import api from "./api";
 import { UserStatus, AccountStatus } from "@chad/types";
-import type { User } from "@chad/types";
-import type { Role } from "@chad/types";
+import type { User, Role, Rank } from "@chad/types";
 
-export type { User };
+export type { User, Rank };
 export { UserStatus, AccountStatus };
 
 interface UpdateMe {
@@ -36,6 +35,17 @@ export interface UserSearchResult {
     status: "online" | "offline";
 }
 
+export interface PublicUserProfile {
+    id: string;
+    username: string;
+    avatarUrl?: string;
+    bio?: string | null;
+    score: number;
+    rank: Rank;
+    role: Role;
+    leaderboardRank: number;
+}
+
 export interface UserListItem {
     id: string;
     username: string;
@@ -47,6 +57,13 @@ export interface UserListItem {
     accountStatus: AccountStatus;
     role: Role;
 }
+
+export const getPublicProfile = async (
+    username: string,
+): Promise<PublicUserProfile> => {
+    const res = await api.get<PublicUserProfile>(`/users/profile/${username}`);
+    return res.data;
+};
 
 export const getMe = async (): Promise<User> => {
     const res = await api.get<User>("/users/me");
