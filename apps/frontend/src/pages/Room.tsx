@@ -62,7 +62,7 @@ export default function LobbyCreator() {
         <Window>
             <Header />
 
-            <Card className="mb-20 relative max-w-5xl min-w-1/2 -mt-10 mx-auto space-y-8 flex flex-col">
+            <Card className="mb-20 relative max-w-5xl min-w-1/2 mt-10 mx-auto space-y-8 flex flex-col">
                 {error && (
                     <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
                         {error}
