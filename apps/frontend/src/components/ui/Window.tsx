@@ -27,7 +27,7 @@ export function Window({
 		duration-500 ease-in-out ${className}`;
     const footerClasses = `flex justify-center mt-4 items-center text-sm gap-1 \
 		transition-colors duration-50 ease-in-out`;
-    const linkClasses = `transition-all duration-300 ease-in-out \
+    const linkClasses = `select-none transition-all duration-300 ease-in-out \
 		uppercase text-center hover:font-bold`;
     return (
         <div className={classes}>
