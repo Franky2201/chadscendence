@@ -82,7 +82,7 @@ services:
                 DOMAIN_NAME: ${DOMAIN_NAME}
         env_file: .env
         environment:
-            - VITE_BACKEND_URL=${BACKEND_URL:-http://localhost:3000}
+            - VITE_BACKEND_URL=${BACKEND_URL:-http://localhost:3000/api}
         depends_on:
             - backend
         ports:
