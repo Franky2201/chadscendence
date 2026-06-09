@@ -5,7 +5,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { Card, Button } from "../ui/index";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useTheme } from "../../contexts/ThemeContext";
 
 export function Leaderboard({
@@ -103,9 +103,11 @@ export function Leaderboard({
                                         className="w-10 h-10 mr-2 mb-1 rounded-xl border"
                                     />
 
-                                    <span className="block truncate text-xl font-bold max-w-[14rem] sm:max-w-[18rem]">
-                                        {item.username}
-                                    </span>
+                                    <Link to={`/users/${item.username}`}>
+                                        <span className="block truncate text-xl font-bold max-w-[14rem] sm:max-w-[18rem] hover:scale-105 transition-transform">
+                                            {item.username}
+                                        </span>
+                                    </Link>
                                 </div>
 
                                 <span className="text-lg font-mona-sans">
