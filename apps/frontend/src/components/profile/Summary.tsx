@@ -43,7 +43,7 @@ export function Summary() {
                         onClick={() => fileInputRef.current?.click()}
                     >
                         <img
-                            src={user.avatarUrl}
+                            src={user?.avatarUrl}
                             alt="avatar"
                             className="w-40 h-40 rounded-xl object-cover border-4 border-white/20 shadow-xl transition-all group-hover:opacity-50"
                         />
@@ -71,13 +71,13 @@ export function Summary() {
                             )}
                         </h2>
                         <p className="text-sm font-medium text-white/50 mb-1">
-                            {user.email}
+                            {user?.email}
                         </p>
                         <p className="text-lg font-bold text-white/80 mt-1">
-                            {user.rank?.icon} {user.rank?.name}
+                            {user?.rank?.icon} {user?.rank?.name}
                         </p>
                         <p className="text-xl font-black text-white">
-                            {t("profilePage.rating")} : {user.score}
+                            {t("profilePage.rating")} : {user?.score}
                         </p>
                     </div>
                 </div>
