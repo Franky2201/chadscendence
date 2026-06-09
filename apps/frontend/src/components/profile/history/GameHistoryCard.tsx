@@ -1,6 +1,7 @@
 import { type ItemColor } from "../../ui/unified";
 import { useAuth } from "../../../contexts/AuthContext";
 import { Badge } from "../../ui/index";
+import { useTheme } from "../../../contexts/ThemeContext";
 
 export type GameHistory = {
     start: string;
@@ -13,6 +14,8 @@ export type GameHistory = {
 
 type GameHistoryCardProps = {
     game: GameHistory;
+    isOpen: boolean;
+    onToggle: () => void;
 };
 
 type MyStats = {
@@ -41,7 +44,12 @@ function extractMyStats(history: GameHistory, username: string): MyStats {
     };
 }
 
-export function GameHistoryCard({ game }: GameHistoryCardProps) {
+export function GameHistoryCard({
+    game,
+    isOpen,
+    onToggle,
+}: GameHistoryCardProps) {
+    const { theme } = useTheme();
     const { user } = useAuth();
 
     if (!user) {
@@ -65,7 +73,12 @@ export function GameHistoryCard({ game }: GameHistoryCardProps) {
         w-full items-center justify-center`;
 
     return (
-        <Badge className="border-1" color={color}>
+        <Badge
+            className={`flex flex-col w-full  hover:ring-2 hover:cursor-pointer 
+                transition-all duration-200 ease-in-out`}
+            color={isOpen ? theme : color}
+            onClick={onToggle}
+        >
             <div
                 className={`flex flex-wrap w-full justify-between items-center`}
             >
@@ -77,8 +90,13 @@ export function GameHistoryCard({ game }: GameHistoryCardProps) {
                         {startDate.toLocaleTimeString()}
                     </span>
                 </div>
-                <hr className="w-full mb-1 text-black/20"></hr>
-                <div className="grid grid-cols-4 justify-center items-center w-full place-items-center">
+                <hr className="w-full text-black/20"></hr>
+                <div
+                    className={`grid grid-cols-4 justify-center transition-all ease-in-out
+                        items-center w-full place-items-center duration-200 ${
+                            isOpen ? "opacity-0 h-0" : "opacity-100"
+                        }`}
+                >
                     <span className={commonClasses}>#{myPosition}</span>
                     <span className={commonClasses}>{myScore}</span>
                     <span className={commonClasses}>{myRating}</span>
@@ -86,6 +104,43 @@ export function GameHistoryCard({ game }: GameHistoryCardProps) {
                         {myRatingDiff > 0 ? `+` : ``}
                         {myRatingDiff}
                     </span>
+                </div>
+            </div>
+
+            {/* Expandable section */}
+            <div
+                className={`overflow-hidden transition-all duration-400 ease-in-out ${
+                    isOpen ? "max-h-40 mt-2 opacity-100" : "max-h-0 opacity-0"
+                }`}
+            >
+                <div className="text-sm rounded">
+                    {game.players.map((player, index) => (
+                        <div
+                            key={player}
+                            className={`grid grid-cols-4 justify-center 
+                                items-center w-full place-items-center 
+                                ${player == user.username ? "text-white" : ""}`}
+                        >
+                            <div className="grid grid-cols-2 w-full items-center text-xs sm:text-base md:text-lg">
+                                <span className="text-end mr-2">
+                                    #{index + 1}
+                                </span>
+                                <span className="truncate text-start">
+                                    {player}
+                                </span>
+                            </div>
+                            <span className={commonClasses}>
+                                {game.scores[index]}
+                            </span>
+                            <span className={commonClasses}>
+                                {game.ratings[index]}
+                            </span>
+                            <span className={commonClasses}>
+                                {game.rating_diffs[index] > 0 ? `+` : ``}
+                                {game.rating_diffs[index]}
+                            </span>
+                        </div>
+                    ))}
                 </div>
             </div>
         </Badge>

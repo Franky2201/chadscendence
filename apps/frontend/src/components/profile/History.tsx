@@ -1,5 +1,6 @@
 import { Card } from "../ui";
 import { GameHistoryCard, type GameHistory } from "./history/GameHistoryCard";
+import { useState } from "react";
 
 const data: GameHistory[] = [
     {
@@ -29,13 +30,15 @@ const data: GameHistory[] = [
 ];
 
 export function History() {
+    const [openId, setOpenId] = useState<string | null>(null);
+
     const commonClasses =
         "select-none flex justify-self-center font-mona-sans-ligh text-xs sm:text-md";
 
     return (
         <Card title="Game History">
             <div className="flex flex-col gap-2">
-                <div className="grid grid-cols-4 gap-2">
+                <div className="grid grid-cols-4 gap-2 px-4">
                     <span className={commonClasses}>Position</span>
                     <span className={commonClasses}>Score</span>
                     <span className={commonClasses}>Rating</span>
@@ -43,7 +46,14 @@ export function History() {
                 </div>
 
                 {data.map((g) => (
-                    <GameHistoryCard key={g.start} game={g} />
+                    <GameHistoryCard
+                        key={g.start}
+                        game={g}
+                        isOpen={openId === g.start}
+                        onToggle={() =>
+                            setOpenId(openId === g.start ? null : g.start)
+                        }
+                    />
                 ))}
             </div>
         </Card>
