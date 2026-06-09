@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getPublicProfile, type PublicUserProfile } from "../services/users";
+import { getPublicProfile } from "../services/users";
+import type { PublicUserProfile } from "@chad/types";
 import { Window, Card, Badge } from "../components/ui";
 import { Header } from "../components/Header";
 import { useTranslation } from "react-i18next";
@@ -23,7 +24,7 @@ export default function PublicProfile() {
             try {
                 const data = await getPublicProfile(username);
                 setProfile(data);
-            } catch (err) {
+            } catch {
                 setError(t("users.error"));
             } finally {
                 setLoading(false);
@@ -48,7 +49,11 @@ export default function PublicProfile() {
                     </div>
                 ) : (
                     <div className="flex flex-col gap-4 w-full max-w-250">
-                        <Card size="large" title={profile.username} href="/users">
+                        <Card
+                            size="large"
+                            title={profile.username}
+                            href="/users"
+                        >
                             <div className="flex flex-col md:flex-row gap-8 items-center md:items-start w-full mt-4">
                                 <div className="flex flex-col items-center gap-4 md:w-1/3">
                                     <div className="relative">
@@ -62,13 +67,18 @@ export default function PublicProfile() {
                                         <h2 className="text-2xl font-black flex items-center gap-2">
                                             #{profile.leaderboardRank ?? "..."}
                                             {profile.role?.name === "Admin" && (
-                                                <Badge color="black" className="text-xs">
+                                                <Badge
+                                                    color="black"
+                                                    className="text-xs"
+                                                >
                                                     {t("profilePage.admin")}
                                                 </Badge>
                                             )}
                                         </h2>
                                         <p className="text-lg font-bold text-white/80 mt-1">
-                                            {profile.rank?.icon} {profile.rank?.name} - {profile.score}
+                                            {profile.rank?.icon}{" "}
+                                            {profile.rank?.name} -{" "}
+                                            {profile.rating}
                                         </p>
                                     </div>
                                 </div>

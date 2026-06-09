@@ -8,7 +8,6 @@ export function Summary() {
     const { theme } = useTheme();
     const {
         user,
-        leaderboardRank,
         editUsername,
         setEditUsername,
         editBio,
@@ -63,7 +62,7 @@ export function Summary() {
 
                     <div className="flex flex-col items-center text-center gap-1 mt-2">
                         <h2 className="text-2xl font-black flex items-center gap-2">
-                            #{leaderboardRank ?? "..."}
+                            #{user?.leaderboardRank ?? "..."}
                             {user?.role?.name === "Admin" && (
                                 <Badge color="black" className="text-xs">
                                     {t("profilePage.admin")}
@@ -77,7 +76,7 @@ export function Summary() {
                             {user?.rank?.icon} {user?.rank?.name}
                         </p>
                         <p className="text-xl font-black text-white">
-                            {t("profilePage.rating")} : {user?.score}
+                            {t("profilePage.rating")} : {user?.rating}
                         </p>
                     </div>
                 </div>

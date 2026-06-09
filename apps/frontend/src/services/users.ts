@@ -1,62 +1,15 @@
 import api from "./api";
-import { UserStatus, AccountStatus } from "@chad/types";
-import type { User, Role, Rank } from "@chad/types";
-
-export type { User, Rank };
-export { UserStatus, AccountStatus };
-
-interface UpdateMe {
-    username?: string;
-    oldPassword?: string;
-    password?: string;
-    avatarUrl?: string;
-    bio?: string | null;
-}
-
-export interface AdminUpdateData {
-    username?: string;
-    avatarUrl?: string;
-    bio?: string | null;
-    score?: number;
-    roleId?: string;
-}
-
-export type LeaderboardType = {
-    id: string | number;
-    username: string;
-    avatarUrl: string;
-    score: number;
-}[];
-
-export interface UserSearchResult {
-    id: string;
-    username: string;
-    avatarUrl: string;
-    status: "online" | "offline";
-}
-
-export interface PublicUserProfile {
-    id: string;
-    username: string;
-    avatarUrl?: string;
-    bio?: string | null;
-    score: number;
-    rank: Rank;
-    role: Role;
-    leaderboardRank: number;
-}
-
-export interface UserListItem {
-    id: string;
-    username: string;
-    avatarUrl?: string;
-    bio?: string | null;
-    score: number;
-    updatedAt: string;
-    status: "online" | "offline";
-    accountStatus: AccountStatus;
-    role: Role;
-}
+import type {
+    User,
+    UpdateMePayload,
+    AdminUpdateDataPayload,
+    LeaderboardItem,
+    UserSearchResult,
+    PublicUserProfile,
+    UserListItem,
+    BasicMessageResponse,
+    BanResponse,
+} from "@chad/types";
 
 export const getPublicProfile = async (
     username: string,
@@ -70,7 +23,7 @@ export const getMe = async (): Promise<User> => {
     return res.data;
 };
 
-export const updateMe = async (data: UpdateMe): Promise<User> => {
+export const updateMe = async (data: UpdateMePayload): Promise<User> => {
     const res = await api.patch<User>("/users/me", data);
     return res.data;
 };
@@ -93,27 +46,24 @@ export const uploadAvatarForUser = async (
     const res = await api.post<UserListItem>(
         `/users/${userId}/avatar`,
         formData,
-        { headers: { "Content-Type": "multipart/form-data" } },
+        {
+            headers: { "Content-Type": "multipart/form-data" },
+        },
     );
     return res.data;
 };
 
-export const deleteMe = async (): Promise<{ message: string }> => {
-    const res = await api.delete<{ message: string }>("/users/me");
+export const deleteMe = async (): Promise<BasicMessageResponse> => {
+    const res = await api.delete<BasicMessageResponse>("/users/me");
     return res.data;
 };
 
 export const getLeaderboard = async (
     count: number,
-): Promise<LeaderboardType> => {
-    const res = await api.get<LeaderboardType>(
+): Promise<LeaderboardItem[]> => {
+    const res = await api.get<LeaderboardItem[]>(
         `/users/leaderboard?count=${count}`,
     );
-    return res.data;
-};
-
-export const getMyLeaderboardRank = async (): Promise<number> => {
-    const res = await api.get<number>("/users/me/leaderboard-rank");
     return res.data;
 };
 
@@ -130,18 +80,14 @@ export const getAllUsers = async (): Promise<UserListItem[]> => {
     return res.data;
 };
 
-export const banUser = async (
-    userId: string,
-): Promise<{ accountStatus: AccountStatus }> => {
-    const res = await api.patch<{ accountStatus: AccountStatus }>(
-        `/users/${userId}/ban`,
-    );
+export const banUser = async (userId: string): Promise<BanResponse> => {
+    const res = await api.patch<BanResponse>(`/users/${userId}/ban`);
     return res.data;
 };
 
 export const adminUpdateUser = async (
     userId: string,
-    data: AdminUpdateData,
+    data: AdminUpdateDataPayload,
 ): Promise<UserListItem> => {
     const res = await api.patch<UserListItem>(`/users/${userId}`, data);
     return res.data;

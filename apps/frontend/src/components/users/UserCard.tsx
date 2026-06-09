@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import type { UserListItem } from "../../services/users";
+import type { UserListItem } from "@chad/types";
 
 interface UserCardProps {
     user: UserListItem;
@@ -10,10 +10,7 @@ export function UserCard({ user, actions }: UserCardProps) {
     return (
         <div className="flex flex-col items-center justify-between w-56 h-64 bg-slate-800/70 border border-slate-700 rounded-2xl p-5 backdrop-blur-sm shadow-xl">
             <div className="flex flex-col items-center gap-3">
-                <Link
-                    to={`/users/${user.username}`}
-                    className="relative group"
-                >
+                <Link to={`/users/${user.username}`} className="relative group">
                     {user.avatarUrl ? (
                         <img
                             src={user.avatarUrl}
@@ -26,10 +23,11 @@ export function UserCard({ user, actions }: UserCardProps) {
                         </div>
                     )}
                     <span
-                        className={`absolute bottom-0 right-0 w-4 h-4 rounded-full border-2 border-slate-800 ${user.status === "online"
-                            ? "bg-green-400"
-                            : "bg-slate-500"
-                            }`}
+                        className={`absolute bottom-0 right-0 w-4 h-4 rounded-full border-2 border-slate-800 ${
+                            user.status === "online"
+                                ? "bg-green-400"
+                                : "bg-slate-500"
+                        }`}
                     />
                 </Link>
 
@@ -39,7 +37,7 @@ export function UserCard({ user, actions }: UserCardProps) {
                             {user.username}
                         </p>
                     </Link>
-                    <p className="text-sm text-slate-400">{user.score} pts</p>
+                    <p className="text-sm text-slate-400">{user.rating} pts</p>
                 </div>
             </div>
 

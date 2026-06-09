@@ -34,7 +34,7 @@ export function Profile({ className = "" }: { className?: string }) {
                     <div className="flex flex-wrap gap-2">
                         <p className="text-3xl font-bold">{user?.username}</p>
                     </div>
-                    Rating : {user?.score}
+                    Rating : {user?.rating}
                 </div>
             </div>
             <div className="flex flex-col gap-3">

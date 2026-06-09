@@ -2,7 +2,8 @@ import type { ReactNode } from "react";
 import { createContext, useContext, useState, useEffect } from "react";
 import { toast } from "sonner";
 import { logout as logoutAuth } from "../services/auth";
-import { type User, getMe } from "../services/users";
+import { getMe } from "../services/users";
+import type { User } from "@chad/types";
 
 interface AuthContextType {
     user: User | null;

@@ -8,7 +8,7 @@ import {
 import { InjectRepository } from "@nestjs/typeorm";
 import { MoreThan, Repository } from "typeorm";
 import { User } from "./user.entity";
-import { AccountStatus } from "@chad/types";
+import { AccountStatus, UserListItem, UserSearchResult } from "@chad/types";
 import { UpdateAdminUserDto, UpdateUserDto } from "./users.dto";
 import { hash, compare } from "bcrypt";
 import { RanksService } from "../ranks/ranks.service";
@@ -25,7 +25,7 @@ export class UsersService implements OnModuleInit {
         private readonly rolesService: RolesService,
         private readonly presenceService: PresenceService,
         private readonly ranksService: RanksService,
-    ) {}
+    ) { }
 
     async onModuleInit() {
         await this.seedAdmin();
@@ -174,7 +174,7 @@ export class UsersService implements OnModuleInit {
         }));
     }
 
-    async searchUsers(query: string, currentUserId: string) {
+    async searchUsers(query: string, currentUserId: string): Promise<UserSearchResult[]> {
         const users = await this.userRepository
             .createQueryBuilder("user")
             .where("user.username ILIKE :query", { query: `%${query}%` })
@@ -193,7 +193,7 @@ export class UsersService implements OnModuleInit {
         }));
     }
 
-    async getAllUsers() {
+    async getAllUsers(): Promise<UserListItem[]> {
         const users = await this.userRepository.find({
             select: {
                 id: true,
@@ -218,9 +218,9 @@ export class UsersService implements OnModuleInit {
             accountStatus: u.accountStatus,
             role: u.role,
             rank: u.rank,
-            status: this.presenceService.isUserOnline(u.id)
+            status: (this.presenceService.isUserOnline(u.id)
                 ? "online"
-                : "offline",
+                : "offline") as "online" | "offline",
         }));
     }
 

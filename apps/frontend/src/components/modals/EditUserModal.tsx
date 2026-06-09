@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { Button, Input } from "../ui";
-import type { UserListItem, AdminUpdateData } from "../../services/users";
+import type { UserListItem, AdminUpdateDataPayload } from "@chad/types";
 import { useTranslation } from "react-i18next";
 
 interface EditUserModalProps {
@@ -8,7 +8,7 @@ interface EditUserModalProps {
     onClose: () => void;
     onUpdateUser: (
         id: string,
-        data: AdminUpdateData,
+        data: AdminUpdateDataPayload,
         avatarFile?: File | null,
     ) => Promise<void>;
 }
@@ -23,7 +23,7 @@ export function EditUserModal({
     const [avatarPreview, setAvatarPreview] = useState(user.avatarUrl ?? "");
     const [avatarFile, setAvatarFile] = useState<File | null>(null);
     const [bio, setBio] = useState(user.bio ?? "");
-    const [score, setScore] = useState(String(user.score));
+    const [rating, setRating] = useState(String(user.rating));
     const [isLoading, setIsLoading] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -43,7 +43,7 @@ export function EditUserModal({
                 {
                     username: username.trim() || undefined,
                     bio: bio.trim() || null,
-                    score: score !== "" ? Number(score) : undefined,
+                    rating: rating !== "" ? Number(rating) : undefined,
                 },
                 avatarFile,
             );
@@ -118,11 +118,11 @@ export function EditUserModal({
 
                     <div className="flex flex-col gap-1">
                         <label className="text-sm font-bold text-slate-400">
-                            {t("admin.usersManager.editModal.score")}
+                            {t("admin.usersManager.editModal.rating")}
                         </label>
                         <Input
-                            value={score}
-                            onChange={(e) => setScore(e.target.value)}
+                            value={rating}
+                            onChange={(e) => setRating(e.target.value)}
                             type="number"
                             min={0}
                             color="blue"

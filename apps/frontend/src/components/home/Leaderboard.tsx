@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { getLeaderboard, getMyLeaderboardRank } from "../../services/users";
-import type { LeaderboardType } from "../../services/users";
+import { getLeaderboard } from "../../services/users";
+import type { LeaderboardItem } from "@chad/types";
 import { useAuth } from "../../contexts/AuthContext";
 import { Card, Button } from "../ui/index";
 import { toast } from "sonner";
@@ -15,10 +15,12 @@ export function Leaderboard({
     count: number;
     className?: string;
 }) {
-    type DisplayUser = LeaderboardType[number] & { rank?: number };
+    type DisplayUser = LeaderboardItem & { rank?: number };
+
     const [topUsers, setTopUsers] = useState<DisplayUser[]>([]);
     const [appendedCurrent, setAppendedCurrent] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(true);
+
     const { t } = useTranslation();
     const { user } = useAuth();
     const navigate = useNavigate();
@@ -32,33 +34,24 @@ export function Leaderboard({
                 const data = await getLeaderboard(count);
                 const displayData: DisplayUser[] = data.map((u) => ({ ...u }));
                 setAppendedCurrent(false);
+
                 if (user) {
                     const alreadyIncluded = displayData.some(
                         (u) => String(u.id) === String(user.id),
                     );
 
                     if (!alreadyIncluded) {
-                        try {
-                            const myRank = await getMyLeaderboardRank();
-                            displayData.push({
-                                id: user.id,
-                                username: user.username,
-                                avatarUrl: user.avatarUrl || "/avatar.jpg",
-                                score: user.score,
-                                rank: myRank,
-                            });
-                            setAppendedCurrent(true);
-                        } catch {
-                            displayData.push({
-                                id: user.id,
-                                username: user.username,
-                                avatarUrl: user.avatarUrl || "/avatar.jpg",
-                                score: user.score,
-                            });
-                            setAppendedCurrent(true);
-                        }
+                        displayData.push({
+                            id: user.id,
+                            username: user.username,
+                            avatarUrl: user.avatarUrl,
+                            rating: user.rating,
+                            rank: user.leaderboardRank,
+                        });
+                        setAppendedCurrent(true);
                     }
                 }
+
                 if (isMounted) setTopUsers(displayData);
                 setIsLoading(false);
             } catch {
@@ -100,7 +93,7 @@ export function Leaderboard({
                                     <img
                                         src={item.avatarUrl}
                                         alt={`${item.username} avatar`}
-                                        className="w-10 h-10 mr-2 mb-1 rounded-xl border"
+                                        className="w-10 h-10 mr-2 mb-1 rounded-xl border object-cover"
                                     />
 
                                     <Link to={`/users/${item.username}`}>
@@ -111,7 +104,7 @@ export function Leaderboard({
                                 </div>
 
                                 <span className="text-lg font-mona-sans">
-                                    {item.score}
+                                    {item.rating}
                                 </span>
                             </div>
                         </div>
