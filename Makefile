@@ -52,7 +52,7 @@ build: check
 # Start services in detached mode with hot-reloading (Bind Volumes)
 up: check
 	@printf "$(GREEN)Starting services in detached mode...$(NO_COLOR)\n"
-	@$(COMPOSE) up -d --remove-orphans
+	@$(COMPOSE) up -d --remove-orphans --build
 	@printf "$(GREEN)Services started. Use 'make logs' to follow output or 'make down' to stop.$(NO_COLOR)\n"
 
 down:
