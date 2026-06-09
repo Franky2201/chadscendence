@@ -63,14 +63,6 @@ export function PlayerList({ players, maxPlayers }: PlayerListProps) {
                                         {t("room.playerList.host")}
                                     </span>
                                 )}
-                                {player.rankIcon && (
-                                    <span
-                                        className="text-lg leading-none"
-                                        title="Rank"
-                                    >
-                                        {player.rankIcon}
-                                    </span>
-                                )}
                             </div>
                         </div>
                     </Badge>
