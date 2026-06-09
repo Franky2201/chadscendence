@@ -25,7 +25,7 @@ export class UsersService implements OnModuleInit {
         private readonly rolesService: RolesService,
         private readonly presenceService: PresenceService,
         private readonly ranksService: RanksService,
-    ) { }
+    ) {}
 
     async onModuleInit() {
         await this.seedAdmin();
@@ -174,7 +174,10 @@ export class UsersService implements OnModuleInit {
         }));
     }
 
-    async searchUsers(query: string, currentUserId: string): Promise<UserSearchResult[]> {
+    async searchUsers(
+        query: string,
+        currentUserId: string,
+    ): Promise<UserSearchResult[]> {
         const users = await this.userRepository
             .createQueryBuilder("user")
             .where("user.username ILIKE :query", { query: `%${query}%` })
@@ -218,9 +221,9 @@ export class UsersService implements OnModuleInit {
             accountStatus: u.accountStatus,
             role: u.role,
             rank: u.rank,
-            status: (this.presenceService.isUserOnline(u.id)
+            status: this.presenceService.isUserOnline(u.id)
                 ? "online"
-                : "offline") as "online" | "offline",
+                : "offline",
         }));
     }
 

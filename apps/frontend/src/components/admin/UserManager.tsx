@@ -170,7 +170,7 @@ export default function UserManager({
                                 <Button
                                     color={
                                         user.accountStatus ===
-                                            AccountStatus.BANNED
+                                        AccountStatus.BANNED
                                             ? "orange"
                                             : "red"
                                     }
