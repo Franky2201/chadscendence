@@ -202,7 +202,7 @@ export class UsersService implements OnModuleInit {
                 updatedAt: true,
                 accountStatus: true,
             },
-            relations: { role: true },
+            relations: { role: true, rank: true },
             order: { username: "ASC" },
         });
 
@@ -215,6 +215,7 @@ export class UsersService implements OnModuleInit {
             updatedAt: u.updatedAt,
             accountStatus: u.accountStatus,
             role: u.role,
+            rank: u.rank,
             status: this.presenceService.isUserOnline(u.id)
                 ? "online"
                 : "offline",
@@ -278,6 +279,32 @@ export class UsersService implements OnModuleInit {
             where: { username },
             relations: { rank: true },
         });
+    }
+
+    async getPublicProfileByUsername(username: string) {
+        const user = await this.userRepository.findOne({
+            where: { username },
+            relations: { rank: true, role: true },
+        });
+
+        if (!user) {
+            throw new NotFoundException("User not found");
+        }
+
+        const above = await this.userRepository.count({
+            where: { score: MoreThan(user.score) },
+        });
+
+        return {
+            id: user.id,
+            username: user.username,
+            avatarUrl: user.avatarUrl,
+            bio: user.bio,
+            score: user.score,
+            rank: user.rank,
+            role: user.role,
+            leaderboardRank: above + 1,
+        };
     }
 
     async findByEmailOrUsername(email: string, username: string) {
