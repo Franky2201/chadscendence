@@ -15,6 +15,13 @@
     --color-black: #000000;
 }
 
+.font-mona-sans-light {
+    font-family: "Mona Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+}
+
 .font-mona-sans {
     font-family: "Mona Sans", sans-serif;
     font-optical-sizing: auto;
