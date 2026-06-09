@@ -275,7 +275,7 @@ export function Statistics() {
                             )
                         }
                     ></CustomBarChart>
-                    <span className="font-mona-sans-light text-xs">
+                    <span className="select-none font-mona-sans-light text-xs">
                         Games Played
                     </span>
                 </div>

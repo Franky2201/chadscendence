@@ -69,6 +69,7 @@ export function CustomBarChart({
                         tickLine={false}
                         axisLine={false}
                         dy={2}
+                        style={{ userSelect: "none" }}
                     />
                     <YAxis
                         stroke="rgba(255,255,255,0.5)"
@@ -79,6 +80,7 @@ export function CustomBarChart({
                         tickFormatter={formatAxisMetric}
                         tick={{ textAnchor: "end" }}
                         dx={0}
+                        style={{ userSelect: "none" }}
                     />
                     <Tooltip
                         content={<CustomTooltip />}
