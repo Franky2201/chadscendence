@@ -149,7 +149,7 @@ function randomInt(min: number, max: number): number {
 }
 
 export function Statistics() {
-    const [period, setPeriod] = useState<TimeRange>(7);
+    const [period, setPeriod] = useState<TimeRange>(15);
     const { theme } = useTheme();
 
     // TODO : This is a test sample for the number of games played
@@ -254,15 +254,24 @@ export function Statistics() {
                         ))}
                     </Select>*/}
                 </div>
-                {/* */}
-                {}
-                <div className="relative flex flex-col justify-center items-center w-120">
+                {/* Games Played over time */}
+                <div
+                    className="relative flex flex-col justify-center 
+                    items-center w-120"
+                >
                     <CustomBarChart
                         values={arr}
                         startDate={
                             new Date(
                                 new Date().getTime() -
-                                    (period - 1) * 24 * 60 * 60 * 1000,
+                                    ((arr.length < period
+                                        ? arr.length
+                                        : period) -
+                                        1) *
+                                        24 *
+                                        60 *
+                                        60 *
+                                        1000,
                             )
                         }
                     ></CustomBarChart>

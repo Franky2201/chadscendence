@@ -59,7 +59,7 @@ export function SkillRadarChart({ data, className }: SkillRadarChartProps) {
                     strokeWidth={1}
                 />
                 <Radar
-                    name="Skills"
+                    name="Avg."
                     dataKey="value"
                     stroke="var(--stroke-color)"
                     strokeWidth={1}
