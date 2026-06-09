@@ -6,11 +6,10 @@ import {
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository, In } from "typeorm";
-import { Role } from "src/common/entities/role.entity";
+import { Role } from "./role.entity";
 import { Permission } from "src/common/entities/permission.entity";
 import { User } from "src/common/entities/user.entity";
-import { CreateRoleDto } from "./dto/create-role.dto";
-import { UpdateRoleDto } from "./dto/update-role.dto";
+import { CreateRoleDto, UpdateRoleDto } from "./roles.dto";
 import { PermissionAction } from "@chad/types";
 
 @Injectable()
@@ -24,7 +23,7 @@ export class RolesService {
         private readonly permissionRepository: Repository<Permission>,
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
-    ) {}
+    ) { }
 
     async onModuleInit() {
         await this.seedRoles();

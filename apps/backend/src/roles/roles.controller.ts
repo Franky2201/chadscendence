@@ -9,7 +9,7 @@ import {
     UseGuards,
 } from "@nestjs/common";
 import { RolesService } from "./roles.service";
-import { CreateRoleDto } from "./dto/create-role.dto";
+import { CreateRoleDto } from "./roles.dto";
 import { UpdateRoleDto } from "./dto/update-role.dto";
 import { JwtAuthGuard } from "../common/guards/jwt.guard";
 import { PermissionsGuard } from "../common/guards/permissions.guard";
@@ -19,7 +19,7 @@ import { PermissionAction } from "@chad/types";
 @Controller("roles")
 @UseGuards(JwtAuthGuard, PermissionsGuard)
 export class RolesController {
-    constructor(private readonly rolesService: RolesService) {}
+    constructor(private readonly rolesService: RolesService) { }
 
     @Get()
     findAll() {
