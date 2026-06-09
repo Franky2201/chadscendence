@@ -9,10 +9,8 @@ import {
 } from "typeorm";
 import { UserStatus, AccountStatus } from "@chad/types";
 import type { Rank as IRank } from "@chad/types";
-import { Rank } from "./rank.entity";
-import { Role } from "./role.entity";
-
-export { UserStatus, AccountStatus };
+import { Rank } from "../ranks/rank.entity";
+import { Role } from "../roles/role.entity";
 
 @Entity("users")
 export class User {
@@ -57,10 +55,7 @@ export class User {
     accountStatus: AccountStatus;
 
     @Column({ type: "int", default: 0 })
-    score: number;
-
-    @Column({ name: "rank_id", nullable: true })
-    rankId?: string;
+    rating: number;
 
     @ManyToOne(() => Rank, { nullable: true, onDelete: "SET NULL" })
     @JoinColumn({ name: "rank_id" })

@@ -8,8 +8,8 @@ import {
     JoinTable,
     OneToMany,
 } from "typeorm";
-import { Permission } from "../common/entities/permission.entity";
-import { User } from "../common/entities/user.entity";
+import { Permission } from "./permission.entity";
+import { User } from "../users/user.entity";
 
 @Entity("roles")
 export class Role {

@@ -9,8 +9,8 @@ import { Repository } from "typeorm";
 import {
     Friendship,
     FriendshipStatus,
-} from "../common/entities/friendship.entity";
-import { User } from "../common/entities/user.entity";
+} from "./friendship.entity";
+import { User } from "../users/user.entity";
 import { PresenceService } from "../presence/presence.service";
 
 @Injectable()
@@ -22,7 +22,7 @@ export class FriendsService {
         private readonly userRepository: Repository<User>,
         @Inject()
         private readonly presenceService: PresenceService,
-    ) {}
+    ) { }
 
     async getFriends(userId: string) {
         const friendships = await this.friendshipRepository.find({

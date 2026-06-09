@@ -10,15 +10,14 @@ import {
 } from "@nestjs/common";
 import { JwtAuthGuard } from "../common/guards/jwt.guard";
 import { GetUser } from "../common/decorators/get-user.decorator";
-import type { JwtPayload } from "../common/dto/auth.dto";
+import type { JwtPayload } from "../auth/auth.dto";
 import { RoomsService } from "./rooms.service";
-import { CreateRoomDto } from "./dto/create-room.dto";
-import { UpdateRoomGamesDto } from "./dto/update-room-games.dto";
+import { CreateRoomDto, UpdateRoomGamesDto } from "./rooms.dto";
 
 @Controller("rooms")
 @UseGuards(JwtAuthGuard)
 export class RoomsController {
-    constructor(private readonly roomsService: RoomsService) {}
+    constructor(private readonly roomsService: RoomsService) { }
 
     @Post()
     createRoom(

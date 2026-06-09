@@ -8,7 +8,8 @@ import {
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
-import { User, AccountStatus } from "../common/entities/user.entity";
+import { User } from "../users/user.entity";
+import { AccountStatus } from "@chad/types";
 import {
     CreateUserDto,
     OAuthProfile,

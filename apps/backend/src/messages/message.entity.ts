@@ -6,7 +6,7 @@ import {
     JoinColumn,
     CreateDateColumn,
 } from "typeorm";
-import { User } from "./user.entity";
+import { User } from "../users/user.entity";
 
 @Entity("messages")
 export class Message {

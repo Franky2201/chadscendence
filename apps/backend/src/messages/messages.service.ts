@@ -1,11 +1,11 @@
 import { Injectable, ForbiddenException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { Message } from "../common/entities/message.entity";
+import { Message } from "./message.entity";
 import {
     Friendship,
     FriendshipStatus,
-} from "../common/entities/friendship.entity";
+} from "../friends/friendship.entity";
 import { MessagesGateway } from "./messages.gateway";
 
 type UnreadCountRow = {
@@ -21,7 +21,7 @@ export class MessagesService {
         @InjectRepository(Friendship)
         private readonly friendshipRepository: Repository<Friendship>,
         private readonly messagesGateway: MessagesGateway,
-    ) {}
+    ) { }
 
     async checkCanMessage(senderId: string, receiverId: string) {
         const friendship = await this.friendshipRepository.findOne({

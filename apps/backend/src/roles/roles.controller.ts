@@ -9,8 +9,7 @@ import {
     UseGuards,
 } from "@nestjs/common";
 import { RolesService } from "./roles.service";
-import { CreateRoleDto } from "./roles.dto";
-import { UpdateRoleDto } from "./dto/update-role.dto";
+import { CreateRoleDto, UpdateRoleDto } from "./roles.dto";
 import { JwtAuthGuard } from "../common/guards/jwt.guard";
 import { PermissionsGuard } from "../common/guards/permissions.guard";
 import { Permissions } from "../common/decorators/permissions.decorator";

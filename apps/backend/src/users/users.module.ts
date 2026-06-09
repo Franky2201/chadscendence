@@ -2,8 +2,8 @@ import { Module, forwardRef } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { UsersController } from "./users.controller";
 import { UsersService } from "./users.service";
-import { User } from "../common/entities/user.entity";
-import { Rank } from "../common/entities/rank.entity";
+import { User } from "./user.entity";
+import { Rank } from "../ranks/rank.entity";
 import { RanksModule } from "../ranks/ranks.module";
 import { RolesModule } from "src/roles/roles.module";
 
@@ -17,4 +17,4 @@ import { RolesModule } from "src/roles/roles.module";
     providers: [UsersService],
     exports: [UsersService],
 })
-export class UsersModule {}
+export class UsersModule { }

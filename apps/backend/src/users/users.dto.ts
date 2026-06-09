@@ -21,11 +21,6 @@ export class UpdateUserDto {
     @IsOptional()
     @Allow()
     bio?: string | null;
-
-    @IsInt()
-    @Min(0)
-    @IsOptional()
-    score?: number;
 }
 
 export class UpdateAdminUserDto {
@@ -45,7 +40,7 @@ export class UpdateAdminUserDto {
     @IsInt()
     @Min(0)
     @IsOptional()
-    score?: number;
+    rating?: number;
 
     @IsString()
     @IsOptional()

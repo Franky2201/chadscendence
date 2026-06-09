@@ -10,14 +10,14 @@ import {
 } from "@nestjs/common";
 import { MessagesService } from "./messages.service";
 import { JwtAuthGuard } from "../common/guards/jwt.guard";
-import { CreateMessageDto } from "../common/dto/messages.dto";
+import { CreateMessageDto } from "./messages.dto";
 import { GetUser } from "src/common/decorators/get-user.decorator";
 import * as types from "@chad/types";
 
 @Controller("messages")
 @UseGuards(JwtAuthGuard)
 export class MessagesController {
-    constructor(private readonly messagesService: MessagesService) {}
+    constructor(private readonly messagesService: MessagesService) { }
 
     @Get("unread-counts")
     getUnreadCounts(@GetUser() user: types.JwtPayload) {

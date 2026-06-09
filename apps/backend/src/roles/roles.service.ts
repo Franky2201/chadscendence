@@ -7,8 +7,8 @@ import {
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository, In } from "typeorm";
 import { Role } from "./role.entity";
-import { Permission } from "src/common/entities/permission.entity";
-import { User } from "src/common/entities/user.entity";
+import { Permission } from "src/roles/permission.entity";
+import { User } from "../users/user.entity";
 import { CreateRoleDto, UpdateRoleDto } from "./roles.dto";
 import { PermissionAction } from "@chad/types";
 

@@ -17,9 +17,9 @@ import { diskStorage } from "multer";
 import { extname } from "path";
 import { UsersService } from "./users.service";
 import { JwtAuthGuard } from "../common/guards/jwt.guard";
-import { UpdateAdminUserDto, UpdateUserDto } from "../common/dto/users.dto";
+import { UpdateAdminUserDto, UpdateUserDto } from "./users.dto";
 import { GetUser } from "../common/decorators/get-user.decorator";
-import type { JwtPayload } from "../common/dto/auth.dto";
+import type { JwtPayload } from "../auth/auth.dto";
 import { PermissionsGuard } from "src/common/guards/permissions.guard";
 import { Permissions } from "src/common/decorators/permissions.decorator";
 import { PermissionAction } from "@chad/types";
@@ -132,12 +132,6 @@ export class UsersController {
     searchUsers(@Query("q") query: string, @GetUser() body: JwtPayload) {
         if (!query) return [];
         return this.usersService.searchUsers(query, body.sub);
-    }
-
-    @Get("me/leaderboard-rank")
-    @UseGuards(JwtAuthGuard)
-    getMyLeaderboardRank(@GetUser() payload: JwtPayload) {
-        return this.usersService.getUserLeaderboardRank(payload.sub);
     }
 
     @Get("leaderboard")

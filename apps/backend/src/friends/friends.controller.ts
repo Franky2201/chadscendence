@@ -6,17 +6,16 @@ import {
     Delete,
     Param,
     UseGuards,
-    Request,
 } from "@nestjs/common";
 import { FriendsService } from "./friends.service";
 import { JwtAuthGuard } from "../common/guards/jwt.guard";
 import { GetUser } from "../common/decorators/get-user.decorator";
-import type { JwtPayload } from "../common/dto/auth.dto";
+import type { JwtPayload } from "../auth/auth.dto";
 
 @Controller("friends")
 @UseGuards(JwtAuthGuard)
 export class FriendsController {
-    constructor(private readonly friendsService: FriendsService) {}
+    constructor(private readonly friendsService: FriendsService) { }
 
     @Get()
     getFriends(@GetUser() payload: JwtPayload) {

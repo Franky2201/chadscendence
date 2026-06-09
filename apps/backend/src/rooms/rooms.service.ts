@@ -3,7 +3,7 @@ import {
     Injectable,
     NotFoundException,
 } from "@nestjs/common";
-import type { JwtPayload } from "../common/dto/auth.dto";
+import type { JwtPayload } from "../auth/auth.dto";
 
 export interface RoomPlayer {
     id: string;
