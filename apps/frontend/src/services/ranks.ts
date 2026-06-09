@@ -1,5 +1,17 @@
 import api from "./api";
-import type { Rank, CreateRank, UpdateRank } from "@chad/types";
+import type { Rank } from "@chad/types";
+
+interface CreateRank {
+    name: string;
+    ratingMin: number;
+    icon: string;
+}
+
+interface UpdateRank {
+    name?: string;
+    ratingMin?: number;
+    icon?: string;
+}
 
 export const getRanks = async () => {
     const res = await api.get<Rank[]>("/ranks");
