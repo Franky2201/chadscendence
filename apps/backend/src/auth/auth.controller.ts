@@ -10,14 +10,14 @@ import {
 } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { GetUser } from "../common/decorators/get-user.decorator";
-import type { OAuthProfile } from "../common/dto/auth.dto";
-import { CreateUserDto, LoginUserDto } from "../common/dto/auth.dto";
+import type { OAuthProfile } from "./auth.dto";
+import { CreateUserDto, LoginUserDto } from "./auth.dto";
 import { IntraAuthGuard } from "../common/guards/intra.guard";
 import { GithubAuthGuard } from "../common/guards/github.guard";
 
 @Controller("auth")
 export class AuthController {
-    constructor(private authService: AuthService) {}
+    constructor(private authService: AuthService) { }
 
     @Post("register")
     async register(
@@ -53,7 +53,7 @@ export class AuthController {
 
     @Get("42")
     @UseGuards(IntraAuthGuard)
-    async intraAuth() {}
+    async intraAuth() { }
 
     @Get("42/callback")
     @UseGuards(IntraAuthGuard)
@@ -84,7 +84,7 @@ export class AuthController {
 
     @Get("github")
     @UseGuards(GithubAuthGuard)
-    async GithubAuth() {}
+    async GithubAuth() { }
 
     @Get("github/callback")
     @UseGuards(GithubAuthGuard)
