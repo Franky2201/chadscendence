@@ -28,6 +28,7 @@
 		"profile": {
 			"title": "Profil",
 			"friends": "Mes amis",
+			"admin": "Gestion",
 			"logout": "Déconnexion"
 		},
 		"leaderboard": "Classement"
@@ -70,5 +71,68 @@
 		"successAvatar": "Avatar mis à jour avec succès",
 		"errorAvatar": "Erreur lors de la mise à jour de l'avatar",
 		"loading": "Chargement ..."
+	},
+	"admin": {
+		"title": "Administration",
+		"loading": "Chargement...",
+		"tabs": {
+			"users": "Utilisateurs",
+			"ranks": "Gestion des ranks",
+			"roles": "Rôles"
+		},
+		"roles": {
+			"title": "Gestion des Rôles",
+			"editTitle": "Modification du rôle",
+			"modify": "Modifier",
+			"delete": "Supprimer",
+			"newRole": "Nouveau rôle",
+			"roleName": "Nom du rôle",
+			"create": "Créer",
+			"cancel": "Annuler",
+			"addRole": "Ajouter un rôle",
+			"validate": "Valider"
+		},
+		"usersManager": {
+			"title": "Gestion des Utilisateurs",
+			"search": "Rechercher un joueur...",
+			"allRoles": "Tous les rôles",
+			"noPlayers": "Aucun joueur trouvé.",
+			"selectRole": "Sélectionner un rôle",
+			"modify": "Modifier",
+			"unban": "Débannir",
+			"ban": "Bannir",
+			"editModal": {
+				"title": "Modifier",
+				"avatar": "Avatar",
+				"username": "Pseudo",
+				"bio": "Bio",
+				"score": "Score",
+				"cancel": "Annuler",
+				"saving": "Enregistrement...",
+				"save": "Enregistrer"
+			},
+			"banModal": {
+				"unbanTitle": "Débannir le joueur",
+				"banTitle": "Bannir le joueur",
+				"unban": "Débannir",
+				"ban": "Bannir",
+				"warning": "Le joueur ne pourra plus se connecter.",
+				"cancel": "Annuler",
+				"loading": "...",
+				"confirm": "Confirmer"
+			}
+		}
+	},
+	"users": {
+		"title": "Joueurs",
+		"search": "Rechercher un joueur...",
+		"loading": "Chargement...",
+		"error": "Impossible de charger la liste des joueurs.",
+		"addFriend": "Demander en ami",
+		"pending": "En attente",
+		"friend": "Ami",
+		"playersCount_zero": "0 joueur",
+		"playersCount_one": "1 joueur",
+		"playersCount_other": "{{count}} joueurs"
 	}
 }

@@ -8,14 +8,12 @@ import {
 import { InjectRepository } from "@nestjs/typeorm";
 import { MoreThan, Repository } from "typeorm";
 import { User, AccountStatus } from "../common/entities/user.entity";
-import { UpdateUserDto } from "../common/dto/users.dto";
+import { UpdateAdminUserDto, UpdateUserDto } from "../common/dto/users.dto";
 import { hash, compare } from "bcrypt";
 import { RanksService } from "../ranks/ranks.service";
 import { ConfigService } from "@nestjs/config";
 import { PresenceService } from "../presence/presence.service";
-import { Role } from "src/common/entities/role.entity";
-import { Permission } from "src/common/entities/permission.entity";
-import { PermissionAction } from "@chad/types";
+import { RolesService } from "src/roles/roles.service";
 
 @Injectable()
 export class UsersService implements OnModuleInit {
@@ -23,10 +21,7 @@ export class UsersService implements OnModuleInit {
         private readonly configService: ConfigService,
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
-        @InjectRepository(Role)
-        private readonly roleRepository: Repository<Role>,
-        @InjectRepository(Permission)
-        private readonly permissionRepository: Repository<Permission>,
+        private readonly rolesService: RolesService,
         private readonly presenceService: PresenceService,
         private readonly ranksService: RanksService,
     ) {}
@@ -44,42 +39,7 @@ export class UsersService implements OnModuleInit {
             throw new Error("Missing admin credentials");
         }
 
-        const allPermissions: Permission[] = [];
-        for (const action of Object.values(PermissionAction)) {
-            let permission = await this.permissionRepository.findOne({
-                where: { action },
-            });
-            if (!permission) {
-                permission = this.permissionRepository.create({ action });
-                await this.permissionRepository.save(permission);
-            }
-            allPermissions.push(permission);
-        }
-
-        let userRole = await this.roleRepository.findOne({
-            where: { name: "User" },
-        });
-        if (!userRole) {
-            userRole = this.roleRepository.create({
-                name: "User",
-                permissions: [],
-            });
-            await this.roleRepository.save(userRole);
-        }
-
-        let adminRole = await this.roleRepository.findOne({
-            where: { name: "Admin" },
-        });
-        if (!adminRole) {
-            adminRole = this.roleRepository.create({
-                name: "Admin",
-                permissions: allPermissions,
-            });
-            await this.roleRepository.save(adminRole);
-        } else {
-            adminRole.permissions = allPermissions;
-            await this.roleRepository.save(adminRole);
-        }
+        const { adminRole } = await this.rolesService.seedRoles();
 
         const admin = await this.userRepository.findOne({
             where: { email: adminEmail },
@@ -105,7 +65,6 @@ export class UsersService implements OnModuleInit {
         });
 
         await this.userRepository.save(adminUser);
-        console.log("Roles and Admin user seeded successfully!");
     }
 
     async getUser(id: string) {
@@ -243,6 +202,7 @@ export class UsersService implements OnModuleInit {
                 updatedAt: true,
                 accountStatus: true,
             },
+            relations: { role: true },
             order: { username: "ASC" },
         });
 
@@ -254,6 +214,7 @@ export class UsersService implements OnModuleInit {
             score: u.score,
             updatedAt: u.updatedAt,
             accountStatus: u.accountStatus,
+            role: u.role,
             status: this.presenceService.isUserOnline(u.id)
                 ? "online"
                 : "offline",
@@ -273,11 +234,28 @@ export class UsersService implements OnModuleInit {
         return { accountStatus: user.accountStatus };
     }
 
-    async adminUpdateUser(id: string, dto: UpdateUserDto) {
+    async adminUpdateUser(id: string, dto: UpdateAdminUserDto) {
         const user = await this.userRepository.findOne({ where: { id } });
         if (!user) throw new NotFoundException("User not found");
 
-        await this.userRepository.save({ id, ...dto });
+        const { roleId, ...rest } = dto;
+
+        const role = roleId
+            ? await this.rolesService.findOne(roleId)
+            : undefined;
+
+        if (roleId && !role) {
+            throw new NotFoundException("Role not found");
+        }
+
+        const updatedUser = {
+            ...user,
+            ...rest,
+            ...(role ? { role } : {}),
+        };
+
+        await this.userRepository.save(updatedUser);
+
         return this.getUser(id);
     }
 

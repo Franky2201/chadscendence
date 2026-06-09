@@ -1,6 +1,7 @@
 import api from "./api";
 import { UserStatus, AccountStatus } from "@chad/types";
 import type { User } from "@chad/types";
+import type { Role } from "@chad/types";
 
 export type { User };
 export { UserStatus, AccountStatus };
@@ -11,6 +12,14 @@ interface UpdateMe {
     password?: string;
     avatarUrl?: string;
     bio?: string | null;
+}
+
+export interface AdminUpdateData {
+    username?: string;
+    avatarUrl?: string;
+    bio?: string | null;
+    score?: number;
+    roleId?: string;
 }
 
 export type LeaderboardType = {
@@ -36,6 +45,7 @@ export interface UserListItem {
     updatedAt: string;
     status: "online" | "offline";
     accountStatus: AccountStatus;
+    role: Role;
 }
 
 export const getMe = async (): Promise<User> => {
@@ -111,13 +121,6 @@ export const banUser = async (
     );
     return res.data;
 };
-
-interface AdminUpdateData {
-    username?: string;
-    avatarUrl?: string;
-    bio?: string | null;
-    score?: number;
-}
 
 export const adminUpdateUser = async (
     userId: string,

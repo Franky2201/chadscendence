@@ -17,14 +17,21 @@ import { diskStorage } from "multer";
 import { extname } from "path";
 import { UsersService } from "./users.service";
 import { JwtAuthGuard } from "../common/guards/jwt.guard";
-import { UpdateUserDto } from "../common/dto/users.dto";
+import { UpdateAdminUserDto, UpdateUserDto } from "../common/dto/users.dto";
 import { GetUser } from "../common/decorators/get-user.decorator";
 import type { JwtPayload } from "../common/dto/auth.dto";
+import { PermissionsGuard } from "src/common/guards/permissions.guard";
+import { Permissions } from "src/common/decorators/permissions.decorator";
+import { PermissionAction } from "@chad/types";
 
 const avatarUploadOptions = {
     storage: diskStorage({
         destination: "./uploads",
-        filename: (_req: Express.Request, file: Express.Multer.File, cb: (err: Error | null, name: string) => void) => {
+        filename: (
+            _req: Express.Request,
+            file: Express.Multer.File,
+            cb: (err: Error | null, name: string) => void,
+        ) => {
             const unique = Date.now() + "-" + Math.round(Math.random() * 1e9);
             cb(null, unique + extname(file.originalname));
         },
@@ -80,8 +87,15 @@ export class UsersController {
         return this.usersService.uploadAvatar(payload.sub, file.filename);
     }
 
-    @Post(":id/avatar")
+    @Delete("me")
     @UseGuards(JwtAuthGuard)
+    deleteUser(@GetUser() payload: JwtPayload) {
+        return this.usersService.deleteUser(payload.sub);
+    }
+
+    @Post(":id/avatar")
+    @UseGuards(JwtAuthGuard, PermissionsGuard)
+    @Permissions(PermissionAction.MANAGE_USERS)
     @UseInterceptors(FileInterceptor("file", avatarUploadOptions))
     uploadAvatarForUser(
         @Param("id") id: string,
@@ -91,25 +105,21 @@ export class UsersController {
         return this.usersService.uploadAvatar(id, file.filename);
     }
 
-    @Delete("me")
-    @UseGuards(JwtAuthGuard)
-    deleteUser(@GetUser() payload: JwtPayload) {
-        return this.usersService.deleteUser(payload.sub);
+    @Patch(":id")
+    @UseGuards(JwtAuthGuard, PermissionsGuard)
+    @Permissions(PermissionAction.MANAGE_USERS)
+    adminUpdateUser(
+        @Param("id") id: string,
+        @Body() updateUserDto: UpdateAdminUserDto,
+    ) {
+        return this.usersService.adminUpdateUser(id, updateUserDto);
     }
 
     @Patch(":id/ban")
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, PermissionsGuard)
+    @Permissions(PermissionAction.MANAGE_USERS)
     banUser(@Param("id") id: string) {
         return this.usersService.banUser(id);
-    }
-
-    @Patch(":id")
-    @UseGuards(JwtAuthGuard)
-    adminUpdateUser(
-        @Param("id") id: string,
-        @Body() updateUserDto: UpdateUserDto,
-    ) {
-        return this.usersService.adminUpdateUser(id, updateUserDto);
     }
 
     @Get("search")
