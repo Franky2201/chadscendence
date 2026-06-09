@@ -25,7 +25,7 @@ export class UsersService implements OnModuleInit {
         private readonly rolesService: RolesService,
         private readonly presenceService: PresenceService,
         private readonly ranksService: RanksService,
-    ) { }
+    ) {}
 
     async onModuleInit() {
         await this.seedAdmin();
@@ -82,7 +82,12 @@ export class UsersService implements OnModuleInit {
             where: { rating: MoreThan(user.rating) },
         });
 
-        return { ...user, leaderboardRank: above + 1 };
+        return {
+            ...user,
+            leaderboardRank: above + 1,
+            rank: user.rank!,
+            role: user.role,
+        };
     }
 
     async updateUser(id: string, updateUserDto: UpdateUserDto) {

@@ -10,20 +10,20 @@ import {
 } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { GetUser } from "../common/decorators/get-user.decorator";
-import type { OAuthProfile } from "./auth.dto";
+import type { OAuthProfile, AuthResponse } from "@chad/types";
 import { CreateUserDto, LoginUserDto } from "./auth.dto";
 import { IntraAuthGuard } from "../common/guards/intra.guard";
 import { GithubAuthGuard } from "../common/guards/github.guard";
 
 @Controller("auth")
 export class AuthController {
-    constructor(private authService: AuthService) { }
+    constructor(private authService: AuthService) {}
 
     @Post("register")
     async register(
         @Body() body: CreateUserDto,
         @Res({ passthrough: true }) res: Response,
-    ) {
+    ): Promise<AuthResponse> {
         const token = await this.authService.register({ authregister: body });
 
         res.cookie("access_token", token.access_token, {
@@ -39,7 +39,7 @@ export class AuthController {
     async login(
         @Body() body: LoginUserDto,
         @Res({ passthrough: true }) res: Response,
-    ) {
+    ): Promise<AuthResponse> {
         const token = await this.authService.login({ authlogin: body });
 
         res.cookie("access_token", token.access_token, {
@@ -53,7 +53,7 @@ export class AuthController {
 
     @Get("42")
     @UseGuards(IntraAuthGuard)
-    async intraAuth() { }
+    async intraAuth() {}
 
     @Get("42/callback")
     @UseGuards(IntraAuthGuard)
@@ -84,7 +84,7 @@ export class AuthController {
 
     @Get("github")
     @UseGuards(GithubAuthGuard)
-    async GithubAuth() { }
+    async GithubAuth() {}
 
     @Get("github/callback")
     @UseGuards(GithubAuthGuard)
@@ -111,7 +111,7 @@ export class AuthController {
     }
 
     @Post("logout")
-    logout(@Res({ passthrough: true }) res: Response) {
+    logout(@Res({ passthrough: true }) res: Response): AuthResponse {
         res.clearCookie("access_token", {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",

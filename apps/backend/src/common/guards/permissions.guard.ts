@@ -22,7 +22,7 @@ export class PermissionsGuard implements CanActivate {
     constructor(
         private reflector: Reflector,
         private usersService: UsersService,
-    ) { }
+    ) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const requiredPermissions = this.reflector.getAllAndOverride<
@@ -46,7 +46,9 @@ export class PermissionsGuard implements CanActivate {
             throw new ForbiddenException();
         }
 
-        const userPermissions = user.role.permissions.map((p: Permission) => p.action);
+        const userPermissions = user.role.permissions.map(
+            (p: Permission) => p.action,
+        );
 
         const hasPermission = requiredPermissions.every((permission) =>
             userPermissions.includes(permission),

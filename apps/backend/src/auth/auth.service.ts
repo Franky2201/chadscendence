@@ -9,13 +9,8 @@ import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
 import { User } from "../users/user.entity";
-import { AccountStatus } from "@chad/types";
-import {
-    CreateUserDto,
-    OAuthProfile,
-    JwtPayload,
-    LoginUserDto,
-} from "./auth.dto";
+import { AccountStatus, JwtPayload, OAuthProfile } from "@chad/types";
+import { CreateUserDto, LoginUserDto } from "./auth.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { RanksService } from "../ranks/ranks.service";
@@ -118,10 +113,10 @@ export class AuthService {
             typeof username === "string"
                 ? username
                 : typeof email === "string" && email.includes("@")
-                    ? (email.split("@")[0] ?? "user")
-                    : "user";
+                  ? (email.split("@")[0] ?? "user")
+                  : "user";
 
-        const safeAvatarUrl = avatarUrl ?? undefined;
+        const safeAvatarUrl = avatarUrl ?? this.defaultAvatar;
 
         const providerKey = provider === "github" ? "githubId" : "intraId";
 

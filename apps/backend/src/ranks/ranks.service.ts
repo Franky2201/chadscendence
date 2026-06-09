@@ -14,7 +14,7 @@ export class RanksService implements OnModuleInit {
     constructor(
         @InjectRepository(Rank)
         private readonly rankRepository: Repository<Rank>,
-    ) { }
+    ) {}
 
     async onModuleInit() {
         await this.seedRanks();
@@ -83,6 +83,5 @@ export class RanksService implements OnModuleInit {
     async deleteRank(id: string) {
         const rank = await this.getRank(id);
         await this.rankRepository.remove(rank);
-        return { message: "Rank deleted successfully" };
     }
 }

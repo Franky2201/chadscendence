@@ -11,4 +11,4 @@ import { Friendship } from "../friends/friendship.entity";
     controllers: [MessagesController],
     providers: [MessagesService, MessagesGateway],
 })
-export class MessagesModule { }
+export class MessagesModule {}

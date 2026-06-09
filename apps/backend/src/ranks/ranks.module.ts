@@ -11,4 +11,4 @@ import { UsersModule } from "../users/users.module";
     providers: [RanksService],
     exports: [RanksService],
 })
-export class RanksModule { }
+export class RanksModule {}

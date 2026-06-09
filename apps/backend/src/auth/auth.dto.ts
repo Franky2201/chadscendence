@@ -6,11 +6,9 @@ import {
     Matches,
     IsOptional,
 } from "class-validator";
-import { JwtPayload, OAuthProfile } from "@chad/types";
+import { LoginPayload, RegisterPayload } from "@chad/types";
 
-export type { JwtPayload, OAuthProfile };
-
-export class LoginUserDto {
+export class LoginUserDto implements LoginPayload {
     @IsString()
     identifier!: string;
 
@@ -19,7 +17,7 @@ export class LoginUserDto {
     password!: string;
 }
 
-export class CreateUserDto {
+export class CreateUserDto implements RegisterPayload {
     @IsString()
     @MinLength(3)
     @MaxLength(32)

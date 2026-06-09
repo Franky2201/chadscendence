@@ -23,7 +23,7 @@ export class RolesService {
         private readonly permissionRepository: Repository<Permission>,
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
-    ) { }
+    ) {}
 
     async onModuleInit() {
         await this.seedRoles();

@@ -9,7 +9,7 @@ import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
 import { parse } from "cookie";
 import { PresenceService } from "./presence.service";
-import { JwtPayload } from "../auth/auth.dto";
+import type { JwtPayload } from "@chad/types";
 
 @WebSocketGateway({
     cors: {
@@ -26,7 +26,8 @@ import { JwtPayload } from "../auth/auth.dto";
     },
 })
 export class PresenceGateway
-    implements OnGatewayConnection, OnGatewayDisconnect {
+    implements OnGatewayConnection, OnGatewayDisconnect
+{
     @WebSocketServer()
     server: Server;
 
@@ -34,7 +35,7 @@ export class PresenceGateway
         private readonly presenceService: PresenceService,
         private readonly jwtService: JwtService,
         private readonly configService: ConfigService,
-    ) { }
+    ) {}
 
     handleConnection(client: Socket) {
         try {

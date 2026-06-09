@@ -8,11 +8,7 @@ import {
     UpdateDateColumn,
 } from "typeorm";
 import { User } from "../users/user.entity";
-
-export enum FriendshipStatus {
-    PENDING = "pending",
-    ACCEPTED = "accepted",
-}
+import { FriendshipStatus } from "@chad/types";
 
 @Entity("friendships")
 export class Friendship {

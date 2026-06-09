@@ -5,11 +5,11 @@ import {
     Post,
     Delete,
     Body,
-    UseGuards,
-    Query,
     Param,
-    UseInterceptors,
+    Query,
     UploadedFile,
+    UseInterceptors,
+    UseGuards,
     BadRequestException,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
@@ -19,10 +19,19 @@ import { UsersService } from "./users.service";
 import { JwtAuthGuard } from "../common/guards/jwt.guard";
 import { UpdateAdminUserDto, UpdateUserDto } from "./users.dto";
 import { GetUser } from "../common/decorators/get-user.decorator";
-import type { JwtPayload } from "../auth/auth.dto";
 import { PermissionsGuard } from "src/common/guards/permissions.guard";
 import { Permissions } from "src/common/decorators/permissions.decorator";
 import { PermissionAction } from "@chad/types";
+import type {
+    JwtPayload,
+    UserListItem,
+    User,
+    BasicMessageResponse,
+    BanResponse,
+    PublicUserProfile,
+    UserSearchResult,
+    LeaderboardItem,
+} from "@chad/types";
 
 const avatarUploadOptions = {
     storage: diskStorage({
@@ -54,16 +63,16 @@ const avatarUploadOptions = {
 
 @Controller("users")
 export class UsersController {
-    constructor(private readonly usersService: UsersService) { }
+    constructor(private readonly usersService: UsersService) {}
 
     @Get()
-    getAllUsers() {
+    getAllUsers(): Promise<UserListItem[]> {
         return this.usersService.getAllUsers();
     }
 
     @Get("me")
     @UseGuards(JwtAuthGuard)
-    getCurrentUser(@GetUser() payload: JwtPayload) {
+    getCurrentUser(@GetUser() payload: JwtPayload): Promise<User> {
         return this.usersService.getUser(payload.sub);
     }
 
@@ -72,7 +81,7 @@ export class UsersController {
     updateUser(
         @GetUser() payload: JwtPayload,
         @Body() updateUserDto: UpdateUserDto,
-    ) {
+    ): Promise<User> {
         return this.usersService.updateUser(payload.sub, updateUserDto);
     }
 
@@ -82,14 +91,14 @@ export class UsersController {
     uploadAvatar(
         @GetUser() payload: JwtPayload,
         @UploadedFile() file: Express.Multer.File,
-    ) {
+    ): Promise<User> {
         if (!file) throw new BadRequestException("Aucun fichier fourni.");
         return this.usersService.uploadAvatar(payload.sub, file.filename);
     }
 
     @Delete("me")
     @UseGuards(JwtAuthGuard)
-    deleteUser(@GetUser() payload: JwtPayload) {
+    deleteUser(@GetUser() payload: JwtPayload): Promise<BasicMessageResponse> {
         return this.usersService.deleteUser(payload.sub);
     }
 
@@ -100,7 +109,7 @@ export class UsersController {
     uploadAvatarForUser(
         @Param("id") id: string,
         @UploadedFile() file: Express.Multer.File,
-    ) {
+    ): Promise<UserListItem> {
         if (!file) throw new BadRequestException("Aucun fichier fourni.");
         return this.usersService.uploadAvatar(id, file.filename);
     }
@@ -111,31 +120,38 @@ export class UsersController {
     adminUpdateUser(
         @Param("id") id: string,
         @Body() updateUserDto: UpdateAdminUserDto,
-    ) {
+    ): Promise<UserListItem> {
         return this.usersService.adminUpdateUser(id, updateUserDto);
     }
 
     @Patch(":id/ban")
     @UseGuards(JwtAuthGuard, PermissionsGuard)
     @Permissions(PermissionAction.MANAGE_USERS)
-    banUser(@Param("id") id: string) {
+    banUser(@Param("id") id: string): Promise<BanResponse> {
         return this.usersService.banUser(id);
     }
 
     @Get("profile/:username")
-    getPublicProfile(@Param("username") username: string) {
+    getPublicProfile(
+        @Param("username") username: string,
+    ): Promise<PublicUserProfile> {
         return this.usersService.getPublicProfileByUsername(username);
     }
 
     @Get("search")
     @UseGuards(JwtAuthGuard)
-    searchUsers(@Query("q") query: string, @GetUser() body: JwtPayload) {
-        if (!query) return [];
+    searchUsers(
+        @Query("q") query: string,
+        @GetUser() body: JwtPayload,
+    ): Promise<UserSearchResult[]> {
+        if (!query) return Promise.resolve([]);
         return this.usersService.searchUsers(query, body.sub);
     }
 
     @Get("leaderboard")
-    getGlobalLeaderboard(@Query("count") count: string = "10") {
+    getGlobalLeaderboard(
+        @Query("count") count: string = "10",
+    ): Promise<LeaderboardItem[]> {
         return this.usersService.getGlobalLeaderboard(Number(count));
     }
 }

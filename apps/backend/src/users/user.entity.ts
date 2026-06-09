@@ -26,8 +26,8 @@ export class User {
     @Column({ name: "password_hash", nullable: true, select: false })
     password?: string;
 
-    @Column({ name: "avatar_url", nullable: true })
-    avatarUrl?: string;
+    @Column({ name: "avatar_url" })
+    avatarUrl: string;
 
     @Column({ type: "text", nullable: true })
     bio?: string | null;

@@ -15,4 +15,16 @@ export interface Role {
 	name: string;
 	permissions: Permission[];
 	userCount?: number;
+	createdAt?: string | Date;
+	updatedAt?: string | Date;
+}
+
+export interface CreateRolePayload {
+	name: string;
+	permissions: PermissionAction[];
+}
+
+export interface UpdateRolePayload {
+	name?: string;
+	permissions?: PermissionAction[];
 }

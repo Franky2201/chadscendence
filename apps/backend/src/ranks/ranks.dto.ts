@@ -1,20 +1,21 @@
 import { IsString, IsOptional, IsNotEmpty, IsNumber } from "class-validator";
+import { CreateRankPayload, UpdateRankPayload } from "@chad/types";
 
-export class CreateRankDto {
+export class CreateRankDto implements CreateRankPayload {
     @IsString()
     @IsNotEmpty()
-    name: string;
+    name!: string;
 
     @IsNumber()
     @IsNotEmpty()
-    ratingMin: number;
+    ratingMin!: number;
 
     @IsString()
-    @IsOptional()
-    icon: string;
+    @IsNotEmpty()
+    icon!: string;
 }
 
-export class UpdateRankDto {
+export class UpdateRankDto implements UpdateRankPayload {
     @IsString()
     @IsOptional()
     name?: string;

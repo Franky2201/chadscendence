@@ -1,7 +1,7 @@
 import { WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
 import { Server } from "socket.io";
 import { PresenceService } from "../presence/presence.service";
-import { Message } from "src/messages/message.entity";
+import { Message as IMessage } from "@chad/types";
 
 @WebSocketGateway({
     cors: {
@@ -21,9 +21,9 @@ export class MessagesGateway {
     @WebSocketServer()
     server: Server;
 
-    constructor(private readonly presenceService: PresenceService) { }
+    constructor(private readonly presenceService: PresenceService) {}
 
-    notifyNewMessage(receiverId: string, message: Message) {
+    notifyNewMessage(receiverId: string, message: IMessage) {
         const clients: string[] =
             this.presenceService.getUserClients(receiverId);
 
