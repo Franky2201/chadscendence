@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useTheme } from "../../contexts/ThemeContext";
-import { Card, Button, Select } from "../ui/index";
+import { Card, Button /*, Select*/ } from "../ui/index";
 import { DonutChart, SkillRadarChart, CustomBarChart } from "./stats/index";
 
 // TODO : Remove the following with calls to the database
