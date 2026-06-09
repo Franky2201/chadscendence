@@ -106,7 +106,7 @@
 				"avatar": "Avatar",
 				"username": "Pseudo",
 				"bio": "Bio",
-				"score": "Score",
+				"rating": "Rating",
 				"cancel": "Annuler",
 				"saving": "Enregistrement...",
 				"save": "Enregistrer"
@@ -134,5 +134,40 @@
 		"playersCount_zero": "0 joueur",
 		"playersCount_one": "1 joueur",
 		"playersCount_other": "{{count}} joueurs"
+	},
+	"room": {
+		"error": {
+			"load": "Impossible de charger cette salle.",
+			"updateGames": "Impossible de mettre à jour les mini-jeux.",
+			"leave": "Impossible de quitter la salle."
+		},
+		"denied": {
+			"title": "Accès refusé",
+			"message": "Veuillez vous connecter pour lancer une partie.",
+			"back": "Retour à l'accueil"
+		},
+		"noCode": {
+			"title": "Aucun code de salle fourni",
+			"message": "Utilisez le bouton multijoueur sur la page d'accueil pour créer ou rejoindre une salle.",
+			"back": "Retour à l'accueil"
+		},
+		"loading": "Chargement de la salle...",
+		"notFound": "Salle introuvable.",
+		"codeLabel": "Code de la salle",
+		"copyLink": "Copier",
+		"leaveRoom": "Quitter la salle",
+		"startGame": "Lancer la partie",
+		"selectOneGame": "Sélectionnez au moins un jeu",
+		"waitingHost": "En attente de l'hôte...",
+		"gameList": {
+			"label": "Mini-jeux",
+			"title": "Choisissez la liste",
+			"loading": "Chargement des jeux...",
+			"selectedOrder": "Ordre des jeux sélectionnés"
+		},
+		"playerList": {
+			"label": "Joueurs",
+			"host": "Hôte"
+		}
 	}
 }

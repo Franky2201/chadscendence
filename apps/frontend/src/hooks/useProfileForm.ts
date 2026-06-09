@@ -3,18 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../contexts/AuthContext";
-import {
-    updateMe,
-    uploadAvatar,
-    getMyLeaderboardRank,
-} from "../services/users";
+import { updateMe, uploadAvatar } from "../services/users";
 
 export const useProfileForm = () => {
     const { t } = useTranslation();
     const { user, isLoading, login } = useAuth();
     const navigate = useNavigate();
 
-    const [leaderboardRank, setLeaderboardRank] = useState<number | null>(null);
     const [editUsername, setEditUsername] = useState("");
     const [editBio, setEditBio] = useState("");
     const [oldPassword, setOldPassword] = useState("");
@@ -34,10 +29,6 @@ export const useProfileForm = () => {
 
     useEffect(() => {
         if (user) {
-            getMyLeaderboardRank()
-                .then(setLeaderboardRank)
-                .catch(() => {});
-
             Promise.resolve().then(() => {
                 setEditUsername(user.username);
                 setEditBio(user.bio || "");
@@ -100,7 +91,6 @@ export const useProfileForm = () => {
 
     return {
         user,
-        leaderboardRank,
         editUsername,
         setEditUsername,
         editBio,

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Window, Button, Input, Title } from "../components/ui";
 import { UserCard } from "../components/users/UserCard";
 import { getAllUsers } from "../services/users";
-import type { UserListItem } from "../services/users";
+import type { UserListItem } from "@chad/types";
 import { useAuth } from "../contexts/AuthContext";
 import { useFriends } from "../contexts/FriendsContext";
 import { Header } from "../components/Header";

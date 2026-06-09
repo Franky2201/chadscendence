@@ -7,9 +7,6 @@ import {
     useCallback,
 } from "react";
 import {
-    type Friend,
-    type FriendRequest,
-    type SentRequest,
     getFriends,
     getPendingRequests,
     getSentRequests,
@@ -17,6 +14,7 @@ import {
     removeFriend,
     sendFriendRequest,
 } from "../services/friends";
+import type { Friend, FriendRequest, SentRequest } from "@chad/types";
 import { useAuth } from "./AuthContext";
 import { socket } from "../services/socket";
 

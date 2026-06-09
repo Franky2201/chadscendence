@@ -5,7 +5,7 @@ import {
     ForbiddenException,
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
-import { PermissionAction } from "@chad/types";
+import { Permission, PermissionAction } from "@chad/types";
 import { PERMISSIONS_KEY } from "../decorators/permissions.decorator";
 import { UsersService } from "../../users/users.service";
 
@@ -46,7 +46,9 @@ export class PermissionsGuard implements CanActivate {
             throw new ForbiddenException();
         }
 
-        const userPermissions = user.role.permissions.map((p) => p.action);
+        const userPermissions = user.role.permissions.map(
+            (p: Permission) => p.action,
+        );
 
         const hasPermission = requiredPermissions.every((permission) =>
             userPermissions.includes(permission),

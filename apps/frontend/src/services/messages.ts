@@ -1,18 +1,5 @@
 import api from "./api";
-
-export interface MessageSender {
-    id: string;
-    username: string;
-    avatarUrl: string;
-}
-
-export interface Message {
-    id: string;
-    content: string;
-    createdAt: string;
-    isRead: boolean;
-    sender: MessageSender;
-}
+import type { Message, UnreadCountsResponse } from "@chad/types";
 
 export const getConversation = async (
     friendId: string,
@@ -22,10 +9,8 @@ export const getConversation = async (
     return res.data;
 };
 
-export const getUnreadCounts = async (): Promise<Record<string, number>> => {
-    const res = await api.get<Record<string, number>>(
-        "/messages/unread-counts",
-    );
+export const getUnreadCounts = async (): Promise<UnreadCountsResponse> => {
+    const res = await api.get<UnreadCountsResponse>("/messages/unread-counts");
     return res.data;
 };
 

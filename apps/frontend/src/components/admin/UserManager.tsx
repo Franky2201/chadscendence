@@ -2,8 +2,8 @@ import { useState, useMemo } from "react";
 import { Card, Button, Input, Title, Select, Badge } from "../ui";
 import { EditUserModal } from "../modals/EditUserModal";
 import { BanModal } from "../modals/BanModal";
-import { AccountStatus } from "../../services/users";
-import type { UserListItem, AdminUpdateData } from "../../services/users";
+import { AccountStatus } from "@chad/types";
+import type { UserListItem, AdminUpdateDataPayload } from "@chad/types";
 import { useAuth } from "../../contexts/AuthContext";
 import { Link } from "react-router-dom";
 import type { Role } from "@chad/types";
@@ -19,7 +19,7 @@ interface UserManagerProps {
     roles: Role[];
     onUpdateUser: (
         id: string,
-        data: AdminUpdateData,
+        data: AdminUpdateDataPayload,
         avatarFile?: File | null,
     ) => Promise<void>;
     onBanUser: (id: string) => Promise<void>;
@@ -75,7 +75,7 @@ export default function UserManager({
                 <Select
                     value={roleFilter}
                     onChange={(e) => setRoleFilter(e.target.value)}
-                    className="flex-1 !h-full !bg-white/10 !border-white/20 !text-white"
+                    className="flex-1 !bg-white/10 !border-white/20 !text-white !text-left !font-normal !text-lg !py-3 !px-3 !rounded-xl"
                 >
                     <option value="ALL" className="text-black">
                         {t("admin.usersManager.allRoles")}

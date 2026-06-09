@@ -106,7 +106,7 @@
 				"avatar": "Avatar",
 				"username": "Username",
 				"bio": "Bio",
-				"score": "Score",
+				"rating": "Rating",
 				"cancel": "Cancel",
 				"saving": "Saving...",
 				"save": "Save"
@@ -134,5 +134,40 @@
 		"playersCount_zero": "0 players",
 		"playersCount_one": "1 player",
 		"playersCount_other": "{{count}} players"
+	},
+	"room": {
+		"error": {
+			"load": "Failed to load this room.",
+			"updateGames": "Failed to update mini-games.",
+			"leave": "Failed to leave the room."
+		},
+		"denied": {
+			"title": "Access denied",
+			"message": "Please log in to start a game.",
+			"back": "Back to home"
+		},
+		"noCode": {
+			"title": "No room code provided",
+			"message": "Use the multiplayer button on the home page to create or join a room.",
+			"back": "Back to home"
+		},
+		"loading": "Loading room...",
+		"notFound": "Room not found.",
+		"codeLabel": "Room code",
+		"copyLink": "Copy",
+		"leaveRoom": "Leave room",
+		"startGame": "Start Game",
+		"selectOneGame": "Select at least one game",
+		"waitingHost": "Waiting for host...",
+		"gameList": {
+			"label": "Mini-games",
+			"title": "Choose the list",
+			"loading": "Loading games...",
+			"selectedOrder": "Order of selected games"
+		},
+		"playerList": {
+			"label": "Players",
+			"host": "Host"
+		}
 	}
 }

@@ -9,7 +9,7 @@ import {
     OneToMany,
 } from "typeorm";
 import { Permission } from "./permission.entity";
-import { User } from "./user.entity";
+import { User } from "../users/user.entity";
 
 @Entity("roles")
 export class Role {

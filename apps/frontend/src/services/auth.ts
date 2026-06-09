@@ -1,26 +1,16 @@
 import api from "./api";
+import type { RegisterPayload, LoginPayload, AuthResponse } from "@chad/types";
 
-export interface RegisterData {
-    username: string;
-    email: string;
-    password: string;
-}
+const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
 
-export interface LoginData {
-    identifier: string;
-    password: string;
-}
-
-export interface AuthResponse {
-    message: string;
-}
-
-export const register = async (data: RegisterData): Promise<AuthResponse> => {
+export const register = async (
+    data: RegisterPayload,
+): Promise<AuthResponse> => {
     const res = await api.post<AuthResponse>("/auth/register", data);
     return res.data;
 };
 
-export const login = async (data: LoginData): Promise<AuthResponse> => {
+export const login = async (data: LoginPayload): Promise<AuthResponse> => {
     const res = await api.post<AuthResponse>("/auth/login", data);
     return res.data;
 };
@@ -30,12 +20,10 @@ export const logout = async (): Promise<AuthResponse> => {
     return res.data;
 };
 
-const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
-
-export const withIntra = (): void => {
+export const withIntra = () => {
     window.location.href = `${backendUrl}/auth/42`;
 };
 
-export const withGithub = (): void => {
+export const withGithub = () => {
     window.location.href = `${backendUrl}/auth/github`;
 };

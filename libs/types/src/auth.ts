@@ -11,3 +11,18 @@ export interface OAuthProfile {
     email: string | null;
     avatarUrl: string | null;
 }
+
+export interface RegisterPayload {
+    username: string;
+    email: string;
+    password: string;
+}
+
+export interface LoginPayload {
+    identifier: string;
+    password: string;
+}
+
+export interface AuthResponse {
+    success: boolean;
+}

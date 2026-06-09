@@ -9,7 +9,7 @@ import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
 import { parse } from "cookie";
 import { PresenceService } from "./presence.service";
-import { JwtPayload } from "../common/dto/auth.dto";
+import type { JwtPayload } from "@chad/types";
 
 @WebSocketGateway({
     cors: {

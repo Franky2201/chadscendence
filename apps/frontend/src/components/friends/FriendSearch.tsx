@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { searchUsers, type UserSearchResult } from "../../services/users";
+import { searchUsers } from "../../services/users";
+import type { UserSearchResult } from "@chad/types";
 import { useFriends } from "../../contexts/FriendsContext";
 import { Input, Button } from "../ui";
 import { useTranslation } from "react-i18next";

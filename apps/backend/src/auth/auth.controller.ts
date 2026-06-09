@@ -10,8 +10,8 @@ import {
 } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { GetUser } from "../common/decorators/get-user.decorator";
-import type { OAuthProfile } from "../common/dto/auth.dto";
-import { CreateUserDto, LoginUserDto } from "../common/dto/auth.dto";
+import type { OAuthProfile, AuthResponse } from "@chad/types";
+import { CreateUserDto, LoginUserDto } from "./auth.dto";
 import { IntraAuthGuard } from "../common/guards/intra.guard";
 import { GithubAuthGuard } from "../common/guards/github.guard";
 
@@ -23,7 +23,7 @@ export class AuthController {
     async register(
         @Body() body: CreateUserDto,
         @Res({ passthrough: true }) res: Response,
-    ) {
+    ): Promise<AuthResponse> {
         const token = await this.authService.register({ authregister: body });
 
         res.cookie("access_token", token.access_token, {
@@ -39,7 +39,7 @@ export class AuthController {
     async login(
         @Body() body: LoginUserDto,
         @Res({ passthrough: true }) res: Response,
-    ) {
+    ): Promise<AuthResponse> {
         const token = await this.authService.login({ authlogin: body });
 
         res.cookie("access_token", token.access_token, {
@@ -111,7 +111,7 @@ export class AuthController {
     }
 
     @Post("logout")
-    logout(@Res({ passthrough: true }) res: Response) {
+    logout(@Res({ passthrough: true }) res: Response): AuthResponse {
         res.clearCookie("access_token", {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
