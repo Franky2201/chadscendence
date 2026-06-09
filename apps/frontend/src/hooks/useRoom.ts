@@ -16,7 +16,6 @@ export type EnrichedPlayer = RoomPlayer & {
     avatarUrl?: string;
     leaderboardRank: number | null;
     score: number;
-    rankIcon?: string;
 };
 
 export function useRoom(code: string | undefined) {
@@ -147,7 +146,6 @@ export function useRoom(code: string | undefined) {
                 avatarUrl: userData?.avatarUrl,
                 leaderboardRank: userIndex !== -1 ? userIndex + 1 : null,
                 score: userData?.score ?? 0,
-                rankIcon: userData?.rank?.icon,
             };
         },
     );
