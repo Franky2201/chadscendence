@@ -1,27 +1,9 @@
 import { Rank } from "./rank";
+import { Role } from "./role";
 
 export enum UserStatus {
     ONLINE = "online",
     OFFLINE = "offline"
-}
-
-export enum PermissionAction {
-    BAN_USER = 'BAN_USER',
-    MANAGE_USERS = 'MANAGE_USERS',
-    MANAGE_ROLES = 'MANAGE_ROLES',
-    MANAGE_RANKS = 'MANAGE_RANKS',
-}
-
-export interface Permission {
-    id: string;
-    action: PermissionAction;
-}
-
-export interface Role {
-    id: string;
-    name: string;
-    permissions: Permission[];
-    userCount?: number;
 }
 
 export enum AccountStatus {
@@ -33,16 +15,77 @@ export interface User {
     id: string;
     username: string;
     email: string;
-    avatarUrl?: string;
-    bio?: string;
+    avatarUrl: string;
+    bio?: string | null;
     status: UserStatus;
     accountStatus: AccountStatus;
     role: Role;
-    score: number;
-    rankId?: string;
-    rank?: Rank;
+    rating: number;
+    rank: Rank;
+    leaderboardRank: number;
     intraId?: string;
     githubId?: string;
     createdAt: string | Date;
     updatedAt: string | Date;
+}
+
+export interface UpdateMePayload {
+    username?: string;
+    oldPassword?: string;
+    password?: string;
+    avatarUrl?: string;
+    bio?: string | null;
+}
+
+export interface AdminUpdateDataPayload {
+    username?: string;
+    avatarUrl?: string;
+    bio?: string | null;
+    rating?: number;
+    roleId?: string;
+}
+
+export type LeaderboardItem = {
+    id: string | number;
+    username: string;
+    avatarUrl: string;
+    rating: number;
+};
+
+export interface UserSearchResult {
+    id: string;
+    username: string;
+    avatarUrl: string;
+    status: "online" | "offline";
+}
+
+export interface PublicUserProfile {
+    id: string;
+    username: string;
+    avatarUrl: string;
+    bio?: string | null;
+    rating: number;
+    rank: Rank;
+    role: Role;
+    leaderboardRank: number;
+}
+
+export interface UserListItem {
+    id: string;
+    username: string;
+    avatarUrl: string;
+    bio?: string | null;
+    rating: number;
+    updatedAt: string | Date;
+    status: "online" | "offline";
+    accountStatus: AccountStatus;
+    role: Role;
+}
+
+export interface BasicMessageResponse {
+    message: string;
+}
+
+export interface BanResponse {
+    accountStatus: AccountStatus;
 }

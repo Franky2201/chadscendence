@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "../ui";
-import { AccountStatus } from "../../services/users";
-import type { UserListItem } from "../../services/users";
+import { AccountStatus } from "@chad/types";
+import type { UserListItem } from "@chad/types";
 import { useTranslation } from "react-i18next";
 
 interface BanModalProps {

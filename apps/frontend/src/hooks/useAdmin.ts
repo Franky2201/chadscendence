@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import type { Role, Permission, Rank } from "@chad/types";
+import type { Role, Permission, Rank, PermissionAction } from "@chad/types";
 import { toast } from "sonner";
 import {
     getRoles,
@@ -7,15 +7,15 @@ import {
     createRole,
     updateRole,
     deleteRole,
-    getRanks,
-} from "../services/admin";
+} from "../services/roles";
+import { getRanks } from "../services/ranks";
 import {
     getAllUsers,
     adminUpdateUser,
     banUser,
     uploadAvatarForUser,
 } from "../services/users";
-import type { UserListItem, AdminUpdateData } from "../services/users";
+import type { UserListItem, AdminUpdateDataPayload } from "@chad/types";
 
 export const useAdmin = (
     canManageRoles: boolean,
@@ -59,7 +59,10 @@ export const useAdmin = (
 
     const handleCreateRole = async (name: string, perms: string[]) => {
         try {
-            const newRole = await createRole({ name, permissions: perms });
+            const newRole = await createRole({
+                name,
+                permissions: perms as PermissionAction[],
+            });
             setRoles((prev) => [...prev, { ...newRole, userCount: 0 }]);
             toast.success("Rôle créé");
         } catch {
@@ -73,7 +76,10 @@ export const useAdmin = (
         perms: string[],
     ) => {
         try {
-            const updated = await updateRole(id, { name, permissions: perms });
+            const updated = await updateRole(id, {
+                name,
+                permissions: perms as PermissionAction[],
+            });
             setRoles((prev) =>
                 prev.map((r) => (r.id === id ? { ...r, ...updated } : r)),
             );
@@ -95,7 +101,7 @@ export const useAdmin = (
 
     const handleUpdateUser = async (
         id: string,
-        data: AdminUpdateData,
+        data: AdminUpdateDataPayload,
         avatarFile?: File | null,
     ) => {
         try {

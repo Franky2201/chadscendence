@@ -7,8 +7,9 @@ import {
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { MoreThan, Repository } from "typeorm";
-import { User, AccountStatus } from "../common/entities/user.entity";
-import { UpdateAdminUserDto, UpdateUserDto } from "../common/dto/users.dto";
+import { User } from "./user.entity";
+import { AccountStatus, UserListItem, UserSearchResult } from "@chad/types";
+import { UpdateAdminUserDto, UpdateUserDto } from "./users.dto";
 import { hash, compare } from "bcrypt";
 import { RanksService } from "../ranks/ranks.service";
 import { ConfigService } from "@nestjs/config";
@@ -48,7 +49,7 @@ export class UsersService implements OnModuleInit {
         if (admin) return;
 
         const hashedPassword = await hash(adminPassword, 10);
-        const defaultRank = await this.ranksService.getRankForScore(5000);
+        const defaultRank = await this.ranksService.getRankForRating(5000);
 
         const frontendUrl =
             this.configService.get<string>("FRONTEND_URL") ||
@@ -59,8 +60,8 @@ export class UsersService implements OnModuleInit {
             username: adminUsername,
             password: hashedPassword,
             avatarUrl: `${frontendUrl}/public/admin.png`,
-            score: 5000,
-            rankId: defaultRank.id,
+            rating: 5000,
+            rank: defaultRank,
             role: adminRole,
         });
 
@@ -77,7 +78,16 @@ export class UsersService implements OnModuleInit {
             throw new NotFoundException("User not found");
         }
 
-        return user;
+        const above = await this.userRepository.count({
+            where: { rating: MoreThan(user.rating) },
+        });
+
+        return {
+            ...user,
+            leaderboardRank: above + 1,
+            rank: user.rank!,
+            role: user.role,
+        };
     }
 
     async updateUser(id: string, updateUserDto: UpdateUserDto) {
@@ -149,18 +159,10 @@ export class UsersService implements OnModuleInit {
         return { message: "User deleted successfully." };
     }
 
-    async getUserLeaderboardRank(userId: string): Promise<number> {
-        const user = await this.getUser(userId);
-        const above = await this.userRepository.count({
-            where: { score: MoreThan(user.score) },
-        });
-        return above + 1;
-    }
-
     async getGlobalLeaderboard(count: number) {
         const users = await this.userRepository.find({
-            select: { id: true, username: true, avatarUrl: true, score: true },
-            order: { score: "DESC", username: "ASC" },
+            select: { id: true, username: true, avatarUrl: true, rating: true },
+            order: { rating: "DESC", username: "ASC" },
             take: count,
         });
 
@@ -168,11 +170,14 @@ export class UsersService implements OnModuleInit {
             id: u.id,
             username: u.username,
             avatarUrl: u.avatarUrl,
-            score: u.score,
+            rating: u.rating,
         }));
     }
 
-    async searchUsers(query: string, currentUserId: string) {
+    async searchUsers(
+        query: string,
+        currentUserId: string,
+    ): Promise<UserSearchResult[]> {
         const users = await this.userRepository
             .createQueryBuilder("user")
             .where("user.username ILIKE :query", { query: `%${query}%` })
@@ -191,18 +196,18 @@ export class UsersService implements OnModuleInit {
         }));
     }
 
-    async getAllUsers() {
+    async getAllUsers(): Promise<UserListItem[]> {
         const users = await this.userRepository.find({
             select: {
                 id: true,
                 username: true,
                 avatarUrl: true,
                 bio: true,
-                score: true,
+                rating: true,
                 updatedAt: true,
                 accountStatus: true,
             },
-            relations: { role: true },
+            relations: { role: true, rank: true },
             order: { username: "ASC" },
         });
 
@@ -211,10 +216,11 @@ export class UsersService implements OnModuleInit {
             username: u.username,
             avatarUrl: u.avatarUrl,
             bio: u.bio,
-            score: u.score,
+            rating: u.rating,
             updatedAt: u.updatedAt,
             accountStatus: u.accountStatus,
             role: u.role,
+            rank: u.rank,
             status: this.presenceService.isUserOnline(u.id)
                 ? "online"
                 : "offline",
@@ -266,24 +272,29 @@ export class UsersService implements OnModuleInit {
         });
     }
 
-    async findByEmail(email: string) {
-        return this.userRepository.findOne({
-            where: { email },
-            relations: { rank: true },
-        });
-    }
-
-    async findByUsername(username: string) {
-        return this.userRepository.findOne({
+    async getPublicProfileByUsername(username: string) {
+        const user = await this.userRepository.findOne({
             where: { username },
-            relations: { rank: true },
+            relations: { rank: true, role: true },
         });
-    }
 
-    async findByEmailOrUsername(email: string, username: string) {
-        return this.userRepository.findOne({
-            where: [{ email }, { username }],
-            relations: { rank: true },
+        if (!user) {
+            throw new NotFoundException("User not found");
+        }
+
+        const above = await this.userRepository.count({
+            where: { rating: MoreThan(user.rating) },
         });
+
+        return {
+            id: user.id,
+            username: user.username,
+            avatarUrl: user.avatarUrl,
+            bio: user.bio,
+            rating: user.rating,
+            rank: user.rank,
+            role: user.role,
+            leaderboardRank: above + 1,
+        };
     }
 }

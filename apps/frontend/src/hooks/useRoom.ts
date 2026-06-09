@@ -10,12 +10,13 @@ import {
     type RoomPlayer,
 } from "../services/rooms";
 import { getGames, type Game } from "../services/games";
-import { getAllUsers, type UserListItem } from "../services/users";
+import { getAllUsers } from "../services/users";
+import type { UserListItem } from "@chad/types";
 
 export type EnrichedPlayer = RoomPlayer & {
     avatarUrl?: string;
     leaderboardRank: number | null;
-    score: number;
+    rating: number;
 };
 
 export function useRoom(code: string | undefined) {
@@ -72,7 +73,7 @@ export function useRoom(code: string | undefined) {
                     getAllUsers(),
                 ]);
                 setGames(gamesData);
-                setUsers(usersData.sort((a, b) => b.score - a.score));
+                setUsers(usersData.sort((a, b) => b.rating - a.rating));
             } catch (err) {
                 console.error("Failed to load games or users", err);
             }
@@ -145,7 +146,7 @@ export function useRoom(code: string | undefined) {
                 ...player,
                 avatarUrl: userData?.avatarUrl,
                 leaderboardRank: userIndex !== -1 ? userIndex + 1 : null,
-                score: userData?.score ?? 0,
+                rating: userData?.rating ?? 0,
             };
         },
     );

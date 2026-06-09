@@ -7,12 +7,12 @@ import {
     useCallback,
 } from "react";
 import {
-    type Message,
     getConversation,
     sendMessage as apiSendMessage,
     markAsRead,
     getUnreadCounts,
-} from "../services/message";
+} from "../services/messages";
+import type { Message } from "@chad/types";
 import { useAuth } from "./AuthContext";
 import { socket } from "../services/socket";
 

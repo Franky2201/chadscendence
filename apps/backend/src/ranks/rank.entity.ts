@@ -9,9 +9,9 @@ export class Rank implements IRank {
     @Column({ unique: true })
     name: string;
 
-    @Column({ name: "min_score" })
-    minScore: number;
+    @Column({ name: "rating_min" })
+    ratingMin: number;
 
-    @Column({ nullable: true })
-    icon?: string;
+    @Column({ nullable: false })
+    icon: string;
 }

@@ -1,6 +1,7 @@
 import { IsString, IsOptional, Allow, IsInt, Min } from "class-validator";
+import { UpdateMePayload, AdminUpdateDataPayload } from "@chad/types";
 
-export class UpdateUserDto {
+export class UpdateUserDto implements UpdateMePayload {
     @IsString()
     @IsOptional()
     username?: string;
@@ -21,14 +22,9 @@ export class UpdateUserDto {
     @IsOptional()
     @Allow()
     bio?: string | null;
-
-    @IsInt()
-    @Min(0)
-    @IsOptional()
-    score?: number;
 }
 
-export class UpdateAdminUserDto {
+export class UpdateAdminUserDto implements AdminUpdateDataPayload {
     @IsString()
     @IsOptional()
     username?: string;
@@ -45,7 +41,7 @@ export class UpdateAdminUserDto {
     @IsInt()
     @Min(0)
     @IsOptional()
-    score?: number;
+    rating?: number;
 
     @IsString()
     @IsOptional()

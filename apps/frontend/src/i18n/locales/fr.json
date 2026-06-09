@@ -106,7 +106,7 @@
 				"avatar": "Avatar",
 				"username": "Pseudo",
 				"bio": "Bio",
-				"score": "Score",
+				"rating": "Rating",
 				"cancel": "Annuler",
 				"saving": "Enregistrement...",
 				"save": "Enregistrer"

@@ -6,3 +6,9 @@ export class CreateRoomDto {
     @IsOptional()
     selectedGames?: string[];
 }
+
+export class UpdateRoomGamesDto {
+    @IsArray()
+    @IsString({ each: true })
+    selectedGames!: string[];
+}

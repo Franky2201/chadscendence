@@ -106,7 +106,7 @@
 				"avatar": "Avatar",
 				"username": "Username",
 				"bio": "Bio",
-				"score": "Score",
+				"rating": "Rating",
 				"cancel": "Cancel",
 				"saving": "Saving...",
 				"save": "Save"

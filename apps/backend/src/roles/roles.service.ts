@@ -6,11 +6,10 @@ import {
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository, In } from "typeorm";
-import { Role } from "src/common/entities/role.entity";
-import { Permission } from "src/common/entities/permission.entity";
-import { User } from "src/common/entities/user.entity";
-import { CreateRoleDto } from "./dto/create-role.dto";
-import { UpdateRoleDto } from "./dto/update-role.dto";
+import { Role } from "./role.entity";
+import { Permission } from "src/roles/permission.entity";
+import { User } from "../users/user.entity";
+import { CreateRoleDto, UpdateRoleDto } from "./roles.dto";
 import { PermissionAction } from "@chad/types";
 
 @Injectable()

@@ -8,17 +8,13 @@ import {
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
-import { User, AccountStatus } from "../common/entities/user.entity";
-import {
-    CreateUserDto,
-    OAuthProfile,
-    JwtPayload,
-    LoginUserDto,
-} from "../common/dto/auth.dto";
+import { User } from "../users/user.entity";
+import { AccountStatus, JwtPayload, OAuthProfile } from "@chad/types";
+import { CreateUserDto, LoginUserDto } from "./auth.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { RanksService } from "../ranks/ranks.service";
-import { Role } from "../common/entities/role.entity";
+import { Role } from "../roles/role.entity";
 
 @Injectable()
 export class AuthService {
@@ -78,7 +74,7 @@ export class AuthService {
             throw new ConflictException("Username already exists");
 
         const hashedPassword = await bcrypt.hash(password, 10);
-        const defaultRank = await this.ranksService.getRankForScore(0);
+        const defaultRank = await this.ranksService.getRankForRating(0);
         const defaultRole = await this.roleRepository.findOne({
             where: { name: "User" },
         });
@@ -93,8 +89,8 @@ export class AuthService {
             username,
             password: hashedPassword,
             avatarUrl: this.defaultAvatar,
-            score: 0,
-            rankId: defaultRank.id,
+            rating: 0,
+            rank: defaultRank,
             role: defaultRole,
         });
 
@@ -120,7 +116,7 @@ export class AuthService {
                   ? (email.split("@")[0] ?? "user")
                   : "user";
 
-        const safeAvatarUrl = avatarUrl ?? undefined;
+        const safeAvatarUrl = avatarUrl ?? this.defaultAvatar;
 
         const providerKey = provider === "github" ? "githubId" : "intraId";
 
@@ -148,7 +144,7 @@ export class AuthService {
         }
 
         const finalUsername = await this.generateUniqueUsername(safeUsername);
-        const defaultRank = await this.ranksService.getRankForScore(0);
+        const defaultRank = await this.ranksService.getRankForRating(0);
         const defaultRole = await this.roleRepository.findOne({
             where: { name: "User" },
         });
@@ -165,8 +161,8 @@ export class AuthService {
             email,
             username: finalUsername,
             avatarUrl: safeAvatarUrl,
-            score: 0,
-            rankId: defaultRank.id,
+            rating: 0,
+            rank: defaultRank,
             role: defaultRole,
         });
 
