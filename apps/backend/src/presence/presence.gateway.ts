@@ -9,11 +9,19 @@ import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
 import { parse } from "cookie";
 import { PresenceService } from "./presence.service";
-import { JwtPayload } from "../common/dto/auth.dto";
+import type { JwtPayload } from "@chad/types";
 
 @WebSocketGateway({
     cors: {
-        origin: "http://localhost:5173",
+        origin: (origin, callback) => {
+            const frontendUrl =
+                process.env.FRONTEND_URL || "http://localhost:5173";
+            if (!origin || origin === frontendUrl) {
+                callback(null, true);
+            } else {
+                callback(null, false);
+            }
+        },
         credentials: true,
     },
 })

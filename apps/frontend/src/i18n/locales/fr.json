@@ -1,0 +1,173 @@
+{
+	"loading": "Chargement",
+	"home": {
+		"play": {
+			"title": "Jouer",
+			"solo": "Solo",
+			"multiplayer": "Multijoueur",
+			"colorTheme": "Personnalisation"
+		},
+		"identification": {
+			"title": "Identification",
+			"login": {
+				"title": "Connexion",
+				"emailOrUsername": "Email ou nom d'utilisateur",
+				"password": "Mot de passe",
+				"login": "Se connecter",
+				"error": "Identifiants invalides"
+			},
+			"register": {
+				"title": "Création de compte",
+				"email": "Email",
+				"username": "Nom d'utilisateur",
+				"password": "Mot de passe",
+				"register": "S'inscrire",
+				"error": "Identifiants invalides"
+			}
+		},
+		"profile": {
+			"title": "Profil",
+			"friends": "Mes amis",
+			"admin": "Gestion",
+			"logout": "Déconnexion"
+		},
+		"leaderboard": "Classement"
+	},
+	"friends": {
+		"title": "Mes amis",
+		"search": "Rechercher un joueur",
+		"blank": "Vous n'avez pas encore d'amis.",
+		"noResults": "Aucun joueur trouvé.",
+		"message": "Votre message",
+		"send": "Envoyer",
+		"remove": "Retirer",
+		"add": "Ajouter",
+		"friend": "Ami",
+		"pendingRequests": "Demandes en attente",
+		"waiting": "En attente",
+		"close": "Fermer",
+		"back": "Retour",
+		"settings": "Paramètres"
+	},
+	"profilePage": {
+		"title": "Profil",
+		"back": "Retour",
+		"modify": "Modifier",
+		"admin": "Admin",
+		"rating": "Rating",
+		"username": "Nom d'utilisateur",
+		"bio": "Bio",
+		"bioPlaceholder": "Une petite bio...",
+		"changePassword": "Changer de mot de passe",
+		"hide": "Cacher",
+		"show": "Afficher",
+		"oldPassword": "Ancien mot de passe",
+		"newPassword": "Nouveau mot de passe",
+		"save": "Enregistrer les modifications",
+		"saving": "Sauvegarde...",
+		"errorBothPasswords": "Veuillez remplir l'ancien ET le nouveau mot de passe.",
+		"successProfile": "Profil mis à jour avec succès",
+		"errorProfile": "Erreur lors de la mise à jour du profil",
+		"successAvatar": "Avatar mis à jour avec succès",
+		"errorAvatar": "Erreur lors de la mise à jour de l'avatar",
+		"loading": "Chargement ..."
+	},
+	"admin": {
+		"title": "Administration",
+		"loading": "Chargement...",
+		"tabs": {
+			"users": "Utilisateurs",
+			"ranks": "Gestion des ranks",
+			"roles": "Rôles"
+		},
+		"roles": {
+			"title": "Gestion des Rôles",
+			"editTitle": "Modification du rôle",
+			"modify": "Modifier",
+			"delete": "Supprimer",
+			"newRole": "Nouveau rôle",
+			"roleName": "Nom du rôle",
+			"create": "Créer",
+			"cancel": "Annuler",
+			"addRole": "Ajouter un rôle",
+			"validate": "Valider"
+		},
+		"usersManager": {
+			"title": "Gestion des Utilisateurs",
+			"search": "Rechercher un joueur...",
+			"allRoles": "Tous les rôles",
+			"noPlayers": "Aucun joueur trouvé.",
+			"selectRole": "Sélectionner un rôle",
+			"modify": "Modifier",
+			"unban": "Débannir",
+			"ban": "Bannir",
+			"editModal": {
+				"title": "Modifier",
+				"avatar": "Avatar",
+				"username": "Pseudo",
+				"bio": "Bio",
+				"rating": "Rating",
+				"cancel": "Annuler",
+				"saving": "Enregistrement...",
+				"save": "Enregistrer"
+			},
+			"banModal": {
+				"unbanTitle": "Débannir le joueur",
+				"banTitle": "Bannir le joueur",
+				"unban": "Débannir",
+				"ban": "Bannir",
+				"warning": "Le joueur ne pourra plus se connecter.",
+				"cancel": "Annuler",
+				"loading": "...",
+				"confirm": "Confirmer"
+			}
+		}
+	},
+	"users": {
+		"title": "Joueurs",
+		"search": "Rechercher un joueur...",
+		"loading": "Chargement...",
+		"error": "Impossible de charger la liste des joueurs.",
+		"addFriend": "Demander en ami",
+		"pending": "En attente",
+		"friend": "Ami",
+		"playersCount_zero": "0 joueur",
+		"playersCount_one": "1 joueur",
+		"playersCount_other": "{{count}} joueurs"
+	},
+	"room": {
+		"error": {
+			"load": "Impossible de charger cette salle.",
+			"updateGames": "Impossible de mettre à jour les mini-jeux.",
+			"leave": "Impossible de quitter la salle."
+		},
+		"denied": {
+			"title": "Accès refusé",
+			"message": "Veuillez vous connecter pour lancer une partie.",
+			"back": "Retour à l'accueil"
+		},
+		"noCode": {
+			"title": "Aucun code de salle fourni",
+			"message": "Utilisez le bouton multijoueur sur la page d'accueil pour créer ou rejoindre une salle.",
+			"back": "Retour à l'accueil"
+		},
+		"loading": "Chargement de la salle...",
+		"notFound": "Salle introuvable.",
+		"codeLabel": "Code de la salle",
+		"copyLink": "Copier",
+		"leaveRoom": "Quitter la salle",
+		"startGame": "Lancer la partie",
+		"selectOneGame": "Sélectionnez au moins un jeu",
+		"waitingHost": "En attente de l'hôte...",
+		"gameList": {
+			"label": "Mini-jeux",
+			"title": "Choisissez la liste",
+			"loading": "Chargement des jeux...",
+			"selectedOrder": "Ordre des jeux sélectionnés"
+		},
+		"playerList": {
+			"label": "Joueurs",
+			"host": "Hôte"
+		}
+	}
+}

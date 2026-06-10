@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { Strategy, Profile } from "passport-github2";
 import { ConfigService } from "@nestjs/config";
-import { OAuthProfile } from "../dto/auth.dto";
+import type { OAuthProfile } from "@chad/types";
 
 @Injectable()
 export class GithubStrategy extends PassportStrategy(Strategy, "github") {
@@ -16,7 +16,7 @@ export class GithubStrategy extends PassportStrategy(Strategy, "github") {
                 "MISSING_CLIENT_SECRET",
             callbackURL:
                 configService.get<string>("GITHUB_CALLBACK_URL") ||
-                "http://localhost:3000/auth/github/callback",
+                `${configService.get<string>("BACKEND_URL", "http://localhost:3000")}/auth/github/callback`,
             scope: ["user:email"],
         });
     }

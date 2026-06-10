@@ -37,10 +37,15 @@ export class GamesService implements OnModuleInit, OnModuleDestroy {
         const rawGames = await this.redis.mget(...keys);
         return rawGames
             .filter((gameStr): gameStr is string => gameStr !== null)
-            .map((gameStr): Game => {
-                const parsed: unknown = JSON.parse(gameStr);
-                return parsed as Game;
-            });
+            .map((gameStr): Game | null => {
+                try {
+                    return JSON.parse(gameStr) as Game;
+                } catch (e) {
+                    console.error("Failed to parse game data from Redis:", e);
+                    return null;
+                }
+            })
+            .filter((game): game is Game => game !== null);
     }
 
     async sendCommand<T = unknown, R = unknown>(

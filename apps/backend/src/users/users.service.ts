@@ -7,13 +7,14 @@ import {
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { MoreThan, Repository } from "typeorm";
-import { User, UserRole } from "../common/entities/user.entity";
-import { UpdateUserDto } from "../common/dto/users.dto";
+import { User } from "./user.entity";
+import { AccountStatus, UserListItem, UserSearchResult } from "@chad/types";
+import { UpdateAdminUserDto, UpdateUserDto } from "./users.dto";
 import { hash, compare } from "bcrypt";
 import { RanksService } from "../ranks/ranks.service";
 import { ConfigService } from "@nestjs/config";
-import { Block } from "../common/entities/block.entity";
 import { PresenceService } from "../presence/presence.service";
+import { RolesService } from "src/roles/roles.service";
 
 @Injectable()
 export class UsersService implements OnModuleInit {
@@ -21,8 +22,7 @@ export class UsersService implements OnModuleInit {
         private readonly configService: ConfigService,
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
-        @InjectRepository(Block)
-        private readonly blockRepository: Repository<Block>,
+        private readonly rolesService: RolesService,
         private readonly presenceService: PresenceService,
         private readonly ranksService: RanksService,
     ) {}
@@ -40,6 +40,8 @@ export class UsersService implements OnModuleInit {
             throw new Error("Missing admin credentials");
         }
 
+        const { adminRole } = await this.rolesService.seedRoles();
+
         const admin = await this.userRepository.findOne({
             where: { email: adminEmail },
         });
@@ -47,33 +49,45 @@ export class UsersService implements OnModuleInit {
         if (admin) return;
 
         const hashedPassword = await hash(adminPassword, 10);
-        const defaultRank = await this.ranksService.getRankForScore(5000);
+        const defaultRank = await this.ranksService.getRankForRating(5000);
+
+        const frontendUrl =
+            this.configService.get<string>("FRONTEND_URL") ||
+            "http://localhost:5173";
 
         const adminUser = this.userRepository.create({
             email: adminEmail,
             username: adminUsername,
             password: hashedPassword,
-            role: UserRole.ADMIN,
-            avatarUrl: "http://localhost:5173/public/admin.png",
-            score: 5000,
-            rankId: defaultRank.id,
+            avatarUrl: `${frontendUrl}/public/admin.png`,
+            rating: 5000,
+            rank: defaultRank,
+            role: adminRole,
         });
 
         await this.userRepository.save(adminUser);
-        console.log("Admin user created successfully!");
     }
 
     async getUser(id: string) {
         const user = await this.userRepository.findOne({
             where: { id },
-            relations: { rank: true },
+            relations: { rank: true, role: { permissions: true } },
         });
 
         if (!user) {
             throw new NotFoundException("User not found");
         }
 
-        return user;
+        const above = await this.userRepository.count({
+            where: { rating: MoreThan(user.rating) },
+        });
+
+        return {
+            ...user,
+            leaderboardRank: above + 1,
+            rank: user.rank!,
+            role: user.role,
+        };
     }
 
     async updateUser(id: string, updateUserDto: UpdateUserDto) {
@@ -122,9 +136,13 @@ export class UsersService implements OnModuleInit {
     }
 
     async uploadAvatar(id: string, filename: string) {
+        const backendUrl =
+            this.configService.get<string>("BACKEND_URL") ||
+            "http://localhost:3000";
+
         await this.userRepository.save({
             id,
-            avatarUrl: `http://localhost:3000/uploads/${filename}`,
+            avatarUrl: `${backendUrl}/uploads/${filename}`,
         });
         return this.getUser(id);
     }
@@ -141,18 +159,10 @@ export class UsersService implements OnModuleInit {
         return { message: "User deleted successfully." };
     }
 
-    async getUserLeaderboardRank(userId: string): Promise<number> {
-        const user = await this.getUser(userId);
-        const above = await this.userRepository.count({
-            where: { score: MoreThan(user.score) },
-        });
-        return above + 1;
-    }
-
     async getGlobalLeaderboard(count: number) {
         const users = await this.userRepository.find({
-            select: { id: true, username: true, avatarUrl: true, score: true },
-            order: { score: "DESC", username: "ASC" },
+            select: { id: true, username: true, avatarUrl: true, rating: true },
+            order: { rating: "DESC", username: "ASC" },
             take: count,
         });
 
@@ -160,38 +170,18 @@ export class UsersService implements OnModuleInit {
             id: u.id,
             username: u.username,
             avatarUrl: u.avatarUrl,
-            score: u.score,
+            rating: u.rating,
         }));
     }
 
-    async searchUsers(query: string, currentUserId: string) {
-        const blockedRelations = await this.blockRepository.find({
-            where: [
-                { blocker: { id: currentUserId } },
-                { blocked: { id: currentUserId } },
-            ],
-            relations: { blocker: true, blocked: true },
-        });
-
-        const excludedIds = blockedRelations.map((b) =>
-            b.blocker.id === currentUserId ? b.blocked.id : b.blocker.id,
-        );
-        excludedIds.push(currentUserId);
-
-        let queryBuilder = this.userRepository
+    async searchUsers(
+        query: string,
+        currentUserId: string,
+    ): Promise<UserSearchResult[]> {
+        const users = await this.userRepository
             .createQueryBuilder("user")
-            .where("user.username ILIKE :query", { query: `%${query}%` });
-
-        if (excludedIds.length > 0) {
-            queryBuilder = queryBuilder.andWhere(
-                "user.id NOT IN (:...excludedIds)",
-                {
-                    excludedIds,
-                },
-            );
-        }
-
-        const users = await queryBuilder
+            .where("user.username ILIKE :query", { query: `%${query}%` })
+            .andWhere("user.id != :currentUserId", { currentUserId })
             .select(["user.id", "user.username", "user.avatarUrl"])
             .take(10)
             .getMany();
@@ -206,6 +196,75 @@ export class UsersService implements OnModuleInit {
         }));
     }
 
+    async getAllUsers(): Promise<UserListItem[]> {
+        const users = await this.userRepository.find({
+            select: {
+                id: true,
+                username: true,
+                avatarUrl: true,
+                bio: true,
+                rating: true,
+                updatedAt: true,
+                accountStatus: true,
+            },
+            relations: { role: true, rank: true },
+            order: { username: "ASC" },
+        });
+
+        return users.map((u) => ({
+            id: u.id,
+            username: u.username,
+            avatarUrl: u.avatarUrl,
+            bio: u.bio,
+            rating: u.rating,
+            updatedAt: u.updatedAt,
+            accountStatus: u.accountStatus,
+            role: u.role,
+            rank: u.rank,
+            status: this.presenceService.isUserOnline(u.id)
+                ? "online"
+                : "offline",
+        }));
+    }
+
+    async banUser(id: string) {
+        const user = await this.userRepository.findOne({ where: { id } });
+        if (!user) throw new NotFoundException("User not found");
+
+        user.accountStatus =
+            user.accountStatus === AccountStatus.BANNED
+                ? AccountStatus.ACTIVE
+                : AccountStatus.BANNED;
+
+        await this.userRepository.save(user);
+        return { accountStatus: user.accountStatus };
+    }
+
+    async adminUpdateUser(id: string, dto: UpdateAdminUserDto) {
+        const user = await this.userRepository.findOne({ where: { id } });
+        if (!user) throw new NotFoundException("User not found");
+
+        const { roleId, ...rest } = dto;
+
+        const role = roleId
+            ? await this.rolesService.findOne(roleId)
+            : undefined;
+
+        if (roleId && !role) {
+            throw new NotFoundException("Role not found");
+        }
+
+        const updatedUser = {
+            ...user,
+            ...rest,
+            ...(role ? { role } : {}),
+        };
+
+        await this.userRepository.save(updatedUser);
+
+        return this.getUser(id);
+    }
+
     async findById(id: string) {
         return this.userRepository.findOne({
             where: { id },
@@ -213,24 +272,29 @@ export class UsersService implements OnModuleInit {
         });
     }
 
-    async findByEmail(email: string) {
-        return this.userRepository.findOne({
-            where: { email },
-            relations: { rank: true },
-        });
-    }
-
-    async findByUsername(username: string) {
-        return this.userRepository.findOne({
+    async getPublicProfileByUsername(username: string) {
+        const user = await this.userRepository.findOne({
             where: { username },
-            relations: { rank: true },
+            relations: { rank: true, role: true },
         });
-    }
 
-    async findByEmailOrUsername(email: string, username: string) {
-        return this.userRepository.findOne({
-            where: [{ email }, { username }],
-            relations: { rank: true },
+        if (!user) {
+            throw new NotFoundException("User not found");
+        }
+
+        const above = await this.userRepository.count({
+            where: { rating: MoreThan(user.rating) },
         });
+
+        return {
+            id: user.id,
+            username: user.username,
+            avatarUrl: user.avatarUrl,
+            bio: user.bio,
+            rating: user.rating,
+            rank: user.rank,
+            role: user.role,
+            leaderboardRank: above + 1,
+        };
     }
 }

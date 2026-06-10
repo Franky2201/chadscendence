@@ -1,7 +1,9 @@
 import { useFriends } from "../../contexts/FriendsContext";
 import { useChat } from "../../contexts/ChatContext";
+import { useTranslation } from "react-i18next";
 
 export default function FriendList() {
+    const { t } = useTranslation();
     const {
         friends,
         requests,
@@ -9,22 +11,18 @@ export default function FriendList() {
         isLoading,
         acceptRequest,
         declineRequest,
-        removeFriend,
-        blockUser,
     } = useFriends();
-    const { openChat } = useChat();
+    const { openChat, unreadCounts } = useChat();
 
     if (isLoading)
-        return (
-            <p className="text-white/60 text-[16px]">Chargement des amis...</p>
-        );
+        return <p className="text-white/60 text-[16px]">{t("loading")}</p>;
 
     return (
         <div className="flex flex-col gap-6 w-full">
             {(requests.length > 0 || sentRequests.length > 0) && (
                 <div className="flex flex-col gap-3">
                     <h3 className="text-white/60 text-sm uppercase font-bold tracking-wider">
-                        Demandes en attente
+                        {t("friends.pendingRequests")}
                     </h3>
                     {requests.map((req) => (
                         <div
@@ -78,7 +76,7 @@ export default function FriendList() {
                             </div>
                             <div className="flex gap-2 pr-2">
                                 <span className="text-white/50 text-sm italic">
-                                    En attente...
+                                    {t("friends.waiting")}
                                 </span>
                             </div>
                         </div>
@@ -88,70 +86,52 @@ export default function FriendList() {
 
             <div className="flex flex-col gap-4">
                 <h3 className="text-white/60 text-sm uppercase font-bold tracking-wider">
-                    Mes Amis
+                    {t("friends.title")}
                 </h3>
                 {friends.length === 0 ? (
-                    <p className="text-white/40 italic">
-                        Vous n'avez pas encore d'amis.
-                    </p>
+                    <p className="text-white/40 italic">{t("friends.blank")}</p>
                 ) : (
-                    friends.map((friend) => (
-                        <div
-                            key={friend.friendshipId}
-                            className="flex flex-row items-center justify-between group"
-                        >
-                            <div className="flex items-center gap-4">
-                                <div className="relative">
-                                    <img
-                                        src={friend.avatarUrl}
-                                        alt={friend.username}
-                                        className={`w-[50px] h-[50px] rounded-full object-cover border-2 transition-colors ${
-                                            friend.status === "online"
-                                                ? "border-green-500"
-                                                : "border-transparent"
-                                        }`}
-                                    />
-                                    {friend.status === "online" && (
-                                        <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-[#1E1E1E] rounded-full"></span>
-                                    )}
+                    friends.map((friend) => {
+                        const unreadCount = unreadCounts[friend.id] || 0;
+                        return (
+                            <div
+                                key={friend.friendshipId}
+                                onClick={() =>
+                                    openChat({
+                                        id: friend.id,
+                                        username: friend.username,
+                                        avatarUrl: friend.avatarUrl,
+                                    })
+                                }
+                                className="flex flex-row items-center justify-between group cursor-pointer hover:bg-white/5 p-2 rounded-xl transition-colors"
+                            >
+                                <div className="flex items-center gap-4">
+                                    <div className="relative">
+                                        <img
+                                            src={friend.avatarUrl}
+                                            alt={friend.username}
+                                            className={`w-[50px] h-[50px] rounded-full object-cover border-2 transition-colors ${
+                                                friend.status === "online"
+                                                    ? "border-green-500"
+                                                    : "border-transparent"
+                                            }`}
+                                        />
+                                        {friend.status === "online" && (
+                                            <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-[#1E1E1E] rounded-full"></span>
+                                        )}
+                                    </div>
+                                    <span className="text-white text-lg font-medium">
+                                        {friend.username}
+                                    </span>
                                 </div>
-                                <span className="text-white text-lg font-medium">
-                                    {friend.username}
-                                </span>
+                                {unreadCount > 0 && (
+                                    <div className="flex items-center justify-center min-w-[24px] h-[24px] bg-red-500 rounded-full px-2 text-white text-xs font-bold">
+                                        {unreadCount > 99 ? "99+" : unreadCount}
+                                    </div>
+                                )}
                             </div>
-                            <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-all">
-                                <button
-                                    onClick={() =>
-                                        openChat({
-                                            id: friend.id,
-                                            username: friend.username,
-                                            avatarUrl: friend.avatarUrl,
-                                        })
-                                    }
-                                    className="text-blue-400/70 hover:text-blue-400 font-bold"
-                                    title="Message privé"
-                                >
-                                    💬
-                                </button>
-                                <button
-                                    onClick={() =>
-                                        removeFriend(friend.friendshipId)
-                                    }
-                                    className="text-red-400/70 hover:text-red-400"
-                                    title="Retirer l'ami"
-                                >
-                                    ✕
-                                </button>
-                                <button
-                                    onClick={() => blockUser(friend.id)}
-                                    className="text-slate-400/70 hover:text-red-600 font-bold"
-                                    title="Bloquer"
-                                >
-                                    Ø
-                                </button>
-                            </div>
-                        </div>
-                    ))
+                        );
+                    })
                 )}
             </div>
         </div>

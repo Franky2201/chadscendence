@@ -1,43 +1,29 @@
 import api from "./api";
-import type { Rank } from "@chad/types";
+import type { Rank, CreateRankPayload, UpdateRankPayload } from "@chad/types";
 
-export type { Rank };
-
-interface CreateRank {
-    name: string;
-    minScore: number;
-    icon?: string;
-}
-
-interface UpdateRank {
-    name?: string;
-    minScore?: number;
-    icon?: string;
-}
-
-const getRanks = async () => {
-    const res = await api.get("/ranks");
+export const getRanks = async (): Promise<Rank[]> => {
+    const res = await api.get<Rank[]>("/ranks");
     return res.data;
 };
 
-const getRank = async (id: string) => {
-    const res = await api.get(`/ranks/${id}`);
+export const getRank = async (id: string): Promise<Rank> => {
+    const res = await api.get<Rank>(`/ranks/${id}`);
     return res.data;
 };
 
-const createRank = async (data: CreateRank) => {
-    const res = await api.post("/ranks", data);
+export const createRank = async (data: CreateRankPayload): Promise<Rank> => {
+    const res = await api.post<Rank>("/ranks", data);
     return res.data;
 };
 
-const updateRank = async (id: string, data: UpdateRank) => {
-    const res = await api.patch(`/ranks/${id}`, data);
+export const updateRank = async (
+    id: string,
+    data: UpdateRankPayload,
+): Promise<Rank> => {
+    const res = await api.patch<Rank>(`/ranks/${id}`, data);
     return res.data;
 };
 
-const deleteRank = async (id: string) => {
-    const res = await api.delete(`/ranks/${id}`);
-    return res.data;
+export const deleteRank = async (id: string): Promise<void> => {
+    await api.delete<void>(`/ranks/${id}`);
 };
-
-export default { getRanks, getRank, createRank, updateRank, deleteRank };

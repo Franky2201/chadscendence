@@ -8,13 +8,14 @@ import { JwtStrategy } from "../common/strategies/jwt.strategy";
 import { IntraStrategy } from "../common/strategies/intra.strategy";
 import { GithubStrategy } from "../common/strategies/github.strategy";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { User } from "../common/entities/user.entity";
+import { User } from "../users/user.entity";
 import { RanksModule } from "../ranks/ranks.module";
 import { UsersModule } from "../users/users.module";
+import { Role } from "src/roles/role.entity";
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([User]),
+        TypeOrmModule.forFeature([Role, User]),
         PassportModule,
         RanksModule,
         UsersModule,

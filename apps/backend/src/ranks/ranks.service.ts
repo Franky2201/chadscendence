@@ -5,9 +5,9 @@ import {
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { Rank } from "../common/entities/rank.entity";
+import { Rank } from "./rank.entity";
 import { OnModuleInit } from "@nestjs/common";
-import { CreateRankDto, UpdateRankDto } from "../common/dto/ranks.dto";
+import { CreateRankDto, UpdateRankDto } from "./ranks.dto";
 
 @Injectable()
 export class RanksService implements OnModuleInit {
@@ -25,23 +25,23 @@ export class RanksService implements OnModuleInit {
         if (count > 0) return;
 
         const defaultRanks = [
-            { name: "Wood", minScore: 0, icon: "🪵" },
-            { name: "Bronze", minScore: 100, icon: "🥉" },
-            { name: "Silver", minScore: 500, icon: "🥈" },
-            { name: "Gold", minScore: 1000, icon: "🥇" },
-            { name: "Platinum", minScore: 2500, icon: "💎" },
-            { name: "Chad", minScore: 5000, icon: "🗿" },
+            { name: "Wood", ratingMin: 0, icon: "🪵" },
+            { name: "Bronze", ratingMin: 100, icon: "🥉" },
+            { name: "Silver", ratingMin: 500, icon: "🥈" },
+            { name: "Gold", ratingMin: 1000, icon: "🥇" },
+            { name: "Platinum", ratingMin: 2500, icon: "💎" },
+            { name: "Chad", ratingMin: 5000, icon: "🗿" },
         ];
 
         await this.rankRepository.save(defaultRanks);
         console.log("Ranks table seeded successfully!");
     }
 
-    async getRankForScore(score: number): Promise<Rank> {
+    async getRankForRating(rating: number): Promise<Rank> {
         const rank = await this.rankRepository
             .createQueryBuilder("rank")
-            .where("rank.minScore <= :score", { score })
-            .orderBy("rank.minScore", "DESC")
+            .where("rank.ratingMin <= :rating", { rating })
+            .orderBy("rank.ratingMin", "DESC")
             .getOne();
 
         if (!rank) {
@@ -55,7 +55,7 @@ export class RanksService implements OnModuleInit {
 
     async getRanks() {
         return this.rankRepository.find({
-            order: { minScore: "ASC" },
+            order: { ratingMin: "ASC" },
         });
     }
 
@@ -83,6 +83,5 @@ export class RanksService implements OnModuleInit {
     async deleteRank(id: string) {
         const rank = await this.getRank(id);
         await this.rankRepository.remove(rank);
-        return { message: "Rank deleted successfully" };
     }
 }

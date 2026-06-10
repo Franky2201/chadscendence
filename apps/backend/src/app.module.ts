@@ -9,8 +9,9 @@ import { RanksModule } from "./ranks/ranks.module";
 import { GamesModule } from "./games/games.module";
 import { FriendsModule } from "./friends/friends.module";
 import { PresenceModule } from "./presence/presence.module";
-import { BlocksModule } from "./blocks/blocks.module";
 import { MessagesModule } from "./messages/messages.module";
+import { RoomsModule } from "./rooms/rooms.module";
+import { RolesModule } from "./roles/roles.module";
 
 @Module({
     imports: [
@@ -19,8 +20,8 @@ import { MessagesModule } from "./messages/messages.module";
         }),
         TypeOrmModule.forRoot({
             type: "postgres",
-            host: "db",
-            port: 5432,
+            host: process.env.POSTGRES_HOST || "db",
+            port: parseInt(process.env.POSTGRES_PORT || "5432", 10),
             username: process.env.POSTGRES_USER,
             password: process.env.POSTGRES_PASSWORD,
             database: process.env.POSTGRES_DB,
@@ -32,12 +33,13 @@ import { MessagesModule } from "./messages/messages.module";
         }),
         UsersModule,
         AuthModule,
+        RolesModule,
         PresenceModule,
         RanksModule,
         GamesModule,
         FriendsModule,
-        BlocksModule,
         MessagesModule,
+        RoomsModule,
     ],
     controllers: [AppController],
     providers: [AppService],

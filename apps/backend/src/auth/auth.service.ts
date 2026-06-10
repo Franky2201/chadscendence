@@ -1,48 +1,60 @@
 import {
     ConflictException,
+    ForbiddenException,
     Injectable,
+    InternalServerErrorException,
     UnauthorizedException,
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
-import { User } from "../common/entities/user.entity";
-import {
-    CreateUserDto,
-    OAuthProfile,
-    JwtPayload,
-    LoginUserDto,
-} from "../common/dto/auth.dto";
+import { User } from "../users/user.entity";
+import { AccountStatus, JwtPayload, OAuthProfile } from "@chad/types";
+import { CreateUserDto, LoginUserDto } from "./auth.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { RanksService } from "../ranks/ranks.service";
-
-const DEFAULT_AVATAR = "http://localhost:5173/public/avatar.jpg";
+import { Role } from "../roles/role.entity";
 
 @Injectable()
 export class AuthService {
+    private readonly defaultAvatar: string;
+
     constructor(
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
         private readonly configService: ConfigService,
         private readonly jwtService: JwtService,
         private readonly ranksService: RanksService,
-    ) {}
+        @InjectRepository(Role)
+        private readonly roleRepository: Repository<Role>,
+    ) {
+        const frontendUrl =
+            this.configService.get<string>("FRONTEND_URL") ||
+            "http://localhost:5173";
+        this.defaultAvatar = `${frontendUrl}/public/avatar.jpg`;
+    }
 
     async login({ authlogin }: { authlogin: LoginUserDto }) {
-        const { email, password } = authlogin;
+        const { identifier, password } = authlogin;
 
         const user = await this.userRepository
             .createQueryBuilder("user")
-            .where("user.email = :email", { email })
+            .where("user.email = :identifier OR user.username = :identifier", {
+                identifier,
+            })
             .addSelect("user.password")
             .getOne();
 
-        if (!user || !user.password)
-            throw new UnauthorizedException("Account not found");
+        if (!user || !user.password) {
+            throw new UnauthorizedException("Invalid credentials");
+        }
 
-        const isValid = await bcrypt.compare(password, user.password);
-        if (!isValid) throw new UnauthorizedException("Invalid password");
+        const isValidPassword = await bcrypt.compare(password, user.password);
+
+        if (!isValidPassword) {
+            throw new UnauthorizedException("Invalid credentials");
+        }
 
         return this.generateTokens(user);
     }
@@ -62,15 +74,24 @@ export class AuthService {
             throw new ConflictException("Username already exists");
 
         const hashedPassword = await bcrypt.hash(password, 10);
-        const defaultRank = await this.ranksService.getRankForScore(0);
+        const defaultRank = await this.ranksService.getRankForRating(0);
+        const defaultRole = await this.roleRepository.findOne({
+            where: { name: "User" },
+        });
+
+        if (!defaultRole)
+            throw new InternalServerErrorException(
+                "Role USER is missing in database",
+            );
 
         const user = this.userRepository.create({
             email,
             username,
             password: hashedPassword,
-            avatarUrl: DEFAULT_AVATAR,
-            score: 0,
-            rankId: defaultRank.id,
+            avatarUrl: this.defaultAvatar,
+            rating: 0,
+            rank: defaultRank,
+            role: defaultRole,
         });
 
         await this.userRepository.save(user);
@@ -95,17 +116,23 @@ export class AuthService {
                   ? (email.split("@")[0] ?? "user")
                   : "user";
 
-        const safeAvatarUrl = avatarUrl ?? undefined;
+        const safeAvatarUrl = avatarUrl ?? this.defaultAvatar;
 
         const providerKey = provider === "github" ? "githubId" : "intraId";
 
         let user = await this.userRepository.findOne({
             where: { [providerKey]: providerId },
         });
-        if (user) return this.generateTokens(user);
+        if (user) {
+            if (user.accountStatus === AccountStatus.BANNED)
+                throw new ForbiddenException("Account is banned");
+            return this.generateTokens(user);
+        }
 
         user = await this.userRepository.findOne({ where: { email } });
         if (user) {
+            if (user.accountStatus === AccountStatus.BANNED)
+                throw new ForbiddenException("Account is banned");
             if (provider === "github") {
                 user.githubId = providerId;
             } else {
@@ -117,7 +144,15 @@ export class AuthService {
         }
 
         const finalUsername = await this.generateUniqueUsername(safeUsername);
-        const defaultRank = await this.ranksService.getRankForScore(0);
+        const defaultRank = await this.ranksService.getRankForRating(0);
+        const defaultRole = await this.roleRepository.findOne({
+            where: { name: "User" },
+        });
+
+        if (!defaultRole)
+            throw new InternalServerErrorException(
+                "Role USER is missing in database",
+            );
 
         user = this.userRepository.create({
             ...(provider === "github"
@@ -126,8 +161,9 @@ export class AuthService {
             email,
             username: finalUsername,
             avatarUrl: safeAvatarUrl,
-            score: 0,
-            rankId: defaultRank.id,
+            rating: 0,
+            rank: defaultRank,
+            role: defaultRole,
         });
 
         await this.userRepository.save(user);
@@ -152,7 +188,6 @@ export class AuthService {
             sub: user.id,
             email: user.email,
             username: user.username,
-            role: user.role,
         };
 
         const access_token = this.jwtService.sign(payload, {

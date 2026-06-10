@@ -3,7 +3,7 @@ import { ConfigService } from "@nestjs/config";
 import { PassportStrategy } from "@nestjs/passport";
 import Strategy from "passport-42";
 import type { Profile } from "passport";
-import { OAuthProfile } from "../dto/auth.dto";
+import type { OAuthProfile } from "@chad/types";
 
 type IntraProfile = Profile & {
     _json?: {
@@ -27,7 +27,7 @@ export class IntraStrategy extends PassportStrategy(Strategy as any, "42") {
                 "MISSING_CLIENT_SECRET",
             callbackURL:
                 configService.get<string>("INTRA_CALLBACK_URL") ||
-                "http://localhost:3000/auth/42/callback",
+                `${configService.get<string>("BACKEND_URL", "http://localhost:3000")}/auth/42/callback`,
             scope: ["public"],
         });
     }

@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
-import { getLeaderboard, type LeaderboardType } from "../../services/users";
-import { Card } from "../ui/index";
+import { getLeaderboard } from "../../services/users";
+import type { LeaderboardItem } from "@chad/types";
+import { useAuth } from "../../contexts/AuthContext";
+import { Card, Button } from "../ui/index";
+import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
+import { Link, useNavigate } from "react-router-dom";
+import { useTheme } from "../../contexts/ThemeContext";
 
 export function Leaderboard({
     count,
@@ -9,9 +15,16 @@ export function Leaderboard({
     count: number;
     className?: string;
 }) {
-    const [topUsers, setTopUsers] = useState<LeaderboardType>([]);
+    type DisplayUser = LeaderboardItem & { rank?: number };
+
+    const [topUsers, setTopUsers] = useState<DisplayUser[]>([]);
+    const [appendedCurrent, setAppendedCurrent] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
+
+    const { t } = useTranslation();
+    const { user } = useAuth();
+    const navigate = useNavigate();
+    const { theme } = useTheme();
 
     useEffect(() => {
         let isMounted = true;
@@ -19,13 +32,30 @@ export function Leaderboard({
         const fetchLeaderboard = async () => {
             try {
                 const data = await getLeaderboard(count);
-                setTopUsers(data);
-            } catch (err) {
-                console.log(err);
-                if (isMounted)
-                    setError("Erreur lors du chargement du classement.");
-            } finally {
+                const displayData: DisplayUser[] = data.map((u) => ({ ...u }));
+                setAppendedCurrent(false);
+
+                if (user) {
+                    const alreadyIncluded = displayData.some(
+                        (u) => String(u.id) === String(user.id),
+                    );
+
+                    if (!alreadyIncluded) {
+                        displayData.push({
+                            id: user.id,
+                            username: user.username,
+                            avatarUrl: user.avatarUrl,
+                            rating: user.rating,
+                            rank: user.leaderboardRank,
+                        });
+                        setAppendedCurrent(true);
+                    }
+                }
+
+                if (isMounted) setTopUsers(displayData);
                 setIsLoading(false);
+            } catch {
+                toast.error("Error while loading the leaderboard");
             }
         };
 
@@ -34,50 +64,62 @@ export function Leaderboard({
         return () => {
             isMounted = false;
         };
-    }, [count]);
+    }, [count, user]);
 
     return (
         <Card
             className={className}
-            contentClassName="justify-start"
-            title="Leaderboard"
+            contentClassName="h-full flex flex-col justify-between"
+            title={t("home.leaderboard")}
         >
-            <Card className="flex flex-col gap-[8px] w-full border-none">
+            <div className="flex flex-col">
                 {isLoading ? (
-                    <p className="text-[16px]">Chargement des légendes...</p>
-                ) : error ? (
-                    <p className="text-[color:var(--color-red)] text-[16px]">
-                        {error}
-                    </p>
+                    <p className="text-lg">Loading ...</p>
                 ) : (
-                    topUsers.map((user, index) => (
-                        <div
-                            key={user.id}
-                            className="flex flex-row items-center justify-between w-full"
-                        >
-                            <div className="flex flex-row items-center gap-[16px]">
-                                <span className="font-semibold text-[24px] min-w-[36px]">
-                                    {index + 1}.
-                                </span>
+                    topUsers.map((item, index) => (
+                        <div key={item.id} className="w-full">
+                            {appendedCurrent &&
+                                item.rank !== undefined &&
+                                index === topUsers.length - 1 && (
+                                    <span className="block w-full border-t border-dashed my-2" />
+                                )}
 
-                                <img
-                                    src={user.avatarUrl}
-                                    alt={`${user.username} avatar`}
-                                    className="w-[55px] h-[55px] rounded-full object-cover border border-white/10"
-                                />
+                            <div className="flex flex-row items-center justify-between w-full">
+                                <div className="flex flex-row items-center min-w-0">
+                                    <span className="text-xl mr-4 w-5 text-right font-mona-sans">
+                                        {item.rank ?? index + 1}.
+                                    </span>
 
-                                <span className=" text-[24px] font-medium">
-                                    {user.username}
+                                    <img
+                                        src={item.avatarUrl}
+                                        alt={`${item.username} avatar`}
+                                        className="w-10 h-10 mr-2 mb-1 rounded-xl border object-cover"
+                                    />
+
+                                    <Link to={`/users/${item.username}`}>
+                                        <span className="block truncate text-xl font-bold max-w-[14rem] sm:max-w-[18rem] hover:scale-105 transition-transform">
+                                            {item.username}
+                                        </span>
+                                    </Link>
+                                </div>
+
+                                <span className="text-lg font-mona-sans">
+                                    {item.rating}
                                 </span>
                             </div>
-
-                            <span className=" text-[24px] font-medium">
-                                {user.score}
-                            </span>
                         </div>
                     ))
                 )}
-            </Card>
+            </div>
+            <div className="mt-4 w-full text-center">
+                <Button
+                    color={theme}
+                    className="w-full"
+                    onClick={() => navigate("/users")}
+                >
+                    {t("users.title")}
+                </Button>
+            </div>
         </Card>
     );
 }

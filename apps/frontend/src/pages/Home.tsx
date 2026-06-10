@@ -1,6 +1,7 @@
 import { useAuth } from "../contexts/AuthContext";
 import { Window } from "../components/ui";
 import * as board from "../components/home";
+import { Header } from "../components/Header";
 
 export default function HomePage() {
     const { user, isLoading } = useAuth();
@@ -14,26 +15,15 @@ export default function HomePage() {
 
     return (
         <Window>
-            <header className="justify-self-center">
-                <img
-                    className="select-none w-auto drop-shadow-lg max-h-30 mb-8"
-                    src="/game_banner.png"
-                    alt="GameLogo"
-                />
-            </header>
+            <Header />
             <div
-                className="grid w-full max-w-300 justify-self-center 
-				grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3"
+                className={`grid w-full max-w-300 justify-self-center grid-cols-1 
+					md:grid-cols-3 "lg:grid-cols-3" gap-3`}
             >
-                {!user && <board.Identification />}
                 <board.Play />
-                <board.Leaderboard count={5} />
+                {!user && <board.Identification />}
                 {user && <board.Profile />}
-                {user && <board.Friends />}
-                {user && <board.Clan />}
-                {user && <board.Achievements />}
-                <board.Settings />
-                <board.Credits className="md:col-span-2 xl:col-span-2" />
+                <board.Leaderboard count={5} />
             </div>
         </Window>
     );

@@ -15,6 +15,16 @@ if [[ -z "$GAME_ID" ]]; then
     exit 1
 fi
 
+# Check for required tools
+if ! command -v docker > /dev/null 2>&1 && ! command -v node > /dev/null 2>&1; then
+    echo "Error: Either 'docker' or 'node' is required to run this script."
+    exit 1
+fi
+
+if ! command -v node > /dev/null 2>&1; then
+    echo "Warning: 'node' not found on host. Falling back to Docker for node-based operations."
+fi
+
 # 2. Validation on GAME_ID format (alphanumeric with hyphens as separators only)
 if [[ ! "$GAME_ID" =~ ^[a-z0-9]+(-[a-z0-9]+)*$ ]]; then
     echo "Error: GAME_ID must be lowercase alphanumeric with hyphens only as separators (e.g., 'pong-game')."
@@ -118,8 +128,8 @@ if [ -f "$DOCKER_COMPOSE" ]; then
             redis:
                 condition: service_healthy
         volumes:
-            - ../../:/app
-            - /app/node_modules
+            - ../../apps/games/$GAME_ID/src:/app/apps/games/$GAME_ID/src
+            - ../../libs/types/src:/app/libs/types/src
         networks:
             - ft_network
         restart: unless-stopped
@@ -141,12 +151,19 @@ fi
 # 5. Automate root package.json update
 if [ -f "$ROOT_PACKAGE" ]; then
     echo "Updating root package.json scripts..."
-    PACKAGE_PATH="$ROOT_PACKAGE" GAME_ID="$GAME_ID" node -e "
+    UPDATE_PKG_CMD="
       const fs = require('fs');
-      const pkg = JSON.parse(fs.readFileSync(process.env.PACKAGE_PATH));
-      pkg.scripts[process.env.GAME_ID + ':dev'] = 'npm run start:dev -w ' + process.env.GAME_ID;
-      fs.writeFileSync(process.env.PACKAGE_PATH, JSON.stringify(pkg, null, 2) + '\n');
+      const pkgPath = process.env.PKG_PATH;
+      const gameId = process.env.GAME_ID;
+      const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+      pkg.scripts[gameId + ':dev'] = 'npm run start:dev -w ' + gameId;
+      fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n');
     "
+    if command -v node > /dev/null 2>&1; then
+        PKG_PATH="$ROOT_PACKAGE" GAME_ID="$GAME_ID" node -e "$UPDATE_PKG_CMD"
+    else
+        docker run --rm -u "$(id -u):$(id -g)" -v "$ROOT_DIR:/app" -e PKG_PATH="/app/package.json" -e GAME_ID="$GAME_ID" -w /app node:22-alpine node -e "$UPDATE_PKG_CMD"
+    fi
 fi
 
 # 6. Create UI Component in Frontend
@@ -163,6 +180,8 @@ if [ -f "$UI_TEMPLATE_SRC" ]; then
         -e "s/template-id/$GAME_ID/g" \
         -e "s/Template/$COMPONENT_NAME/g" \
         "$UI_COMPONENT_PATH"
+    # Ensure file is readable and owned by the user if created via docker later
+    chmod 644 "$UI_COMPONENT_PATH"
 fi
 
 # 7. Register Component in Games.tsx
@@ -170,64 +189,97 @@ GAMES_PAGE="$ROOT_DIR/apps/frontend/src/pages/Games.tsx"
 if [ -f "$GAMES_PAGE" ]; then
     echo "Registering game in $GAMES_PAGE..."
     # Add import (using node for safer multi-line/insertion logic)
-    GAME_ID="$GAME_ID" COMPONENT_NAME="$COMPONENT_NAME" GAMES_PAGE="$GAMES_PAGE" node -e "
+    REG_SCRIPT="
       const fs = require('fs');
-      let content = fs.readFileSync(process.env.GAMES_PAGE, 'utf8');
+      const gamesPagePath = process.env.GAMES_PAGE;
+      const gameId = process.env.GAME_ID;
+      const componentName = process.env.COMPONENT_NAME;
+      let content = fs.readFileSync(gamesPagePath, 'utf8');
 
       // Add import if not exists
-      const importLine = \`import \${process.env.COMPONENT_NAME}UI from \"../components/games/\${process.env.COMPONENT_NAME}UI\";\n\`;
+      const importLine = \`import \${componentName}UI from \"../components/games/\${componentName}UI\";\n\`;
       if (!content.includes(importLine)) {
-          // Find last import to preserve 'use client' or header safety
-          const lastImportIndex = content.lastIndexOf('\nimport ');
-          if (lastImportIndex !== -1) {
-              const insertAt = content.indexOf('\n', lastImportIndex + 1) + 1;
+          const lastImportMatch = content.match(/\\nimport\\s+.*\\n/g);
+          if (lastImportMatch) {
+              const lastImportIndex = content.lastIndexOf(lastImportMatch[lastImportMatch.length - 1]);
+              const insertAt = content.indexOf('\\n', lastImportIndex + 1) + 1;
               content = content.slice(0, insertAt) + importLine + content.slice(insertAt);
           } else {
               content = importLine + content;
           }
       }
 
-      // Add switch case
-      const switchMarker = 'const renderActiveGame = () => {';
-      const switchIndex = content.indexOf(switchMarker);
-      if (switchIndex === -1) {
-          console.error('Could not find renderActiveGame in Games.tsx — skipping case registration.');
+      // Add switch case with robust regex
+      const switchMarker = /const\\s+renderActiveGame\\s*=\\s*\\(\\)\\s*=>\\s*\\{/;
+      const switchMatch = content.match(switchMarker);
+      if (!switchMatch) {
+          console.error('Error: Could not find renderActiveGame function in Games.tsx');
           process.exit(1);
       }
 
-      const switchBodyMarker = 'switch (activeGameId) {';
-      const switchBodyIndex = content.indexOf(switchBodyMarker, switchIndex);
-      if (switchBodyIndex === -1) {
-          console.error('Could not find switch (activeGameId) in renderActiveGame — skipping.');
+      const switchBodyMarker = /switch\\s*\\(\\s*activeGameId\\s*\\)\\s*\\{/;
+      const restOfContent = content.slice(switchMatch.index);
+      const bodyMatch = restOfContent.match(switchBodyMarker);
+      if (!bodyMatch) {
+          console.error('Error: Could not find switch (activeGameId) block in Games.tsx');
           process.exit(1);
       }
 
-      const caseBlock = \`            case \"\${process.env.GAME_ID}\":\n                return <\${process.env.COMPONENT_NAME}UI />;\n\`;
+      const bodyIndex = switchMatch.index + bodyMatch.index + bodyMatch[0].length;
+      const caseBlock = \`\\n            case \"\${gameId}\":\\n                return <\${componentName}UI />;\`;
 
-      if (!content.includes(\`case \"\${process.env.GAME_ID}\":\`)) {
-          const index = switchBodyIndex + switchBodyMarker.length;
-          content = content.slice(0, index) + '\n' + caseBlock + content.slice(index);
+      if (!content.includes(\`case \"\${gameId}\":\`)) {
+          content = content.slice(0, bodyIndex) + caseBlock + content.slice(bodyIndex);
+          console.log(\`Successfully registered case \"\${gameId}\"\`);
+      } else {
+          console.log(\`Case \"\${gameId}\" already exists, skipping.\`);
       }
 
-      fs.writeFileSync(process.env.GAMES_PAGE, content);
+      fs.writeFileSync(gamesPagePath, content);
     "
+    if command -v node > /dev/null 2>&1; then
+        GAMES_PAGE="$GAMES_PAGE" GAME_ID="$GAME_ID" COMPONENT_NAME="$COMPONENT_NAME" node -e "$REG_SCRIPT"
+    else
+        docker run --rm -u "$(id -u):$(id -g)" -v "$ROOT_DIR:/app" \
+            -e GAMES_PAGE="/app/apps/frontend/src/pages/Games.tsx" \
+            -e GAME_ID="$GAME_ID" \
+            -e COMPONENT_NAME="$COMPONENT_NAME" \
+            -w /app node:22-alpine node -e "$REG_SCRIPT"
+    fi
 fi
 
-# 8. Run npm install
-echo "Running npm install..."
-(cd "$ROOT_DIR" && npm install)
+echo "Game logic and frontend registration complete."
 
-# 9. Register game in Backend (GamesModule & GamesService)
+# 8. Register game in Backend (GamesModule & GamesService)
 # Backend is now generic and uses GAMES_CLIENT for all games.
 # No manual registration needed in GamesModule or GamesService.
 
 
 echo "Done! New game created and registered."
 echo "Port assigned: $NEW_PORT"
+
+# 9. Update package-lock.json to include the new workspace
+if [ -f "$ROOT_PACKAGE" ]; then
+    echo "Updating package-lock.json..."
+    if command -v docker > /dev/null 2>&1; then
+        echo "Using a temporary Docker container to update lockfile (ensures compatibility)..."
+        # We use node:22-alpine to match the microservices' environment
+        docker run --rm -u "$(id -u):$(id -g)" -v "$ROOT_DIR:/app" -w /app -e npm_config_cache=/tmp/.npm node:22-alpine npm install --package-lock-only
+        echo "Lockfile updated successfully."
+    elif command -v npm > /dev/null 2>&1; then
+        echo "Docker not found, falling back to host npm..."
+        (cd "$ROOT_DIR" && npm install --package-lock-only)
+        echo "Lockfile updated successfully."
+    else
+        echo "Warning: Neither 'docker' nor 'npm' found. You must update the lockfile manually."
+    fi
+fi
+
 echo ""
 echo "Next steps:"
-echo "1. Run 'make up' to see the new game service in the frontend."
-echo "2. Implement your game logic in apps/games/$GAME_ID/src/."
-echo "3. Define your shared types in libs/types/src/game.ts"
-echo "4. Add your unit tests in apps/games/$GAME_ID/test/."
+echo "1. Run 'make' to see the new game service in the frontend."
+echo "   Docker will automatically detect, build, and start your new game."
+echo "2. Check the frontend at https://${DOMAIN_NAME:-localhost}:5173/games"
+echo "3. Implement your game logic in apps/games/$GAME_ID/src/"
+echo "4. Define your shared types in libs/types/src/game.ts"
 echo "5. Customize your UI in ${UI_COMPONENT_PATH:-apps/frontend/src/components/games/}"

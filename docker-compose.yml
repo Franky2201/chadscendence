@@ -7,7 +7,7 @@ services:
         image: postgres:17-alpine
         restart: unless-stopped
         ports:
-            - "5432:5432"
+            - "${POSTGRES_HOST_PORT:-5432}:5432"
         environment:
             POSTGRES_USER: ${POSTGRES_USER}
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -31,7 +31,7 @@ services:
         image: redis:7-alpine
         restart: unless-stopped
         ports:
-            - "6379:6379"
+            - "${REDIS_HOST_PORT:-6380}:6379"
         volumes:
             - redisdata:/data
         networks:
@@ -51,18 +51,21 @@ services:
             target: development
             #target: final
         env_file: .env
+        environment:
+            - PORT=3000
+            - FRONTEND_URL=${FRONTEND_URL:-http://localhost:5173}
+            - BACKEND_URL=${BACKEND_URL:-http://localhost:3000}
         depends_on:
             db:
                 condition: service_healthy
             redis:
                 condition: service_healthy
         ports:
-            - "3000:3000"
+            - "${BACKEND_PORT:-3000}:3000"
         volumes:
-            #Bind mounts used for development to allow live code changes without rebuilding the image. In production, consider using named volumes or copying files into the image.
-            - .:/app # [DEV MODE ONLY]
-            - /app/node_modules # [DEV MODE ONLY]
+            - ./apps/backend/src:/app/apps/backend/src
             - ./apps/backend/uploads:/app/apps/backend/uploads
+            - ./libs/types/src:/app/libs/types/src
         networks:
             - ft_network
         restart: unless-stopped
@@ -78,17 +81,15 @@ services:
             args:
                 DOMAIN_NAME: ${DOMAIN_NAME}
         env_file: .env
+        environment:
+            - VITE_BACKEND_URL=${BACKEND_URL:-http://localhost:3000}
         depends_on:
             - backend
         ports:
-            #sudo is necessary to bind to those ports on linux
-            #      - "80:80"
-            #     - "443:443"
-            - "5173:5173"
+            - "${FRONTEND_PORT:-5173}:5173"
         volumes:
-            #Bind mounts used for development to allow live code changes without rebuilding the image. In production, consider using named volumes or copying files into the image.
-            - .:/app # [DEV MODE ONLY]
-            - /app/node_modules # [DEV MODE ONLY]
+            - ./apps/frontend/src:/app/apps/frontend/src
+            - ./libs/types/src:/app/libs/types/src
         networks:
             - ft_network
         restart: unless-stopped

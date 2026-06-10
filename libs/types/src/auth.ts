@@ -1,10 +1,7 @@
-import { UserRole } from "./user";
-
 export interface JwtPayload {
     sub: string;
     email: string;
     username: string;
-    role: UserRole;
 }
 
 export interface OAuthProfile {
@@ -13,4 +10,19 @@ export interface OAuthProfile {
     username: string | null;
     email: string | null;
     avatarUrl: string | null;
+}
+
+export interface RegisterPayload {
+    username: string;
+    email: string;
+    password: string;
+}
+
+export interface LoginPayload {
+    identifier: string;
+    password: string;
+}
+
+export interface AuthResponse {
+    success: boolean;
 }

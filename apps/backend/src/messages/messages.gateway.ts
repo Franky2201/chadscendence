@@ -1,11 +1,19 @@
 import { WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
 import { Server } from "socket.io";
 import { PresenceService } from "../presence/presence.service";
-import { Message } from "src/common/entities/message.entity";
+import { Message as IMessage } from "@chad/types";
 
 @WebSocketGateway({
     cors: {
-        origin: "http://localhost:5173",
+        origin: (origin, callback) => {
+            const frontendUrl =
+                process.env.FRONTEND_URL || "http://localhost:5173";
+            if (!origin || origin === frontendUrl) {
+                callback(null, true);
+            } else {
+                callback(null, false);
+            }
+        },
         credentials: true,
     },
 })
@@ -15,7 +23,7 @@ export class MessagesGateway {
 
     constructor(private readonly presenceService: PresenceService) {}
 
-    notifyNewMessage(receiverId: string, message: Message) {
+    notifyNewMessage(receiverId: string, message: IMessage) {
         const clients: string[] =
             this.presenceService.getUserClients(receiverId);
 

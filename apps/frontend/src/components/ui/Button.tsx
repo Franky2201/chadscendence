@@ -17,7 +17,7 @@ const sizeClasses: Record<ItemSize, string> = {
 
 export function Button({
     size = "medium",
-    color = "grey",
+    color = "white",
     borderRadius = "rounded-xl",
     children,
     className = "",
@@ -25,35 +25,34 @@ export function Button({
     ...props
 }: ButtonProps) {
     const divClasses = [
-        "group relative border-none select-none",
+        "relative border-none select-none",
         borderRadius,
         className,
     ]
         .filter(Boolean)
         .join(" ");
     const buttonClasses = [
-        "items-center justify-center transition-all duration-100 ease-in-out h-full w-full\
-		select-none group-active:translate-y-0 font-bold bg-[color:var(--ui-color)]",
+        "items-center justify-center transition-all duration-100 ease-in-out h-full w-full text-center\
+		select-none active:translate-y-0 font-bold bg-[color:var(--ui-color)] font-mona-sans",
         borderRadius,
         sizeClasses[size],
         className,
         props.disabled
             ? "translate-y-0 cursor-not-allowed"
-            : "translate-y-[-5px] group-hover:translate-y-[-7px] cursor-pointer",
+            : "translate-y-[-3px] hover:translate-y-[-5px] cursor-pointer",
     ]
         .filter(Boolean)
         .join(" ");
     const spanBotClasses = [
-        "absolute inset-0 bg-[color:var(--ui-color)]",
+        "absolute inset-0 bg-[color:var(--ui-color)] transition-all duration-100",
         borderRadius,
         sizeClasses[size],
         className,
     ]
         .filter(Boolean)
         .join(" ");
-    const resolvedColor = props.disabled ? "grey" : color;
-    const colorStyle = getItemColorStyle(resolvedColor);
-    const textStyle = getItemColorTextStyle(resolvedColor, 65);
+    const colorStyle = getItemColorStyle(color);
+    const textStyle = getItemColorTextStyle(color, 65);
     return (
         <div className={divClasses}>
             <span

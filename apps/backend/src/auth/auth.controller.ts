@@ -1,9 +1,17 @@
 import type { Response } from "express";
-import { Controller, Post, Body, Get, Res, UseGuards } from "@nestjs/common";
+import {
+    Controller,
+    Post,
+    Body,
+    Get,
+    Res,
+    UseGuards,
+    ForbiddenException,
+} from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { GetUser } from "../common/decorators/get-user.decorator";
-import type { OAuthProfile } from "../common/dto/auth.dto";
-import { CreateUserDto, LoginUserDto } from "../common/dto/auth.dto";
+import type { OAuthProfile, AuthResponse } from "@chad/types";
+import { CreateUserDto, LoginUserDto } from "./auth.dto";
 import { IntraAuthGuard } from "../common/guards/intra.guard";
 import { GithubAuthGuard } from "../common/guards/github.guard";
 
@@ -15,7 +23,7 @@ export class AuthController {
     async register(
         @Body() body: CreateUserDto,
         @Res({ passthrough: true }) res: Response,
-    ) {
+    ): Promise<AuthResponse> {
         const token = await this.authService.register({ authregister: body });
 
         res.cookie("access_token", token.access_token, {
@@ -31,7 +39,7 @@ export class AuthController {
     async login(
         @Body() body: LoginUserDto,
         @Res({ passthrough: true }) res: Response,
-    ) {
+    ): Promise<AuthResponse> {
         const token = await this.authService.login({ authlogin: body });
 
         res.cookie("access_token", token.access_token, {
@@ -53,18 +61,25 @@ export class AuthController {
         @GetUser() user: OAuthProfile,
         @Res() res: Response,
     ) {
-        const token = await this.authService.registerOAuth({
-            ...user,
-            provider: "42",
-        });
+        const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+        try {
+            const token = await this.authService.registerOAuth({
+                ...user,
+                provider: "42",
+            });
 
-        res.cookie("access_token", token.access_token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "lax",
-        });
+            res.cookie("access_token", token.access_token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "lax",
+            });
 
-        return res.redirect("http://localhost:5173/");
+            return res.redirect(frontendUrl);
+        } catch (err) {
+            if (err instanceof ForbiddenException)
+                return res.redirect(`${frontendUrl}?error=banned`);
+            throw err;
+        }
     }
 
     @Get("github")
@@ -74,22 +89,29 @@ export class AuthController {
     @Get("github/callback")
     @UseGuards(GithubAuthGuard)
     async githubCallback(@GetUser() user: OAuthProfile, @Res() res: Response) {
-        const token = await this.authService.registerOAuth({
-            ...user,
-            provider: "github",
-        });
+        const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+        try {
+            const token = await this.authService.registerOAuth({
+                ...user,
+                provider: "github",
+            });
 
-        res.cookie("access_token", token.access_token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "lax",
-        });
+            res.cookie("access_token", token.access_token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "lax",
+            });
 
-        return res.redirect("http://localhost:5173/");
+            return res.redirect(frontendUrl);
+        } catch (err) {
+            if (err instanceof ForbiddenException)
+                return res.redirect(`${frontendUrl}?error=banned`);
+            throw err;
+        }
     }
 
     @Post("logout")
-    logout(@Res({ passthrough: true }) res: Response) {
+    logout(@Res({ passthrough: true }) res: Response): AuthResponse {
         res.clearCookie("access_token", {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",

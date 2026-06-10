@@ -20,12 +20,13 @@ export class AppModule
 {
     private readonly logger = new Logger(AppModule.name);
     private heartbeatInterval?: NodeJS.Timeout;
+    private gameId = "math";
 
     constructor(private readonly _redisService: RedisService) {}
 
     async onApplicationBootstrap() {
         const gameData: Game = {
-            id: "math",
+            id: this.gameId,
             name: "Math",
             description: "C'est du calcul mental frangin",
             port: Number(process.env.PORT ?? 3001),
@@ -35,7 +36,7 @@ export class AppModule
             await this._redisService
                 .getClient()
                 .set(
-                    `games:active:${gameData.id}`,
+                    `games:active:${this.gameId}`,
                     JSON.stringify(gameData),
                     "EX",
                     15,
@@ -50,14 +51,16 @@ export class AppModule
             void register();
         }, 5000);
 
-        this.logger.log("Game registered in Redis with heartbeat (15s TTL)");
+        this.logger.log(
+            `Game registered in Redis with heartbeat (15s TTL): ${this.gameId}`,
+        );
     }
 
     async onApplicationShutdown() {
         if (this.heartbeatInterval) {
             clearInterval(this.heartbeatInterval);
         }
-        await this._redisService.getClient().del(`games:active:math`);
-        this.logger.log("Game deregistered from Redis");
+        await this._redisService.getClient().del(`games:active:${this.gameId}`);
+        this.logger.log(`Game deregistered from Redis: ${this.gameId}`);
     }
 }

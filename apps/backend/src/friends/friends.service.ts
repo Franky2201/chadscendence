@@ -1,18 +1,20 @@
 import {
     Injectable,
-    NotFoundException,
     BadRequestException,
-    Inject,
+    NotFoundException,
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import {
-    Friendship,
-    FriendshipStatus,
-} from "../common/entities/friendship.entity";
-import { User } from "../common/entities/user.entity";
+import { Friendship } from "./friendship.entity";
+import { User } from "../users/user.entity";
 import { PresenceService } from "../presence/presence.service";
-import { Block } from "../common/entities/block.entity";
+import {
+    Friend,
+    FriendRequest,
+    SentRequest,
+    FriendshipStatus,
+    MessageResponse,
+} from "@chad/types";
 
 @Injectable()
 export class FriendsService {
@@ -21,13 +23,10 @@ export class FriendsService {
         private readonly friendshipRepository: Repository<Friendship>,
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
-        @Inject()
         private readonly presenceService: PresenceService,
-        @InjectRepository(Block)
-        private readonly blockRepository: Repository<Block>,
     ) {}
 
-    async getFriends(userId: string) {
+    async getFriends(userId: string): Promise<Friend[]> {
         const friendships = await this.friendshipRepository.find({
             where: [
                 {
@@ -57,7 +56,7 @@ export class FriendsService {
         });
     }
 
-    async getPendingRequests(userId: string) {
+    async getPendingRequests(userId: string): Promise<FriendRequest[]> {
         const requests = await this.friendshipRepository.find({
             where: {
                 addressee: { id: userId },
@@ -74,7 +73,7 @@ export class FriendsService {
         }));
     }
 
-    async getSentRequests(userId: string) {
+    async getSentRequests(userId: string): Promise<SentRequest[]> {
         const requests = await this.friendshipRepository.find({
             where: {
                 requester: { id: userId },
@@ -91,7 +90,10 @@ export class FriendsService {
         }));
     }
 
-    async sendFriendRequest(requesterId: string, addresseeId: string) {
+    async sendFriendRequest(
+        requesterId: string,
+        addresseeId: string,
+    ): Promise<MessageResponse> {
         if (requesterId === addresseeId) {
             throw new BadRequestException(
                 "You cannot send a friend request to yourself",
@@ -124,19 +126,6 @@ export class FriendsService {
             );
         }
 
-        const existingBlock = await this.blockRepository.findOne({
-            where: [
-                { blocker: { id: requesterId }, blocked: { id: addresseeId } },
-                { blocker: { id: addresseeId }, blocked: { id: requesterId } },
-            ],
-        });
-
-        if (existingBlock) {
-            throw new BadRequestException(
-                "Vous ne pouvez pas interagir avec cet utilisateur.",
-            );
-        }
-
         const friendship = this.friendshipRepository.create({
             requester: { id: requesterId },
             addressee: { id: addresseeId },
@@ -147,40 +136,21 @@ export class FriendsService {
         return { message: "Friend request sent" };
     }
 
-    async acceptFriendRequest(userId: string, friendshipId: string) {
+    async acceptFriendRequest(
+        userId: string,
+        friendshipId: string,
+    ): Promise<MessageResponse> {
         const friendship = await this.friendshipRepository.findOne({
             where: {
                 id: friendshipId,
                 addressee: { id: userId },
                 status: FriendshipStatus.PENDING,
             },
-            relations: {
-                requester: true,
-            },
+            relations: { requester: true },
         });
 
         if (!friendship) {
             throw new NotFoundException("Friend request not found");
-        }
-
-        const existingBlock = await this.blockRepository.findOne({
-            where: [
-                {
-                    blocker: { id: userId },
-                    blocked: { id: friendship.requester.id },
-                },
-                {
-                    blocker: { id: friendship.requester.id },
-                    blocked: { id: userId },
-                },
-            ],
-        });
-
-        if (existingBlock) {
-            await this.friendshipRepository.remove(friendship);
-            throw new BadRequestException(
-                "Action impossible suite à un blocage.",
-            );
         }
 
         friendship.status = FriendshipStatus.ACCEPTED;
@@ -189,7 +159,10 @@ export class FriendsService {
         return { message: "Friend request accepted" };
     }
 
-    async removeFriend(userId: string, friendshipId: string) {
+    async removeFriend(
+        userId: string,
+        friendshipId: string,
+    ): Promise<MessageResponse> {
         const friendship = await this.friendshipRepository.findOne({
             where: [
                 { id: friendshipId, requester: { id: userId } },
