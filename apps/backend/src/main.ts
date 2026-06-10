@@ -38,8 +38,11 @@ async function bootstrap() {
         }),
     );
 
+    const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+    const allowedOrigins = frontendUrl.split(",").map((url) => url.trim());
+
     app.enableCors({
-        origin: process.env.FRONTEND_URL || "http://localhost:5173",
+        origin: allowedOrigins,
         credentials: true,
         methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
         allowedHeaders: "Content-Type, Accept, Authorization",

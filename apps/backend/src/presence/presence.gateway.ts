@@ -16,7 +16,10 @@ import type { JwtPayload } from "@chad/types";
         origin: (origin, callback) => {
             const frontendUrl =
                 process.env.FRONTEND_URL || "http://localhost:5173";
-            if (!origin || origin === frontendUrl) {
+            const allowedOrigins = frontendUrl
+                .split(",")
+                .map((url) => url.trim());
+            if (!origin || allowedOrigins.includes(origin)) {
                 callback(null, true);
             } else {
                 callback(null, false);
