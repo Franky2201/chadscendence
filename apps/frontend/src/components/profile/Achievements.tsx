@@ -1,6 +1,7 @@
 import { useTheme } from "../../contexts/ThemeContext";
 import { Card, Badge, ProgressBar } from "../ui";
 import { getItemColorStyle, getItemMixedColorStyle } from "../ui/unified";
+import achievementsData from "./achievements.json";
 
 type UserStats = {
     gamesPlayed: number;
@@ -8,18 +9,14 @@ type UserStats = {
     peakRating: number;
     daysPlayed: number;
     playTime: number;
-};
-
-type Tier = {
-    label: number;
-    target: number;
+    numberOfFriends: number;
 };
 
 type Achievement = {
     title: string;
     description: string;
-    tiers: Tier[];
-    value: (stats: UserStats) => number;
+    stat: keyof UserStats;
+    tiers: number[];
 };
 
 type ProgressResult = {
@@ -29,14 +26,14 @@ type ProgressResult = {
     tierIndex: number;
 };
 
-function computeTierProgress(value: number, tiers: Tier[]): ProgressResult {
+function computeTierProgress(value: number, tiers: number[]): ProgressResult {
     let previous = 0;
 
     for (let i = 0; i < tiers.length; i++) {
         const tier = tiers[i];
-        if (value < tier.target) {
+        if (value < tier) {
             const current = value - previous;
-            const target = tier.target - previous;
+            const target = tier - previous;
             return {
                 current,
                 target,
@@ -44,7 +41,7 @@ function computeTierProgress(value: number, tiers: Tier[]): ProgressResult {
                 tierIndex: i,
             };
         }
-        previous = tier.target;
+        previous = tier;
     }
     return {
         current: value,
@@ -54,89 +51,31 @@ function computeTierProgress(value: number, tiers: Tier[]): ProgressResult {
     };
 }
 
-const achievements: Achievement[] = [
-    {
-        title: "Player",
-        description: "Play more games.",
-        value: (s) => s.gamesPlayed,
-        tiers: [
-            { label: 1, target: 1 },
-            { label: 2, target: 10 },
-            { label: 3, target: 100 },
-            { label: 4, target: 1000 },
-        ],
-    },
-    {
-        title: "Perfect Answer",
-        description: "Hit perfect answers.",
-        value: (s) => s.perfectAnswers,
-        tiers: [
-            { label: 1, target: 1 },
-            { label: 2, target: 10 },
-            { label: 3, target: 100 },
-        ],
-    },
-    {
-        title: "Competitive player",
-        description: "Grind the ladder.",
-        value: (s) => s.peakRating,
-        tiers: [
-            { label: 1, target: 1 },
-            { label: 2, target: 200 },
-            { label: 3, target: 1000 },
-            { label: 4, target: 2000 },
-            { label: 5, target: 3000 },
-        ],
-    },
-    {
-        title: "No Time",
-        description: "Total playtime.",
-        value: (s) => s.playTime,
-        tiers: [
-            { label: 1, target: 10 },
-            { label: 2, target: 50 },
-            { label: 3, target: 100 },
-        ],
-    },
-    {
-        title: "Recurring player",
-        description: "Play on different days.",
-        value: (s) => s.daysPlayed,
-        tiers: [
-            { label: 1, target: 1 },
-            { label: 2, target: 7 },
-            { label: 3, target: 14 },
-            { label: 4, target: 30 },
-            { label: 5, target: 91 },
-            { label: 6, target: 182 },
-            { label: 7, target: 365 },
-        ],
-    },
-];
-
 export function Achievements() {
     const { theme } = useTheme();
+    const achievements = achievementsData as Achievement[];
+
     const s: UserStats = {
         gamesPlayed: 21,
         perfectAnswers: 23,
         peakRating: 4335.2,
-        daysPlayed: 1,
-        playTime: 34,
+        daysPlayed: 101,
+        playTime: 1,
+        numberOfFriends: 0,
     };
+
     return (
         <Card title="Achievements">
             <div className="flex flex-wrap gap-2 justify-center">
                 {achievements.map((a) => {
-                    const raw = a.value(s);
+                    const raw = s[a.stat];
                     const progress = computeTierProgress(raw, a.tiers);
                     const completed = progress.completed;
-
-                    const currentTier = a.tiers[progress.tierIndex]?.label;
-
                     return (
                         <Badge
                             key={a.title}
                             className="w-78"
+                            contentClassName="h-full flex flex-col justify-between"
                             freq="5"
                             color={completed ? theme : "white"}
                             type={completed ? "translation" : "default"}
@@ -155,20 +94,22 @@ export function Achievements() {
                                             ),
                                         }}
                                     >
-                                        Tier {currentTier} / {a.tiers.length}
+                                        Tier {progress.tierIndex} /{" "}
+                                        {a.tiers.length}
                                     </div>
                                 )}
-                                <span className="select-none text-lg font-mona-sans-title break-words pr-10">
+                                <span className="select-none text-md sm:text-lg font-mona-sans-title break-words pr-10">
                                     {a.title}
                                 </span>
 
-                                <span className="select-none font-mona-sans-light text-sm">
+                                <span className="select-none font-mona-sans-light text-xs sm:text-sm">
                                     {a.description}
                                 </span>
-
+                            </div>
+                            <div className="my-1 w-full text-center">
                                 {!completed && (
                                     <ProgressBar
-                                        className="h-4 w-full my-1"
+                                        barClassName="h-5 w-full"
                                         progress={progress.current}
                                         objective={progress.target}
                                         color={theme}

@@ -3,6 +3,7 @@ import { getItemMixedColorStyle, type ItemColor } from "./unified";
 import { getItemColorStyle } from "./unified";
 
 type BadgeProps = HTMLAttributes<HTMLDivElement> & {
+    barClassName?: string;
     color?: ItemColor;
     bg?: ItemColor;
     objective?: number;
@@ -12,16 +13,20 @@ type BadgeProps = HTMLAttributes<HTMLDivElement> & {
 export function ProgressBar({
     children,
     className = "",
+    barClassName = "",
     color = "grey",
     bg = color,
     objective = 100,
     progress = 0,
     ...props
 }: BadgeProps) {
-    const commonClasses = `${className} rounded-full bg-[var(--ui-color)]`;
+    const commonClasses = `${barClassName} rounded-full bg-[var(--ui-color)]`;
     const ratio = ((progress / objective) * 100).toPrecision(3);
     return (
-        <div className={`relative rounded-full overflow-hidden`} {...props}>
+        <div
+            className={`${className} relative rounded-full overflow-hidden`}
+            {...props}
+        >
             <div
                 className={`${commonClasses} w-full`}
                 style={{ ...getItemMixedColorStyle(bg, "--ui-color", 60) }}

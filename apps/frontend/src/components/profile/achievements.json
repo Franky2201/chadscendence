@@ -1,0 +1,38 @@
+[
+    {
+        "title": "Player",
+        "description": "Play more games.",
+        "stat": "gamesPlayed",
+        "tiers": [1, 10, 100, 1000]
+    },
+    {
+        "title": "Perfect Answer",
+        "description": "Hit perfect answers.",
+        "stat": "perfectAnswers",
+        "tiers": [1, 10, 100]
+    },
+    {
+        "title": "Competitive player",
+        "description": "Grind the ladder.",
+        "stat": "peakRating",
+        "tiers": [1, 200, 1000, 2000, 3000]
+    },
+    {
+        "title": "No Time",
+        "description": "Total playtime.",
+        "stat": "playTime",
+        "tiers": [10, 50, 100, 1000]
+    },
+    {
+        "title": "Recurring player",
+        "description": "Play on different days.",
+        "stat": "daysPlayed",
+        "tiers": [1, 7, 14, 30, 91, 182, 365]
+    },
+	{
+		"title": "The network",
+		"description": "Add friends",
+		"stat": "numberOfFriends",
+		"tiers": [1, 5, 10, 20]
+	}
+]
