@@ -35,11 +35,12 @@ check:
 	@mkdir -p $(BACKEND_UPLOADS_PATH)
 	@if command -v npm > /dev/null 2>&1; then \
 		printf "$(GREEN)Syncing local dependencies...$(NO_COLOR)\n"; \
-		npm install --quiet --no-fund --no-audit; \
-		printf "$(GREEN)Building shared types library...$(NO_COLOR)\n"; \
-		npm run build -w @chad/types --quiet; \
-		printf "$(GREEN)Proactively fixing linting errors (host-side)...$(NO_COLOR)\n"; \
-		npm run lint --workspaces --quiet || true; \
+		(npm install --quiet --no-fund --no-audit && \
+		 printf "$(GREEN)Building shared types library...$(NO_COLOR)\n" && \
+		 npm run build -w @chad/types --quiet && \
+		 printf "$(GREEN)Proactively fixing linting errors (host-side)...$(NO_COLOR)\n" && \
+		 npm run lint --workspaces --quiet) || \
+		 printf "$(RED)Warning: Host-side sync failed. IDE/Linting might be inaccurate but Docker services will still start.$(NO_COLOR)\n"; \
 	fi
 
 build: check
