@@ -181,39 +181,39 @@ At first we used a Slack group, which felt not versatile enough to organize ours
 <!-- TODO : Which member worked on which feature -->
 
 ## Modules
+| Module | Status | Points | Contributors |
+| - | - | - | - |
+| Use a framework for both the frontend and backend.                               | Finished | Major | [ade-woel](#ade-woel), [gde-win](#gde-win), [juhanse](#juhanse), [mmichele](#mmichele), [sdemey](#sdemey) |
+| Implement real-time features ...                                                 | Ongoing  | Major |  |
+| Allow users to interact with other users.                                        | Finished | Major |  |
+| Public API                                                                       | Ongoing  | Major |  |
+| Use an ORM for the database.                                                     | Finished | Minor |  |
+| Custom-made design system with reusable component ...                            | Finished | Minor |  |
+| Advanced search ...                                                              | ?        | Minor |  |
+| WCAG 2.1 AA                                                                      | ?        | Major |  |
+| Support multiples languages (at least 3)                                         | Ongoing  | Minor |  |
+| Support for additional browser                                                   | Ongoing  | Minor |  |
+| Standard user management and authentication                                      | Finished | Major |  |
+| Game statistics and match history                                                | Ongoing  | Minor |  |
+| Remote authentication with OAuth 2.0                                             | Finished | Minor |  |
+| Advanced permissions system                                                      | Ongoing  | Major |  |
+| An organization system                                                           | ?        | Major |  |
+| User activity analytics and insights dashboard                                   | ?        | Minor |  |
+| Implement a complete web-based game where users can play against each other      | Ongoing  | Major |  |
+| Remote players                                                                   | Ongoing  | Major |  |
+| Multiplayer game (more than two players)                                         | Ongoing  | Major |  |
+| Add another game with user history and matchmaking                               | ?        | Major |  |
+| Advanced chat features                                                           | Ongoing  | Minor |  |
+| Tournament system                                                                | ?        | Minor |  |
+| Game customization                                                               | Ongoing  | Minor |  |
+| A gamification system to reward users for their actions                          | Ongoing  | Minor |  |
+| Implement spectator mode for games                                               | ?        | Minor |  |
+| Backend as microservices                                                         | ?        | Major |  |
+| Advanced analytics dashboard with data visualization                             | ?        | Major |  |
+|||	
+| **TOTAL** | 27pts | 9 / 14 (*19) |
 
-| Module                                                                      | Status   | Points        | Contributors                                                                                              |
-| --------------------------------------------------------------------------- | -------- | ------------- | --------------------------------------------------------------------------------------------------------- |
-| Use a framework for both the frontend and backend.                          | Finished | Major         | [ade-woel](#ade-woel), [gde-win](#gde-win), [juhanse](#juhanse), [mmichele](#mmichele), [sdemey](#sdemey) |
-| Implement real-time features ...                                            | Ongoing  | Major         |                                                                                                           |
-| Allow users to interact with other users.                                   | Ongoing  | Major         |                                                                                                           |
-| Public API                                                                  | Ongoing  | Major         |                                                                                                           |
-| Use an ORM for the database.                                                | Finished | Minor         |                                                                                                           |
-| Custom-made design system with reusable component ...                       | Finished | Minor         |                                                                                                           |
-| Advanced search ...                                                         | ?        | Minor         |                                                                                                           |
-| WCAG 2.1 AA                                                                 | ?        | Major         |                                                                                                           |
-| Support multiples languages (at least 3)                                    | Ongoing  | Minor         |                                                                                                           |
-| Support for additional browser                                              | Ongoing  | Minor         |                                                                                                           |
-| Standard user management and authentication                                 | Finished | Major         |                                                                                                           |
-| Game statistics and match history                                           | Ongoing  | Minor         |                                                                                                           |
-| Remote authentication with OAuth 2.0                                        | Finished | Minor         |                                                                                                           |
-| Advanced permissions system                                                 | ?        | Major         |                                                                                                           |
-| An organization system                                                      | ?        | Major         |                                                                                                           |
-| User activity analytics and insights dashboard                              | ?        | Minor         |                                                                                                           |
-| Implement a complete web-based game where users can play against each other | Ongoing  | Major         |                                                                                                           |
-| Remote players                                                              | Ongoing  | Major         |                                                                                                           |
-| Multiplayer game (more than two players)                                    | Ongoing  | Major         |                                                                                                           |
-| Add another game with user history and matchmaking                          | ?        | Major         |                                                                                                           |
-| Advanced chat features                                                      | Ongoing  | Minor         |                                                                                                           |
-| Tournament system                                                           | ?        | Minor         |                                                                                                           |
-| Game customization                                                          | Ongoing  | Minor         |                                                                                                           |
-| A gamification system to reward users for their actions                     | Ongoing  | Minor         |                                                                                                           |
-| Implement spectator mode for games                                          | ?        | Minor         |                                                                                                           |
-| Backend as microservices                                                    | ?        | Major         |                                                                                                           |
-| Advanced analytics dashboard with data visualization                        | ?        | Major         |                                                                                                           |
-|                                                                             |          |
-| **TOTAL**                                                                   | 25pts    | 7 / 14 (\*19) |
-
+<!-- TODO : Update /about page with the modules -->
 <!-- TODO : List of all chosen modules -->
 <!-- TODO : Point calculation -->
 <!-- TODO : Module choice justification -->
