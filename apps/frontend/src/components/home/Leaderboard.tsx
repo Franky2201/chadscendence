@@ -69,10 +69,10 @@ export function Leaderboard({
     return (
         <Card
             className={className}
-            contentClassName="justify-start"
+            contentClassName="h-full flex flex-col justify-between"
             title={t("home.leaderboard")}
         >
-            <div className="flex flex-col w-full border-none">
+            <div className="flex flex-col">
                 {isLoading ? (
                     <p className="text-lg">Loading ...</p>
                 ) : (
@@ -110,10 +110,11 @@ export function Leaderboard({
                         </div>
                     ))
                 )}
-
+            </div>
+            <div className="mt-4 w-full text-center">
                 <Button
                     color={theme}
-                    className="w-full mt-6"
+                    className="w-full"
                     onClick={() => navigate("/users")}
                 >
                     {t("users.title")}

@@ -21,11 +21,11 @@ export function Profile({ className = "" }: { className?: string }) {
     return (
         <Card
             className={className}
-            contentClassName="grid content-between"
+            contentClassName="flex flex-col justify-center items-center gap-3"
             title="Profile"
             href="/profile"
         >
-            <div className="flex flex-wrap mb-4">
+            <div className="flex flex-wrap mb-2 w-full">
                 <Link to="/profile">
                     <img
                         className="rounded-xl w-20 h-20 border"
@@ -43,20 +43,16 @@ export function Profile({ className = "" }: { className?: string }) {
                     {user?.rank.icon} {user?.rank.name} - {user?.rating}
                 </div>
             </div>
-            <div className="flex flex-col gap-3">
-                <Button color="green" onClick={openPanel} size="medium">
+            <div className="flex flex-col gap-3 w-full">
+                <Button color="green" onClick={openPanel}>
                     {t("home.profile.friends")}
                 </Button>
                 {hasAdminAccess && (
-                    <Button
-                        color="blue"
-                        onClick={() => navigate("/admin")}
-                        size="medium"
-                    >
+                    <Button color="blue" onClick={() => navigate("/admin")}>
                         {t("home.profile.admin")}
                     </Button>
                 )}
-                <Button color="red" onClick={handleLogout} size="medium">
+                <Button color="red" onClick={handleLogout}>
                     {t("home.profile.logout")}
                 </Button>
             </div>
