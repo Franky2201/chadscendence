@@ -5,6 +5,7 @@ import { getItemColorStyle } from "./unified";
 export type BadgeType = "default" | "translation";
 
 type BadgeProps = HTMLAttributes<HTMLDivElement> & {
+    contentClassName?: string;
     text?: string;
     color?: ItemColor;
     color2?: ItemColor;
@@ -19,6 +20,7 @@ type BadgeProps = HTMLAttributes<HTMLDivElement> & {
 export function Badge({
     children,
     className = "",
+    contentClassName = "",
     color = "grey",
     color2 = "white",
     borderColor = null,
@@ -74,10 +76,7 @@ export function Badge({
                     }}
                 />
             )}
-
-            <div className={`${type !== "default" ? "p-0.5" : ""} relative`}>
-                {children}
-            </div>
+            <div className={`relative ${contentClassName}`}>{children}</div>
         </div>
     );
 }
