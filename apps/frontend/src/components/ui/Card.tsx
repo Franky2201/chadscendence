@@ -48,8 +48,9 @@ export function Card({
 		${className}`,
     ];
     const clickable = props.href || props.onClick;
-    const commonLinkClass = `shrink-0 whitespace-nowrap self-start font-semibold
-		${clickable ? "hover:underline hover:cursor-pointer" : ""} text-[var(--ui-color)]`;
+    const commonLinkClass = `shrink-0 whitespace-nowrap font-semibold
+		${clickable ? "hover:underline hover:cursor-pointer" : ""} 
+		text-[var(--ui-color)] self-center`;
     return (
         <div
             className={`flex flex-col ${classes}`}
@@ -86,7 +87,7 @@ export function Card({
                             ))}
                     </div>
                     <hr
-                        className={`w-full mt-2 mb-4 text-[var(--ui-color)]/80`}
+                        className={`w-full mt-2 mb-4 text-[var(--ui-color)]/30`}
                         style={{ ...getItemColorStyle(color) }}
                     />
                 </>
