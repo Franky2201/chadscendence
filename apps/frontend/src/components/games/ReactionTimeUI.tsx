@@ -10,6 +10,34 @@ type Phase = "waiting" | "ready" | "clicked";
 
 export default function ReactionTimeUI() {
     const [score, setScore] = useState(0);
+    const [started, setStarted] = useState(false);
+
+    if (!started) {
+        return (
+            <div className="flex flex-col items-center justify-center p-6 bg-slate-800/50 rounded-3xl border border-white/10 backdrop-blur-sm min-h-75 relative">
+                <div className="w-full max-w-sm flex flex-col items-center gap-8 text-center">
+                    <div className="flex flex-col gap-2">
+                        <div className="text-2xl font-black text-white">Reaction Time</div>
+                        <div className="text-white/40 text-sm font-mono">
+                            Clique dès que le cercle devient vert.<br />
+                            5 rounds — bonne chance !
+                        </div>
+                    </div>
+
+                    <button
+                        onClick={() => setStarted(true)}
+                        className="w-48 h-48 rounded-full bg-slate-600 border-4 border-slate-500 text-white font-black text-xl transition-all hover:scale-105 hover:bg-slate-500 shadow-2xl select-none"
+                    >
+                        Je suis prêt !
+                    </button>
+
+                    <p className="text-white/20 text-xs font-mono">
+                        Clique pour démarrer
+                    </p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <GameContainer<
@@ -136,7 +164,7 @@ function ReactionTimeGame({
                         {lastResult.rating ??
                             (lastResult.success
                                 ? "Bien joué !"
-                                : "Ça flop ...")}
+                                : "Oups ...")}
                     </div>
                     <div className="text-white/60 font-mono text-sm">
                         {lastResult.message}
