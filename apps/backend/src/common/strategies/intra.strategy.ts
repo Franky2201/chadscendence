@@ -22,9 +22,15 @@ export class IntraStrategy extends PassportStrategy(Strategy as any, "42") {
         const clientSecret = configService.get<string>("INTRA_CLIENT_SECRET");
         const callbackURL = configService.get<string>("INTRA_CALLBACK_URL");
 
-        if (!clientID || !clientSecret || !callbackURL) {
+        if (
+            !clientID ||
+            !clientSecret ||
+            !callbackURL ||
+            clientID === "your_intra_client_id" ||
+            clientSecret === "your_intra_client_secret"
+        ) {
             throw new Error(
-                "Missing Intra OAuth configuration (ID, Secret, or Callback URL)",
+                "Intra OAuth is not configured. Please provide real credentials in the .env file.",
             );
         }
 

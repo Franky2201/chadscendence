@@ -11,9 +11,15 @@ export class GithubStrategy extends PassportStrategy(Strategy, "github") {
         const clientSecret = configService.get<string>("GITHUB_CLIENT_SECRET");
         const callbackURL = configService.get<string>("GITHUB_CALLBACK_URL");
 
-        if (!clientID || !clientSecret || !callbackURL) {
+        if (
+            !clientID ||
+            !clientSecret ||
+            !callbackURL ||
+            clientID === "your_github_client_id" ||
+            clientSecret === "your_github_client_secret"
+        ) {
             throw new Error(
-                "Missing GitHub OAuth configuration (ID, Secret, or Callback URL)",
+                "GitHub OAuth is not configured. Please provide real credentials in the .env file.",
             );
         }
 
