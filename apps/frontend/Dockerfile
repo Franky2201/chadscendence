@@ -48,5 +48,5 @@ COPY --from=build /app/apps/frontend/dist /usr/share/nginx/html
 COPY --from=build /etc/nginx/tls /etc/nginx/tls
 COPY apps/frontend/nginx/nginx.conf.template /etc/nginx/templates/default.conf.template
 
-EXPOSE 80 443
+EXPOSE 80 443 8080 8443
 CMD ["nginx", "-g", "daemon off;"]
