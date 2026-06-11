@@ -18,16 +18,20 @@ type IntraProfile = Profile & {
 @Injectable()
 export class IntraStrategy extends PassportStrategy(Strategy as any, "42") {
     constructor(private configService: ConfigService) {
+        const clientID = configService.get<string>("INTRA_CLIENT_ID");
+        const clientSecret = configService.get<string>("INTRA_CLIENT_SECRET");
+        const callbackURL = configService.get<string>("INTRA_CALLBACK_URL");
+
+        if (!clientID || !clientSecret || !callbackURL) {
+            throw new Error(
+                "Missing Intra OAuth configuration (ID, Secret, or Callback URL)",
+            );
+        }
+
         super({
-            clientID:
-                configService.get<string>("INTRA_CLIENT_ID") ||
-                "MISSING_CLIENT_ID",
-            clientSecret:
-                configService.get<string>("INTRA_CLIENT_SECRET") ||
-                "MISSING_CLIENT_SECRET",
-            callbackURL:
-                configService.get<string>("INTRA_CALLBACK_URL") ||
-                `${configService.get<string>("BACKEND_URL", "http://localhost:3000")}/auth/42/callback`,
+            clientID,
+            clientSecret,
+            callbackURL,
             scope: ["public"],
         });
     }
