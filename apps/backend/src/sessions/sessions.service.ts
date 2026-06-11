@@ -7,8 +7,9 @@ import { RoomsGateway } from "../rooms/rooms.gateway";
 import { GamesService } from "../games/games.service";
 import { GameAdapterRegistry } from "./engine/game-adapter.registry";
 import { ScoreAggregator } from "./engine/score-aggregator";
-import type { RoomSession, Room, Game, RoomSessionRound, RoomSessionPlayer } from "@chad/types";
+import type { RoomSession, Room, Game, RoomSessionRound } from "@chad/types";
 import { UsersService } from "src/users/users.service";
+import { RatingService } from "src/rating/rating.service";
 
 @Injectable()
 export class SessionsService {
@@ -24,7 +25,8 @@ export class SessionsService {
         private readonly roomsGateway: RoomsGateway,
         private readonly gamesService: GamesService,
         private readonly usersService: UsersService,
-    ) { }
+        private readonly ratingService: RatingService,
+    ) {}
 
     startGame(room: Room, selectedGames: Game[]): RoomSession {
         const normalizedCode = room.code;
@@ -232,7 +234,7 @@ export class SessionsService {
         return { success: true };
     }
 
-    finishGame(code: string) {
+    async finishGame(code: string) {
         const session = this.getSessionOrThrow(code);
 
         if (session.status !== "finished") {
@@ -249,16 +251,60 @@ export class SessionsService {
         }
 
         const isMultiplayer = session.players.length > 1;
-        const persistedPlayers: unknown[] = [];
+        // 👇 On importe le type User ou on utilise un type générique au lieu de any[]
+        let persistedPlayers: unknown[] = [];
 
-        /* if (isMultiplayer) {
-            persistedPlayers = await Promise.all(
-                session.players.map((player) =>
-                    this.usersService.applyScoreDelta(player.id, player.totalScore),
-                ),
+        if (isMultiplayer) {
+            const currentUsers = await Promise.all(
+                session.players.map((p) => this.usersService.findById(p.id)),
             );
-        } */
 
+            const ratingPlayersInput = session.players.map(
+                (sessionPlayer, index) => {
+                    const dbUser = currentUsers[index];
+
+                    // 🔒 FIX 1 : On gère le cas 'null' avec une valeur par défaut (ex: 1000 Elo)
+                    const currentRating = dbUser?.rating ?? 1000;
+
+                    return {
+                        id: sessionPlayer.id,
+                        username: sessionPlayer.username,
+                        rating: currentRating,
+                        score: sessionPlayer.totalScore,
+                    };
+                },
+            );
+
+            const totalRounds = session.games.length;
+
+            const ratingResults = this.ratingService.calculateRatings(
+                ratingPlayersInput,
+                totalRounds,
+            );
+
+            persistedPlayers = await Promise.all(
+                ratingResults.map((result, index) => {
+                    const playerId = ratingPlayersInput[index].id;
+                    return this.usersService.updateRating(
+                        playerId,
+                        result.newRating,
+                    );
+                }),
+            );
+
+            // 🔒 FIX 2 : On supprime les 'any' en utilisant une intersection de types locale
+            session.players.forEach((p, index) => {
+                // On indique à TypeScript qu'on "étend" l'objet temporairement
+                const enrichedPlayer = p as typeof p & {
+                    ratingDelta: number;
+                    newRating: number;
+                };
+                enrichedPlayer.ratingDelta = ratingResults[index].delta;
+                enrichedPlayer.newRating = ratingResults[index].newRating;
+            });
+        }
+
+        // On marque la partie comme comptabilisée pour éviter les requêtes multiples
         session.scorePersistedAt = new Date().toISOString();
 
         return {
