@@ -30,11 +30,6 @@ export class RoomsController {
         );
     }
 
-    @Get(":code/session")
-    getSession(@Param("code") code: string) {
-        return this.roomsService.getSession(code);
-    }
-
     @Get(":code")
     getRoom(@Param("code") code: string) {
         return this.roomsService.getRoom(code);
@@ -61,5 +56,10 @@ export class RoomsController {
     @Delete(":code/leave")
     leaveRoom(@GetUser() user: JwtPayload, @Param("code") code: string) {
         return this.roomsService.leaveRoom(code, user.sub);
+    }
+
+    @Post(":code/start")
+    startGame(@GetUser() user: JwtPayload, @Param("code") code: string) {
+        return this.roomsService.startGame(code, user.sub);
     }
 }

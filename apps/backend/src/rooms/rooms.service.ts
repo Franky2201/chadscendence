@@ -1,19 +1,21 @@
 import {
+    BadRequestException,
     ForbiddenException,
     Injectable,
     NotFoundException,
 } from "@nestjs/common";
-import type { JwtPayload } from "@chad/types";
-import type { RoomSession, Room } from "@chad/types";
-import { RoomsGateway } from "./rooms.gateway";
+import type { Game, JwtPayload, Room } from "@chad/types";
+import { SessionsService } from "src/sessions/sessions.service";
+import { GamesService } from "src/games/games.service";
 
 @Injectable()
 export class RoomsService {
     private readonly rooms = new Map<string, Room>();
-    private readonly sessions = new Map<string, RoomSession>();
-    private readonly sessionTimers = new Map<string, NodeJS.Timeout>();
 
-    constructor(private readonly roomsGateway: RoomsGateway) { }
+    constructor(
+        private readonly sessionsService: SessionsService,
+        private readonly gamesService: GamesService,
+    ) {}
 
     createRoom(user: JwtPayload, selectedGames: string[] = []): Room {
         const code = this.generateUniqueCode();
@@ -66,7 +68,11 @@ export class RoomsService {
         return this.cloneRoom(room);
     }
 
-    updateSelectedGames(code: string, userId: string, selectedGames: string[]): Room {
+    updateSelectedGames(
+        code: string,
+        userId: string,
+        selectedGames: string[],
+    ): Room {
         const room = this.getRoomOrThrow(code);
 
         if (room.hostId !== userId) {
@@ -110,6 +116,34 @@ export class RoomsService {
         return { message: "Room left" };
     }
 
+    async startGame(code: string, userId: string) {
+        const room = this.getRoomOrThrow(code);
+
+        if (room.hostId !== userId) {
+            throw new ForbiddenException("Seul l'hôte peut lancer une partie.");
+        }
+
+        if (room.selectedGames.length === 0) {
+            throw new BadRequestException(
+                "Ajoutez au moins un mini-jeu avant de démarrer.",
+            );
+        }
+
+        const activeGames = await this.gamesService.getActiveGames();
+        const gameCatalog = new Map(activeGames.map((game) => [game.id, game]));
+        const selectedGames = room.selectedGames
+            .map((gameId) => gameCatalog.get(gameId))
+            .filter((game): game is Game => Boolean(game));
+
+        if (selectedGames.length === 0) {
+            throw new BadRequestException(
+                "Aucun mini-jeu actif ne correspond à la sélection.",
+            );
+        }
+
+        return this.sessionsService.startGame(room, selectedGames);
+    }
+
     private getRoomOrThrow(code: string) {
         const normalizedCode = this.normalizeCode(code);
         const room = this.rooms.get(normalizedCode);
@@ -146,37 +180,6 @@ export class RoomsService {
             ...room,
             selectedGames: [...room.selectedGames],
             players: room.players.map((player) => ({ ...player })),
-        };
-    }
-
-    getSession(code: string): RoomSession {
-        return this.cloneSession(this.getSessionOrThrow(code));
-    }
-
-    private getSessionOrThrow(code: string) {
-        const normalizedCode = this.normalizeCode(code);
-        const session = this.sessions.get(normalizedCode);
-
-        if (!session) {
-            throw new NotFoundException("Aucune partie active pour cette salle.");
-        }
-
-        return session;
-    }
-
-    private cloneSession(session: RoomSession): RoomSession {
-        return {
-            ...session,
-            games: [...session.games],
-            rounds: session.rounds.map((round) => ({
-                ...round,
-                prompt: round.prompt ? { ...round.prompt } : null,
-                scores: { ...round.scores },
-            })),
-            players: session.players.map((player) => ({
-                ...player,
-                scoresByRound: [...player.scoresByRound],
-            })),
         };
     }
 }
