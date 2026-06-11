@@ -10,6 +10,7 @@ import {
     type RoomPlayer,
 } from "../services/rooms";
 import { getGames, type Game } from "../services/games";
+import { startSession } from "../services/sessions";
 import { getAllUsers } from "../services/users";
 import type { UserListItem } from "@chad/types";
 
@@ -89,8 +90,8 @@ export function useRoom(code: string | undefined) {
         const nextSelectedGames = selectedGames.includes(id)
             ? selectedGames.filter((gameId) => gameId !== id)
             : selectedGames.length >= maxRounds
-              ? selectedGames
-              : [...selectedGames, id];
+                ? selectedGames
+                : [...selectedGames, id];
 
         setIsSubmitting(true);
         setError(null);
@@ -129,9 +130,18 @@ export function useRoom(code: string | undefined) {
         }
     };
 
-    const launch = () => {
-        // TODO
-        console.log("Launching game");
+    const launch = async () => {
+        if (!room || room.hostId !== user?.id) return;
+        setIsSubmitting(true);
+        setError(null);
+
+        try {
+            await startSession(room.code);
+        } catch {
+            setError(t("room.error.start"));
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const isHost = room?.hostId === user?.id;
@@ -141,7 +151,6 @@ export function useRoom(code: string | undefined) {
         (player) => {
             const userIndex = users.findIndex((u) => u.id === player.id);
             const userData = userIndex !== -1 ? users[userIndex] : null;
-            console.log(userData);
             return {
                 ...player,
                 avatarUrl: userData?.avatarUrl,
