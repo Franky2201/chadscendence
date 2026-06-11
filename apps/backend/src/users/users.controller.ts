@@ -35,7 +35,7 @@ import type {
 
 const avatarUploadOptions = {
     storage: diskStorage({
-        destination: "./uploads",
+        destination: "apps/backend/uploads",
         filename: (
             _req: Express.Request,
             file: Express.Multer.File,

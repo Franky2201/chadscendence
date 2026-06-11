@@ -9,6 +9,7 @@ import {
     ForbiddenException,
 } from "@nestjs/common";
 import { AuthService } from "./auth.service";
+import { ConfigService } from "@nestjs/config";
 import { GetUser } from "../common/decorators/get-user.decorator";
 import type { OAuthProfile, AuthResponse } from "@chad/types";
 import { CreateUserDto, LoginUserDto } from "./auth.dto";
@@ -17,7 +18,10 @@ import { GithubAuthGuard } from "../common/guards/github.guard";
 
 @Controller("auth")
 export class AuthController {
-    constructor(private authService: AuthService) {}
+    constructor(
+        private authService: AuthService,
+        private configService: ConfigService,
+    ) {}
 
     @Post("register")
     async register(
@@ -30,6 +34,7 @@ export class AuthController {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "lax",
+            maxAge: 24 * 60 * 60 * 1000, // 1 day
         });
 
         return { success: true };
@@ -46,6 +51,7 @@ export class AuthController {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "lax",
+            maxAge: 24 * 60 * 60 * 1000, // 1 day
         });
 
         return { success: true };
@@ -61,7 +67,9 @@ export class AuthController {
         @GetUser() user: OAuthProfile,
         @Res() res: Response,
     ) {
-        const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+        const frontendUrl =
+            this.configService.get<string>("FRONTEND_URL") ||
+            `https://${this.configService.get<string>("DOMAIN_NAME") || "localhost"}`;
         try {
             const token = await this.authService.registerOAuth({
                 ...user,
@@ -72,6 +80,7 @@ export class AuthController {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
                 sameSite: "lax",
+                maxAge: 24 * 60 * 60 * 1000, // 1 day
             });
 
             return res.redirect(frontendUrl);
@@ -89,7 +98,9 @@ export class AuthController {
     @Get("github/callback")
     @UseGuards(GithubAuthGuard)
     async githubCallback(@GetUser() user: OAuthProfile, @Res() res: Response) {
-        const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+        const frontendUrl =
+            this.configService.get<string>("FRONTEND_URL") ||
+            `https://${this.configService.get<string>("DOMAIN_NAME") || "localhost"}`;
         try {
             const token = await this.authService.registerOAuth({
                 ...user,
@@ -100,6 +111,7 @@ export class AuthController {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
                 sameSite: "lax",
+                maxAge: 24 * 60 * 60 * 1000, // 1 day
             });
 
             return res.redirect(frontendUrl);
