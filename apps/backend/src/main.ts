@@ -40,10 +40,10 @@ async function bootstrap() {
     );
 
     const configService = app.get(ConfigService);
-    const frontendUrl =
+    const frontendUrl: string =
         configService.get<string>("FRONTEND_URL") ||
         `https://${configService.get<string>("DOMAIN_NAME") || "localhost"}`;
-    const allowedOrigins = frontendUrl
+    const allowedOrigins: string[] = frontendUrl
         .split(",")
         .map((url: string) => url.trim());
 
