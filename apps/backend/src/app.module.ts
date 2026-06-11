@@ -12,6 +12,7 @@ import { PresenceModule } from "./presence/presence.module";
 import { MessagesModule } from "./messages/messages.module";
 import { RoomsModule } from "./rooms/rooms.module";
 import { RolesModule } from "./roles/roles.module";
+import { SessionsModule } from "./sessions/sessions.module";
 
 @Module({
     imports: [
@@ -40,6 +41,7 @@ import { RolesModule } from "./roles/roles.module";
         FriendsModule,
         MessagesModule,
         RoomsModule,
+        SessionsModule,
     ],
     controllers: [AppController],
     providers: [AppService],
