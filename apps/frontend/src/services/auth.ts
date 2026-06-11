@@ -1,7 +1,9 @@
 import api from "./api";
 import type { RegisterPayload, LoginPayload, AuthResponse } from "@chad/types";
 
-const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+const backendUrl = import.meta.env.PROD
+    ? "/api"
+    : import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
 
 export const register = async (
     data: RegisterPayload,

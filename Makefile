@@ -15,7 +15,8 @@ all: up
 
 help:
 	@printf "$(GREEN)Available targets:$(NO_COLOR)\n"
-	@printf "  all (default)  Start the project\n"
+	@printf "  all (default)  Start the project in development mode\n"
+	@printf "  prod           Start the project in production mode (Nginx, relative paths)\n"
 	@printf "  up             Start services (detached)\n"
 	@printf "  build          Build or rebuild images\n"
 	@printf "  down           Stop and remove containers\n"
@@ -46,9 +47,13 @@ check:
 build: check
 	@$(COMPOSE) build
 
+# Production target: Start services with BUILD_TARGET=final
+prod: export BUILD_TARGET=final
+prod: up
+
 # Start services in detached mode with hot-reloading (Bind Volumes)
 up: check
-	@printf "$(GREEN)Starting services in detached mode...$(NO_COLOR)\n"
+	@printf "$(GREEN)Starting services (Mode: $${BUILD_TARGET:-development})...$(NO_COLOR)\n"
 	@$(COMPOSE) up -d --remove-orphans --build
 	@printf "$(GREEN)Services started. Use 'make logs' to follow output or 'make down' to stop.$(NO_COLOR)\n"
 

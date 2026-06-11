@@ -7,16 +7,26 @@ import type { OAuthProfile } from "@chad/types";
 @Injectable()
 export class GithubStrategy extends PassportStrategy(Strategy, "github") {
     constructor(configService: ConfigService) {
+        const clientID = configService.get<string>("GITHUB_CLIENT_ID");
+        const clientSecret = configService.get<string>("GITHUB_CLIENT_SECRET");
+        const callbackURL = configService.get<string>("GITHUB_CALLBACK_URL");
+
+        if (
+            !clientID ||
+            !clientSecret ||
+            !callbackURL ||
+            clientID === "your_github_client_id" ||
+            clientSecret === "your_github_client_secret"
+        ) {
+            throw new Error(
+                "GitHub OAuth is not configured. Please provide real credentials in the .env file.",
+            );
+        }
+
         super({
-            clientID:
-                configService.get<string>("GITHUB_CLIENT_ID") ||
-                "MISSING_CLIENT_ID",
-            clientSecret:
-                configService.get<string>("GITHUB_CLIENT_SECRET") ||
-                "MISSING_CLIENT_SECRET",
-            callbackURL:
-                configService.get<string>("GITHUB_CALLBACK_URL") ||
-                `${configService.get<string>("BACKEND_URL", "http://localhost:3000")}/auth/github/callback`,
+            clientID,
+            clientSecret,
+            callbackURL,
             scope: ["user:email"],
         });
     }

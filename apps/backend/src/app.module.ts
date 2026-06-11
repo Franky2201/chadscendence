@@ -12,6 +12,7 @@ import { PresenceModule } from "./presence/presence.module";
 import { MessagesModule } from "./messages/messages.module";
 import { RoomsModule } from "./rooms/rooms.module";
 import { RolesModule } from "./roles/roles.module";
+import { RatingModule } from "./rating/rating.module";
 import { SessionsModule } from "./sessions/sessions.module";
 
 @Module({
@@ -41,9 +42,10 @@ import { SessionsModule } from "./sessions/sessions.module";
         FriendsModule,
         MessagesModule,
         RoomsModule,
+        RatingModule,
         SessionsModule,
     ],
     controllers: [AppController],
     providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
