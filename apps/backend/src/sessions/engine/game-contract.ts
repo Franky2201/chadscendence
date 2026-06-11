@@ -28,7 +28,8 @@ export class DefaultSessionGameAdapter implements SessionGameAdapter {
     }
 
     extractScore(result: unknown): number {
-        if (typeof result === "number" && Number.isFinite(result)) return Math.max(0, Math.trunc(result));
+        if (typeof result === "number" && Number.isFinite(result))
+            return Math.max(0, Math.trunc(result));
         return 0;
     }
 }

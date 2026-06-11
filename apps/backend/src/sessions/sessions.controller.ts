@@ -15,9 +15,7 @@ import type { JwtPayload } from "@chad/types";
 @Controller("sessions")
 @UseGuards(JwtAuthGuard)
 export class SessionsController {
-    constructor(
-        private readonly sessionsService: SessionsService,
-    ) { }
+    constructor(private readonly sessionsService: SessionsService) {}
 
     @Get(":code")
     getSession(@Param("code") code: string) {
@@ -31,7 +29,12 @@ export class SessionsController {
         @Param("roundIndex", ParseIntPipe) roundIndex: number,
         @Body() body: { answer: unknown },
     ) {
-        return this.sessionsService.submitRoundAnswer(code, user.sub, roundIndex, body.answer);
+        return this.sessionsService.submitRoundAnswer(
+            code,
+            user.sub,
+            roundIndex,
+            body.answer,
+        );
     }
 
     @Post(":code/rounds/close")

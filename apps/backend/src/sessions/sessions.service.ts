@@ -189,7 +189,9 @@ export class SessionsService {
                 "Vous ne pouvez soumettre que pour le round actuel.",
             );
 
-        const player = session.players.find((p: RoomSessionPlayer) => p.id === userId);
+        const player = session.players.find(
+            (p: { id: string }) => p.id === userId,
+        );
         if (!player)
             throw new ForbiddenException(
                 "Vous ne participez pas à cette partie.",
@@ -214,7 +216,9 @@ export class SessionsService {
         const score = adapter.extractScore(result);
         round.scores[userId] = score;
 
-        const hasAllAnswers = session.players.every((p: RoomSessionPlayer) => round.scores[p.id] !== undefined);
+        const hasAllAnswers = session.players.every(
+            (p: { id: string }) => round.scores[p.id] !== undefined,
+        );
         if (hasAllAnswers) {
             this.closeCurrentRoundByCode(session.roomCode);
         }

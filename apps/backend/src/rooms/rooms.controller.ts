@@ -17,7 +17,7 @@ import { CreateRoomDto, UpdateRoomGamesDto } from "./rooms.dto";
 @Controller("rooms")
 @UseGuards(JwtAuthGuard)
 export class RoomsController {
-    constructor(private readonly roomsService: RoomsService) { }
+    constructor(private readonly roomsService: RoomsService) {}
 
     @Post()
     createRoom(
