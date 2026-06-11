@@ -290,4 +290,11 @@ export class UsersService implements OnModuleInit {
             leaderboardRank: above + 1,
         };
     }
+
+    async updateRating(userId: string, newRating: number) {
+        await this.userRepository.update(userId, {
+            rating: Math.round(newRating),
+        });
+        return this.userRepository.findOneBy({ id: userId });
+    }
 }
