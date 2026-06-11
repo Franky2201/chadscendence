@@ -39,7 +39,7 @@ export function GameList({
                     <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-2">
                         {t("room.gameList.label")}
                     </p>
-                    <h2 className="text-2xl font-bold text-gray-900">
+                    <h2 className="text-2xl font-bold">
                         {t("room.gameList.title")}
                     </h2>
                 </div>
