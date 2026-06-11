@@ -32,7 +32,7 @@ export class AuthService {
         const frontendUrl =
             this.configService.get<string>("FRONTEND_URL") ||
             `https://${this.configService.get<string>("DOMAIN_NAME") || "localhost"}`;
-        this.defaultAvatar = `${frontendUrl}/public/avatar.jpg`;
+        this.defaultAvatar = `${frontendUrl}/avatar.jpg`;
     }
 
     async login({ authlogin }: { authlogin: LoginUserDto }) {

@@ -59,7 +59,7 @@ export class UsersService implements OnModuleInit {
             email: adminEmail,
             username: adminUsername,
             password: hashedPassword,
-            avatarUrl: `${frontendUrl}/public/admin.png`,
+            avatarUrl: `${frontendUrl}/admin.png`,
             rating: 5000,
             rank: defaultRank,
             role: adminRole,

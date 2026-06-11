@@ -29,7 +29,9 @@ async function bootstrap() {
             next();
         },
     );
-    app.useStaticAssets(join(process.cwd(), "uploads"), { prefix: "/uploads" });
+    app.useStaticAssets(join(process.cwd(), "apps/backend/uploads"), {
+        prefix: "/uploads",
+    });
 
     app.useGlobalPipes(
         new ValidationPipe({
