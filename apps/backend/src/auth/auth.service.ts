@@ -31,7 +31,7 @@ export class AuthService {
     ) {
         const frontendUrl =
             this.configService.get<string>("FRONTEND_URL") ||
-            "http://localhost:5173";
+            `https://${this.configService.get<string>("DOMAIN_NAME") || "localhost"}`;
         this.defaultAvatar = `${frontendUrl}/public/avatar.jpg`;
     }
 

@@ -53,7 +53,7 @@ export class UsersService implements OnModuleInit {
 
         const frontendUrl =
             this.configService.get<string>("FRONTEND_URL") ||
-            "http://localhost:5173";
+            `https://${this.configService.get<string>("DOMAIN_NAME") || "localhost"}`;
 
         const adminUser = this.userRepository.create({
             email: adminEmail,

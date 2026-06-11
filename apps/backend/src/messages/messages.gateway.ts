@@ -7,7 +7,8 @@ import { Message as IMessage } from "@chad/types";
     cors: {
         origin: (origin, callback) => {
             const frontendUrl =
-                process.env.FRONTEND_URL || "http://localhost:5173";
+                process.env.FRONTEND_URL ||
+                `https://${process.env.DOMAIN_NAME || "localhost"}`;
             const allowedOrigins = frontendUrl
                 .split(",")
                 .map((url) => url.trim());

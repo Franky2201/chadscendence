@@ -2,6 +2,7 @@ import { NestFactory } from "@nestjs/core";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import { AppModule } from "./app.module";
 import { ValidationPipe } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import { join } from "path";
@@ -38,8 +39,13 @@ async function bootstrap() {
         }),
     );
 
-    const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
-    const allowedOrigins = frontendUrl.split(",").map((url) => url.trim());
+    const configService = app.get(ConfigService);
+    const frontendUrl =
+        configService.get<string>("FRONTEND_URL") ||
+        `https://${configService.get<string>("DOMAIN_NAME") || "localhost"}`;
+    const allowedOrigins = frontendUrl
+        .split(",")
+        .map((url: string) => url.trim());
 
     app.enableCors({
         origin: allowedOrigins,
