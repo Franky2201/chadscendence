@@ -17,7 +17,7 @@ import { CreateRoomDto, UpdateRoomGamesDto } from "./rooms.dto";
 @Controller("rooms")
 @UseGuards(JwtAuthGuard)
 export class RoomsController {
-    constructor(private readonly roomsService: RoomsService) {}
+    constructor(private readonly roomsService: RoomsService) { }
 
     @Post()
     createRoom(
@@ -28,6 +28,11 @@ export class RoomsController {
             user,
             createRoomDto.selectedGames ?? [],
         );
+    }
+
+    @Get(":code/session")
+    getSession(@Param("code") code: string) {
+        return this.roomsService.getSession(code);
     }
 
     @Get(":code")

@@ -4,28 +4,18 @@ import {
     NotFoundException,
 } from "@nestjs/common";
 import type { JwtPayload } from "@chad/types";
-
-export interface RoomPlayer {
-    id: string;
-    username: string;
-    host: boolean;
-    status: "online" | "pending";
-}
-
-export interface Room {
-    code: string;
-    hostId: string;
-    selectedGames: string[];
-    players: RoomPlayer[];
-    createdAt: string;
-    updatedAt: string;
-}
+import type { RoomSession, Room } from "@chad/types";
+import { RoomsGateway } from "./rooms.gateway";
 
 @Injectable()
 export class RoomsService {
     private readonly rooms = new Map<string, Room>();
+    private readonly sessions = new Map<string, RoomSession>();
+    private readonly sessionTimers = new Map<string, NodeJS.Timeout>();
 
-    createRoom(user: JwtPayload, selectedGames: string[] = []) {
+    constructor(private readonly roomsGateway: RoomsGateway) { }
+
+    createRoom(user: JwtPayload, selectedGames: string[] = []): Room {
         const code = this.generateUniqueCode();
         const now = new Date().toISOString();
 
@@ -49,11 +39,11 @@ export class RoomsService {
         return this.cloneRoom(room);
     }
 
-    getRoom(code: string) {
+    getRoom(code: string): Room {
         return this.cloneRoom(this.getRoomOrThrow(code));
     }
 
-    joinRoom(code: string, user: JwtPayload) {
+    joinRoom(code: string, user: JwtPayload): Room {
         const room = this.getRoomOrThrow(code);
         const existingPlayer = room.players.find(
             (player) => player.id === user.sub,
@@ -76,7 +66,7 @@ export class RoomsService {
         return this.cloneRoom(room);
     }
 
-    updateSelectedGames(code: string, userId: string, selectedGames: string[]) {
+    updateSelectedGames(code: string, userId: string, selectedGames: string[]): Room {
         const room = this.getRoomOrThrow(code);
 
         if (room.hostId !== userId) {
@@ -156,6 +146,37 @@ export class RoomsService {
             ...room,
             selectedGames: [...room.selectedGames],
             players: room.players.map((player) => ({ ...player })),
+        };
+    }
+
+    getSession(code: string): RoomSession {
+        return this.cloneSession(this.getSessionOrThrow(code));
+    }
+
+    private getSessionOrThrow(code: string) {
+        const normalizedCode = this.normalizeCode(code);
+        const session = this.sessions.get(normalizedCode);
+
+        if (!session) {
+            throw new NotFoundException("Aucune partie active pour cette salle.");
+        }
+
+        return session;
+    }
+
+    private cloneSession(session: RoomSession): RoomSession {
+        return {
+            ...session,
+            games: [...session.games],
+            rounds: session.rounds.map((round) => ({
+                ...round,
+                prompt: round.prompt ? { ...round.prompt } : null,
+                scores: { ...round.scores },
+            })),
+            players: session.players.map((player) => ({
+                ...player,
+                scoresByRound: [...player.scoresByRound],
+            })),
         };
     }
 }
