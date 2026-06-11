@@ -25,3 +25,21 @@ export interface MathValidationResult {
     correctAnswer?: number;
     message?: string;
 }
+
+export interface ReactionTimeProblem {
+		id: string;
+		delay: number;
+}
+
+export interface ReactionTimeSubmission {
+		id: string;
+		reactionTime: number;
+		tooEarly: boolean;
+}
+
+export interface ReactionTimeResult {
+		success: boolean;
+		reactionTime?: number;
+		rating?: string;
+		message?: string;
+}
