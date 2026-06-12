@@ -113,9 +113,9 @@ export function useGameSession() {
                 }, 1500);
             } else {
                 setSession(updatedSession);
-                setTimeout( () => {
+                setTimeout(() => {
                     setViewState("inter_round");
-                    setTimeout( () => {
+                    setTimeout(() => {
                         void playNextRound(updatedSession, roundIndex + 1);
                     }, 1500);
                 }, 2500);
@@ -125,8 +125,11 @@ export function useGameSession() {
         }
     };
 
-    const submitAnswer = async (answer: unknown): Promise<{ success: boolean; isCompleted: boolean }> => {
-        if (!session || viewState !== "playing") return { success: false, isCompleted: false };
+    const submitAnswer = async (
+        answer: unknown,
+    ): Promise<{ success: boolean; isCompleted: boolean }> => {
+        if (!session || viewState !== "playing")
+            return { success: false, isCompleted: false };
         try {
             const res = await submitRoundAnswer(
                 session.id,
@@ -138,7 +141,10 @@ export function useGameSession() {
                 await handleRoundEnd(session, activeRoundIndex);
             }
 
-            return { success: res.addedScore > 0, isCompleted: res.isCompleted };
+            return {
+                success: res.addedScore > 0,
+                isCompleted: res.isCompleted,
+            };
         } catch (error) {
             console.error("Erreur réponse:", error);
             return { success: false, isCompleted: false };

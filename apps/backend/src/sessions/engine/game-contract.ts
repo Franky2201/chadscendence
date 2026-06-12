@@ -119,7 +119,8 @@ export class ReactionSessionGameAdapter extends DefaultSessionGameAdapter {
         const obj = answer as Record<string, unknown>;
         return {
             id: prompt.roundToken,
-            reactionTime: typeof obj.reactionTimeMs === "number" ? obj.reactionTimeMs : 0,
+            reactionTime:
+                typeof obj.reactionTimeMs === "number" ? obj.reactionTimeMs : 0,
             tooEarly: obj.earlyClick === true,
         };
     }

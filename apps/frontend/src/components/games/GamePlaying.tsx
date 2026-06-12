@@ -7,13 +7,17 @@ import type { SessionRoundPrompt } from "@chad/types";
 interface GamePlayingProps {
     prompt: SessionRoundPrompt;
     timeLeft: number;
-    onSubmit: (answer: unknown) => Promise<{ success: boolean; isCompleted: boolean }>;
+    onSubmit: (
+        answer: unknown,
+    ) => Promise<{ success: boolean; isCompleted: boolean }>;
 }
 
 export function GamePlaying({ prompt, timeLeft, onSubmit }: GamePlayingProps) {
     const { theme } = useTheme();
     const [answer, setAnswer] = useState<string>("");
-    const [status, setStatus] = useState<"playing" | "correct" | "wrong">("playing");
+    const [status, setStatus] = useState<"playing" | "correct" | "wrong">(
+        "playing",
+    );
 
     const handleSubmit = async (e?: React.FormEvent) => {
         e?.preventDefault();

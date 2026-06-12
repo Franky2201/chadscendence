@@ -51,8 +51,7 @@ export default function SoloGamePage() {
                     </div>
                 );
             case "playing": {
-                const gameId =
-                    session?.rounds[activeRoundIndex]?.game.id;
+                const gameId = session?.rounds[activeRoundIndex]?.game.id;
 
                 if (gameId === "reaction-time") {
                     return (
