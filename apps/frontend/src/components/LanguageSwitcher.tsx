@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 export default function LanguageSwitcher() {
     const { i18n } = useTranslation();
 
-    const handleLanguageChange = (lng: "fr" | "en") => {
+    const handleLanguageChange = (lng: "fr" | "en" | "du") => {
         i18n.changeLanguage(lng);
     };
 
@@ -28,6 +28,16 @@ export default function LanguageSwitcher() {
                 }`}
             >
                 EN
+            </button>
+            <button
+                onClick={() => handleLanguageChange("du")}
+                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
+                    i18n.resolvedLanguage === "du"
+                        ? `text-white`
+                        : "text-white/60 hover:text-white hover:bg-white/10"
+                }`}
+            >
+                NL
             </button>
         </div>
     );

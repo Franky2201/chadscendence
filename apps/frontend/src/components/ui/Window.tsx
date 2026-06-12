@@ -4,6 +4,7 @@ import { type ItemColor } from "./unified";
 import AnimatedBackground from "./AnimatedBackground";
 import { useTheme } from "../../contexts/ThemeContext";
 import LanguageSwitcher from "../LanguageSwitcher";
+import { useTranslation } from "react-i18next";
 
 type WindowProps = {
     children: ReactNode;
@@ -24,18 +25,19 @@ export function Window({
 }: WindowProps) {
     const { theme } = useTheme();
     const location = useLocation();
+    const { t } = useTranslation();
     const links = [
         location.pathname !== "/privacypolicy" && {
             to: "/privacypolicy",
-            label: "Privacy Policy",
+            label: t("window.footer.privacyPolicy"),
         },
         location.pathname !== "/termsofservice" && {
             to: "/termsofservice",
-            label: "Terms of Service",
+            label: t("window.footer.termsOFService"),
         },
         location.pathname !== "/about" && {
             to: "/about",
-            label: "About Us",
+            label: t("window.footer.about"),
         },
     ].filter((link): link is { to: string; label: string } => Boolean(link));
     const classes = `min-h-screen relative overflow-hidden font-sans p-8 transition-all \

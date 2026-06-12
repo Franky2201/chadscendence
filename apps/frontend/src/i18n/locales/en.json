@@ -1,5 +1,12 @@
 {
-	"loading": "Loading",
+	"loading": "Loading ...",
+	"window": {
+		"footer":{
+			"privacyPolicy": "Privacy Policy",
+			"termsOFService": "Terms of Service",
+			"about": "About Us"
+		}
+	},
 	"home": {
 		"play": {
 			"title": "Play",
@@ -170,7 +177,6 @@
 			"host": "Host"
 		}
 	},
-
 	"privacyPolicy": {
     "title": "Privacy Policy",
     "back": "Back",
