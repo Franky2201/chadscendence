@@ -49,7 +49,7 @@ export function Play({ className = "" }: { className?: string }) {
                             ...getItemColorStyle(cTheme.name),
                         }}
                     >
-                        { }
+                        {}
                     </Button>
                 ))}
             </div>
