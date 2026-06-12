@@ -4,7 +4,7 @@ import { Card, Button } from "../ui";
 import { Header } from "../Header";
 import { useTheme } from "../../contexts/ThemeContext";
 import type { Game } from "../../services/games";
-import type { ItemColor } from "../ui/unified";
+import { getItemColorStyle, type ItemColor } from "../ui/unified";
 
 interface GameSetupProps {
     games: Game[];
@@ -131,7 +131,8 @@ export function GameSetup({
                         onChange={(e) =>
                             onRepetitionsChange(Number(e.target.value))
                         }
-                        className="w-full cursor-pointer h-2 bg-slate-500/20 rounded-lg appearance-none accent-white-500"
+                        className="w-full cursor-pointer h-2 bg-white/30 rounded-lg appearance-none accent-[var(--ui-color)]"
+                        style={{ ...getItemColorStyle(theme) }}
                     />
                 </div>
 

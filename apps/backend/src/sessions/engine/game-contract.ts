@@ -60,6 +60,13 @@ export class MathSessionGameAdapter extends DefaultSessionGameAdapter {
             answer: typeof answer === "number" ? Math.trunc(answer) : 0,
         };
     }
+
+    override extractScore(result: unknown): number {
+        if (!result || typeof result !== "object") return 0;
+        const res = result as Record<string, unknown>;
+        if (res.success === true) return 1;
+        return 0;
+    }
 }
 
 export class ClickerSessionGameAdapter extends DefaultSessionGameAdapter {
@@ -90,28 +97,40 @@ export class ClickerSessionGameAdapter extends DefaultSessionGameAdapter {
 }
 
 export class ReactionSessionGameAdapter extends DefaultSessionGameAdapter {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     override normalizePrompt(problem: unknown): SessionRoundPrompt {
+        const obj = (problem ?? {}) as Record<string, unknown>;
         return {
             kind: "action",
             prompt: "Reaction Time!",
             actionLabel: "WAIT...",
             actionValue: "reaction",
+            roundToken: typeof obj.id === "string" ? obj.id : undefined,
         };
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     override buildSubmitPayload(answer: unknown, prompt: SessionRoundPrompt) {
-        return answer;
+        if (!answer || typeof answer !== "object") {
+            return {
+                id: prompt.roundToken,
+                reactionTime: 0,
+                tooEarly: true,
+            };
+        }
+        const obj = answer as Record<string, unknown>;
+        return {
+            id: prompt.roundToken,
+            reactionTime: typeof obj.reactionTimeMs === "number" ? obj.reactionTimeMs : 0,
+            tooEarly: obj.earlyClick === true,
+        };
     }
 
     override extractScore(result: unknown): number {
         if (!result || typeof result !== "object") return 0;
         const res = result as Record<string, unknown>;
 
-        if (res.earlyClick) return 0;
+        if (res.success !== true) return 0;
 
-        const time = res.reactionTimeMs;
+        const time = res.reactionTime;
         if (typeof time === "number") {
             if (time < 200) return 2;
             if (time < 400) return 1.5;
