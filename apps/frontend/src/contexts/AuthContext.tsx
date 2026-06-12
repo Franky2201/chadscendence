@@ -9,6 +9,7 @@ interface AuthContextType {
     isLoading: boolean;
     login: (userData: User) => void;
     logout: () => Promise<void>;
+    refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -17,6 +18,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
+    const refreshUser = async () => {
+        try {
+            const data = await checkAuthStatus();
+            if (data.isAuthenticated && data.user) {
+                setUser(data.user);
+            } else {
+                setUser(null);
+            }
+        } catch {
+            setUser(null);
+        }
+    };
+
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         if (params.get("error") === "banned") {
@@ -24,22 +38,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             window.history.replaceState({}, "", window.location.pathname);
         }
 
-        const checkAuth = async () => {
-            try {
-                const data = await checkAuthStatus();
-
-                if (data.isAuthenticated && data.user) {
-                    setUser(data.user);
-                } else {
-                    setUser(null);
-                }
-            } catch {
-                setUser(null);
-            } finally {
-                setIsLoading(false);
-            }
+        const initAuth = async () => {
+            await refreshUser();
+            setIsLoading(false);
         };
-        checkAuth();
+
+        void initAuth();
     }, []);
 
     const login = (userData: User) => setUser(userData);
@@ -54,7 +58,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     return (
-        <AuthContext.Provider value={{ user, isLoading, login, logout }}>
+        <AuthContext.Provider
+            value={{ user, isLoading, login, logout, refreshUser }}
+        >
             {children}
         </AuthContext.Provider>
     );

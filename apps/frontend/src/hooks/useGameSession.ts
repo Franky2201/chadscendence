@@ -7,6 +7,7 @@ import {
     closeRound,
 } from "../services/sessions";
 import type { GameSession, SessionRoundPrompt } from "@chad/types";
+import { useAuth } from "../contexts/AuthContext";
 
 export type SessionViewState =
     | "setup"
@@ -16,6 +17,7 @@ export type SessionViewState =
     | "podium";
 
 export function useGameSession() {
+    const { refreshUser } = useAuth();
     const [session, setSession] = useState<GameSession | null>(null);
     const [prompt, setPrompt] = useState<SessionRoundPrompt | null>(null);
     const [viewState, setViewState] = useState<SessionViewState>("setup");
@@ -102,6 +104,7 @@ export function useGameSession() {
             if (isLastRound) {
                 const finalSession = await finishGame(updatedSession.id);
                 setSession(finalSession);
+                await refreshUser();
                 setViewState("podium");
             } else {
                 setSession(updatedSession);
