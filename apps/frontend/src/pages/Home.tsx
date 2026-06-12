@@ -2,14 +2,16 @@ import { useAuth } from "../contexts/AuthContext";
 import { Window } from "../components/ui";
 import * as board from "../components/home";
 import { Header } from "../components/Header";
+import { useTranslation } from "react-i18next";
 
 export default function HomePage() {
     const { user, isLoading } = useAuth();
+    const { t } = useTranslation();
 
     if (isLoading)
         return (
             <div className="min-h-screen flex items-center justify-center">
-                Loading ...
+                {t("loading")}
             </div>
         );
 

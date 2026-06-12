@@ -1,5 +1,12 @@
 {
-	"loading": "Chargement",
+	"loading": "Chargement ...",
+	"window": {
+		"footer":{
+			"privacyPolicy": "Politique de confidentialité",
+			"termsOFService": "Conditions d'utilisation",
+			"about": "À propos"
+		}
+	},
 	"home": {
 		"play": {
 			"title": "Jouer",
