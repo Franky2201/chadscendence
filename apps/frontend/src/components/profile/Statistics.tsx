@@ -2,6 +2,9 @@ import { useState } from "react";
 import { useTheme } from "../../contexts/ThemeContext";
 import { Card, Button /*, Select*/ } from "../ui/index";
 import { DonutChart, SkillRadarChart, CustomBarChart } from "./stats/index";
+import { useTranslation } from "react-i18next";
+
+// const { tmp } = useTranslation();
 
 // TODO : Remove the following with calls to the database
 type TimeRange = 0 | 1 | 7 | 15 | 30 | 60;
@@ -123,8 +126,8 @@ const sds: Record<TimeRange, SkillRateEntry[]> = {
         { name: "Mathematics", value: 82 },
         { name: "Reflex", value: 70 },
         { name: "Memory", value: 8 },
-        { name: "Geography", value: 40 },
         { name: "Social", value: 25 },
+        { name: "Geography", value: 40 },
     ],
     0: [
         { name: "Mathematics", value: 95 },
@@ -151,6 +154,7 @@ function randomInt(min: number, max: number): number {
 export function Statistics() {
     const [period, setPeriod] = useState<TimeRange>(15);
     const { theme } = useTheme();
+    const { t } = useTranslation();
 
     // TODO : This is a test sample for the number of games played
     const arr: number[] = Array.from({ length: period as number }, () =>
@@ -170,9 +174,9 @@ export function Statistics() {
                 ards[period][1].value +
                 ards[period][2].value)) *
         100;
-
+    
     return (
-        <Card contentClassName="" title="Statistics">
+        <Card contentClassName="" title={t("profilePage.statistics.stats.title")}>
             <div className="flex flex-wrap w-full justify-center gap-2">
                 {periods.map((p) => (
                     <Button
@@ -205,7 +209,7 @@ export function Statistics() {
                             </span>
                         </div>
                         <span className="select-none font-mona-sans-light text-xs">
-                            Win Rate
+                            {t("profilePage.statistics.stats.winRate")}
                         </span>
                     </div>
                 )}
@@ -229,7 +233,7 @@ export function Statistics() {
                             className="select-none font-mona-sans-light 
                             text-xs"
                         >
-                            Answer rate
+                            {t("profilePage.statistics.stats.answerRate")}
                         </span>
                     </div>
                 )}
@@ -276,7 +280,7 @@ export function Statistics() {
                         }
                     ></CustomBarChart>
                     <span className="select-none font-mona-sans-light text-xs">
-                        Games Played
+                        {t("profilePage.statistics.stats.gamePlayed")}
                     </span>
                 </div>
             </div>

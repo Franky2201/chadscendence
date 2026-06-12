@@ -1,3 +1,4 @@
+
 import { Window } from "../components/ui";
 import { useAuth } from "../contexts/AuthContext";
 import { useTranslation } from "react-i18next";
@@ -33,7 +34,7 @@ export default function SoloGamePage() {
     if (!user) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-slate-900 text-white">
-                <h1 className="text-3xl font-bold">Accès refusé</h1>
+                <h1 className="text-3xl font-bold">{t("room.denied.title")}</h1>
             </div>
         );
     }
@@ -44,7 +45,7 @@ export default function SoloGamePage() {
                 return (
                     <div className="flex flex-col items-center justify-center min-h-[50vh] text-white">
                         <h1 className="text-6xl font-bold animate-bounce text-yellow-400">
-                            PRÉPAREZ-VOUS !
+                            {t("game.session.loading")} !
                         </h1>
                     </div>
                 );
@@ -73,7 +74,7 @@ export default function SoloGamePage() {
                 return (
                     <div className="flex flex-col items-center justify-center min-h-[50vh] text-white">
                         <h1 className="text-5xl font-bold text-pink-500">
-                            SUIVANT ! ⚡️
+                            {t("game.session.next")} ⚡️
                         </h1>
                     </div>
                 );

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Card } from "../ui";
 import { GameHistoryCard, type GameHistory } from "./history/GameHistoryCard";
 import { useState } from "react";
@@ -30,19 +31,20 @@ const data: GameHistory[] = [
 ];
 
 export function History() {
+    const { t } = useTranslation();
     const [openId, setOpenId] = useState<string | null>(null);
 
     const commonClasses =
         "select-none flex justify-self-center font-mona-sans-ligh text-xs sm:text-md";
 
     return (
-        <Card title="Game History">
+        <Card title={t("profilePage.statistics.gameHistory.title")}>
             <div className="flex flex-col gap-2">
                 <div className="grid grid-cols-4 gap-2 px-4">
-                    <span className={commonClasses}>Position</span>
-                    <span className={commonClasses}>Score</span>
-                    <span className={commonClasses}>Rating</span>
-                    <span className={commonClasses}>Rating Gained</span>
+                    <span className={commonClasses}>{t("profilePage.statistics.gameHistory.position")}</span>
+                    <span className={commonClasses}>{t("profilePage.statistics.gameHistory.score")}</span>
+                    <span className={commonClasses}>{t("profilePage.statistics.gameHistory.rating")}</span>
+                    <span className={commonClasses}>{t("profilePage.statistics.gameHistory.ratingGained")}</span>
                 </div>
 
                 {data.map((g) => (
