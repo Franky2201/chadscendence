@@ -94,7 +94,7 @@ export class ReactionSessionGameAdapter extends DefaultSessionGameAdapter {
     override normalizePrompt(problem: unknown): SessionRoundPrompt {
         return {
             kind: "action",
-            prompt: "Reaction Time!",
+            prompt: "Attend le signal ...",
             actionLabel: "WAIT...",
             actionValue: "reaction",
         };

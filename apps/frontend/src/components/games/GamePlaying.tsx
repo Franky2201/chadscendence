@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Card, Button, Input } from "../ui";
+import { Button, Input } from "../ui";
 import { Header } from "../Header";
 import { useTheme } from "../../contexts/ThemeContext";
 import type { SessionRoundPrompt } from "@chad/types";
@@ -31,13 +31,13 @@ export function GamePlaying({ prompt, timeLeft, onSubmit }: GamePlayingProps) {
     return (
         <>
             <Header />
-            <div className="flex flex-col items-center justify-center min-h-[calc(100vh-120px)] w-full px-4">
-                <Card className="max-w-2xl w-full flex flex-col items-center p-10 text-center shadow-2xl">
-                    <div className="text-4xl font-bold mb-4 bg-slate-100 rounded-full w-20 h-20 flex items-center justify-center border-4 border-slate-300">
+            <div className="flex-1 flex flex-col items-center justify-center px-4">
+                <div className="flex flex-col items-center gap-6 p-10 text-center rounded-3xl bg-white/5 backdrop-blur-[8px] border border-white/20 shadow-2xl w-full max-w-2xl">
+                    <div className="text-4xl font-bold bg-slate-100 rounded-full w-20 h-20 flex items-center justify-center border-4 border-slate-300 text-slate-900">
                         {timeLeft}
                     </div>
 
-                    <h2 className="text-4xl font-black mb-8">
+                    <h2 className="text-4xl font-black">
                         {prompt.prompt}
                     </h2>
 
@@ -77,7 +77,7 @@ export function GamePlaying({ prompt, timeLeft, onSubmit }: GamePlayingProps) {
                             {prompt.actionLabel || "RÉPONDRE"}
                         </Button>
                     </form>
-                </Card>
+                </div>
             </div>
         </>
     );
