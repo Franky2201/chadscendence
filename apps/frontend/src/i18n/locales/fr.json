@@ -146,6 +146,19 @@
 				"loading": "...",
 				"confirm": "Confirmer"
 			}
+		},
+		"notification" : {
+			"loadingError" : "Erreur de chargement des données",
+			"roleCreated" : "Rôle créé",
+			"creationError" : "Erreur lors de la création",
+			"roleUpdated" : "Rôle mis à jour",
+			"updateRoleError" : "Erreur lors de la mise à jour",
+			"roleDeleted" : "Rôle supprimé",
+			"deleteError" : "Impossible de supprimer ce rôle",
+			"profileUpdated" : "Profil mis à jour",
+			"updateProfileError" : "Impossible de modifier le profil",
+			"statusUpdate" : "Statut mis à jour",
+			"statusUpdateError" : "Impossible d'effectuer cette action"
 		}
 	},
 	"users": {

@@ -52,23 +52,23 @@ export default function MathGameUI() {
                             disabled={status !== "playing"}
                             className="w-full bg-pink-600 hover:bg-pink-700 disabled:opacity-50 text-white rounded-2xl py-4 text-xl font-black transition-all shadow-lg shadow-pink-600/20"
                         >
-                            RÉPONDRE
+                            ⮕
                         </button>
                     </form>
 
                     {status === "wrong" && lastResult && (
                         <div className="mt-4 text-red-400 font-bold text-lg animate-bounce">
-                            Dommage ! C'était {lastResult.correctAnswer}
+                            ​❌​ {lastResult.correctAnswer}
                         </div>
                     )}
                     {status === "expired" && (
                         <div className="mt-4 text-orange-400 font-bold text-lg animate-bounce">
-                            TROP TARD ! Temps écoulé
+                            ​❌​
                         </div>
                     )}
                     {status === "correct" && (
                         <div className="mt-4 text-green-400 font-bold text-lg animate-bounce">
-                            BIEN JOUÉ !
+                            ✅
                         </div>
                     )}
                 </div>
