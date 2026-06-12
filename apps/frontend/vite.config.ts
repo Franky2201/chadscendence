@@ -9,6 +9,10 @@ export default defineConfig({
         host: "0.0.0.0",
         port: 8443,
         strictPort: true,
+        hmr: {
+            protocol: "wss",
+            port: 8443,
+        },
         proxy: {
             "/api": {
                 target: "http://backend:3000",
