@@ -97,7 +97,7 @@ export default function UserManager({
                     >
                         <div className="flex items-center gap-4">
                             <Link
-                                to={`/profile/${user.username}`}
+                                to={`/users/${user.username}`}
                                 className="relative group"
                             >
                                 {user.avatarUrl ? (
@@ -113,7 +113,7 @@ export default function UserManager({
                                 )}
                             </Link>
                             <div className="flex flex-col items-start gap-1">
-                                <Link to={`/profile/${user.username}`}>
+                                <Link to={`/users/${user.username}`}>
                                     <span className="font-bold text-white text-lg hover:text-pink-400 transition-colors">
                                         {user.username}
                                     </span>
