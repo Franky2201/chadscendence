@@ -1,15 +1,11 @@
-import { RoomSessionPlayer, RoomSessionRound } from "@chad/types";
+import { GameSession, GameSessionRound } from "@chad/types";
 
 export class ScoreAggregator {
-    applyRound(players: RoomSessionPlayer[], round: RoomSessionRound) {
-        for (const player of players) {
-            const roundScore = round.scores[player.id] ?? 0;
-            player.scoresByRound[round.index] = roundScore;
-
-            player.totalScore = player.scoresByRound.reduce(
-                (sum, value) => sum + (Number.isFinite(value) ? value : 0),
-                0,
-            );
-        }
+    applyRoundScore(session: GameSession, round: GameSessionRound, score: number) {
+        round.score = score;
+        session.totalScore = session.rounds.reduce(
+            (sum, r) => sum + (Number.isFinite(r.score) ? r.score : 0),
+            0
+        );
     }
 }

@@ -2,104 +2,80 @@ import {
     Injectable,
     BadRequestException,
     ForbiddenException,
+    NotFoundException,
 } from "@nestjs/common";
-import { RoomsGateway } from "../rooms/rooms.gateway";
 import { GamesService } from "../games/games.service";
+import { UsersService } from "../users/users.service";
 import { GameAdapterRegistry } from "./engine/game-adapter.registry";
 import { ScoreAggregator } from "./engine/score-aggregator";
-import type { RoomSession, Room, Game, RoomSessionRound } from "@chad/types";
-import { UsersService } from "src/users/users.service";
-import { RatingService } from "src/rating/rating.service";
+import type { GameSession, GameSessionRound, Game } from "@chad/types";
 
 @Injectable()
 export class SessionsService {
-    private readonly sessions = new Map<string, RoomSession>();
-    private readonly sessionTimers = new Map<string, NodeJS.Timeout>();
-
-    private readonly roundDurationMs = 20_000;
-    private readonly interRoundPauseMs = 5_000;
+    private readonly sessions = new Map<string, GameSession>();
     private readonly gameAdapterRegistry = new GameAdapterRegistry();
     private readonly scoreAggregator = new ScoreAggregator();
+    private readonly EXPECTED_SCORES: Record<string, number> = {
+        "math": 10,
+        "clicker": 50,
+        "reaction": 5,
+    };
 
     constructor(
-        private readonly roomsGateway: RoomsGateway,
         private readonly gamesService: GamesService,
         private readonly usersService: UsersService,
-        private readonly ratingService: RatingService,
-    ) {}
+    ) { }
 
-    startGame(room: Room, selectedGames: Game[]): RoomSession {
-        const normalizedCode = room.code;
-        const now = new Date().toISOString();
+    async createSession(userId: string, selectedGameIds: string[], repetitions: number): Promise<GameSession> {
+        const activeGames = await this.gamesService.getActiveGames();
+        const gameCatalog = new Map(activeGames.map((g) => [g.id, g]));
 
-        const session: RoomSession = {
-            roomCode: room.code,
+        const selectedGames = selectedGameIds
+            .map((id) => gameCatalog.get(id))
+            .filter((g): g is Game => Boolean(g));
+
+        if (selectedGames.length === 0) {
+            throw new BadRequestException("Aucun jeu valide sélectionné.");
+        }
+
+        const sessionId = Math.random().toString(36).substring(2, 10).toUpperCase();
+        const rounds: GameSessionRound[] = [];
+
+        let roundIndex = 0;
+        for (let r = 0; r < repetitions; r++) {
+            for (const game of selectedGames) {
+                rounds.push({
+                    index: roundIndex++,
+                    game,
+                    score: 0,
+                    prompt: null,
+                });
+            }
+        }
+
+        const session: GameSession = {
+            id: sessionId,
+            userId,
             status: "running",
-            startedAt: now,
+            startedAt: new Date().toISOString(),
             currentRoundIndex: 0,
+            totalScore: 0,
             games: selectedGames,
-            rounds: selectedGames.map((game, index) => ({
-                index,
-                game,
-                scores: {},
-                prompt: null,
-            })),
-            players: room.players.map((player) => ({
-                id: player.id,
-                username: player.username,
-                totalScore: 0,
-                scoresByRound: [],
-            })),
+            rounds,
         };
 
-        this.sessions.set(normalizedCode, session);
-        this.roomsGateway.broadcastSessionUpdate(
-            normalizedCode,
-            this.cloneSession(session),
-        );
-        this.scheduleCurrentRound(normalizedCode);
-
+        this.sessions.set(sessionId, session);
         return this.cloneSession(session);
     }
 
-    private scheduleCurrentRound(normalizedCode: string) {
-        const session = this.sessions.get(normalizedCode);
-        if (!session || session.status !== "running") return;
+    async startRound(id: string, userId: string, roundIndex: number) {
+        const session = this.getSessionOrThrow(id, userId);
 
-        const round = session.rounds[session.currentRoundIndex];
-        if (!round) return;
+        if (session.status !== "running") throw new BadRequestException("La partie est terminée.");
+        if (roundIndex !== session.currentRoundIndex) throw new BadRequestException("Ce n'est pas le round actuel.");
 
-        this.clearSessionTimer(normalizedCode);
-        round.prompt = null;
+        const round = session.rounds[roundIndex];
 
-        void this.loadRoundPrompt(session, round).then(() => {
-            round.endsAt = new Date(
-                Date.now() + this.roundDurationMs,
-            ).toISOString();
-
-            const safePrompt = round.prompt ?? {
-                kind: "text" as const,
-                prompt: "Get ready!",
-            };
-
-            this.roomsGateway.broadcastRoundStarted(
-                normalizedCode,
-                safePrompt,
-                round.endsAt,
-            );
-
-            const timeout = setTimeout(() => {
-                this.closeCurrentRoundByCode(normalizedCode);
-            }, this.roundDurationMs);
-
-            this.sessionTimers.set(normalizedCode, timeout);
-        });
-    }
-
-    private async loadRoundPrompt(
-        session: RoomSession,
-        round: RoomSessionRound,
-    ) {
         try {
             const adapter = this.gameAdapterRegistry.getAdapter(round.game.id);
             const problem = await this.gamesService.sendCommand<void, unknown>(
@@ -108,102 +84,21 @@ export class SessionsService {
             );
             round.prompt = adapter.normalizePrompt(problem);
         } catch {
-            round.prompt = { kind: "text", prompt: "Error loading prompt" };
+            round.prompt = { kind: "text", prompt: "Play" };
         }
 
-        if (
-            session.status !== "running" ||
-            session.rounds[session.currentRoundIndex]?.index !== round.index
-        )
-            return;
+        round.startedAt = new Date().toISOString();
+        return this.cloneSession(session);
     }
 
-    private closeCurrentRoundByCode(normalizedCode: string) {
-        const session = this.sessions.get(normalizedCode);
-        if (!session || session.status !== "running") return;
+    async submitRoundAnswer(id: string, userId: string, roundIndex: number, answer: unknown) {
+        const session = this.getSessionOrThrow(id, userId);
 
-        const round = session.rounds[session.currentRoundIndex];
-        if (!round || round.closedAt) return;
-
-        this.clearSessionTimer(normalizedCode);
-        round.closedAt = new Date().toISOString();
-
-        this.scoreAggregator.applyRound(session.players, round);
-        this.roomsGateway.broadcastRoundEnded(
-            normalizedCode,
-            this.cloneSession(session),
-        );
-
-        if (session.currentRoundIndex >= session.rounds.length - 1) {
-            session.status = "finished";
-            session.endedAt = new Date().toISOString();
-            return;
-        }
-
-        setTimeout(() => {
-            session.currentRoundIndex += 1;
-            this.scheduleCurrentRound(normalizedCode);
-        }, this.interRoundPauseMs);
-    }
-
-    private clearSessionTimer(normalizedCode: string) {
-        const timer = this.sessionTimers.get(normalizedCode);
-        if (timer) {
-            clearTimeout(timer);
-            this.sessionTimers.delete(normalizedCode);
-        }
-    }
-
-    getSessionOrThrow(code: string): RoomSession {
-        const session = this.sessions.get(code.trim().toUpperCase());
-        if (!session) throw new BadRequestException("Aucune partie active.");
-        return session;
-    }
-
-    cloneSession(session: RoomSession): RoomSession {
-        return {
-            ...session,
-            games: Array.from(session.games),
-            rounds: session.rounds.map((r) => ({
-                ...r,
-                scores: { ...r.scores },
-                prompt: r.prompt ? { ...r.prompt } : null,
-            })),
-            players: session.players.map((p) => ({
-                ...p,
-                scoresByRound: Array.from(p.scoresByRound),
-            })),
-        };
-    }
-
-    async submitRoundAnswer(
-        code: string,
-        userId: string,
-        roundIndex: number,
-        answer: unknown,
-    ) {
-        const session = this.getSessionOrThrow(code);
-
-        if (session.status !== "running")
-            throw new BadRequestException("La partie est terminée.");
-        if (roundIndex !== session.currentRoundIndex)
-            throw new BadRequestException(
-                "Vous ne pouvez soumettre que pour le round actuel.",
-            );
-
-        const player = session.players.find(
-            (p: { id: string }) => p.id === userId,
-        );
-        if (!player)
-            throw new ForbiddenException(
-                "Vous ne participez pas à cette partie.",
-            );
+        if (session.status !== "running") throw new BadRequestException("La partie est terminée.");
+        if (roundIndex !== session.currentRoundIndex) throw new BadRequestException("Mauvais index de round.");
 
         const round = session.rounds[roundIndex];
-        if (round.closedAt)
-            throw new BadRequestException("Le round est déjà clôturé.");
-        if (round.scores[userId] !== undefined)
-            throw new BadRequestException("Réponse déjà soumise.");
+        if (round.closedAt) throw new BadRequestException("Ce round est déjà clôturé.");
 
         const adapter = this.gameAdapterRegistry.getAdapter(round.game.id);
         const prompt = round.prompt ?? { kind: "action", prompt: "Play" };
@@ -215,102 +110,84 @@ export class SessionsService {
             payload,
         );
 
-        const score = adapter.extractScore(result);
-        round.scores[userId] = score;
-
-        const hasAllAnswers = session.players.every(
-            (p: { id: string }) => round.scores[p.id] !== undefined,
-        );
-        if (hasAllAnswers) {
-            this.closeCurrentRoundByCode(session.roomCode);
-        }
-
-        return { roundScore: score, result };
-    }
-
-    closeCurrentRoundManual(code: string) {
-        const session = this.getSessionOrThrow(code);
-        this.closeCurrentRoundByCode(session.roomCode);
-        return { success: true };
-    }
-
-    async finishGame(code: string) {
-        const session = this.getSessionOrThrow(code);
-
-        if (session.status !== "finished") {
-            throw new BadRequestException(
-                "Terminez tous les rounds avant de finaliser.",
-            );
-        }
-
-        if (session.scorePersistedAt) {
-            return {
-                session: this.cloneSession(session),
-                persistedPlayers: [],
-            };
-        }
-
-        const isMultiplayer = session.players.length > 1;
-        // 👇 On importe le type User ou on utilise un type générique au lieu de any[]
-        let persistedPlayers: unknown[] = [];
-
-        if (isMultiplayer) {
-            const currentUsers = await Promise.all(
-                session.players.map((p) => this.usersService.findById(p.id)),
-            );
-
-            const ratingPlayersInput = session.players.map(
-                (sessionPlayer, index) => {
-                    const dbUser = currentUsers[index];
-
-                    // 🔒 FIX 1 : On gère le cas 'null' avec une valeur par défaut (ex: 1000 Elo)
-                    const currentRating = dbUser?.rating ?? 1000;
-
-                    return {
-                        id: sessionPlayer.id,
-                        username: sessionPlayer.username,
-                        rating: currentRating,
-                        score: sessionPlayer.totalScore,
-                    };
-                },
-            );
-
-            const totalRounds = session.games.length;
-
-            const ratingResults = this.ratingService.calculateRatings(
-                ratingPlayersInput,
-                totalRounds,
-            );
-
-            persistedPlayers = await Promise.all(
-                ratingResults.map((result, index) => {
-                    const playerId = ratingPlayersInput[index].id;
-                    return this.usersService.updateRating(
-                        playerId,
-                        result.newRating,
-                    );
-                }),
-            );
-
-            // 🔒 FIX 2 : On supprime les 'any' en utilisant une intersection de types locale
-            session.players.forEach((p, index) => {
-                // On indique à TypeScript qu'on "étend" l'objet temporairement
-                const enrichedPlayer = p as typeof p & {
-                    ratingDelta: number;
-                    newRating: number;
-                };
-                enrichedPlayer.ratingDelta = ratingResults[index].delta;
-                enrichedPlayer.newRating = ratingResults[index].newRating;
-            });
-        }
-
-        // On marque la partie comme comptabilisée pour éviter les requêtes multiples
-        session.scorePersistedAt = new Date().toISOString();
+        const scoreObtained = adapter.extractScore(result);
+        this.scoreAggregator.applyRoundScore(session, round, scoreObtained);
 
         return {
-            session: this.cloneSession(session),
-            persistedPlayers,
-            isRanked: isMultiplayer,
+            addedScore: scoreObtained,
+            totalRoundScore: round.score,
+            result
+        };
+    }
+
+    closeRound(id: string, userId: string, roundIndex: number) {
+        const session = this.getSessionOrThrow(id, userId);
+
+        if (session.status !== "running") throw new BadRequestException("La partie est terminée.");
+        if (roundIndex !== session.currentRoundIndex) return this.cloneSession(session);
+
+        const round = session.rounds[roundIndex];
+        round.closedAt = new Date().toISOString();
+
+        if (session.currentRoundIndex < session.rounds.length - 1) {
+            session.currentRoundIndex++;
+        }
+
+        return this.cloneSession(session);
+    }
+
+    async finishGame(id: string, userId: string) {
+        const session = this.getSessionOrThrow(id, userId);
+
+        if (session.status === "finished") return this.cloneSession(session);
+
+        const currentRound = session.rounds[session.currentRoundIndex];
+        if (!currentRound.closedAt) currentRound.closedAt = new Date().toISOString();
+
+        session.status = "finished";
+        session.endedAt = new Date().toISOString();
+
+        let expectedTotalScore = 0;
+
+        for (const r of session.rounds) {
+            const par = this.EXPECTED_SCORES[r.game.id] || 10;
+            expectedTotalScore += par;
+        }
+
+        let performanceRatio = 1.0;
+        if (expectedTotalScore > 0) {
+            performanceRatio = session.totalScore / expectedTotalScore;
+        }
+
+        let ratingDelta = Math.round((performanceRatio - 1.0) * 40);
+
+        ratingDelta = Math.max(-50, Math.min(100, ratingDelta));
+        session.ratingDelta = ratingDelta;
+
+        const dbUser = await this.usersService.findById(userId);
+        const currentRating = dbUser?.rating ?? 1000;
+        const newRating = Math.max(0, currentRating + ratingDelta);
+
+        await this.usersService.updateRating(userId, newRating);
+
+        return this.cloneSession(session);
+    }
+
+    getSessionOrThrow(id: string, userId: string): GameSession {
+        const session = this.sessions.get(id.trim().toUpperCase());
+        if (!session) throw new NotFoundException("Partie introuvable.");
+        if (session.userId !== userId) throw new ForbiddenException("Cette partie ne vous appartient pas.");
+        return session;
+    }
+
+    private cloneSession(session: GameSession): GameSession {
+        return {
+            ...session,
+            games: [...session.games],
+            rounds: session.rounds.map((r) => ({
+                ...r,
+                prompt: r.prompt ? { ...r.prompt } : null,
+            })),
         };
     }
 }
