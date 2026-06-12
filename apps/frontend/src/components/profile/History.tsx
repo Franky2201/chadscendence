@@ -1,38 +1,37 @@
 import { useTranslation } from "react-i18next";
 import { Card } from "../ui";
 import { GameHistoryCard, type GameHistory } from "./history/GameHistoryCard";
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import type { User } from "@chad/types";
 
-const data: GameHistory[] = [
-    {
-        start: "2026-06-09T14:30:00",
-        duration: 3,
-        players: ["Totema", "admin", "Aaa"],
-        scores: [431, 321, 123],
-        ratings: [1221, 432, 567],
-        rating_diffs: [32, -12, -3],
-    },
-    {
-        start: "2026-06-09T14:35:00",
-        duration: 3,
-        players: ["Totema", "admin", "Aaa"],
-        scores: [431, 321, 123],
-        ratings: [123, 432, 567],
-        rating_diffs: [-32, -12, -3],
-    },
-    {
-        start: "2026-06-04T14:30:00",
-        duration: 3,
-        players: ["Totema", "admin", "Aaa"],
-        scores: [431, 321, 123],
-        ratings: [873, 432, 567],
-        rating_diffs: [0, -12, -3],
-    },
-];
+interface HistoryProps {
+    user: User | null;
+}
 
-export function History() {
+export function History({ user }: HistoryProps) {
     const { t } = useTranslation();
     const [openId, setOpenId] = useState<string | null>(null);
+
+    const historyData: (GameHistory & { id: string })[] = useMemo(() => {
+        if (!user?.analytics) return [];
+
+        return user.analytics
+            .slice()
+            .sort(
+                (a, b) =>
+                    new Date(b.playedAt).getTime() -
+                    new Date(a.playedAt).getTime(),
+            )
+            .map((game) => ({
+                id: game.id,
+                start: new Date(game.playedAt).toISOString(),
+                duration: game.roundsDetails?.length || 0,
+                players: [user.username],
+                scores: [game.totalScore],
+                ratings: [game.newRating],
+                rating_diffs: [game.ratingDelta],
+            }));
+    }, [user]);
 
     const commonClasses =
         "select-none flex justify-self-center font-mona-sans-ligh text-xs sm:text-md";
@@ -42,7 +41,7 @@ export function History() {
             <div className="flex flex-col gap-2">
                 <div className="grid grid-cols-4 gap-2 px-4">
                     <span className={commonClasses}>
-                        {t("profilePage.statistics.gameHistory.position")}
+                        {t("profilePage.statistics.gameHistory.rounds")}
                     </span>
                     <span className={commonClasses}>
                         {t("profilePage.statistics.gameHistory.score")}
@@ -55,16 +54,22 @@ export function History() {
                     </span>
                 </div>
 
-                {data.map((g) => (
-                    <GameHistoryCard
-                        key={g.start}
-                        game={g}
-                        isOpen={openId === g.start}
-                        onToggle={() =>
-                            setOpenId(openId === g.start ? null : g.start)
-                        }
-                    />
-                ))}
+                {historyData.length === 0 ? (
+                    <div className="text-center text-white/50 py-6 italic font-mono text-sm">
+                        {t("profilePage.statistics.gameHistory.noData")}
+                    </div>
+                ) : (
+                    historyData.map((g) => (
+                        <GameHistoryCard
+                            key={g.id}
+                            game={g}
+                            isOpen={openId === g.id}
+                            onToggle={() =>
+                                setOpenId(openId === g.id ? null : g.id)
+                            }
+                        />
+                    ))
+                )}
             </div>
         </Card>
     );

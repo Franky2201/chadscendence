@@ -19,9 +19,6 @@ export default function AdminPage() {
     const hasPermissions =
         user?.role?.permissions && user.role.permissions.length > 0;
 
-    const canManageRanks =
-        user?.role?.permissions?.some((p) => p.action === "MANAGE_RANKS") ??
-        false;
     const canManageRoles =
         user?.role?.permissions?.some((p) => p.action === "MANAGE_ROLES") ??
         false;
@@ -39,7 +36,7 @@ export default function AdminPage() {
         handleDeleteRole,
         handleUpdateUser,
         handleBanUser,
-    } = useAdmin(canManageRoles, canManageRanks, canManageUsers);
+    } = useAdmin(canManageRoles, canManageUsers);
 
     useEffect(() => {
         if (!hasPermissions) {
@@ -73,14 +70,6 @@ export default function AdminPage() {
                     >
                         {t("admin.tabs.users")}
                     </Button>
-                    {canManageRanks && (
-                        <Button
-                            color={activeTab === "ranks" ? "pink" : "grey"}
-                            onClick={() => setActiveTab("ranks")}
-                        >
-                            {t("admin.tabs.ranks")}
-                        </Button>
-                    )}
                     {canManageRoles && (
                         <Button
                             color={activeTab === "roles" ? "pink" : "grey"}
@@ -99,12 +88,6 @@ export default function AdminPage() {
                         onUpdate={handleUpdateRole}
                         onDelete={handleDeleteRole}
                     />
-                )}
-
-                {activeTab === "ranks" && canManageRanks && (
-                    <div className="text-white/50 italic">
-                        Composant RankManager à insérer ici
-                    </div>
                 )}
 
                 {activeTab === "users" && (

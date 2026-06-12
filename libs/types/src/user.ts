@@ -11,6 +11,21 @@ export enum AccountStatus {
     BANNED = "banned",
 }
 
+export interface RoundDetail {
+    gameId: string;
+    score: number;
+}
+
+export interface GameAnalytics {
+    id: string;
+    userId: string;
+    totalScore: number;
+    ratingDelta: number;
+    newRating: number;
+    roundsDetails: RoundDetail[];
+    playedAt: string | Date;
+}
+
 export interface User {
     id: string;
     username: string;
@@ -27,6 +42,7 @@ export interface User {
     githubId?: string;
     createdAt: string | Date;
     updatedAt: string | Date;
+    analytics: GameAnalytics[];
 }
 
 export interface UpdateMePayload {

@@ -43,7 +43,7 @@ export class AuthController {
                     secret: this.configService.get<string>("JWT_SECRET") || "",
                 },
             );
-            const user = await this.usersService.findById(payload.sub);
+            const user = await this.usersService.getUser(payload.sub);
 
             return { isAuthenticated: true, user };
         } catch {
