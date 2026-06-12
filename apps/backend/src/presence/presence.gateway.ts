@@ -82,4 +82,18 @@ export class PresenceGateway
             this.server.emit("user_status", { userId, status: "offline" });
         }
     }
+
+    notifyUserBanned(userId: string) {
+        const clients = this.presenceService.getClients(userId);
+        if (clients && clients.length > 0) {
+            this.server.to(clients).emit("banned");
+            // Optionally force disconnect after a short delay
+            setTimeout(() => {
+                for (const clientId of clients) {
+                    const socket = this.server.sockets.sockets.get(clientId);
+                    if (socket) socket.disconnect();
+                }
+            }, 1000);
+        }
+    }
 }

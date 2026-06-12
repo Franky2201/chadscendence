@@ -3,6 +3,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 import { toast } from "sonner";
 import { checkAuthStatus, logout as logoutAuth } from "../services/auth";
 import type { User } from "@chad/types";
+import { socket } from "../services/socket";
 
 interface AuthContextType {
     user: User | null;
@@ -23,6 +24,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             const data = await checkAuthStatus();
             if (data.isAuthenticated && data.user) {
                 setUser(data.user);
+                if (data.user.accountStatus === "banned") {
+                    if (window.location.pathname !== "/banned") {
+                        window.location.href = "/banned";
+                    }
+                }
             } else {
                 setUser(null);
             }
@@ -30,6 +36,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             setUser(null);
         }
     };
+
+    useEffect(() => {
+        socket.on("banned", () => {
+            window.location.href = "/banned";
+        });
+
+        return () => {
+            socket.off("banned");
+        };
+    }, []);
 
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);

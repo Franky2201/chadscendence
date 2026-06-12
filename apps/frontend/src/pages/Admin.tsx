@@ -42,14 +42,12 @@ export default function AdminPage() {
     } = useAdmin(canManageRoles, canManageRanks, canManageUsers);
 
     useEffect(() => {
-        if (!hasPermissions) {
+        if (!isLoading && !hasPermissions) {
             navigate("/");
         }
-    }, [hasPermissions, navigate]);
+    }, [hasPermissions, navigate, isLoading]);
 
-    if (!hasPermissions) return null;
-
-    if (isLoading)
+    if (isLoading || !user)
         return (
             <Window>
                 <div className="p-8 text-white font-bold text-center">
@@ -57,6 +55,8 @@ export default function AdminPage() {
                 </div>
             </Window>
         );
+
+    if (!hasPermissions) return null;
 
     return (
         <Window>
