@@ -52,7 +52,7 @@ export default function PublicProfile() {
                         <Card
                             size="large"
                             title={profile.username}
-                            href="/users"
+                            onClick={() => navigate(-1)}
                         >
                             <div className="flex flex-col md:flex-row gap-8 items-center md:items-start w-full mt-4">
                                 <div className="flex flex-col items-center gap-4 md:w-1/3">
