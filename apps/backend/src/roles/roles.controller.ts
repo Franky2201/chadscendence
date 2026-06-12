@@ -16,9 +16,8 @@ import { Permissions } from "../common/decorators/permissions.decorator";
 import { PermissionAction, Role, Permission } from "@chad/types";
 
 @Controller("roles")
-@UseGuards(JwtAuthGuard, PermissionsGuard)
 export class RolesController {
-    constructor(private readonly rolesService: RolesService) {}
+    constructor(private readonly rolesService: RolesService) { }
 
     @Get()
     findAll(): Promise<Role[]> {
@@ -36,12 +35,14 @@ export class RolesController {
     }
 
     @Post()
+    @UseGuards(JwtAuthGuard, PermissionsGuard)
     @Permissions(PermissionAction.MANAGE_ROLES)
     create(@Body() createRoleDto: CreateRoleDto): Promise<Role> {
         return this.rolesService.create(createRoleDto);
     }
 
     @Patch(":id")
+    @UseGuards(JwtAuthGuard, PermissionsGuard)
     @Permissions(PermissionAction.MANAGE_ROLES)
     update(
         @Param("id") id: string,
@@ -51,6 +52,7 @@ export class RolesController {
     }
 
     @Delete(":id")
+    @UseGuards(JwtAuthGuard, PermissionsGuard)
     @Permissions(PermissionAction.MANAGE_ROLES)
     remove(@Param("id") id: string): Promise<Role> {
         return this.rolesService.remove(id);
