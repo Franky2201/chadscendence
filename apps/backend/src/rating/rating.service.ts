@@ -23,7 +23,10 @@ export class RatingService {
         }
 
         let ratingDelta = Math.round((performanceRatio - 1.0) * this.K_FACTOR);
-        ratingDelta = Math.max(this.MAX_LOSS, Math.min(this.MAX_GAIN, ratingDelta));
+        ratingDelta = Math.max(
+            this.MAX_LOSS,
+            Math.min(this.MAX_GAIN, ratingDelta),
+        );
 
         const newRating = Math.max(0, currentRating + ratingDelta);
 

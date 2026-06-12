@@ -17,7 +17,7 @@ import { PermissionAction, Role, Permission } from "@chad/types";
 
 @Controller("roles")
 export class RolesController {
-    constructor(private readonly rolesService: RolesService) { }
+    constructor(private readonly rolesService: RolesService) {}
 
     @Get()
     findAll(): Promise<Role[]> {
