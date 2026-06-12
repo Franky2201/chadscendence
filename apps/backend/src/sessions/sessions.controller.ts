@@ -56,6 +56,15 @@ export class SessionsController {
         );
     }
 
+    @Post(":id/rounds/:roundIndex/close")
+    closeRound(
+        @Param("id") id: string,
+        @Param("roundIndex", ParseIntPipe) roundIndex: number,
+        @GetUser() user: JwtPayload,
+    ) {
+        return this.sessionsService.closeRound(id, user.sub, roundIndex);
+    }
+
     @Post(":id/finish")
     finishGame(@Param("id") id: string, @GetUser() user: JwtPayload) {
         return this.sessionsService.finishGame(id, user.sub);

@@ -8,30 +8,33 @@ import { GamesService } from "../games/games.service";
 import { UsersService } from "../users/users.service";
 import { GameAdapterRegistry } from "./engine/game-adapter.registry";
 import { ScoreAggregator } from "./engine/score-aggregator";
-import type { GameSession, GameSessionRound, Game } from "@chad/types";
 import { RatingService } from "src/rating/rating.service";
+import type { GameSession, GameSessionRound, Game } from "@chad/types";
 
 @Injectable()
 export class SessionsService {
     private readonly sessions = new Map<string, GameSession>();
     private readonly gameAdapterRegistry = new GameAdapterRegistry();
     private readonly scoreAggregator = new ScoreAggregator();
-    private readonly EXPECTED_SCORES: Record<string, number> = {
-        math: 10,
-        clicker: 50,
-        reaction: 5,
-    };
+
+    private readonly GAME_CONFIG: Record<
+        string,
+        { timeLimit: number; par: number }
+    > = {
+            math: { timeLimit: 10, par: 1 },
+            reaction: { timeLimit: 20, par: 1 },
+        };
 
     constructor(
         private readonly gamesService: GamesService,
         private readonly usersService: UsersService,
         private readonly ratingService: RatingService,
-    ) {}
+    ) { }
 
     async createSession(
         userId: string,
         selectedGameIds: string[],
-        repetitions: number,
+        sequenceLength: number,
     ): Promise<GameSession> {
         const activeGames = await this.gamesService.getActiveGames();
         const gameCatalog = new Map(activeGames.map((g) => [g.id, g]));
@@ -40,9 +43,8 @@ export class SessionsService {
             .map((id) => gameCatalog.get(id))
             .filter((g): g is Game => Boolean(g));
 
-        if (selectedGames.length === 0) {
+        if (selectedGames.length === 0)
             throw new BadRequestException("Aucun jeu valide sélectionné.");
-        }
 
         const sessionId = Math.random()
             .toString(36)
@@ -50,16 +52,15 @@ export class SessionsService {
             .toUpperCase();
         const rounds: GameSessionRound[] = [];
 
-        let roundIndex = 0;
-        for (let r = 0; r < repetitions; r++) {
-            for (const game of selectedGames) {
-                rounds.push({
-                    index: roundIndex++,
-                    game,
-                    score: 0,
-                    prompt: null,
-                });
-            }
+        for (let r = 0; r < sequenceLength; r++) {
+            const randomGame =
+                selectedGames[Math.floor(Math.random() * selectedGames.length)];
+            rounds.push({
+                index: r,
+                game: randomGame,
+                score: 0,
+                prompt: null,
+            });
         }
 
         const session: GameSession = {
@@ -100,7 +101,9 @@ export class SessionsService {
         }
 
         round.startedAt = new Date().toISOString();
-        return this.cloneSession(session);
+
+        const duration = this.GAME_CONFIG[gameId]?.timeLimit || 10;
+        return { session: this.cloneSession(session), duration };
     }
 
     async submitRoundAnswer(
@@ -110,17 +113,11 @@ export class SessionsService {
         answer: unknown,
     ) {
         const session = this.getSessionOrThrow(id, userId);
-
-        if (session.status !== "running")
-            throw new BadRequestException("La partie est terminée.");
-        if (roundIndex !== session.currentRoundIndex)
-            throw new BadRequestException("Mauvais index de round.");
-
         const round = session.rounds[roundIndex];
+        const gameId = String((round.game as unknown as { id: string }).id);
+
         if (round.closedAt)
             throw new BadRequestException("Ce round est déjà clôturé.");
-
-        const gameId = String((round.game as unknown as { id: string }).id);
 
         const adapter = this.gameAdapterRegistry.getAdapter(gameId);
         const prompt = round.prompt ?? { kind: "action", prompt: "Play" };
@@ -135,9 +132,12 @@ export class SessionsService {
         const scoreObtained = adapter.extractScore(result);
         this.scoreAggregator.applyRoundScore(session, round, scoreObtained);
 
+        const isCompleted = gameId === "math" || gameId === "reaction";
+
         return {
             addedScore: scoreObtained,
             totalRoundScore: round.score,
+            isCompleted,
             result,
         };
     }
@@ -150,19 +150,15 @@ export class SessionsService {
         if (roundIndex !== session.currentRoundIndex)
             return this.cloneSession(session);
 
-        const round = session.rounds[roundIndex];
-        round.closedAt = new Date().toISOString();
-
-        if (session.currentRoundIndex < session.rounds.length - 1) {
+        session.rounds[roundIndex].closedAt = new Date().toISOString();
+        if (session.currentRoundIndex < session.rounds.length - 1)
             session.currentRoundIndex++;
-        }
 
         return this.cloneSession(session);
     }
 
     async finishGame(id: string, userId: string) {
         const session = this.getSessionOrThrow(id, userId);
-
         if (session.status === "finished") return this.cloneSession(session);
 
         const currentRound = session.rounds[session.currentRoundIndex];
@@ -175,8 +171,7 @@ export class SessionsService {
         let expectedTotalScore = 0;
         for (const r of session.rounds) {
             const gameId = String((r.game as unknown as { id: string }).id);
-            const par = this.EXPECTED_SCORES[gameId] || 10;
-            expectedTotalScore += par;
+            expectedTotalScore += this.GAME_CONFIG[gameId]?.par || 10;
         }
 
         const dbUser = await this.usersService.findById(userId);
@@ -189,7 +184,6 @@ export class SessionsService {
         );
 
         session.ratingDelta = delta;
-
         await this.usersService.updateRating(userId, newRating);
 
         return this.cloneSession(session);
