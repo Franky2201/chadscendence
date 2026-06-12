@@ -8,15 +8,13 @@ const TermsOfService: React.FC = () => {
     const { isLoading } = useAuth();
     const navigate = useNavigate();
 
-    const userAccountItems = t(
-        "termsOfService.userAccounts.items",
-        { returnObjects: true }
-    ) as string[];
+    const userAccountItems = t("termsOfService.userAccounts.items", {
+        returnObjects: true,
+    }) as string[];
 
-    const acceptableUseItems = t(
-        "termsOfService.acceptableUse.items",
-        { returnObjects: true }
-    ) as string[];
+    const acceptableUseItems = t("termsOfService.acceptableUse.items", {
+        returnObjects: true,
+    }) as string[];
 
     if (isLoading)
         return (

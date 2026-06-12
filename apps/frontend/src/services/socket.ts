@@ -1,8 +1,6 @@
 import { io } from "socket.io-client";
 
-const backendUrl = import.meta.env.PROD
-    ? undefined
-    : import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+const backendUrl = undefined;
 
 export const socket = io(backendUrl, {
     withCredentials: true,

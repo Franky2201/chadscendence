@@ -8,20 +8,17 @@ const PrivacyPolicy: React.FC = () => {
     const { isLoading } = useAuth();
     const navigate = useNavigate();
 
-    const informationItems = t(
-        "privacyPolicy.informationWeCollect.items",
-        { returnObjects: true }
-    ) as string[];
+    const informationItems = t("privacyPolicy.informationWeCollect.items", {
+        returnObjects: true,
+    }) as string[];
 
-    const usageItems = t(
-        "privacyPolicy.howWeUseYourData.items",
-        { returnObjects: true }
-    ) as string[];
+    const usageItems = t("privacyPolicy.howWeUseYourData.items", {
+        returnObjects: true,
+    }) as string[];
 
-    const gdprItems = t(
-        "privacyPolicy.gdprRights.items",
-        { returnObjects: true }
-    ) as string[];
+    const gdprItems = t("privacyPolicy.gdprRights.items", {
+        returnObjects: true,
+    }) as string[];
 
     if (isLoading)
         return (
