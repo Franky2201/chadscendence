@@ -9,6 +9,7 @@ import { UsersService } from "../users/users.service";
 import { GameAdapterRegistry } from "./engine/game-adapter.registry";
 import { ScoreAggregator } from "./engine/score-aggregator";
 import type { GameSession, GameSessionRound, Game } from "@chad/types";
+import { RatingService } from "src/rating/rating.service";
 
 @Injectable()
 export class SessionsService {
@@ -24,6 +25,7 @@ export class SessionsService {
     constructor(
         private readonly gamesService: GamesService,
         private readonly usersService: UsersService,
+        private readonly ratingService: RatingService,
     ) { }
 
     async createSession(userId: string, selectedGameIds: string[], repetitions: number): Promise<GameSession> {
@@ -148,25 +150,21 @@ export class SessionsService {
         session.endedAt = new Date().toISOString();
 
         let expectedTotalScore = 0;
-
         for (const r of session.rounds) {
             const par = this.EXPECTED_SCORES[r.game.id] || 10;
             expectedTotalScore += par;
         }
 
-        let performanceRatio = 1.0;
-        if (expectedTotalScore > 0) {
-            performanceRatio = session.totalScore / expectedTotalScore;
-        }
-
-        let ratingDelta = Math.round((performanceRatio - 1.0) * 40);
-
-        ratingDelta = Math.max(-50, Math.min(100, ratingDelta));
-        session.ratingDelta = ratingDelta;
-
         const dbUser = await this.usersService.findById(userId);
         const currentRating = dbUser?.rating ?? 1000;
-        const newRating = Math.max(0, currentRating + ratingDelta);
+
+        const { newRating, delta } = this.ratingService.calculateSoloRating(
+            currentRating,
+            session.totalScore,
+            expectedTotalScore,
+        );
+
+        session.ratingDelta = delta;
 
         await this.usersService.updateRating(userId, newRating);
 

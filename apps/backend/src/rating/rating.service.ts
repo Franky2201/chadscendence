@@ -1,48 +1,35 @@
 import { Injectable } from "@nestjs/common";
-import { RatingPlayer, RatingResult } from "./rating.types";
+
+export interface SoloRatingResult {
+    newRating: number;
+    delta: number;
+}
 
 @Injectable()
 export class RatingService {
-    private winEstimation(ratingA: number, ratingB: number): number {
-        const result = 1 / (1 + Math.pow(10, -(ratingA - ratingB) / 600));
+    private readonly K_FACTOR = 40;
+    private readonly MAX_GAIN = 100;
+    private readonly MAX_LOSS = -50;
 
-        return Math.max(0, Math.min(1, result));
-    }
+    calculateSoloRating(
+        currentRating: number,
+        totalScore: number,
+        expectedTotalScore: number,
+    ): SoloRatingResult {
+        let performanceRatio = 1.0;
 
-    private scoreDiff(scoreA: number, scoreB: number): number {
-        return 0.5 * Math.tanh((scoreA - scoreB) / 15) + 0.5;
-    }
-
-    calculateRatings(players: RatingPlayer[], rounds: number): RatingResult[] {
-        const n = players.length;
-
-        const deltas = new Array<number>(n).fill(0);
-
-        for (let i = 0; i < n; i++) {
-            for (let j = 0; j < n; j++) {
-                if (i === j) continue;
-
-                const estimation = this.winEstimation(
-                    players[i].rating,
-                    players[j].rating,
-                );
-
-                const scoreDiff = this.scoreDiff(
-                    players[i].score,
-                    players[j].score,
-                );
-
-                const ratingDelta =
-                    ((0.9 * rounds) / (n - 1)) * (scoreDiff - estimation);
-
-                deltas[i] += ratingDelta;
-            }
+        if (expectedTotalScore > 0) {
+            performanceRatio = totalScore / expectedTotalScore;
         }
 
-        return players.map((player, index) => ({
-            username: player.username,
-            newRating: Math.max(0, player.rating + deltas[index]),
-            delta: deltas[index],
-        }));
+        let ratingDelta = Math.round((performanceRatio - 1.0) * this.K_FACTOR);
+        ratingDelta = Math.max(this.MAX_LOSS, Math.min(this.MAX_GAIN, ratingDelta));
+
+        const newRating = Math.max(0, currentRating + ratingDelta);
+
+        return {
+            newRating,
+            delta: ratingDelta,
+        };
     }
 }
