@@ -6,6 +6,8 @@ export interface SessionRoundPrompt {
 	kind: SessionInputKind;
 	prompt: string;
 	roundToken?: string;
+	actionLabel?: string;
+	actionValue?: string;
 }
 
 export interface GameSessionRound {
