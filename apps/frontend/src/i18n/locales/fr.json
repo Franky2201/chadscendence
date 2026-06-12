@@ -31,10 +31,10 @@
                 "password": "Mot de passe",
                 "register": "S'inscrire",
                 "error": "Identifiants invalides",
-                "invalidEmail": "Veuillez entrer une adresse email valide.",
-                "weakPassword": "Le mot de passe doit faire au moins 8 caractères et contenir une majuscule, une minuscule et un chiffre.",
                 "conflictEmail": "Cette adresse email est déjà utilisée.",
-                "conflictUsername": "Ce nom d'utilisateur est déjà utilisé."
+                "conflictUsername": "Ce nom d'utilisateur est déjà utilisé.",
+                "invalidEmail": "Veuillez entrer une adresse email valide.",
+                "weakPassword": "Le mot de passe doit faire au moins 8 caractères et contenir une majuscule, une minuscule et un chiffre."
             }
         },
         "profile": {
@@ -44,10 +44,6 @@
             "logout": "Déconnexion"
         },
         "leaderboard": "Classement"
-    },
-    "banned": {
-        "title": "Compte banni",
-        "message": "Vous avez été banni."
     },
     "friends": {
         "title": "Mes amis",
@@ -155,6 +151,19 @@
                 "loading": "...",
                 "confirm": "Confirmer"
             }
+        },
+        "notification": {
+            "loadingError": "Erreur de chargement des données",
+            "roleCreated": "Rôle créé",
+            "creationError": "Erreur lors de la création",
+            "roleUpdated": "Rôle mis à jour",
+            "updateRoleError": "Erreur lors de la mise à jour",
+            "roleDeleted": "Rôle supprimé",
+            "deleteError": "Impossible de supprimer ce rôle",
+            "profileUpdated": "Profil mis à jour",
+            "updateProfileError": "Impossible de modifier le profil",
+            "statusUpdate": "Statut mis à jour",
+            "statusUpdateError": "Impossible d'effectuer cette action"
         }
     },
     "users": {
@@ -411,5 +420,9 @@
             "Personnalisation du jeu",
             "Système de gamification récompensant les actions des utilisateurs"
         ]
+    },
+    "banned": {
+        "title": "Compte banni",
+        "message": "Vous avez été banni."
     }
 }

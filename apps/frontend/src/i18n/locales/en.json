@@ -31,10 +31,10 @@
                 "password": "Password",
                 "register": "Register",
                 "error": "Invalid credentials",
-                "invalidEmail": "Please enter a valid email address.",
-                "weakPassword": "Password must be at least 8 characters long and contain an uppercase letter, a lowercase letter, and a number.",
                 "conflictEmail": "This email is already in use.",
-                "conflictUsername": "This username is already taken."
+                "conflictUsername": "This username is already taken.",
+                "invalidEmail": "Please enter a valid email address.",
+                "weakPassword": "Password must be at least 8 characters long and contain an uppercase letter, a lowercase letter, and a number."
             }
         },
         "profile": {
@@ -44,10 +44,6 @@
             "logout": "Logout"
         },
         "leaderboard": "Leaderboard"
-    },
-    "banned": {
-        "title": "Account Banned",
-        "message": "You have been banned."
     },
     "friends": {
         "title": "Friends",
@@ -155,6 +151,19 @@
                 "loading": "...",
                 "confirm": "Confirm"
             }
+        },
+        "notification": {
+            "loadingError": "Error loading data",
+            "roleCreated": "Role created",
+            "creationError": "Error during creation",
+            "roleUpdated": "Role updated",
+            "updateRoleError": "Error updating role",
+            "roleDeleted": "Role deleted",
+            "deleteError": "Unable to delete this role",
+            "profileUpdated": "Profile updated",
+            "updateProfileError": "Unable to update profile",
+            "statusUpdate": "Status updated",
+            "statusUpdateError": "Unable to perform this action"
         }
     },
     "users": {
@@ -411,5 +420,9 @@
             "Game customization",
             "A gamification system to reward users for their actions"
         ]
+    },
+    "banned": {
+        "title": "Account Banned",
+        "message": "You have been banned."
     }
 }

@@ -1,6 +1,5 @@
 {
     "loading": "Laden ...",
-
     "window": {
         "footer": {
             "privacyPolicy": "Privacybeleid",
@@ -8,7 +7,6 @@
             "about": "Over ons"
         }
     },
-
     "home": {
         "play": {
             "title": "Spelen",
@@ -33,10 +31,10 @@
                 "password": "Wachtwoord",
                 "register": "Registreren",
                 "error": "Ongeldige inloggegevens",
-                "invalidEmail": "Voer een geldig e-mailadres in.",
-                "weakPassword": "Wachtwoord moet minimaal 8 tekens lang zijn en een hoofdletter, een kleine letter en een cijfer bevatten.",
                 "conflictEmail": "Dit e-mailadres is al in gebruik.",
-                "conflictUsername": "Deze gebruikersnaam is al bezet."
+                "conflictUsername": "Deze gebruikersnaam is al bezet.",
+                "invalidEmail": "Voer een geldig e-mailadres in.",
+                "weakPassword": "Wachtwoord moet minimaal 8 tekens lang zijn en een hoofdletter, een kleine letter en een cijfer bevatten."
             }
         },
         "profile": {
@@ -46,10 +44,6 @@
             "logout": "Uitloggen"
         },
         "leaderboard": "Ranglijst"
-    },
-    "banned": {
-        "title": "Account verbannen",
-        "message": "Je bent verbannen."
     },
     "friends": {
         "title": "Vrienden",
@@ -67,7 +61,6 @@
         "back": "Terug",
         "settings": "Instellingen"
     },
-
     "profilePage": {
         "title": "Profiel",
         "back": "Terug",
@@ -109,7 +102,6 @@
             }
         }
     },
-
     "admin": {
         "title": "Administratie",
         "loading": "Laden...",
@@ -174,7 +166,6 @@
             "statusUpdateError": "Kan deze actie niet uitvoeren"
         }
     },
-
     "users": {
         "title": "Spelers",
         "search": "Zoek een speler...",
@@ -187,7 +178,6 @@
         "playersCount_one": "1 speler",
         "playersCount_other": "{{count}} spelers"
     },
-
     "room": {
         "error": {
             "load": "Kan deze kamer niet laden.",
@@ -318,7 +308,6 @@
             "email": "juhanse@student.42belgium.be"
         }
     },
-
     "termsOfService": {
         "title": "Gebruiksvoorwaarden",
         "back": "Terug",
@@ -398,7 +387,6 @@
             "email": "juhanse@student.42belgium.be"
         }
     },
-
     "about": {
         "title": "Who's the Chad ?",
         "back": "Terug",
@@ -417,7 +405,7 @@
             "minor": "Nevenmodule"
         },
         "projectModules": [
-            "Gebruik een framework for frontend en backend",
+            "Gebruik een framework voor frontend en backend",
             "Laat gebruikers met elkaar interageren",
             "Standaard gebruikersbeheer en authenticatie",
             "Publieke API",
@@ -432,5 +420,9 @@
             "Spelaanpassing",
             "Gamificatiesysteem om gebruikers te belonen"
         ]
+    },
+    "banned": {
+        "title": "Account verbannen",
+        "message": "Je bent verbannen."
     }
 }
