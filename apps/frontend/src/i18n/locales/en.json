@@ -185,6 +185,19 @@
 			"host": "Host"
 		}
 	},
+	"game": {
+		"title": "Create a game",
+		"back": "Back",
+		"selection": "Game selection",
+		"loading": "Loading games...",
+		"sequence": "Sequence repetitions",
+		"start": "Start game",
+		"needMoreGames": "Select at least one game",
+		"session": {
+			"loading": "GET READY",
+			"next": "NEXT"
+		}
+	},
 	"privacyPolicy": {
     "title": "Privacy Policy",
     "back": "Back",

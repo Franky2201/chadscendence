@@ -192,7 +192,19 @@
       "host": "Host"
     }
   },
-
+  "game": {
+    "title": "Spel aanmaken",
+    "back": "Terug",
+    "selection": "Spelselectie",
+    "loading": "Spellen laden...",
+    "sequence": "Sequentie herhalingen",
+    "start": "Spel starten",
+    "needMoreGames": "Selecteer minstens één spel",
+    "session": {
+      "loading": "MAAK JE KLAAR",
+      "next": "VOLGENDE"
+    }
+  },
   "privacyPolicy": {
     "title": "Privacybeleid",
     "back": "Terug",

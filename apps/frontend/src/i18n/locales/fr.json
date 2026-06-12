@@ -1,5 +1,5 @@
 {
-	"loading": "Chargement ...",
+	"loading": "Chargement...",
 	"window": {
 		"footer":{
 			"privacyPolicy": "Politique de confidentialité",
@@ -183,6 +183,19 @@
 		"playerList": {
 			"label": "Joueurs",
 			"host": "Hôte"
+		}
+	},
+	"game": {
+		"title" : "Créer une partie",
+		"back" : "Retour",
+		"selection" : "Sélection des jeux",
+		"loading" : "Chargement des jeux...",
+		"sequence" : "Répétitions de la séquence",
+		"start" : "Lancer la partie",
+		"needMoreGames" : "Sélectionnez au moins un jeu",
+		"session" : {
+			"loading" : "PRÉPAREZ-VOUS",
+			"next" : "SUIVANT"
 		}
 	},
 	"privacyPolicy": {

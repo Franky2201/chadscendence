@@ -8,7 +8,6 @@ import { Repository } from "typeorm";
 import { Rank } from "./rank.entity";
 import { OnModuleInit } from "@nestjs/common";
 import { CreateRankDto, UpdateRankDto } from "./ranks.dto";
-import { useTranslation } from "react-i18next";
 
 @Injectable()
 export class RanksService implements OnModuleInit {
@@ -24,15 +23,14 @@ export class RanksService implements OnModuleInit {
     private async seedRanks() {
         const count = await this.rankRepository.count();
         if (count > 0) return;
-        const { t } = useTranslation();
 
         const defaultRanks = [
-            { name: t("home.profile.wood"), ratingMin: 0, icon: "🪵" },
-            { name: t("home.profile.bronze"), ratingMin: 100, icon: "🥉" },
-            { name: t("home.profile.silver"), ratingMin: 500, icon: "🥈" },
-            { name: t("home.profile.gold"), ratingMin: 1000, icon: "🥇" },
-            { name: t("home.profile.platinum"), ratingMin: 2500, icon: "💎" },
-            { name: t("home.profile.chad"), ratingMin: 5000, icon: "🗿" },
+            { name: "Wood", ratingMin: 0, icon: "🪵" },
+            { name: "Bronze", ratingMin: 100, icon: "🥉" },
+            { name: "Silver", ratingMin: 500, icon: "🥈" },
+            { name: "Gold", ratingMin: 1000, icon: "🥇" },
+            { name: "Platinum", ratingMin: 2500, icon: "💎" },
+            { name: "Chad", ratingMin: 5000, icon: "🗿" },
         ];
 
         await this.rankRepository.save(defaultRanks);
