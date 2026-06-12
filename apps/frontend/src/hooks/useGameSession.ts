@@ -136,7 +136,8 @@ export function useGameSession() {
             if (res.isCompleted) {
                 if (timerRef.current) window.clearInterval(timerRef.current);
                 setTimeout(
-                    () => void handleRoundEnd(session, session.currentRoundIndex),
+                    () =>
+                        void handleRoundEnd(session, session.currentRoundIndex),
                     5000,
                 );
             }

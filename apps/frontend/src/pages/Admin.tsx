@@ -32,6 +32,7 @@ export default function AdminPage() {
     const {
         roles,
         permissions,
+        ranks,
         users,
         isLoading,
         handleCreateRole,

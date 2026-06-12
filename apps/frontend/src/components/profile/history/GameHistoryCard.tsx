@@ -19,7 +19,6 @@ type GameHistoryCardProps = {
 };
 
 type MyStats = {
-    myPosition: number;
     myScore: number;
     myRating: number;
     myRatingDiff: number;
@@ -29,7 +28,6 @@ function extractMyStats(history: GameHistory, username: string): MyStats {
     for (let i = 0; i < history.players.length; i++) {
         if (history.players[i] == username) {
             return {
-                myPosition: i + 1,
                 myScore: history.scores[i],
                 myRating: history.ratings[i],
                 myRatingDiff: history.rating_diffs[i],
@@ -37,7 +35,6 @@ function extractMyStats(history: GameHistory, username: string): MyStats {
         }
     }
     return {
-        myPosition: 0,
         myScore: 0,
         myRating: 0,
         myRatingDiff: 0,
@@ -55,7 +52,7 @@ export function GameHistoryCard({
     if (!user) {
         return null;
     }
-    const { myPosition, myScore, myRating, myRatingDiff } = extractMyStats(
+    const { myScore, myRating, myRatingDiff } = extractMyStats(
         game,
         user.username,
     );
@@ -97,7 +94,7 @@ export function GameHistoryCard({
                             isOpen ? "opacity-0 h-0" : "opacity-100"
                         }`}
                 >
-                    <span className={commonClasses}>#{myPosition}</span>
+                    <span className={commonClasses}>{game.duration}</span>
                     <span className={commonClasses}>{myScore}</span>
                     <span className={commonClasses}>{myRating}</span>
                     <span className={commonClasses}>
@@ -114,33 +111,15 @@ export function GameHistoryCard({
                 }`}
             >
                 <div className="text-sm rounded">
-                    {game.players.map((player, index) => (
-                        <div
-                            key={player}
-                            className={`grid grid-cols-4 justify-center 
-                                items-center w-full place-items-center 
-                                ${player == user.username ? "text-white" : ""}`}
-                        >
-                            <div className="grid grid-cols-2 w-full items-center text-xs sm:text-base md:text-lg">
-                                <span className="text-end mr-2">
-                                    #{index + 1}
-                                </span>
-                                <span className="truncate text-start">
-                                    {player}
-                                </span>
-                            </div>
-                            <span className={commonClasses}>
-                                {game.scores[index]}
-                            </span>
-                            <span className={commonClasses}>
-                                {game.ratings[index]}
-                            </span>
-                            <span className={commonClasses}>
-                                {game.rating_diffs[index] > 0 ? `+` : ``}
-                                {game.rating_diffs[index]}
-                            </span>
-                        </div>
-                    ))}
+                    <div className="grid grid-cols-4 justify-center items-center w-full place-items-center text-white">
+                        <span className={commonClasses}>{game.duration}</span>
+                        <span className={commonClasses}>{myScore}</span>
+                        <span className={commonClasses}>{myRating}</span>
+                        <span className={commonClasses}>
+                            {myRatingDiff > 0 ? `+` : ``}
+                            {myRatingDiff}
+                        </span>
+                    </div>
                 </div>
             </div>
         </Badge>

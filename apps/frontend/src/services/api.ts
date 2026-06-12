@@ -11,9 +11,7 @@ api.interceptors.response.use(
         const isBanned =
             error.response?.status === 403 ||
             (error.response?.status === 401 &&
-                error.response.data?.message
-                    ?.toLowerCase()
-                    .includes("banned"));
+                error.response.data?.message?.toLowerCase().includes("banned"));
 
         if (isBanned) {
             if (window.location.pathname !== "/banned") {

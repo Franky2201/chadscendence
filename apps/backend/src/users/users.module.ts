@@ -6,10 +6,11 @@ import { User } from "./user.entity";
 import { Rank } from "../ranks/rank.entity";
 import { RanksModule } from "../ranks/ranks.module";
 import { RolesModule } from "src/roles/roles.module";
+import { GameAnalytics } from "src/users/analytics.entity";
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([User, Rank]),
+        TypeOrmModule.forFeature([User, Rank, GameAnalytics]),
         forwardRef(() => RanksModule),
         forwardRef(() => RolesModule),
     ],

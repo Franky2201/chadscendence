@@ -86,16 +86,27 @@
         "statistics": {
             "gameHistory": {
                 "title": "Game History",
+                "rounds": "Rounds",
                 "position": "Position",
                 "score": "Score",
                 "rating": "Rating",
-                "ratingGained": "Aura points Gained"
+                "ratingGained": "Aura points Gained",
+                "noData": "No games played yet."
             },
             "stats": {
                 "title": "Statistics",
                 "winRate": "Win Rate",
                 "answerRate": "Answer rate",
-                "gamePlayed": "Games Played"
+                "gamePlayed": "Games Played",
+                "noData": "No data for this period.",
+                "progression": "Progression",
+                "exportCSV": "Export CSV"
+            },
+            "periods": {
+                "today": "Today",
+                "7days": "7 Days",
+                "30days": "30 Days",
+                "allTime": "All Time"
             },
             "achievements": {
                 "title": "Achievements"
@@ -176,7 +187,20 @@
         "friend": "Friend",
         "playersCount_zero": "0 players",
         "playersCount_one": "1 player",
-        "playersCount_other": "{{count}} players"
+        "playersCount_other": "{{count}} players",
+        "allRanks": "All ranks",
+        "sort": {
+            "alphaAsc": "A-Z",
+            "alphaDesc": "Z-A",
+            "ratingAsc": "- Rating",
+            "ratingDesc": "+ Rating"
+        },
+        "noResults": "No player matches these criteria.",
+        "pagination": {
+            "previous": "Previous",
+            "next": "Next",
+            "page": "Page {{current}} / {{total}}"
+        }
     },
     "room": {
         "error": {

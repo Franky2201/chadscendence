@@ -57,7 +57,7 @@ export const useAdmin = (
         };
 
         void loadData();
-    }, [canManageRoles, canManageRanks, canManageUsers, t]);
+    }, [t, canManageRoles, canManageRanks, canManageUsers]);
 
     const handleCreateRole = async (name: string, perms: string[]) => {
         try {

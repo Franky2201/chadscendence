@@ -90,7 +90,6 @@ export class ClickerSessionGameAdapter extends DefaultSessionGameAdapter {
 }
 
 export class ReactionSessionGameAdapter extends DefaultSessionGameAdapter {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     override normalizePrompt(problem: unknown): SessionRoundPrompt {
         const obj = (problem ?? {}) as Record<string, unknown>;
         return {

@@ -10,6 +10,9 @@ import { GameAdapterRegistry } from "./engine/game-adapter.registry";
 import { ScoreAggregator } from "./engine/score-aggregator";
 import { RatingService } from "src/rating/rating.service";
 import type { GameSession, GameSessionRound, Game } from "@chad/types";
+import { InjectRepository } from "@nestjs/typeorm";
+import { GameAnalytics } from "src/users/analytics.entity";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class SessionsService {
@@ -29,6 +32,8 @@ export class SessionsService {
         private readonly gamesService: GamesService,
         private readonly usersService: UsersService,
         private readonly ratingService: RatingService,
+        @InjectRepository(GameAnalytics)
+        private readonly analyticsRepository: Repository<GameAnalytics>,
     ) {}
 
     async createSession(
@@ -176,7 +181,9 @@ export class SessionsService {
             console.log(`[Scoring] Round ${r.index} (${gameId}): Par=${par}`);
         }
 
-        console.log(`[Scoring] Total Score: ${session.totalScore}, Expected: ${expectedTotalScore}`);
+        console.log(
+            `[Scoring] Total Score: ${session.totalScore}, Expected: ${expectedTotalScore}`,
+        );
 
         const dbUser = await this.usersService.findById(userId);
         const currentRating = dbUser?.rating ?? 1000;
@@ -191,6 +198,19 @@ export class SessionsService {
 
         session.ratingDelta = delta;
         await this.usersService.updateRating(userId, newRating);
+
+        const roundsDetails = session.rounds.map((r) => ({
+            gameId: String((r.game as unknown as { id: string }).id),
+            score: r.score,
+        }));
+
+        await this.analyticsRepository.save({
+            userId,
+            totalScore: session.totalScore,
+            ratingDelta: delta,
+            newRating: newRating,
+            roundsDetails,
+        });
 
         return this.cloneSession(session);
     }

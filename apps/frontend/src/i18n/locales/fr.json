@@ -86,16 +86,27 @@
         "statistics": {
             "gameHistory": {
                 "title": "Historique des parties",
+                "rounds": "Tours",
                 "position": "Position",
                 "score": "Score",
                 "rating": "Classement",
-                "ratingGained": "Points d'aura gagnés"
+                "ratingGained": "Points d'aura gagnés",
+                "noData": "Aucune partie jouée pour le moment."
             },
             "stats": {
                 "title": "Statistiques",
                 "winRate": "Taux de victoire",
                 "answerRate": "Taux de réponses",
-                "gamePlayed": "Parties jouées"
+                "gamePlayed": "Parties jouées",
+                "noData": "Aucune donnée pour cette période.",
+                "progression": "Progression",
+                "exportCSV": "Export CSV"
+            },
+            "periods": {
+                "today": "Aujourd'hui",
+                "7days": "7 Jours",
+                "30days": "30 Jours",
+                "allTime": "Toujours"
             },
             "achievements": {
                 "title": "Succès"
@@ -176,7 +187,20 @@
         "friend": "Ami",
         "playersCount_zero": "0 joueur",
         "playersCount_one": "1 joueur",
-        "playersCount_other": "{{count}} joueurs"
+        "playersCount_other": "{{count}} joueurs",
+        "allRanks": "Tous les grades",
+        "sort": {
+            "alphaAsc": "A-Z",
+            "alphaDesc": "Z-A",
+            "ratingAsc": "- Rating",
+            "ratingDesc": "+ Rating"
+        },
+        "noResults": "Aucun joueur ne correspond à ces critères.",
+        "pagination": {
+            "previous": "Précédent",
+            "next": "Suivant",
+            "page": "Page {{current}} / {{total}}"
+        }
     },
     "room": {
         "error": {

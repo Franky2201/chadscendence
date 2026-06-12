@@ -86,16 +86,27 @@
         "statistics": {
             "gameHistory": {
                 "title": "Spelgeschiedenis",
+                "rounds": "Rondes",
                 "position": "Positie",
                 "score": "Score",
                 "rating": "Rating",
-                "ratingGained": "Verdiende aurapunten"
+                "ratingGained": "Verdiende aurapunten",
+                "noData": "Nog geen partijtjes gespeeld."
             },
             "stats": {
                 "title": "Statistieken",
                 "winRate": "Winstkans",
                 "answerRate": "Antwoorden",
-                "gamePlayed": "Gespeelde wedstrijden"
+                "gamePlayed": "Gespeelde wedstrijden",
+                "noData": "Geen gegevens voor deze periode.",
+                "progression": "Progressie",
+                "exportCSV": "Exporteer CSV"
+            },
+            "periods": {
+                "today": "Vandaag",
+                "7days": "7 Dagen",
+                "30days": "30 Dagen",
+                "allTime": "Altijd"
             },
             "achievements": {
                 "title": "Achievements"
@@ -176,7 +187,20 @@
         "friend": "Vriend",
         "playersCount_zero": "0 spelers",
         "playersCount_one": "1 speler",
-        "playersCount_other": "{{count}} spelers"
+        "playersCount_other": "{{count}} spelers",
+        "allRanks": "Alle beoordelingen",
+        "sort": {
+            "alphaAsc": "A-Z",
+            "alphaDesc": "Z-A",
+            "ratingAsc": "- Rating",
+            "ratingDesc": "+ Rating"
+        },
+        "noResults": "Geen speler voldoet aan deze criteria.",
+        "pagination": {
+            "previous": "Vorige",
+            "next": "Volgende",
+            "page": "Pagina {{current}} / {{total}}"
+        }
     },
     "room": {
         "error": {
@@ -410,7 +434,7 @@
             "Standaard gebruikersbeheer en authenticatie",
             "Publieke API",
             "Geavanceerd machtigingssysteem",
-            "Gebruik een ORM voor de database",
+            "Gebruik een ORM for de database",
             "Zelfgemaakt designsysteem met herbruikbare componenten",
             "Externe authenticatie via OAuth 2.0",
             "Ondersteuning voor minstens 3 talen",
