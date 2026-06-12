@@ -8,7 +8,7 @@ type Phase = "waiting" | "ready" | "clicked" | "failed";
 interface ReactionTimeUIProps {
     prompt: SessionRoundPrompt;
     onSubmit: (answer: unknown) => Promise<void>;
-    lastResult?: any;
+    lastResult?: unknown;
 }
 
 export default function ReactionTimeUI({

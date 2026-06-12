@@ -8,7 +8,7 @@ interface GamePlayingProps {
     prompt: SessionRoundPrompt;
     timeLeft: number;
     onSubmit: (answer: unknown) => Promise<void>;
-    lastResult?: any;
+    lastResult?: unknown;
 }
 
 export function GamePlaying({

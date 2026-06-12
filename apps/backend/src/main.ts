@@ -7,6 +7,8 @@ import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import { join } from "path";
 
+import { Response } from "express";
+
 async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
@@ -23,7 +25,7 @@ async function bootstrap() {
 
     app.useStaticAssets(uploadsPath, {
         prefix: "/uploads",
-        setHeaders: (res) => {
+        setHeaders: (res: Response) => {
             res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
         },
     });

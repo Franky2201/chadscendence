@@ -24,7 +24,7 @@ export function useGameSession() {
 
     const [timeLeft, setTimeLeft] = useState<number>(0);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [lastResult, setLastResult] = useState<any>(null);
+    const [lastResult, setLastResult] = useState<unknown>(null);
 
     const timerRef = useRef<number | null>(null);
 

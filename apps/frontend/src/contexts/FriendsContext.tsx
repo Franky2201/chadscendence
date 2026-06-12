@@ -105,7 +105,7 @@ export function FriendsProvider({ children }: { children: ReactNode }) {
             socket.off("user_status");
             socket.off("friendship_updated");
         };
-    }, [user]);
+    }, [user, refreshFriends]);
 
     const acceptRequest = async (friendshipId: string) => {
         await acceptFriendRequest(friendshipId);

@@ -103,8 +103,13 @@ export default function AdminPage() {
                 )}
 
                 {activeTab === "ranks" && canManageRanks && (
-                    <div className="text-white/50 italic">
-                        Composant RankManager à insérer ici
+                    <div className="text-white flex flex-col gap-4">
+                        <div className="text-white/50 italic">
+                            Composant RankManager à insérer ici
+                        </div>
+                        <pre className="text-xs bg-black/20 p-4 rounded border border-white/10 overflow-auto">
+                            {JSON.stringify(ranks, null, 2)}
+                        </pre>
                     </div>
                 )}
 
