@@ -5,15 +5,12 @@ import { useGameSession } from "../hooks/useGameSession";
 import { useGameSetup } from "../hooks/useGameSetup";
 import { GameSetup } from "../components/games/GameSetup";
 import { GamePlaying } from "../components/games/GamePlaying";
-import { GameInterRound } from "../components/games/GameInterRound";
 import { GamePodium } from "../components/games/GamePodium";
 
 export default function SoloGamePage() {
     const { t } = useTranslation();
     const { user, isLoading: authLoading } = useAuth();
-
     const setup = useGameSetup();
-
     const {
         session,
         prompt,
@@ -42,6 +39,14 @@ export default function SoloGamePage() {
 
     const renderView = () => {
         switch (viewState) {
+            case "preparing":
+                return (
+                    <div className="flex flex-col items-center justify-center min-h-[50vh] text-white">
+                        <h1 className="text-6xl font-bold animate-bounce text-yellow-400">
+                            PRÉPAREZ-VOUS !
+                        </h1>
+                    </div>
+                );
             case "playing":
                 return (
                     <GamePlaying
@@ -51,7 +56,13 @@ export default function SoloGamePage() {
                     />
                 );
             case "inter_round":
-                return <GameInterRound />;
+                return (
+                    <div className="flex flex-col items-center justify-center min-h-[50vh] text-white">
+                        <h1 className="text-5xl font-bold text-pink-500">
+                            SUIVANT ! ⚡️
+                        </h1>
+                    </div>
+                );
             case "podium":
                 return <GamePodium session={session!} />;
             case "setup":

@@ -4,32 +4,43 @@ import {
     startRound,
     finishGame,
     submitRoundAnswer,
+    closeRound,
 } from "../services/sessions";
 import type { GameSession, SessionRoundPrompt } from "@chad/types";
 
-export type SessionViewState = "setup" | "playing" | "inter_round" | "podium";
+export type SessionViewState =
+    | "setup"
+    | "preparing"
+    | "playing"
+    | "inter_round"
+    | "podium";
 
 export function useGameSession() {
     const [session, setSession] = useState<GameSession | null>(null);
     const [prompt, setPrompt] = useState<SessionRoundPrompt | null>(null);
     const [viewState, setViewState] = useState<SessionViewState>("setup");
 
-    const [timeLeft, setTimeLeft] = useState<number>(20);
+    const [timeLeft, setTimeLeft] = useState<number>(0);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const timerRef = useRef<number | null>(null);
 
-    const launchGame = async (selectedGames: string[], repetitions: number) => {
+    const launchGame = async (
+        selectedGames: string[],
+        sequenceLength: number,
+    ) => {
         setIsSubmitting(true);
         try {
             const newSession = await createSession({
                 selectedGames,
-                repetitions,
+                repetitions: sequenceLength,
             });
             setSession(newSession);
-            await playNextRound(newSession, 0);
+
+            setViewState("preparing");
+            setTimeout(() => void playNextRound(newSession, 0), 2000);
         } catch (error) {
-            console.error("Erreur lors de la création de la partie:", error);
+            console.error("Erreur de lancement:", error);
         } finally {
             setIsSubmitting(false);
         }
@@ -39,35 +50,27 @@ export function useGameSession() {
         currentSession: GameSession,
         roundIndex: number,
     ) => {
-        setViewState("inter_round");
-
         try {
-            const updatedSession = await startRound(
+            const { session: updatedSession, duration } = await startRound(
                 currentSession.id,
                 roundIndex,
             );
+
             setSession(updatedSession);
-
-            const currentRound = updatedSession.rounds[roundIndex];
-            if (currentRound && currentRound.prompt) {
-                setPrompt(currentRound.prompt);
-            }
-
-            setTimeout(() => {
-                setViewState("playing");
-                startLocalTimer(updatedSession, roundIndex);
-            }, 2000);
+            setPrompt(updatedSession.rounds[roundIndex]?.prompt || null);
+            setViewState("playing");
+            startLocalTimer(updatedSession, roundIndex, duration);
         } catch (error) {
-            console.error("Erreur lors du lancement du round:", error);
+            console.error("Erreur lancement round:", error);
         }
     };
 
     const startLocalTimer = (
         currentSession: GameSession,
         roundIndex: number,
+        duration: number,
     ) => {
-        setTimeLeft(20);
-
+        setTimeLeft(duration);
         if (timerRef.current) window.clearInterval(timerRef.current);
 
         timerRef.current = window.setInterval(() => {
@@ -86,18 +89,30 @@ export function useGameSession() {
         currentSession: GameSession,
         roundIndex: number,
     ) => {
-        const isLastRound = roundIndex >= currentSession.rounds.length - 1;
+        if (timerRef.current) window.clearInterval(timerRef.current);
 
-        if (isLastRound) {
-            try {
-                const result = await finishGame(currentSession.id);
-                setSession(result.session);
+        try {
+            const updatedSession = await closeRound(
+                currentSession.id,
+                roundIndex,
+            );
+
+            const isLastRound = roundIndex >= updatedSession.rounds.length - 1;
+
+            if (isLastRound) {
+                const finalSession = await finishGame(updatedSession.id);
+                setSession(finalSession);
                 setViewState("podium");
-            } catch (error) {
-                console.error("Erreur lors de la fin de partie:", error);
+            } else {
+                setSession(updatedSession);
+                setViewState("inter_round");
+                setTimeout(
+                    () => void playNextRound(updatedSession, roundIndex + 1),
+                    1500,
+                );
             }
-        } else {
-            await playNextRound(currentSession, roundIndex + 1);
+        } catch (error) {
+            console.error("Erreur fin de round:", error);
         }
     };
 
@@ -105,13 +120,17 @@ export function useGameSession() {
         if (!session || viewState !== "playing") return;
 
         try {
-            await submitRoundAnswer(
+            const res = await submitRoundAnswer(
                 session.id,
                 session.currentRoundIndex,
                 answer,
             );
+
+            if (res.isCompleted) {
+                await handleRoundEnd(session, session.currentRoundIndex);
+            }
         } catch (error) {
-            console.error("Erreur lors de la soumission:", error);
+            console.error("Erreur réponse:", error);
         }
     };
 

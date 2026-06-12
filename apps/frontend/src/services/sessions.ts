@@ -16,8 +16,8 @@ export const getSession = async (id: string): Promise<GameSession> => {
 export const startRound = async (
     id: string,
     roundIndex: number,
-): Promise<GameSession> => {
-    const res = await api.post<GameSession>(
+): Promise<{ session: GameSession; duration: number }> => {
+    const res = await api.post<{ session: GameSession; duration: number }>(
         `/sessions/${id}/rounds/${roundIndex}/start`,
     );
     return res.data;
@@ -34,9 +34,17 @@ export const submitRoundAnswer = async (
     return res.data;
 };
 
-export const finishGame = async (id: string) => {
-    const res = await api.post<{ session: GameSession; isRanked: boolean }>(
-        `/sessions/${id}/finish`,
+export const closeRound = async (
+    id: string,
+    roundIndex: number,
+): Promise<GameSession> => {
+    const res = await api.post<GameSession>(
+        `/sessions/${id}/rounds/${roundIndex}/close`,
     );
+    return res.data;
+};
+
+export const finishGame = async (id: string): Promise<GameSession> => {
+    const res = await api.post<GameSession>(`/sessions/${id}/finish`);
     return res.data;
 };
