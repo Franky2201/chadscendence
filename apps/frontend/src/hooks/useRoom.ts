@@ -90,8 +90,8 @@ export function useRoom(code: string | undefined) {
         const nextSelectedGames = selectedGames.includes(id)
             ? selectedGames.filter((gameId) => gameId !== id)
             : selectedGames.length >= maxRounds
-                ? selectedGames
-                : [...selectedGames, id];
+              ? selectedGames
+              : [...selectedGames, id];
 
         setIsSubmitting(true);
         setError(null);
