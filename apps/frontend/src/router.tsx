@@ -6,7 +6,6 @@ import Profile from "./pages/Profile";
 import PublicProfile from "./pages/PublicProfile";
 import About from "./pages/About";
 import Users from "./pages/Users";
-import Room from "./pages/Room";
 import Admin from "./pages/Admin";
 
 export const router = createBrowserRouter([
@@ -37,14 +36,6 @@ export const router = createBrowserRouter([
             {
                 path: "users/:username",
                 element: <PublicProfile />,
-            },
-            {
-                path: "room",
-                element: <Room />,
-            },
-            {
-                path: "room/:code",
-                element: <Room />,
             },
             {
                 path: "admin",
