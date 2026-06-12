@@ -181,7 +181,20 @@
     "friend": "Vriend",
     "playersCount_zero": "0 spelers",
     "playersCount_one": "1 speler",
-    "playersCount_other": "{{count}} spelers"
+    "playersCount_other": "{{count}} spelers",
+    "allRanks": "Alle beoordelingen",
+    "sort": {
+      "alphaAsc": "A-Z",
+      "alphaDesc": "Z-A",
+      "ratingAsc": "- Rating",
+      "ratingDesc": "+ Rating"
+    },
+    "noResults": "Geen speler voldoet aan deze criteria.",
+    "pagination": {
+      "previous": "Vorige",
+      "next": "Volgende",
+      "page": "Pagina {{current}} / {{total}}"
+    }
   },
   "room": {
     "error": {

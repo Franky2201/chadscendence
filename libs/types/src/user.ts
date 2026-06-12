@@ -96,6 +96,7 @@ export interface UserListItem {
     status: "online" | "offline";
     accountStatus: AccountStatus;
     role: Role;
+    rank: Rank;
 }
 
 export interface BasicMessageResponse {
