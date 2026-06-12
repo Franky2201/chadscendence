@@ -174,9 +174,12 @@ export function Statistics() {
                 ards[period][1].value +
                 ards[period][2].value)) *
         100;
-    
+
     return (
-        <Card contentClassName="" title={t("profilePage.statistics.stats.title")}>
+        <Card
+            contentClassName=""
+            title={t("profilePage.statistics.stats.title")}
+        >
             <div className="flex flex-wrap w-full justify-center gap-2">
                 {periods.map((p) => (
                     <Button
