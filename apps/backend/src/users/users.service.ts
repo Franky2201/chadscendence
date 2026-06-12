@@ -50,10 +50,7 @@ export class UsersService implements OnModuleInit {
 
         const hashedPassword = await hash(adminPassword, 10);
         const defaultRank = await this.ranksService.getRankForRating(5000);
-
-        const frontendUrl =
-            this.configService.get<string>("FRONTEND_URL") ||
-            `https://${this.configService.get<string>("DOMAIN_NAME") || "localhost"}`;
+        const frontendUrl = this.configService.get<string>("FRONTEND_URL");
 
         const adminUser = this.userRepository.create({
             email: adminEmail,
@@ -292,5 +289,12 @@ export class UsersService implements OnModuleInit {
             role: user.role,
             leaderboardRank: above + 1,
         };
+    }
+
+    async updateRating(userId: string, newRating: number) {
+        await this.userRepository.update(userId, {
+            rating: Math.round(newRating),
+        });
+        return this.userRepository.findOneBy({ id: userId });
     }
 }

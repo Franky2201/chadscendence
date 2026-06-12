@@ -29,9 +29,7 @@ export class AuthService {
         @InjectRepository(Role)
         private readonly roleRepository: Repository<Role>,
     ) {
-        const frontendUrl =
-            this.configService.get<string>("FRONTEND_URL") ||
-            `https://${this.configService.get<string>("DOMAIN_NAME") || "localhost"}`;
+        const frontendUrl = this.configService.get<string>("FRONTEND_URL");
         this.defaultAvatar = `${frontendUrl}/avatar.jpg`;
     }
 

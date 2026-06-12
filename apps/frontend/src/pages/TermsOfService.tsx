@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { Card, Window } from "../components/ui";
 import { useTranslation } from "react-i18next";
+import { Header } from "../components/Header";
 
 const TermsOfService: React.FC = () => {
     const { t } = useTranslation();
@@ -25,6 +26,8 @@ const TermsOfService: React.FC = () => {
 
     return (
         <Window className="relative min-h-screen w-full overflow-hidden bg-cover bg-center">
+            <Header />
+
             <Card
                 className="relative max-w-250 mx-auto p-6"
                 title={t("termsOfService.title")}
