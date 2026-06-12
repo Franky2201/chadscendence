@@ -1,0 +1,379 @@
+{
+  "loading": "Laden ...",
+
+  "window": {
+    "footer": {
+      "privacyPolicy": "Privacybeleid",
+      "termsOFService": "Gebruiksvoorwaarden",
+      "about": "Over ons"
+    }
+  },
+
+  "home": {
+    "play": {
+      "title": "Spelen",
+      "solo": "Solo",
+      "multiplayer": "Meerspeler",
+      "colorTheme": "Aanpassing"
+    },
+    "identification": {
+      "title": "Identificatie",
+      "login": {
+        "title": "Inloggen",
+        "emailOrUsername": "E-mailadres of gebruikersnaam",
+        "password": "Wachtwoord",
+        "login": "Inloggen",
+        "error": "Ongeldige inloggegevens"
+      },
+      "register": {
+        "title": "Registreren",
+        "email": "E-mailadres",
+        "username": "Gebruikersnaam",
+        "password": "Wachtwoord",
+        "register": "Registreren",
+        "error": "Ongeldige inloggegevens"
+      }
+    },
+    "profile": {
+      "title": "Profiel",
+      "friends": "Vrienden",
+      "admin": "Beheer",
+      "logout": "Uitloggen"
+    },
+    "leaderboard": "Ranglijst"
+  },
+
+  "friends": {
+    "title": "Vrienden",
+    "search": "Zoek een speler",
+    "blank": "Je hebt nog geen vrienden.",
+    "noResults": "Geen speler gevonden.",
+    "message": "Jouw bericht",
+    "send": "Verzenden",
+    "remove": "Verwijderen",
+    "add": "Toevoegen",
+    "friend": "Vriend",
+    "pendingRequests": "Openstaande verzoeken",
+    "waiting": "Wachtend",
+    "close": "Sluiten",
+    "back": "Terug",
+    "settings": "Instellingen"
+  },
+
+  "profilePage": {
+    "title": "Profiel",
+    "back": "Terug",
+    "modify": "Bewerken",
+    "admin": "Beheer",
+    "rating": "Beoordeling",
+    "username": "Gebruikersnaam",
+    "bio": "Bio",
+    "bioPlaceholder": "Een korte bio...",
+    "changePassword": "Wachtwoord wijzigen",
+    "hide": "Verbergen",
+    "show": "Tonen",
+    "oldPassword": "Oud wachtwoord",
+    "newPassword": "Nieuw wachtwoord",
+    "save": "Wijzigingen opslaan",
+    "saving": "Opslaan...",
+    "errorBothPasswords": "Vul zowel het oude als het nieuwe wachtwoord in.",
+    "successProfile": "Profiel succesvol bijgewerkt",
+    "errorProfile": "Fout bij het bijwerken van profiel",
+    "successAvatar": "Avatar succesvol bijgewerkt",
+    "errorAvatar": "Fout bij het bijwerken van avatar",
+    "loading": "Laden ..."
+  },
+
+  "admin": {
+    "title": "Administratie",
+    "loading": "Laden...",
+    "tabs": {
+      "users": "Gebruikers",
+      "ranks": "Beoordeling",
+      "roles": "Rollen"
+    },
+    "roles": {
+      "title": "Rolbeheer",
+      "editTitle": "Rol bewerken",
+      "modify": "Bewerken",
+      "delete": "Verwijderen",
+      "newRole": "Nieuwe rol",
+      "roleName": "Rolnaam",
+      "create": "Aanmaken",
+      "cancel": "Annuleren",
+      "addRole": "Rol toevoegen",
+      "validate": "Bevestigen"
+    },
+    "usersManager": {
+      "title": "Gebruikersbeheer",
+      "search": "Zoek een speler...",
+      "allRoles": "Alle rollen",
+      "noPlayers": "Geen speler gevonden.",
+      "selectRole": "Selecteer een rol",
+      "modify": "Bewerken",
+      "unban": "Deblokkeren",
+      "ban": "Blokkeren",
+      "editModal": {
+        "title": "Bewerken",
+        "avatar": "Avatar",
+        "username": "Gebruikersnaam",
+        "bio": "Bio",
+        "rating": "Beoordeling",
+        "cancel": "Annuleren",
+        "saving": "Opslaan...",
+        "save": "Opslaan"
+      },
+      "banModal": {
+        "unbanTitle": "Speler deblokkeren",
+        "banTitle": "Speler blokkeren",
+        "unban": "Deblokkeren",
+        "ban": "Blokkeren",
+        "warning": "De speler kan niet meer inloggen.",
+        "cancel": "Annuleren",
+        "loading": "...",
+        "confirm": "Bevestigen"
+      }
+    }
+  },
+
+  "users": {
+    "title": "Spelers",
+    "search": "Zoek een speler...",
+    "loading": "Laden...",
+    "error": "Kan spelerslijst niet laden.",
+    "addFriend": "Vriend toevoegen",
+    "pending": "In afwachting",
+    "friend": "Vriend",
+    "playersCount_zero": "0 spelers",
+    "playersCount_one": "1 speler",
+    "playersCount_other": "{{count}} spelers"
+  },
+
+  "room": {
+    "error": {
+      "load": "Kan deze kamer niet laden.",
+      "updateGames": "Kan minigames niet bijwerken.",
+      "leave": "Kan kamer niet verlaten."
+    },
+    "denied": {
+      "title": "Toegang geweigerd",
+      "message": "Log in om een spel te starten.",
+      "back": "Terug naar startpagina"
+    },
+    "noCode": {
+      "title": "Geen kamercode opgegeven",
+      "message": "Gebruik de multiplayerknop op de startpagina om een kamer aan te maken of deel te nemen.",
+      "back": "Terug naar startpagina"
+    },
+    "loading": "Kamer laden...",
+    "notFound": "Kamer niet gevonden.",
+    "codeLabel": "Kamercode",
+    "copyLink": "Kopiëren",
+    "leaveRoom": "Kamer verlaten",
+    "startGame": "Spel starten",
+    "selectOneGame": "Selecteer minstens één spel",
+    "waitingHost": "Wachten op host...",
+    "gameList": {
+      "label": "Minigames",
+      "title": "Kies de lijst",
+      "loading": "Spellen laden...",
+      "selectedOrder": "Volgorde van geselecteerde spellen"
+    },
+    "playerList": {
+      "label": "Spelers",
+      "host": "Host"
+    }
+  },
+
+  "privacyPolicy": {
+    "title": "Privacybeleid",
+    "back": "Terug",
+    "lastUpdated": {
+      "title": "Laatst bijgewerkt",
+      "date": "Juni 2026"
+    },
+    "whoWeAre": {
+      "title": "Wie wij zijn",
+      "content": "Who's the Chad ? is een gamingplatform ontwikkeld als onderdeel van het 42 Belgium-curriculum. Dit privacybeleid legt uit hoe wij persoonlijke gegevens verzamelen, gebruiken en beschermen."
+    },
+    "informationWeCollect": {
+      "title": "Informatie die wij verzamelen",
+      "items": [
+        "E-mailadres",
+        "Gebruikersnaam",
+        "Wachtwoord (gehasht en nooit in platte tekst opgeslagen)",
+        "Profielafbeelding (optioneel)",
+        "GitHub- of 42 OAuth-identificaties",
+        "Spelstatistieken en ranglijsten"
+      ]
+    },
+    "howWeUseYourData": {
+      "title": "Hoe wij uw gegevens gebruiken",
+      "items": [
+        "Accounts aanmaken en beheren",
+        "Gebruikers authenticeren",
+        "Ranglijsten en statistieken tonen",
+        "Multiplayerfunctionaliteiten bieden",
+        "Platformbeveiliging onderhouden"
+      ]
+    },
+    "cookies": {
+      "title": "Cookies",
+      "content": "Wij gebruiken uitsluitend essentiële cookies voor authenticatie, sessiebeheer en beveiliging. Wij gebruiken geen advertentie- of analysecookies."
+    },
+    "publicInformation": {
+      "title": "Publieke informatie",
+      "content": "Gebruikersnamen, profielfoto's, ranglijsten, prestaties en spelstatistieken kunnen zichtbaar zijn voor andere gebruikers van het platform."
+    },
+    "oauthProviders": {
+      "title": "OAuth-providers",
+      "content": "Gebruikers kunnen inloggen via GitHub of 42. Deze authenticatie valt onder hun eigen privacybeleid en voorwaarden."
+    },
+    "gdprRights": {
+      "title": "AVG-rechten",
+      "items": [
+        "Uw gegevens inzien",
+        "Onjuiste informatie corrigeren",
+        "Verwijdering aanvragen",
+        "Verwerking beperken",
+        "Gegevensoverdraagbaarheid aanvragen",
+        "Een klacht indienen bij de Belgische Gegevensbeschermingsautoriteit (APD/GBA)"
+      ]
+    },
+    "exercisingRights": {
+      "title": "Uw rechten uitoefenen",
+      "content": "Om uw rechten uit te oefenen, inclusief het verwijderen van uw account en gegevens, kunt u contact met ons opnemen via het onderstaande e-mailadres of de accountverwijderingsoptie in uw profiel gebruiken (indien beschikbaar)."
+    },
+    "legalBasis": {
+      "title": "Rechtsgrond voor verwerking",
+      "content": "Wij verwerken uw persoonsgegevens op basis van contractuitvoering (om toegang tot het platform te bieden) en gerechtvaardigd belang (beveiliging, misbruikpreventie en verbetering van de dienst)."
+    },
+    "dataRetention": {
+      "title": "Gegevensbewaring",
+      "content": "Wij bewaren uw persoonsgegevens zolang uw account actief is. Bij verwijdering worden gegevens binnen 30 dagen definitief verwijderd, behalve indien wettelijke verplichtingen anders vereisen."
+    },
+    "ageRequirement": {
+      "title": "Leeftijdsvereiste",
+      "content": "Dit platform is bedoeld voor gebruikers van 16 jaar en ouder of de minimumleeftijd voor digitale toestemming in uw land."
+    },
+    "contact": {
+      "title": "Contact",
+      "email": "juhanse@student.42belgium.be"
+    }
+  },
+
+  "termsOfService": {
+    "title": "Gebruiksvoorwaarden",
+    "back": "Terug",
+    "lastUpdated": {
+      "title": "Laatst bijgewerkt",
+      "date": "Juni 2026"
+    },
+    "acceptanceOfTerms": {
+      "title": "Aanvaarding van voorwaarden",
+      "content": "Door een account aan te maken of Who's the Chad ? te gebruiken, gaat u akkoord met deze gebruiksvoorwaarden."
+    },
+    "eligibility": {
+      "title": "Geschiktheid",
+      "content": "Gebruikers zijn verantwoordelijk voor naleving van toepasselijke wetten en regels."
+    },
+    "ageRequirement": {
+      "title": "Leeftijdsvereiste",
+      "content": "U moet minstens 16 jaar oud zijn of de minimumleeftijd voor digitale toestemming in uw rechtsgebied."
+    },
+    "userAccounts": {
+      "title": "Gebruikersaccounts",
+      "items": [
+        "U bent verantwoordelijk voor uw inloggegevens.",
+        "U mag uw account niet delen.",
+        "U moet correcte informatie verstrekken bij registratie."
+      ]
+    },
+    "acceptableUse": {
+      "title": "Toelaatbaar gebruik",
+      "items": [
+        "Geen ongeautoriseerde toegang proberen te krijgen.",
+        "Geen bugs of kwetsbaarheden misbruiken.",
+        "Geen verstoring van het platform veroorzaken.",
+        "Niet iemand anders imiteren.",
+        "Geen geautomatiseerde systemen gebruiken om misbruik te maken.",
+        "Geen illegale of beledigende inhoud uploaden."
+      ]
+    },
+    "rankingsAndStatistics": {
+      "title": "Ranglijsten en statistieken",
+      "content": "Spelresultaten, ranglijsten en statistieken kunnen publiek zichtbaar zijn."
+    },
+    "userContent": {
+      "title": "Gebruikersinhoud",
+      "content": "Gebruikers behouden eigendom van hun geüploade inhoud. Door te uploaden geven zij een licentie om deze te gebruiken voor het platform."
+    },
+    "intellectualProperty": {
+      "title": "Intellectuele eigendom",
+      "content": "Het platform en de inhoud blijven eigendom van het team van Who's the Chad ? tenzij anders vermeld."
+    },
+    "accountSuspension": {
+      "title": "Accountschorsing",
+      "content": "Wij kunnen accounts opschorten bij overtreding van de voorwaarden of misbruik."
+    },
+    "disclaimer": {
+      "title": "Disclaimer",
+      "content": "De dienst wordt geleverd 'zoals hij is' zonder garanties."
+    },
+    "limitationOfLiability": {
+      "title": "Beperking van aansprakelijkheid",
+      "content": "Wij zijn niet aansprakelijk voor indirecte of gevolgschade."
+    },
+    "changesToTerms": {
+      "title": "Wijzigingen in voorwaarden",
+      "content": "Wij kunnen deze voorwaarden wijzigen. Gebruik na wijzigingen betekent acceptatie."
+    },
+    "severability": {
+      "title": "Scheidbaarheid",
+      "content": "Ongeldige bepalingen worden beperkt, de rest blijft geldig."
+    },
+    "governingLaw": {
+      "title": "Toepasselijk recht",
+      "content": "Deze voorwaarden vallen onder Belgisch recht."
+    },
+    "contact": {
+      "title": "Contact",
+      "email": "juhanse@student.42belgium.be"
+    }
+  },
+
+  "about": {
+    "title": "Who's the Chad ?",
+    "back": "Terug",
+    "description": "Een webplatform voor eenvoudige minigames rond kennis en reflectie. Een leuke manier om te leren, je hersenen te trainen of te concurreren met vrienden. Gemaakt door een team van 5 als onderdeel van het 42-curriculum.",
+    "team": "Het team",
+    "technologies": "Gebruikte technologieën",
+    "modules": "Projectmodules",
+    "footer": "Gemaakt met ❤️ bij 42 Belgium",
+    "stack": {
+      "frontend": "Frontend",
+      "backend": "Backend",
+      "others": "Overige"
+    },
+    "moduleTypes": {
+      "major": "Hoofdmodule",
+      "minor": "Nevenmodule"
+    },
+    "projectModules": [
+      "Gebruik een framework voor frontend en backend",
+      "Laat gebruikers met elkaar interageren",
+      "Standaard gebruikersbeheer en authenticatie",
+      "Publieke API",
+      "Geavanceerd machtigingssysteem",
+      "Gebruik een ORM voor de database",
+      "Zelfgemaakt designsysteem met herbruikbare componenten",
+      "Externe authenticatie via OAuth 2.0",
+      "Ondersteuning voor minstens 3 talen",
+      "Ondersteuning voor extra browsers",
+      "Spelstatistieken en matchgeschiedenis",
+      "Geavanceerde chatfuncties",
+      "Spelaanpassing",
+      "Gamificatiesysteem om gebruikers te belonen"
+    ]
+  }
+}
