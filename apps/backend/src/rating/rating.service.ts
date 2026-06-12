@@ -10,6 +10,7 @@ export class RatingService {
     private readonly K_FACTOR = 40;
     private readonly MAX_GAIN = 100;
     private readonly MAX_LOSS = -50;
+    private readonly BASELINE = 0.75;
 
     calculateSoloRating(
         currentRating: number,
@@ -22,7 +23,10 @@ export class RatingService {
             performanceRatio = totalScore / expectedTotalScore;
         }
 
-        let ratingDelta = Math.round((performanceRatio - 1.0) * this.K_FACTOR);
+        let ratingDelta = Math.round(
+            (performanceRatio - this.BASELINE) * this.K_FACTOR,
+        );
+
         ratingDelta = Math.max(
             this.MAX_LOSS,
             Math.min(this.MAX_GAIN, ratingDelta),

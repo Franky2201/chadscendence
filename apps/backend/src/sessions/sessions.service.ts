@@ -21,16 +21,16 @@ export class SessionsService {
         string,
         { timeLimit: number; par: number }
     > = {
-            math: { timeLimit: 10, par: 1 },
-            reaction: { timeLimit: 20, par: 1 },
-            clicker: { timeLimit: 10, par: 30 },
-        };
+        math: { timeLimit: 10, par: 1 },
+        reaction: { timeLimit: 20, par: 1 },
+        clicker: { timeLimit: 10, par: 30 },
+    };
 
     constructor(
         private readonly gamesService: GamesService,
         private readonly usersService: UsersService,
         private readonly ratingService: RatingService,
-    ) { }
+    ) {}
 
     async createSession(
         userId: string,
