@@ -3,6 +3,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { useTranslation } from "react-i18next";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import LanguageSwitcher from "../components/LanguageSwitcher";
 
 export default function Banned() {
     const { user, logout } = useAuth();
@@ -15,8 +16,17 @@ export default function Banned() {
         }
     }, [user, navigate]);
 
+    const handleLogout = async () => {
+        await logout();
+        window.location.href = "/";
+    };
+
     return (
-        <Window className="flex items-center justify-center">
+        <Window className="relative flex items-center justify-center">
+            <div className="absolute top-8 right-8">
+                <LanguageSwitcher />
+            </div>
+
             <Card className="max-w-lg w-full p-12 text-center border-red-500/50">
                 <div className="flex flex-col items-center gap-6">
                     <div className="w-24 h-24 bg-red-500/20 rounded-full flex items-center justify-center border-2 border-red-500/50 animate-pulse">
@@ -47,7 +57,7 @@ export default function Banned() {
                     </p>
 
                     <button
-                        onClick={() => void logout()}
+                        onClick={() => void handleLogout()}
                         className="mt-4 px-8 py-3 bg-white/10 hover:bg-white/20 text-white rounded-2xl font-bold transition-all border border-white/10"
                     >
                         {t("home.profile.logout")}

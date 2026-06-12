@@ -28,12 +28,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                     if (window.location.pathname !== "/banned") {
                         window.location.href = "/banned";
                     }
+                    // Stop socket if banned
+                    socket.disconnect();
+                } else if (!socket.connected) {
+                    socket.connect();
                 }
             } else {
                 setUser(null);
+                socket.disconnect();
             }
         } catch {
             setUser(null);
+            socket.disconnect();
         }
     };
 
