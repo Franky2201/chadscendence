@@ -35,7 +35,7 @@ import type {
 
 const avatarUploadOptions = {
     storage: diskStorage({
-        destination: join(process.cwd(), "apps/backend/uploads"),
+        destination: join(__dirname, "..", "..", "..", "uploads"),
         filename: (
             _req: Express.Request,
             file: Express.Multer.File,
