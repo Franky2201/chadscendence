@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import type { Role, Permission, PermissionAction } from "@chad/types";
+import type { Role, Permission, Rank, PermissionAction } from "@chad/types";
 import { toast } from "sonner";
 import {
     getRoles,
@@ -8,6 +8,7 @@ import {
     updateRole,
     deleteRole,
 } from "../services/roles";
+import { getRanks } from "../services/ranks";
 import {
     getAllUsers,
     adminUpdateUser,
@@ -17,9 +18,14 @@ import {
 import type { UserListItem, AdminUpdateDataPayload } from "@chad/types";
 import { useTranslation } from "react-i18next";
 
-export const useAdmin = (canManageRoles: boolean, canManageUsers: boolean) => {
+export const useAdmin = (
+    canManageRoles: boolean,
+    canManageRanks: boolean,
+    canManageUsers: boolean,
+) => {
     const [roles, setRoles] = useState<Role[]>([]);
     const [permissions, setPermissions] = useState<Permission[]>([]);
+    const [ranks, setRanks] = useState<Rank[]>([]);
     const [users, setUsers] = useState<UserListItem[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const { t } = useTranslation();
@@ -29,16 +35,19 @@ export const useAdmin = (canManageRoles: boolean, canManageUsers: boolean) => {
             setIsLoading(true);
 
             try {
-                const [rolesData, permsData, usersData] = await Promise.all([
-                    canManageRoles || canManageUsers
-                        ? getRoles()
-                        : Promise.resolve([]),
-                    canManageRoles ? getPermissions() : Promise.resolve([]),
-                    getAllUsers(),
-                ]);
+                const [rolesData, permsData, ranksData, usersData] =
+                    await Promise.all([
+                        canManageRoles || canManageUsers
+                            ? getRoles()
+                            : Promise.resolve([]),
+                        canManageRoles ? getPermissions() : Promise.resolve([]),
+                        canManageRanks ? getRanks() : Promise.resolve([]),
+                        getAllUsers(),
+                    ]);
 
                 setRoles(rolesData);
                 setPermissions(permsData);
+                setRanks(ranksData);
                 setUsers(usersData);
             } catch {
                 toast.error(t("admin.notification.loadingError"));
@@ -48,7 +57,7 @@ export const useAdmin = (canManageRoles: boolean, canManageUsers: boolean) => {
         };
 
         void loadData();
-    }, [t, canManageRoles, canManageUsers]);
+    }, [t, canManageRoles, canManageRanks, canManageUsers]);
 
     const handleCreateRole = async (name: string, perms: string[]) => {
         try {
@@ -130,6 +139,7 @@ export const useAdmin = (canManageRoles: boolean, canManageUsers: boolean) => {
     return {
         roles,
         permissions,
+        ranks,
         users,
         isLoading,
         handleCreateRole,

@@ -2,6 +2,7 @@ export enum PermissionAction {
 	BAN_USER = 'BAN_USER',
 	MANAGE_USERS = 'MANAGE_USERS',
 	MANAGE_ROLES = 'MANAGE_ROLES',
+	MANAGE_RANKS = 'MANAGE_RANKS',
 }
 
 export interface Permission {

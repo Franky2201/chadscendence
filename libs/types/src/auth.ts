@@ -25,4 +25,5 @@ export interface LoginPayload {
 
 export interface AuthResponse {
     success: boolean;
+    message?: string;
 }

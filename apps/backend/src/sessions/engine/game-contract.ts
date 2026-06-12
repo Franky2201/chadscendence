@@ -90,13 +90,14 @@ export class ClickerSessionGameAdapter extends DefaultSessionGameAdapter {
 }
 
 export class ReactionSessionGameAdapter extends DefaultSessionGameAdapter {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     override normalizePrompt(problem: unknown): SessionRoundPrompt {
+        const obj = (problem ?? {}) as Record<string, unknown>;
         return {
             kind: "action",
             prompt: "Reaction Time!",
             actionLabel: "WAIT...",
             actionValue: "reaction",
+            roundToken: typeof obj.id === "string" ? obj.id : undefined,
         };
     }
 
@@ -109,15 +110,25 @@ export class ReactionSessionGameAdapter extends DefaultSessionGameAdapter {
         if (!result || typeof result !== "object") return 0;
         const res = result as Record<string, unknown>;
 
-        if (res.earlyClick) return 0;
+        if (res.tooEarly || res.earlyClick) {
+            console.log("[Scoring] Reaction Time: Too early!");
+            return 0;
+        }
 
-        const time = res.reactionTimeMs;
+        const time = (res.reactionTime ?? res.reactionTimeMs) as
+            | number
+            | undefined;
+
+        console.log(`[Scoring] Reaction Time: ${time}ms`);
+
         if (typeof time === "number") {
             if (time < 200) return 2;
             if (time < 400) return 1.5;
             if (time < 600) return 1;
             return 0.5;
         }
+
+        if (res.success === true) return 1;
 
         return 0;
     }

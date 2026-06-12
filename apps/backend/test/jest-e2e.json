@@ -4,6 +4,10 @@
     "testEnvironment": "node",
     "testRegex": ".e2e-spec.ts$",
     "transform": {
-        "^.+\\.(t|j)s$": "ts-jest"
+        "^.+\\.(t|j)sx?$": ["ts-jest", { "useESM": true }]
+    },
+    "moduleNameMapper": {
+        "^@chad/types$": "<rootDir>/../../../libs/types/index.ts",
+        "^(\\.\\.?/.*)\\.js$": "$1"
     }
 }

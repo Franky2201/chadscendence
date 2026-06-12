@@ -6,7 +6,7 @@ import {
     submitRoundAnswer,
     closeRound,
 } from "../services/sessions";
-import type { GameSession, SessionRoundPrompt } from "@chad/types";
+import type { GameSession, SessionRoundPrompt, RoundResult } from "@chad/types";
 import { useAuth } from "../contexts/AuthContext";
 
 export type SessionViewState =
@@ -24,6 +24,7 @@ export function useGameSession() {
 
     const [timeLeft, setTimeLeft] = useState<number>(0);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [lastResult, setLastResult] = useState<RoundResult | null>(null);
 
     const timerRef = useRef<number | null>(null);
 
@@ -60,6 +61,7 @@ export function useGameSession() {
 
             setSession(updatedSession);
             setPrompt(updatedSession.rounds[roundIndex]?.prompt || null);
+            setLastResult(null);
             setViewState("playing");
             startLocalTimer(updatedSession, roundIndex, duration);
         } catch (error) {
@@ -129,8 +131,15 @@ export function useGameSession() {
                 answer,
             );
 
+            setLastResult(res.result);
+
             if (res.isCompleted) {
-                await handleRoundEnd(session, session.currentRoundIndex);
+                if (timerRef.current) window.clearInterval(timerRef.current);
+                setTimeout(
+                    () =>
+                        void handleRoundEnd(session, session.currentRoundIndex),
+                    5000,
+                );
             }
         } catch (error) {
             console.error("Erreur réponse:", error);
@@ -143,6 +152,7 @@ export function useGameSession() {
         viewState,
         timeLeft,
         isSubmitting,
+        lastResult,
         launchGame,
         submitAnswer,
     };

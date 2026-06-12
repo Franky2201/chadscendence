@@ -62,8 +62,9 @@ services:
             - "${BACKEND_PORT:-3000}:3000"
         volumes:
             - ./apps/backend/src:/app/apps/backend/src
-            - backend_uploads:/app/apps/backend/uploads
-            - ./libs/types/src:/app/libs/types/src
+            - ./apps/backend/uploads:/app/apps/backend/uploads
+            - ./libs/types:/app/libs/types
+            - /app/libs/types/node_modules
         networks:
             - ft_network
         restart: unless-stopped
@@ -86,7 +87,8 @@ services:
             - "${FRONTEND_HOST_PORT:-8443}:8443"
         volumes:
             - ./apps/frontend/src:/app/apps/frontend/src
-            - ./libs/types/src:/app/libs/types/src
+            - ./libs/types:/app/libs/types
+            - /app/libs/types/node_modules
         networks:
             - ft_network
         restart: unless-stopped

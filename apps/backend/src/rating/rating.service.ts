@@ -7,10 +7,10 @@ export interface SoloRatingResult {
 
 @Injectable()
 export class RatingService {
-    private readonly K_FACTOR = 40;
-    private readonly MAX_GAIN = 100;
-    private readonly MAX_LOSS = -50;
-    private readonly BASELINE = 0.75;
+    private readonly K_FACTOR = 20;
+    private readonly MAX_GAIN = 50;
+    private readonly MAX_LOSS = -10;
+    private readonly BASELINE = 0.5;
 
     calculateSoloRating(
         currentRating: number,
