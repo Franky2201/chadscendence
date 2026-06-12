@@ -2,6 +2,7 @@ import { useTheme } from "../../contexts/ThemeContext";
 import { Card, Badge, ProgressBar } from "../ui";
 import { getItemColorStyle, getItemMixedColorStyle } from "../ui/unified";
 import achievementsData from "./achievements.json";
+import { useTranslation } from "react-i18next";
 
 type UserStats = {
     gamesPlayed: number;
@@ -52,6 +53,7 @@ function computeTierProgress(value: number, tiers: number[]): ProgressResult {
 }
 
 export function Achievements() {
+    const { t } = useTranslation();
     const { theme } = useTheme();
     const achievements = achievementsData as Achievement[];
 
@@ -65,7 +67,7 @@ export function Achievements() {
     };
 
     return (
-        <Card title="Achievements">
+        <Card title={t("profilePage.statistics.achievements.title")}>
             <div className="flex flex-wrap gap-2 justify-center">
                 {achievements.map((a) => {
                     const raw = s[a.stat];

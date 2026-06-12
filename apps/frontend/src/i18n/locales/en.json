@@ -36,15 +36,7 @@
 			"title": "Profile",
 			"friends": "Friends",
 			"admin": "Management",
-			"logout": "Logout",
-			"rank" : {
-				"wood" : "Wood",
-				"bronze" : "Bronze",
-				"silver" : "Silver",
-				"gold" : "Gold",
-				"platinum" : "Platinum",
-				"chad" : "Chad"
-			}
+			"logout": "Logout"
 		},
 		"leaderboard": "Leaderboard"
 	},
@@ -85,7 +77,25 @@
 		"errorProfile": "Error updating profile",
 		"successAvatar": "Avatar updated successfully",
 		"errorAvatar": "Error updating avatar",
-		"loading": "Loading ..."
+		"loading": "Loading ...",
+		"statistics" : {
+			"gameHistory" : {
+				"title" : "Game History",
+				"position" : "Position",
+				"score" : "Score",
+				"rating" : "Rating",
+				"ratingGained": "Aura points Gained"
+			},
+			"stats" : {
+				"title" : "Statistics",
+				"winRate" : "Win Rate",
+				"answerRate" : "Answer rate",
+				"gamePlayed" : "Games Played"
+			},
+			"achievements" : {
+				"title" : "Achievements"
+			}
+		}
 	},
 	"admin": {
 		"title": "Administration",
@@ -196,6 +206,12 @@
 		"session": {
 			"loading": "GET READY",
 			"next": "NEXT"
+		},
+		"podium": {
+			"end": "FINISHED",
+			"totalScore": "Total score",
+			"rating": "Aura points",
+			"back": "Back to home"
 		}
 	},
 	"privacyPolicy": {

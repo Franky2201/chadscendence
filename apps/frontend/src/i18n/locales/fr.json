@@ -36,15 +36,7 @@
 			"title": "Profil",
 			"friends": "Mes amis",
 			"admin": "Gestion",
-			"logout": "Déconnexion",
-			"rank" : {
-				"wood" : "Bois",
-				"bronze" : "Bronze",
-				"silver" : "Argent",
-				"gold" : "Or",
-				"platinum" : "Platine",
-				"chad" : "Chad"
-			}
+			"logout": "Déconnexion"
 		},
 		"leaderboard": "Classement"
 	},
@@ -85,7 +77,25 @@
 		"errorProfile": "Erreur lors de la mise à jour du profil",
 		"successAvatar": "Avatar mis à jour avec succès",
 		"errorAvatar": "Erreur lors de la mise à jour de l'avatar",
-		"loading": "Chargement ..."
+		"loading": "Chargement ...",
+		"statistics": {
+			"gameHistory": {
+				"title": "Historique des parties",
+				"position": "Position",
+				"score": "Score",
+				"rating": "Classement",
+				"ratingGained": "Points d'aura gagnés"
+			},
+			"stats": {
+				"title": "Statistiques",
+				"winRate": "Taux de victoire",
+				"answerRate": "Taux de réponses",
+				"gamePlayed": "Parties jouées"
+			},
+			"achievements": {
+				"title": "Succès"
+			}
+		}
 	},
 	"admin": {
 		"title": "Administration",
@@ -196,6 +206,12 @@
 		"session" : {
 			"loading" : "PRÉPAREZ-VOUS",
 			"next" : "SUIVANT"
+		},
+		"podium" : {
+			"end" : "TERMINÉ",
+			"totalScore" : "Score total",
+			"rating": "Points d'aura",
+			"back": "Retour à l'accueil"
 		}
 	},
 	"privacyPolicy": {

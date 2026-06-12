@@ -38,15 +38,7 @@
       "title": "Profiel",
       "friends": "Vrienden",
       "admin": "Beheer",
-      "logout": "Uitloggen",
-      "rank": {
-        "wood": "Hout",
-        "bronze": "Brons",
-        "silver": "Zilver",
-        "gold": "Goud",
-        "platinum": "Platina",
-        "chad": "Chad"
-      }
+      "logout": "Uitloggen"
     },
     "leaderboard": "Ranglijst"
   },
@@ -89,7 +81,25 @@
     "errorProfile": "Fout bij het bijwerken van profiel",
     "successAvatar": "Avatar succesvol bijgewerkt",
     "errorAvatar": "Fout bij het bijwerken van avatar",
-    "loading": "Laden ..."
+    "loading": "Laden ...",
+    "statistics": {
+      "gameHistory": {
+        "title": "Spelgeschiedenis",
+        "position": "Positie",
+        "score": "Score",
+        "rating": "Rating",
+        "ratingGained": "Verdiende aurapunten"
+      },
+      "stats": {
+        "title": "Statistieken",
+        "winRate": "Winstkans",
+        "answerRate": "Antwoorden",
+        "gamePlayed": "Gespeelde wedstrijden"
+      },
+			"achievements" : {
+				"title" : "Achievements"
+			}
+    }
   },
 
   "admin": {
@@ -203,6 +213,12 @@
     "session": {
       "loading": "MAAK JE KLAAR",
       "next": "VOLGENDE"
+    },
+    "podium": {
+      "end": "VOLTOOID",
+      "totalScore": "Totale score",
+      "rating": "Aura punten",
+      "back": "Terug naar start"
     }
   },
   "privacyPolicy": {

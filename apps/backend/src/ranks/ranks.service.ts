@@ -25,12 +25,12 @@ export class RanksService implements OnModuleInit {
         if (count > 0) return;
 
         const defaultRanks = [
-            { name: "Wood", ratingMin: 0, icon: "🪵" },
-            { name: "Bronze", ratingMin: 100, icon: "🥉" },
-            { name: "Silver", ratingMin: 500, icon: "🥈" },
-            { name: "Gold", ratingMin: 1000, icon: "🥇" },
-            { name: "Platinum", ratingMin: 2500, icon: "💎" },
-            { name: "Chad", ratingMin: 5000, icon: "🗿" },
+            { name: "Baby", ratingMin: 0, icon: "👶" },
+            { name: "Newbie", ratingMin: 100, icon: "👼​" },
+            { name: "Decent", ratingMin: 500, icon: "🦁" },
+            { name: "Sigma", ratingMin: 1000, icon: "👑​" },
+            { name: "Chad", ratingMin: 2500, icon: "💎" },
+            { name: "GigaChad", ratingMin: 5000, icon: "🗿" },
         ];
 
         await this.rankRepository.save(defaultRanks);
