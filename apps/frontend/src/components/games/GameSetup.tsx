@@ -118,7 +118,7 @@ export function GameSetup({
                         <label className="font-bold text-lg opacity-90">
                             Répétitions de la séquence
                         </label>
-                        <span className="text-xl font-black text-blue-500 px-4 py-1 bg-blue-500/10 rounded-lg">
+                        <span className="text-xl font-black text-white-500 px-4 py-1 bg-white-500/10 rounded-lg">
                             x{repetitions}
                         </span>
                     </div>
@@ -131,7 +131,7 @@ export function GameSetup({
                         onChange={(e) =>
                             onRepetitionsChange(Number(e.target.value))
                         }
-                        className="w-full cursor-pointer h-2 bg-slate-500/20 rounded-lg appearance-none accent-blue-500"
+                        className="w-full cursor-pointer h-2 bg-slate-500/20 rounded-lg appearance-none accent-white-500"
                     />
                 </div>
 
