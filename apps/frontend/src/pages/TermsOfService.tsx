@@ -1,17 +1,27 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { Card, Window } from "../components/ui";
-// import { useTheme } from "../contexts/ThemeContext";
+import { useTranslation } from "react-i18next";
 
 const TermsOfService: React.FC = () => {
-    // const { theme } = useTheme();
+    const { t } = useTranslation();
     const { isLoading } = useAuth();
     const navigate = useNavigate();
+
+    const userAccountItems = t(
+        "termsOfService.userAccounts.items",
+        { returnObjects: true }
+    ) as string[];
+
+    const acceptableUseItems = t(
+        "termsOfService.acceptableUse.items",
+        { returnObjects: true }
+    ) as string[];
 
     if (isLoading)
         return (
             <div className="min-h-screen flex items-center justify-center text-white bg-black">
-                Loading ...
+                {t("loading")}...
             </div>
         );
 
@@ -19,175 +29,167 @@ const TermsOfService: React.FC = () => {
         <Window className="relative min-h-screen w-full overflow-hidden bg-cover bg-center">
             <Card
                 className="relative max-w-250 mx-auto p-6"
-                title="Terms of Service"
-                description="Back"
+                title={t("termsOfService.title")}
+                description={t("termsOfService.back")}
                 size="large"
-                onClick={() => navigate(-1)}
+                onClick={() => navigate("/")}
             >
                 <div className="space-y-6">
                     <div>
                         <h2 className="text-lg font-semibold uppercase tracking-widest">
-                            Last Updated
+                            {t("termsOfService.lastUpdated.title")}
                         </h2>
-                        <p className="text-sm mt-2">June 2026</p>
-                    </div>
-
-                    <div>
-                        <h2 className="text-lg font-semibold uppercase tracking-widest">
-                            Acceptance of Terms
-                        </h2>
-                        <p className="text-sm mt-2 leading-relaxed">
-                            By creating an account or using Who's the Chad ?,
-                            you agree to these Terms of Service.
+                        <p className="text-sm mt-2">
+                            {t("termsOfService.lastUpdated.date")}
                         </p>
                     </div>
 
                     <div>
                         <h2 className="text-lg font-semibold uppercase tracking-widest">
-                            Eligibility
+                            {t("termsOfService.acceptanceOfTerms.title")}
                         </h2>
                         <p className="text-sm mt-2 leading-relaxed">
-                            Users are responsible for ensuring that their use of
-                            the platform complies with applicable laws and
-                            regulations.
+                            {t("termsOfService.acceptanceOfTerms.content")}
                         </p>
                     </div>
 
                     <div>
                         <h2 className="text-lg font-semibold uppercase tracking-widest">
-                            User Accounts
+                            {t("termsOfService.eligibility.title")}
+                        </h2>
+                        <p className="text-sm mt-2 leading-relaxed">
+                            {t("termsOfService.eligibility.content")}
+                        </p>
+                    </div>
+
+                    <div>
+                        <h2 className="text-lg font-semibold uppercase tracking-widest">
+                            {t("termsOfService.ageRequirement.title")}
+                        </h2>
+                        <p className="text-sm mt-2 leading-relaxed">
+                            {t("termsOfService.ageRequirement.content")}
+                        </p>
+                    </div>
+
+                    <div>
+                        <h2 className="text-lg font-semibold uppercase tracking-widest">
+                            {t("termsOfService.userAccounts.title")}
                         </h2>
 
                         <ul className="list-disc pl-5 text-sm mt-2 space-y-1">
-                            <li>
-                                You are responsible for your account
-                                credentials.
-                            </li>
-                            <li>
-                                You must not share your account with others.
-                            </li>
-                            <li>
-                                You must provide accurate information when
-                                registering.
-                            </li>
+                            {userAccountItems.map((item, index) => (
+                                <li key={index}>{item}</li>
+                            ))}
                         </ul>
                     </div>
 
                     <div>
                         <h2 className="text-lg font-semibold uppercase tracking-widest">
-                            Acceptable Use
+                            {t("termsOfService.acceptableUse.title")}
                         </h2>
 
                         <ul className="list-disc pl-5 text-sm mt-2 space-y-1">
-                            <li>
-                                Do not attempt unauthorized access to the
-                                platform.
-                            </li>
-                            <li>Do not exploit bugs or vulnerabilities.</li>
-                            <li>Do not interfere with platform operation.</li>
-                            <li>Do not impersonate another user.</li>
-                            <li>
-                                Do not use automated systems to abuse the
-                                service.
-                            </li>
-                            <li>
-                                Do not upload unlawful or offensive content.
-                            </li>
+                            {acceptableUseItems.map((item, index) => (
+                                <li key={index}>{item}</li>
+                            ))}
                         </ul>
                     </div>
 
                     <div>
                         <h2 className="text-lg font-semibold uppercase tracking-widest">
-                            Rankings and Statistics
+                            {t("termsOfService.rankingsAndStatistics.title")}
                         </h2>
 
                         <p className="text-sm mt-2 leading-relaxed">
-                            Game results, rankings, achievements and statistics
-                            may be displayed publicly to other users of the
-                            platform.
+                            {t("termsOfService.rankingsAndStatistics.content")}
                         </p>
                     </div>
 
                     <div>
                         <h2 className="text-lg font-semibold uppercase tracking-widest">
-                            User Content
+                            {t("termsOfService.userContent.title")}
                         </h2>
 
                         <p className="text-sm mt-2 leading-relaxed">
-                            Users retain ownership of profile pictures and other
-                            content they upload. By uploading content, users
-                            grant Who's the Chad ? a non-exclusive license to
-                            store, process and display such content for
-                            operation of the platform.
+                            {t("termsOfService.userContent.content")}
                         </p>
                     </div>
 
                     <div>
                         <h2 className="text-lg font-semibold uppercase tracking-widest">
-                            Intellectual Property
+                            {t("termsOfService.intellectualProperty.title")}
                         </h2>
 
                         <p className="text-sm mt-2 leading-relaxed">
-                            The platform, software, branding, design and related
-                            materials remain the property of the Who's the Chad
-                            ? team unless otherwise stated.
+                            {t("termsOfService.intellectualProperty.content")}
                         </p>
                     </div>
 
                     <div>
                         <h2 className="text-lg font-semibold uppercase tracking-widest">
-                            Account Suspension
+                            {t("termsOfService.accountSuspension.title")}
                         </h2>
 
                         <p className="text-sm mt-2 leading-relaxed">
-                            We reserve the right to suspend or terminate
-                            accounts that violate these Terms or that threaten
-                            the security or integrity of the platform.
+                            {t("termsOfService.accountSuspension.content")}
                         </p>
                     </div>
 
                     <div>
                         <h2 className="text-lg font-semibold uppercase tracking-widest">
-                            Disclaimer
+                            {t("termsOfService.disclaimer.title")}
                         </h2>
 
                         <p className="text-sm mt-2 leading-relaxed">
-                            The service is provided on an "as is" and "as
-                            available" basis without warranties of any kind.
+                            {t("termsOfService.disclaimer.content")}
                         </p>
                     </div>
 
                     <div>
                         <h2 className="text-lg font-semibold uppercase tracking-widest">
-                            Limitation of Liability
+                            {t("termsOfService.limitationOfLiability.title")}
                         </h2>
 
                         <p className="text-sm mt-2 leading-relaxed">
-                            To the maximum extent permitted by law, Who's the
-                            Chad ? shall not be liable for indirect, incidental
-                            or consequential damages arising from use of the
-                            platform.
+                            {t("termsOfService.limitationOfLiability.content")}
                         </p>
                     </div>
 
                     <div>
                         <h2 className="text-lg font-semibold uppercase tracking-widest">
-                            Governing Law
+                            {t("termsOfService.changesToTerms.title")}
                         </h2>
-
                         <p className="text-sm mt-2 leading-relaxed">
-                            These Terms shall be governed by and interpreted in
-                            accordance with the laws of Belgium.
+                            {t("termsOfService.changesToTerms.content")}
                         </p>
                     </div>
 
                     <div>
                         <h2 className="text-lg font-semibold uppercase tracking-widest">
-                            Contact
+                            {t("termsOfService.severability.title")}
+                        </h2>
+                        <p className="text-sm mt-2 leading-relaxed">
+                            {t("termsOfService.severability.content")}
+                        </p>
+                    </div>
+
+                    <div>
+                        <h2 className="text-lg font-semibold uppercase tracking-widest">
+                            {t("termsOfService.governingLaw.title")}
+                        </h2>
+
+                        <p className="text-sm mt-2 leading-relaxed">
+                            {t("termsOfService.governingLaw.content")}
+                        </p>
+                    </div>
+
+                    <div>
+                        <h2 className="text-lg font-semibold uppercase tracking-widest">
+                            {t("termsOfService.contact.title")}
                         </h2>
 
                         <p className="text-sm mt-2">
-                            juhanse@student.42belgium.be
+                            {t("termsOfService.contact.email")}
                         </p>
                     </div>
                 </div>

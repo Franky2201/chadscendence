@@ -4,58 +4,7 @@ import { Card, Window, Badge } from "../components/ui";
 import { developers } from "../contexts/AboutContext";
 import { type ItemColor } from "../components/ui/unified";
 import { useTheme } from "../contexts/ThemeContext";
-
-const stackLayers = [
-    {
-        label: "Frontend",
-        stack: [
-            { name: "TypeScript", color: "blue" },
-            { name: "React", color: "blue" },
-            { name: "Tailwind CSS", color: "blue" },
-            { name: "Vite", color: "purple" },
-        ],
-    },
-    {
-        label: "Backend",
-        stack: [
-            { name: "TypeScript", color: "blue" },
-            { name: "NestJS", color: "red" },
-            { name: "PostgreSQL", color: "pink" },
-            { name: "TypeORM", color: "orange" },
-        ],
-    },
-    {
-        label: "Others",
-        stack: [
-            { name: "Docker", color: "blue" },
-            { name: "Node.js", color: "green" },
-            { name: "ESLint", color: "violet" },
-        ],
-    },
-];
-
-const modules = [
-    { name: "Use a framework for both frontend and backend", type: "Major" },
-    { name: "Allow users to interact with other users", type: "Major" },
-    { name: "Standard user management and authentication", type: "Major" },
-    { name: "Public API", type: "Major" },
-    { name: "Advanced permissions system", type: "Major" },
-    { name: "Use an ORM for the database", type: "Minor" },
-    {
-        name: "Custom-made design system with reusable components",
-        type: "Minor",
-    },
-    { name: "Remote authentication with OAuth 2.0", type: "Minor" },
-    { name: "Support multiple languages (at least 3)", type: "Minor" },
-    { name: "Support for additional browser", type: "Minor" },
-    { name: "Game statistics and match history", type: "Minor" },
-    { name: "Advanced chat features", type: "Minor" },
-    { name: "Game customization", type: "Minor" },
-    {
-        name: "A gamification system to reward users for their actions",
-        type: "Minor",
-    },
-];
+import { useTranslation } from "react-i18next";
 
 const badges: { name: string; link: string; requires42?: boolean }[] = [
     { name: "42 Belgium", link: "https://42belgium.be" },
@@ -68,14 +17,51 @@ const badges: { name: string; link: string; requires42?: boolean }[] = [
 ];
 
 const About: React.FC = () => {
+    const { t } = useTranslation();
     const { theme } = useTheme();
     const { isLoading } = useAuth();
     const navigate = useNavigate();
 
+    const stackLayers = [
+        {
+            label: t("about.stack.frontend"),
+            stack: [
+                { name: "TypeScript", color: "blue" },
+                { name: "React", color: "blue" },
+                { name: "Tailwind CSS", color: "blue" },
+                { name: "Vite", color: "purple" },
+            ],
+        },
+        {
+            label: t("about.stack.backend"),
+            stack: [
+                { name: "TypeScript", color: "blue" },
+                { name: "NestJS", color: "red" },
+                { name: "PostgreSQL", color: "pink" },
+                { name: "TypeORM", color: "orange" },
+            ],
+        },
+        {
+            label: t("about.stack.others"),
+            stack: [
+                { name: "Docker", color: "blue" },
+                { name: "Node.js", color: "green" },
+                { name: "ESLint", color: "violet" },
+            ],
+        },
+    ];
+
+    const modules = (
+        t("about.projectModules", { returnObjects: true }) as string[]
+    ).map((name, index) => ({
+        name,
+        type: index < 5 ? "Major" : "Minor",
+    }));
+
     if (isLoading)
         return (
             <div className="min-h-screen flex items-center justify-center text-white bg-black">
-                Loading ...
+                {t("loading")}...
             </div>
         );
 
@@ -83,43 +69,46 @@ const About: React.FC = () => {
         <Window className="relative min-h-screen w-full overflow-hidden bg-cover bg-center">
             <Card
                 className="relative max-w-250 mx-auto p-6"
-                title="Who's is the Chad ?"
-                description="Back"
+                title={t("about.title")}
+                description={t("about.back")}
                 size="large"
-                onClick={() => navigate(-1)}
+                onClick={() => navigate("/")}
             >
                 <div className="flex flex-wrap gap-1 mb-3">
-                    {badges.map((badge) => {
-                        return (
-                            <a
-                                href={badge.link}
-                                className="flex"
-                                key={badge.name}
-                                target="_blank"
-                            >
-                                <Badge className="text-xs border-1 hover:ring-1">
-                                    {badge.name}
-                                </Badge>
-                            </a>
-                        );
-                    })}
+                    {badges.map((badge) => (
+                        <a
+                            href={badge.link}
+                            className="flex"
+                            key={badge.name}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <Badge className="text-xs border-1 hover:ring-1">
+                                {badge.name}
+                            </Badge>
+                        </a>
+                    ))}
                 </div>
 
                 <div className="mb-4">
                     <p className="text-sm leading-relaxed">
-                        A web platform for primitive minigames built around
-                        knowledge and reflection. A fun way to learn things,
-                        train your brain, or compete with friends. Built by a
-                        team of 5 as part of the 42 curriculum.
+                        {t("about.description")}
                     </p>
                 </div>
+
                 <p className="text-md font-semibold tracking-widest justify-self-center uppercase">
-                    The Team
+                    {t("about.team")}
                 </p>
+
                 <div className="p-2 mb-3">
                     <div className="flex flex-wrap justify-center gap-3">
                         {developers.map((dev, index) => (
-                            <a key={index} href={dev.link} target="_blank">
+                            <a
+                                key={index}
+                                href={dev.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
                                 <Badge
                                     color={theme}
                                     color2="white"
@@ -133,7 +122,7 @@ const About: React.FC = () => {
                                             alt={`${dev.name} profile`}
                                             className="w-18 h-18 rounded-lg translate-x-[-2px]"
                                         />
-                                        <div className=" ml-2 self-center">
+                                        <div className="ml-2 self-center">
                                             <h2 className="font-bold text-sm mb-0.5">
                                                 {dev.name}
                                             </h2>
@@ -152,22 +141,24 @@ const About: React.FC = () => {
                 </div>
 
                 <p className="text-md font-semibold tracking-widest uppercase">
-                    Technologies Used
+                    {t("about.technologies")}
                 </p>
+
                 <div className="p-3 pt-2">
                     {stackLayers.map((layer) => (
                         <div key={layer.label} className="mb-1">
                             <span className="text-xs uppercase self-center">
                                 {layer.label}
                             </span>
+
                             <div className="flex flex-wrap gap-1 p-1">
-                                {layer.stack.map((layer) => (
+                                {layer.stack.map((tech) => (
                                     <Badge
-                                        key={layer.name}
-                                        color={layer.color as ItemColor}
-                                        className={`text-xs font-medium border-2`}
+                                        key={tech.name}
+                                        color={tech.color as ItemColor}
+                                        className="text-xs font-medium border-2"
                                     >
-                                        {layer.name}
+                                        {tech.name}
                                     </Badge>
                                 ))}
                             </div>
@@ -176,8 +167,9 @@ const About: React.FC = () => {
                 </div>
 
                 <p className="text-md font-semibold tracking-widest uppercase">
-                    Project Modules
+                    {t("about.modules")}
                 </p>
+
                 <div className="p-3">
                     <div className="flex flex-col gap-1">
                         {modules.map((mod) => (
@@ -188,18 +180,26 @@ const About: React.FC = () => {
                                 <span className="text-sm ml-1.5">
                                     {mod.name}
                                 </span>
+
                                 <Badge
                                     className="text-xs font-medium rounded-full ring-2"
-                                    color={`${mod.type === "Major" ? "red" : "green"}`}
+                                    color={
+                                        mod.type === "Major"
+                                            ? "red"
+                                            : "green"
+                                    }
                                 >
-                                    {mod.type}
+                                    {mod.type === "Major"
+                                        ? t("about.moduleTypes.major")
+                                        : t("about.moduleTypes.minor")}
                                 </Badge>
                             </div>
                         ))}
                     </div>
                 </div>
+
                 <p className="flex items-center justify-center text-sm uppercase tracking-widest mt-3">
-                    Made with ❤️ at 42 Belgium
+                    {t("about.footer")}
                 </p>
             </Card>
         </Window>

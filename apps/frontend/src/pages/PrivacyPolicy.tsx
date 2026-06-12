@@ -1,17 +1,32 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { Card, Window } from "../components/ui";
-// import { useTheme } from "../contexts/ThemeContext";
+import { useTranslation } from "react-i18next";
 
 const PrivacyPolicy: React.FC = () => {
-    // const { theme } = useTheme();
+    const { t } = useTranslation();
     const { isLoading } = useAuth();
     const navigate = useNavigate();
+
+    const informationItems = t(
+        "privacyPolicy.informationWeCollect.items",
+        { returnObjects: true }
+    ) as string[];
+
+    const usageItems = t(
+        "privacyPolicy.howWeUseYourData.items",
+        { returnObjects: true }
+    ) as string[];
+
+    const gdprItems = t(
+        "privacyPolicy.gdprRights.items",
+        { returnObjects: true }
+    ) as string[];
 
     if (isLoading)
         return (
             <div className="min-h-screen flex items-center justify-center text-white bg-black">
-                Loading ...
+                {t("loading")}...
             </div>
         );
 
@@ -19,119 +34,143 @@ const PrivacyPolicy: React.FC = () => {
         <Window className="relative min-h-screen w-full overflow-hidden bg-cover bg-center">
             <Card
                 className="relative max-w-250 mx-auto p-6"
-                title="Privacy Policy"
-                description="Back"
+                title={t("privacyPolicy.title")}
+                description={t("privacyPolicy.back")}
                 size="large"
-                onClick={() => navigate(-1)}
+                onClick={() => navigate("/")}
             >
                 <div className="space-y-6">
                     <div>
                         <h2 className="text-lg font-semibold uppercase tracking-widest">
-                            Last Updated
+                            {t("privacyPolicy.lastUpdated.title")}
                         </h2>
-                        <p className="text-sm mt-2">June 2026</p>
-                    </div>
-
-                    <div>
-                        <h2 className="text-lg font-semibold uppercase tracking-widest">
-                            Who We Are
-                        </h2>
-                        <p className="text-sm mt-2 leading-relaxed">
-                            Who's the Chad ? is a gaming platform developed as
-                            part of the 42 Belgium curriculum. This Privacy
-                            Policy explains how we collect, use and protect
-                            personal information.
+                        <p className="text-sm mt-2">
+                            {t("privacyPolicy.lastUpdated.date")}
                         </p>
                     </div>
 
                     <div>
                         <h2 className="text-lg font-semibold uppercase tracking-widest">
-                            Information We Collect
+                            {t("privacyPolicy.whoWeAre.title")}
+                        </h2>
+                        <p className="text-sm mt-2 leading-relaxed">
+                            {t("privacyPolicy.whoWeAre.content")}
+                        </p>
+                    </div>
+
+                    <div>
+                        <h2 className="text-lg font-semibold uppercase tracking-widest">
+                            {t("privacyPolicy.informationWeCollect.title")}
                         </h2>
 
                         <ul className="list-disc pl-5 text-sm mt-2 space-y-1">
-                            <li>Email address</li>
-                            <li>Username</li>
-                            <li>
-                                Password (hashed and never stored in plain text)
-                            </li>
-                            <li>Profile picture (optional)</li>
-                            <li>GitHub or 42 OAuth identifiers</li>
-                            <li>Game statistics and rankings</li>
+                            {informationItems.map((item, index) => (
+                                <li key={index}>{item}</li>
+                            ))}
                         </ul>
                     </div>
 
                     <div>
                         <h2 className="text-lg font-semibold uppercase tracking-widest">
-                            How We Use Your Data
+                            {t("privacyPolicy.howWeUseYourData.title")}
                         </h2>
 
                         <ul className="list-disc pl-5 text-sm mt-2 space-y-1">
-                            <li>Create and manage accounts</li>
-                            <li>Authenticate users</li>
-                            <li>Display rankings and statistics</li>
-                            <li>Provide multiplayer features</li>
-                            <li>Maintain platform security</li>
+                            {usageItems.map((item, index) => (
+                                <li key={index}>{item}</li>
+                            ))}
                         </ul>
                     </div>
 
                     <div>
                         <h2 className="text-lg font-semibold uppercase tracking-widest">
-                            Cookies
+                            {t("privacyPolicy.cookies.title")}
                         </h2>
 
                         <p className="text-sm mt-2 leading-relaxed">
-                            We use essential cookies exclusively for
-                            authentication, session management and security. We
-                            do not use advertising cookies or analytics cookies.
+                            {t("privacyPolicy.cookies.content")}
                         </p>
                     </div>
 
                     <div>
                         <h2 className="text-lg font-semibold uppercase tracking-widest">
-                            Public Information
+                            {t("privacyPolicy.publicInformation.title")}
                         </h2>
 
                         <p className="text-sm mt-2 leading-relaxed">
-                            Usernames, profile pictures, rankings, achievements
-                            and game statistics may be visible to other users of
-                            the platform.
+                            {t("privacyPolicy.publicInformation.content")}
                         </p>
                     </div>
 
                     <div>
                         <h2 className="text-lg font-semibold uppercase tracking-widest">
-                            OAuth Providers
+                            {t("privacyPolicy.oauthProviders.title")}
                         </h2>
 
                         <p className="text-sm mt-2 leading-relaxed">
-                            Users may authenticate using GitHub or 42.
-                            Authentication through these providers is subject to
-                            their own privacy policies and terms.
+                            {t("privacyPolicy.oauthProviders.content")}
                         </p>
                     </div>
 
                     <div>
                         <h2 className="text-lg font-semibold uppercase tracking-widest">
-                            GDPR Rights
+                            {t("privacyPolicy.gdprRights.title")}
                         </h2>
 
                         <ul className="list-disc pl-5 text-sm mt-2 space-y-1">
-                            <li>Access your data</li>
-                            <li>Correct inaccurate information</li>
-                            <li>Request deletion</li>
-                            <li>Restrict processing</li>
-                            <li>Request data portability</li>
+                            {gdprItems.map((item, index) => (
+                                <li key={index}>{item}</li>
+                            ))}
                         </ul>
                     </div>
 
                     <div>
                         <h2 className="text-lg font-semibold uppercase tracking-widest">
-                            Contact
+                            {t("privacyPolicy.exercisingRights.title")}
+                        </h2>
+
+                        <p className="text-sm mt-2 leading-relaxed">
+                            {t("privacyPolicy.exercisingRights.content")}
+                        </p>
+                    </div>
+
+                    <div>
+                        <h2 className="text-lg font-semibold uppercase tracking-widest">
+                            {t("privacyPolicy.legalBasis.title")}
+                        </h2>
+
+                        <p className="text-sm mt-2 leading-relaxed">
+                            {t("privacyPolicy.legalBasis.content")}
+                        </p>
+                    </div>
+
+                    <div>
+                        <h2 className="text-lg font-semibold uppercase tracking-widest">
+                            {t("privacyPolicy.dataRetention.title")}
+                        </h2>
+
+                        <p className="text-sm mt-2 leading-relaxed">
+                            {t("privacyPolicy.dataRetention.content")}
+                        </p>
+                    </div>
+
+                    <div>
+                        <h2 className="text-lg font-semibold uppercase tracking-widest">
+                            {t("privacyPolicy.ageRequirement.title")}
+                        </h2>
+
+                        <p className="text-sm mt-2 leading-relaxed">
+                            {t("privacyPolicy.ageRequirement.content")}
+                        </p>
+                    </div>
+
+                    <div>
+                        <h2 className="text-lg font-semibold uppercase tracking-widest">
+                            {t("privacyPolicy.contact.title")}
                         </h2>
 
                         <p className="text-sm mt-2">
-                            juhanse@student.42belgium.be
+                            {t("privacyPolicy.contact.email")}
                         </p>
                     </div>
                 </div>
