@@ -1,8 +1,7 @@
 import type { ReactNode } from "react";
 import { createContext, useContext, useState, useEffect } from "react";
 import { toast } from "sonner";
-import { logout as logoutAuth } from "../services/auth";
-import { getMe } from "../services/users";
+import { checkAuthStatus, logout as logoutAuth } from "../services/auth";
 import type { User } from "@chad/types";
 
 interface AuthContextType {
@@ -10,6 +9,7 @@ interface AuthContextType {
     isLoading: boolean;
     login: (userData: User) => void;
     logout: () => Promise<void>;
+    refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -18,6 +18,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
+    const refreshUser = async () => {
+        try {
+            const data = await checkAuthStatus();
+            if (data.isAuthenticated && data.user) {
+                setUser(data.user);
+            } else {
+                setUser(null);
+            }
+        } catch {
+            setUser(null);
+        }
+    };
+
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         if (params.get("error") === "banned") {
@@ -25,17 +38,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             window.history.replaceState({}, "", window.location.pathname);
         }
 
-        const checkAuth = async () => {
-            try {
-                const userData = await getMe();
-                setUser(userData);
-            } catch {
-                setUser(null);
-            } finally {
-                setIsLoading(false);
-            }
+        const initAuth = async () => {
+            await refreshUser();
+            setIsLoading(false);
         };
-        checkAuth();
+
+        void initAuth();
     }, []);
 
     const login = (userData: User) => setUser(userData);
@@ -50,7 +58,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     return (
-        <AuthContext.Provider value={{ user, isLoading, login, logout }}>
+        <AuthContext.Provider
+            value={{ user, isLoading, login, logout, refreshUser }}
+        >
             {children}
         </AuthContext.Provider>
     );

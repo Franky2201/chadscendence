@@ -1,182 +1,112 @@
 import { useState, useEffect, useRef } from "react";
-import GameContainer from "./GameContainer";
-import type {
-    ReactionTimeProblem,
-    ReactionTimeResult,
-    ReactionTimeSubmission,
-} from "@chad/types";
+import { Card } from "../ui";
+import { Header } from "../Header";
+import type { SessionRoundPrompt } from "@chad/types";
 
-type Phase = "waiting" | "ready" | "clicked";
+type Phase = "waiting" | "ready" | "clicked" | "failed";
 
-export default function ReactionTimeUI() {
-    const [score, setScore] = useState(0);
-    const [started, setStarted] = useState(false);
-
-    if (!started) {
-        return (
-            <div className="flex flex-col items-center justify-center p-6 bg-slate-800/50 rounded-3xl border border-white/10 backdrop-blur-sm min-h-75 relative">
-                <div className="w-full max-w-sm flex flex-col items-center gap-8 text-center">
-                    <div className="flex flex-col gap-2">
-                        <div className="text-2xl font-black text-white">
-                            Reaction Time
-                        </div>
-                        <div className="text-white/40 text-sm font-mono">
-                            Clique dès que le cercle devient vert.
-                            <br />
-                        </div>
-                    </div>
-
-                    <button
-                        onClick={() => setStarted(true)}
-                        className="w-48 h-48 rounded-full bg-slate-600 border-4 border-slate-500 text-white font-black text-xl transition-all hover:scale-105 hover:bg-slate-500 shadow-2xl select-none"
-                    >
-                        Je suis prêt !
-                    </button>
-
-                    <p className="text-white/20 text-xs font-mono">
-                        Clique pour démarrer
-                    </p>
-                </div>
-            </div>
-        );
-    }
-
-    return (
-        <GameContainer<
-            ReactionTimeProblem,
-            ReactionTimeResult,
-            ReactionTimeSubmission
-        >
-            gameId="reaction-time"
-            score={score}
-            setScore={setScore}
-            renderGame={(problem, status, lastResult, submitAnswer) => (
-                <ReactionTimeGame
-                    key={problem.id}
-                    problem={problem}
-                    status={status}
-                    lastResult={lastResult}
-                    submitAnswer={submitAnswer}
-                />
-            )}
-        />
-    );
+interface ReactionTimeUIProps {
+    prompt: SessionRoundPrompt;
+    onSubmit: (answer: unknown) => Promise<void>;
 }
 
-function ReactionTimeGame({
-    problem,
-    status,
-    lastResult,
-    submitAnswer,
-}: {
-    problem: ReactionTimeProblem;
-    status: "playing" | "correct" | "wrong" | "expired";
-    lastResult: ReactionTimeResult | null;
-    submitAnswer: (answer: ReactionTimeSubmission) => Promise<void>;
-}) {
+export default function ReactionTimeUI({
+    prompt,
+    onSubmit,
+}: ReactionTimeUIProps) {
     const [phase, setPhase] = useState<Phase>("waiting");
+    const [reactionTime, setReactionTime] = useState<number | null>(null);
+
     const signalTimeRef = useRef<number | null>(null);
-    const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const timerRef = useRef<number | null>(null);
 
     useEffect(() => {
-        if (status !== "playing") return;
+        const randomDelay = Math.floor(Math.random() * 3000) + 2000;
 
-        signalTimeRef.current = null;
-
-        timerRef.current = setTimeout(() => {
+        timerRef.current = window.setTimeout(() => {
             signalTimeRef.current = Date.now();
             setPhase("ready");
-        }, problem.delay);
+        }, randomDelay);
 
         return () => {
-            if (timerRef.current) clearTimeout(timerRef.current);
+            if (timerRef.current) window.clearTimeout(timerRef.current);
         };
-    }, [problem.delay, status]);
+    }, []);
 
-    const handleClick = () => {
-        if (status !== "playing") return;
-
+    const handleClick = async () => {
         if (phase === "waiting") {
-            if (timerRef.current) clearTimeout(timerRef.current);
-            setPhase("clicked");
-            void submitAnswer({
-                id: problem.id,
-                reactionTime: 0,
-                tooEarly: true,
-            });
+            if (timerRef.current) window.clearTimeout(timerRef.current);
+            setPhase("failed");
+            await onSubmit({ earlyClick: true });
             return;
         }
 
         if (phase === "ready" && signalTimeRef.current !== null) {
-            const reactionTime = Date.now() - signalTimeRef.current;
+            const timeTaken = Date.now() - signalTimeRef.current;
             setPhase("clicked");
-            void submitAnswer({
-                id: problem.id,
-                reactionTime,
-                tooEarly: false,
-            });
+            setReactionTime(timeTaken);
+            await onSubmit({ reactionTimeMs: timeTaken });
         }
     };
 
-    const isWaiting = phase === "waiting" && status === "playing";
-    const isReady = phase === "ready" && status === "playing";
+    const isWaiting = phase === "waiting";
+    const isReady = phase === "ready";
 
     return (
-        <div className="w-full max-w-sm text-center flex flex-col items-center gap-8">
-            <div className="text-sm font-mono text-white/40 uppercase tracking-widest">
-                {isWaiting && "Prépare-toi..."}
-                {isReady && "MAINTENANT !"}
-                {phase === "clicked" && "Résultat"}
-                {status === "correct" &&
-                    phase !== "waiting" &&
-                    phase !== "ready" &&
-                    ""}
-            </div>
+        <>
+            <Header />
+            <div className="flex flex-col items-center justify-center min-h-[calc(100vh-120px)] w-full px-4">
+                <Card className="max-w-2xl w-full flex flex-col items-center p-10 text-center shadow-2xl">
+                    <h2 className="text-4xl font-black mb-8">
+                        {prompt.prompt || "Reaction Time"}
+                    </h2>
 
-            <button
-                onClick={handleClick}
-                disabled={status !== "playing"}
-                className={[
-                    "w-48 h-48 rounded-full text-white font-black text-2xl transition-all duration-150 shadow-2xl select-none",
-                    isWaiting
-                        ? "bg-slate-600 border-4 border-slate-500 scale-95"
-                        : isReady
-                          ? "bg-green-500 border-4 border-green-400 scale-105 shadow-green-500/50 animate-pulse cursor-pointer"
-                          : "bg-slate-700 border-4 border-slate-600 opacity-60 cursor-default",
-                ].join(" ")}
-            >
-                {isWaiting && "..."}
-                {isReady && "CLIQUE !"}
-                {phase === "clicked" &&
-                    (lastResult?.reactionTime
-                        ? `${lastResult.reactionTime}ms`
-                        : "⚡")}
-            </button>
+                    <div className="text-sm font-mono text-gray-500 uppercase tracking-widest h-4 mb-6">
+                        {isWaiting && "Prépare-toi..."}
+                        {isReady && "MAINTENANT !"}
+                        {phase === "clicked" && "Résultat"}
+                        {phase === "failed" && "Oups !"}
+                    </div>
 
-            {lastResult && (
-                <div className="p-4 bg-white/5 rounded-xl border border-white/10 w-full animate-in fade-in slide-in-from-top-2">
-                    <div
+                    <button
+                        onClick={() => void handleClick()}
+                        disabled={phase === "clicked" || phase === "failed"}
                         className={[
-                            "text-xl font-black mb-1",
-                            lastResult.success
-                                ? "text-green-400"
-                                : "text-red-400",
+                            "w-64 h-64 rounded-full text-white font-black text-3xl transition-all duration-150 shadow-2xl select-none flex items-center justify-center",
+                            isWaiting
+                                ? "bg-slate-600 border-4 border-slate-500 scale-95 cursor-pointer"
+                                : isReady
+                                  ? "bg-green-500 border-4 border-green-400 scale-105 shadow-green-500/50 animate-pulse cursor-pointer"
+                                  : phase === "failed"
+                                    ? "bg-red-500 border-4 border-red-400 scale-95 opacity-80"
+                                    : "bg-blue-500 border-4 border-blue-400 opacity-90 cursor-default",
                         ].join(" ")}
                     >
-                        {lastResult.rating ??
-                            (lastResult.success ? "Bien joué !" : "Oups ...")}
-                    </div>
-                    <div className="text-white/60 font-mono text-sm">
-                        {lastResult.message}
-                    </div>
-                </div>
-            )}
+                        {isWaiting && "..."}
+                        {isReady && "CLIQUE !"}
+                        {phase === "failed" && "TROP TÔT"}
+                        {phase === "clicked" && `${reactionTime}ms`}
+                    </button>
 
-            {isWaiting && (
-                <p className="text-white/30 text-xs font-mono">
-                    Attends que le cercle devienne vert...
-                </p>
-            )}
-        </div>
+                    <div className="h-8 mt-8 flex items-center justify-center">
+                        {isWaiting && (
+                            <p className="text-gray-400 text-sm font-mono">
+                                Attends que le cercle devienne vert...
+                            </p>
+                        )}
+                        {phase === "failed" && (
+                            <p className="text-red-500 text-lg font-bold animate-in fade-in slide-in-from-top-2">
+                                Tu as cliqué trop tôt !
+                            </p>
+                        )}
+                        {phase === "clicked" && (
+                            <p className="text-green-500 text-lg font-bold animate-in fade-in slide-in-from-top-2">
+                                Bien joué !
+                            </p>
+                        )}
+                    </div>
+                </Card>
+            </div>
+        </>
     );
 }

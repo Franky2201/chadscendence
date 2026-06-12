@@ -3,6 +3,11 @@ import type { RegisterPayload, LoginPayload, AuthResponse } from "@chad/types";
 
 const backendUrl = "/api";
 
+export const checkAuthStatus = async () => {
+    const res = await api.get("/auth/check");
+    return res.data;
+};
+
 export const register = async (
     data: RegisterPayload,
 ): Promise<AuthResponse> => {

@@ -1,5 +1,4 @@
-import { Card, IconButton, Button } from "../ui";
-import { useModal } from "../../contexts/ModalContext";
+import { Card, Button } from "../ui";
 import { useTheme } from "../../contexts/ThemeContext";
 import { getItemColorStyle, type ItemColor } from "../ui/unified";
 import { useTranslation } from "react-i18next";
@@ -19,7 +18,6 @@ const colorThemes: { name: ItemColor }[] = [
 
 export function Play({ className = "" }: { className?: string }) {
     const { theme, setTheme } = useTheme();
-    const { openModal } = useModal();
     const { t } = useTranslation();
     const navigate = useNavigate();
 
@@ -29,24 +27,13 @@ export function Play({ className = "" }: { className?: string }) {
             contentClassName={`flex flex-col justify-center items-center gap-3`}
             title={t("home.play.title")}
         >
-            <div className="flex flex-wrap justify-center gap-3">
-                <IconButton
-                    onClick={() => navigate("/games")}
-                    color={theme}
-                    className="h-25 w-25 flex flex-col"
-                    img="game_solo.svg"
-                >
-                    {t("home.play.solo")}
-                </IconButton>
-                <IconButton
-                    onClick={() => openModal("GAME")}
-                    color={theme}
-                    className="h-25 w-25 flex flex-col"
-                    img="game_party.svg"
-                >
-                    {t("home.play.multiplayer")}
-                </IconButton>
-            </div>
+            <Button
+                onClick={() => navigate("/games")}
+                color={theme}
+                className="w-full flex flex-col"
+            >
+                {t("home.play.title")}
+            </Button>
             <p className="text-xs uppercase text-center">
                 {t("home.play.colorTheme")}
             </p>
