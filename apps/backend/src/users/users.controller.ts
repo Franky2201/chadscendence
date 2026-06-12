@@ -14,7 +14,7 @@ import {
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
-import { extname } from "path";
+import { extname, join } from "path";
 import { UsersService } from "./users.service";
 import { JwtAuthGuard } from "../common/guards/jwt.guard";
 import { UpdateAdminUserDto, UpdateUserDto } from "./users.dto";
@@ -35,7 +35,7 @@ import type {
 
 const avatarUploadOptions = {
     storage: diskStorage({
-        destination: "apps/backend/uploads",
+        destination: join(process.cwd(), "apps/backend/uploads"),
         filename: (
             _req: Express.Request,
             file: Express.Multer.File,

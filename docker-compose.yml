@@ -62,7 +62,7 @@ services:
             - "${BACKEND_PORT:-3000}:3000"
         volumes:
             - ./apps/backend/src:/app/apps/backend/src
-            - backend_uploads:/app/apps/backend/uploads
+            - ./apps/backend/uploads:/app/apps/backend/uploads
             - ./libs/types:/app/libs/types
             - /app/libs/types/node_modules
             - /app/libs/types/dist
