@@ -21,3 +21,24 @@ services:
         networks:
             - ft_network
         restart: unless-stopped
+    reaction-time:
+        container_name: ft_reaction-time
+        build:
+            context: ../../
+            dockerfile: apps/games/reaction-time/Dockerfile
+            target: development
+        env_file: ../../.env
+        environment:
+            - PORT=3002
+            - REDIS_HOST=redis
+            - REDIS_PORT=6379
+        depends_on:
+            redis:
+                condition: service_healthy
+        volumes:
+            - ../../apps/games/reaction-time/src:/app/apps/games/reaction-time/src
+            - ../../libs/types/src:/app/libs/types/src
+        networks:
+            - ft_network
+        restart: unless-stopped
+
