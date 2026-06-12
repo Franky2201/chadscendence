@@ -198,7 +198,7 @@ export class SessionsService {
 
         await this.analyticsRepository.save({
             userId,
-            totalScore: session.totalScore,
+            totalScore: Math.round(session.totalScore * 100) / 100,
             ratingDelta: delta,
             newRating: newRating,
             roundsDetails,
