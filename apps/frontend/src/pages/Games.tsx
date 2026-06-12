@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getGames } from "../services";
 import type { Game } from "../services";
+import ReactionTimeUI from "../components/games/ReactionTimeUI";
 import MathGameUI from "../components/games/MathGameUI";
 
 export default function GamesPage() {
@@ -18,6 +19,8 @@ export default function GamesPage() {
 
     const renderActiveGame = () => {
         switch (activeGameId) {
+            case "reaction-time":
+                return <ReactionTimeUI />;
             case "math":
                 return <MathGameUI />;
             default:

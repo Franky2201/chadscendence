@@ -74,7 +74,7 @@ export function Leaderboard({
         >
             <div className="flex flex-col">
                 {isLoading ? (
-                    <p className="text-lg">Loading ...</p>
+                    <p className="text-lg">{t("loading")}</p>
                 ) : (
                     topUsers.map((item, index) => (
                         <div key={item.id} className="w-full">

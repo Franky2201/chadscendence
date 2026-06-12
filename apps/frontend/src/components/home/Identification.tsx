@@ -1,21 +1,23 @@
 import { Card, Button, IconButton } from "../ui";
 import { useModal } from "../../contexts/ModalContext";
 import { withIntra, withGithub } from "../../services/auth";
+import { useTranslation } from "react-i18next";
 
 export function Identification({ className = "" }: { className?: string }) {
+    const { t } = useTranslation();
     const { openModal } = useModal();
 
     return (
         <Card
             className={className}
             contentClassName="flex flex-col gap-3 justify-center"
-            title="Identification"
+            title={t("home.identification.title")}
         >
             <Button className="w-full" onClick={() => openModal("LOGIN")}>
-                Login
+                {t("home.identification.login.title")}
             </Button>
             <Button className="w-full" onClick={() => openModal("REGISTER")}>
-                Register
+                {t("home.identification.register.title")}
             </Button>
             <hr className="w-full border-t mb-1" />
             <div className="flex gap-3 justify-center items-center">
