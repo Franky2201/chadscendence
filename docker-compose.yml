@@ -65,7 +65,6 @@ services:
             - ./apps/backend/uploads:/app/apps/backend/uploads
             - ./libs/types:/app/libs/types
             - /app/libs/types/node_modules
-            - /app/libs/types/dist
         networks:
             - ft_network
         restart: unless-stopped
@@ -90,7 +89,6 @@ services:
             - ./apps/frontend/src:/app/apps/frontend/src
             - ./libs/types:/app/libs/types
             - /app/libs/types/node_modules
-            - /app/libs/types/dist
         networks:
             - ft_network
         restart: unless-stopped
