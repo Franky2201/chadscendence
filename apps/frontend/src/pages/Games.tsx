@@ -18,6 +18,7 @@ export default function SoloGamePage() {
         viewState,
         timeLeft,
         isSubmitting,
+        lastResult,
         launchGame,
         submitAnswer,
     } = useGameSession();
@@ -57,6 +58,7 @@ export default function SoloGamePage() {
                         <ReactionTimeUI
                             prompt={prompt!}
                             onSubmit={submitAnswer}
+                            lastResult={lastResult}
                         />
                     );
                 }
@@ -66,6 +68,7 @@ export default function SoloGamePage() {
                         prompt={prompt!}
                         timeLeft={timeLeft}
                         onSubmit={submitAnswer}
+                        lastResult={lastResult}
                     />
                 );
             }

@@ -171,8 +171,12 @@ export class SessionsService {
         let expectedTotalScore = 0;
         for (const r of session.rounds) {
             const gameId = String((r.game as unknown as { id: string }).id);
-            expectedTotalScore += this.GAME_CONFIG[gameId]?.par || 10;
+            const par = this.GAME_CONFIG[gameId]?.par || 10;
+            expectedTotalScore += par;
+            console.log(`[Scoring] Round ${r.index} (${gameId}): Par=${par}`);
         }
+
+        console.log(`[Scoring] Total Score: ${session.totalScore}, Expected: ${expectedTotalScore}`);
 
         const dbUser = await this.usersService.findById(userId);
         const currentRating = dbUser?.rating ?? 1000;
@@ -182,6 +186,8 @@ export class SessionsService {
             session.totalScore,
             expectedTotalScore,
         );
+
+        console.log(`[Scoring] New Rating: ${newRating} (Delta: ${delta})`);
 
         session.ratingDelta = delta;
         await this.usersService.updateRating(userId, newRating);
