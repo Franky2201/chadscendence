@@ -41,14 +41,20 @@ const modules = [
     { name: "Public API", type: "Major" },
     { name: "Advanced permissions system", type: "Major" },
     { name: "Use an ORM for the database", type: "Minor" },
-    { name: "Custom-made design system with reusable components", type: "Minor" },
+    {
+        name: "Custom-made design system with reusable components",
+        type: "Minor",
+    },
     { name: "Remote authentication with OAuth 2.0", type: "Minor" },
     { name: "Support multiple languages (at least 3)", type: "Minor" },
     { name: "Support for additional browser", type: "Minor" },
     { name: "Game statistics and match history", type: "Minor" },
     { name: "Advanced chat features", type: "Minor" },
     { name: "Game customization", type: "Minor" },
-    { name: "A gamification system to reward users for their actions", type: "Minor" },
+    {
+        name: "A gamification system to reward users for their actions",
+        type: "Minor",
+    },
 ];
 
 const badges: { name: string; link: string; requires42?: boolean }[] = [

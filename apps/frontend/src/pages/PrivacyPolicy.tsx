@@ -37,10 +37,10 @@ const PrivacyPolicy: React.FC = () => {
                             Who We Are
                         </h2>
                         <p className="text-sm mt-2 leading-relaxed">
-                            Who's the Chad ? is a gaming platform developed as part
-                            of the 42 Belgium curriculum. This Privacy Policy
-                            explains how we collect, use and protect personal
-                            information.
+                            Who's the Chad ? is a gaming platform developed as
+                            part of the 42 Belgium curriculum. This Privacy
+                            Policy explains how we collect, use and protect
+                            personal information.
                         </p>
                     </div>
 

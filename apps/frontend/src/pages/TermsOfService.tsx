@@ -37,8 +37,8 @@ const TermsOfService: React.FC = () => {
                             Acceptance of Terms
                         </h2>
                         <p className="text-sm mt-2 leading-relaxed">
-                            By creating an account or using Who's the Chad ?, you
-                            agree to these Terms of Service.
+                            By creating an account or using Who's the Chad ?,
+                            you agree to these Terms of Service.
                         </p>
                     </div>
 
@@ -129,8 +129,8 @@ const TermsOfService: React.FC = () => {
 
                         <p className="text-sm mt-2 leading-relaxed">
                             The platform, software, branding, design and related
-                            materials remain the property of the Who's the Chad ?
-                            team unless otherwise stated.
+                            materials remain the property of the Who's the Chad
+                            ? team unless otherwise stated.
                         </p>
                     </div>
 
@@ -163,10 +163,10 @@ const TermsOfService: React.FC = () => {
                         </h2>
 
                         <p className="text-sm mt-2 leading-relaxed">
-                            To the maximum extent permitted by law,
-                            Who's the Chad ? shall not be liable for indirect,
-                            incidental or consequential damages arising from use
-                            of the platform.
+                            To the maximum extent permitted by law, Who's the
+                            Chad ? shall not be liable for indirect, incidental
+                            or consequential damages arising from use of the
+                            platform.
                         </p>
                     </div>
 
@@ -186,7 +186,9 @@ const TermsOfService: React.FC = () => {
                             Contact
                         </h2>
 
-                        <p className="text-sm mt-2">juhanse@student.42belgium.be</p>
+                        <p className="text-sm mt-2">
+                            juhanse@student.42belgium.be
+                        </p>
                     </div>
                 </div>
             </Card>
