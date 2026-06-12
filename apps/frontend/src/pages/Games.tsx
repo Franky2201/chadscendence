@@ -1,112 +1,80 @@
-import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { getGames } from "../services";
-import type { Game } from "../services";
-import MathGameUI from "../components/games/MathGameUI";
+import { Window } from "../components/ui";
+import { useAuth } from "../contexts/AuthContext";
+import { useTranslation } from "react-i18next";
+import { useGameSession } from "../hooks/useGameSession";
+import { useGameSetup } from "../hooks/useGameSetup";
+import { GameSetup } from "../components/games/GameSetup";
+import { GamePlaying } from "../components/games/GamePlaying";
+import { GameInterRound } from "../components/games/GameInterRound";
+import { GamePodium } from "../components/games/GamePodium";
 
-export default function GamesPage() {
-    const [games, setGames] = useState<Game[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [activeGameId, setActiveGameId] = useState<string | null>(null);
+export default function SoloGamePage() {
+    const { t } = useTranslation();
+    const { user, isLoading: authLoading } = useAuth();
 
-    useEffect(() => {
-        getGames()
-            .then((data) => setGames(data))
-            .catch((err) => console.error("Failed to fetch games:", err))
-            .finally(() => setLoading(false));
-    }, []);
+    const setup = useGameSetup();
 
-    const renderActiveGame = () => {
-        switch (activeGameId) {
-            case "math":
-                return <MathGameUI />;
+    const {
+        session,
+        prompt,
+        viewState,
+        timeLeft,
+        isSubmitting,
+        launchGame,
+        submitAnswer,
+    } = useGameSession();
+
+    if (authLoading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center text-white bg-slate-900">
+                {t("loading")}...
+            </div>
+        );
+    }
+
+    if (!user) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-slate-900 text-white">
+                <h1 className="text-3xl font-bold">Accès refusé</h1>
+            </div>
+        );
+    }
+
+    const renderView = () => {
+        switch (viewState) {
+            case "playing":
+                return (
+                    <GamePlaying
+                        prompt={prompt!}
+                        timeLeft={timeLeft}
+                        onSubmit={submitAnswer}
+                    />
+                );
+            case "inter_round":
+                return <GameInterRound />;
+            case "podium":
+                return <GamePodium session={session!} />;
+            case "setup":
             default:
                 return (
-                    <div className="text-center p-10">
-                        Ce jeu n'est pas encore implémenté.
-                    </div>
+                    <GameSetup
+                        games={setup.games}
+                        selectedGames={setup.selectedGames}
+                        repetitions={setup.repetitions}
+                        isLoading={setup.isLoading}
+                        isSubmitting={isSubmitting}
+                        onToggleGame={setup.toggleGame}
+                        onRepetitionsChange={setup.setRepetitions}
+                        onLaunch={() =>
+                            void launchGame(
+                                setup.selectedGames,
+                                setup.repetitions,
+                            )
+                        }
+                    />
                 );
         }
     };
 
-    return (
-        <div
-            className="relative min-h-screen w-full overflow-hidden bg-slate-900 bg-cover bg-center text-white font-sans p-10"
-            style={{ backgroundImage: "url('/background.png')" }}
-        >
-            <div className="absolute inset-0 bg-slate-900/80" />
-
-            <div className="relative z-10 max-w-4xl mx-auto">
-                <Link
-                    to={activeGameId ? "/games" : "/"}
-                    onClick={(e) => {
-                        if (activeGameId) {
-                            e.preventDefault();
-                            setActiveGameId(null);
-                        }
-                    }}
-                    className="text-pink-500 hover:text-pink-400 mb-8 inline-block font-bold"
-                >
-                    ← {activeGameId ? "Quitter le jeu" : "Retour à l'accueil"}
-                </Link>
-
-                {activeGameId ? (
-                    <div>
-                        <h1 className="text-5xl font-black mb-10 tracking-tight uppercase">
-                            {games.find((g) => g.id === activeGameId)?.name}
-                        </h1>
-                        {renderActiveGame()}
-                    </div>
-                ) : (
-                    <>
-                        <h1 className="text-5xl font-black mb-10 tracking-tight">
-                            LES JEUX
-                        </h1>
-
-                        {loading ? (
-                            <div className="text-2xl">
-                                Chargement des jeux...
-                            </div>
-                        ) : games.length > 0 ? (
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                {games.map((game) => (
-                                    <div
-                                        key={game.id}
-                                        className="bg-white/10 backdrop-blur-md p-8 rounded-3xl border border-white/20 hover:border-pink-500/50 transition-colors"
-                                    >
-                                        <h2 className="text-2xl font-bold mb-4">
-                                            {game.name}
-                                        </h2>
-                                        <p className="text-slate-300 mb-6">
-                                            {game.description}
-                                        </p>
-                                        <div className="flex items-center gap-3">
-                                            <button
-                                                onClick={() =>
-                                                    setActiveGameId(game.id)
-                                                }
-                                                className="bg-pink-600 px-6 py-2 rounded-xl font-bold hover:bg-pink-700 transition"
-                                            >
-                                                Jouer
-                                            </button>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        ) : (
-                            <div className="bg-white/10 backdrop-blur-md p-10 rounded-3xl border border-white/20 text-center">
-                                <h2 className="text-2xl font-bold mb-4">
-                                    Aucun jeu disponible
-                                </h2>
-                                <p className="text-slate-300">
-                                    Les serveurs de jeu sont actuellement hors
-                                    ligne. Revenez plus tard !
-                                </p>
-                            </div>
-                        )}
-                    </>
-                )}
-            </div>
-        </div>
-    );
+    return <Window>{renderView()}</Window>;
 }
