@@ -6,7 +6,7 @@ import {
     submitRoundAnswer,
     closeRound,
 } from "../services/sessions";
-import type { GameSession, SessionRoundPrompt } from "@chad/types";
+import type { GameSession, SessionRoundPrompt, RoundResult } from "@chad/types";
 import { useAuth } from "../contexts/AuthContext";
 
 export type SessionViewState =
@@ -24,7 +24,7 @@ export function useGameSession() {
 
     const [timeLeft, setTimeLeft] = useState<number>(0);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [lastResult, setLastResult] = useState<unknown>(null);
+    const [lastResult, setLastResult] = useState<RoundResult | null>(null);
 
     const timerRef = useRef<number | null>(null);
 

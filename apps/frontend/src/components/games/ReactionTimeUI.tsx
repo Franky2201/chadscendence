@@ -1,14 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 import { Card } from "../ui";
 import { Header } from "../Header";
-import type { SessionRoundPrompt } from "@chad/types";
+import type { SessionRoundPrompt, RoundResult } from "@chad/types";
 
 type Phase = "waiting" | "ready" | "clicked" | "failed";
 
 interface ReactionTimeUIProps {
     prompt: SessionRoundPrompt;
     onSubmit: (answer: unknown) => Promise<void>;
-    lastResult?: unknown;
+    lastResult?: RoundResult | null;
 }
 
 export default function ReactionTimeUI({
@@ -103,15 +103,17 @@ export default function ReactionTimeUI({
                             <p className="text-gray-400 text-sm font-mono"></p>
                         )}
                         {(phase === "failed" ||
-                            lastResult?.success === false) && (
+                            (lastResult && lastResult.success === false)) && (
                             <p className="text-red-500 text-lg font-bold animate-in fade-in slide-in-from-top-2">
-                                {lastResult?.message || "Too early !"}
+                                {(lastResult && lastResult.message) ||
+                                    "Too early !"}
                             </p>
                         )}
                         {phase === "clicked" &&
-                            lastResult?.success === true && (
+                            lastResult &&
+                            lastResult.success === true && (
                                 <p className="text-green-500 text-lg font-bold animate-in fade-in slide-in-from-top-2">
-                                    {lastResult?.message || "Success !"}
+                                    {lastResult.message || "Success !"}
                                 </p>
                             )}
                     </div>

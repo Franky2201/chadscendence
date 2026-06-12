@@ -2,13 +2,13 @@ import { useState } from "react";
 import { Card, Button, Input } from "../ui";
 import { Header } from "../Header";
 import { useTheme } from "../../contexts/ThemeContext";
-import type { SessionRoundPrompt } from "@chad/types";
+import type { SessionRoundPrompt, RoundResult } from "@chad/types";
 
 interface GamePlayingProps {
     prompt: SessionRoundPrompt;
     timeLeft: number;
     onSubmit: (answer: unknown) => Promise<void>;
-    lastResult?: unknown;
+    lastResult?: RoundResult | null;
 }
 
 export function GamePlaying({
@@ -36,8 +36,8 @@ export function GamePlaying({
         await onSubmit(finalAnswer);
     };
 
-    const isCorrect = lastResult?.success === true;
-    const isWrong = lastResult?.success === false;
+    const isCorrect = lastResult && lastResult.success === true;
+    const isWrong = lastResult && lastResult.success === false;
 
     return (
         <>
