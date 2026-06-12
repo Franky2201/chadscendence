@@ -28,7 +28,7 @@ export class UsersService implements OnModuleInit {
         private readonly ranksService: RanksService,
         @InjectRepository(GameAnalytics)
         private readonly analyticsRepository: Repository<GameAnalytics>,
-    ) {}
+    ) { }
 
     async onModuleInit() {
         await this.seedAdmin();
@@ -306,9 +306,20 @@ export class UsersService implements OnModuleInit {
     }
 
     async updateRating(userId: string, newRating: number) {
-        await this.userRepository.update(userId, {
-            rating: Math.round(newRating),
+        const user = await this.userRepository.findOne({
+            where: { id: userId },
+            relations: { "rank": true }
         });
-        return this.userRepository.findOneBy({ id: userId });
+
+        if (!user) {
+            throw new NotFoundException("Utilisateur introuvable");
+        }
+
+        const newRank = await this.ranksService.getRankForRating(newRating);
+
+        user.rating = newRating;
+        user.rank = newRank;
+
+        return this.userRepository.save(user);
     }
 }
