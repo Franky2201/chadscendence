@@ -6,6 +6,7 @@ import { useGameSetup } from "../hooks/useGameSetup";
 import { GameSetup } from "../components/games/GameSetup";
 import { GamePlaying } from "../components/games/GamePlaying";
 import { GamePodium } from "../components/games/GamePodium";
+import ReactionTimeUI from "../components/games/ReactionTimeUI";
 
 export default function SoloGamePage() {
     const { t } = useTranslation();
@@ -47,7 +48,19 @@ export default function SoloGamePage() {
                         </h1>
                     </div>
                 );
-            case "playing":
+            case "playing": {
+                const gameId =
+                    session?.rounds[session.currentRoundIndex]?.game.id;
+
+                if (gameId === "reaction-time") {
+                    return (
+                        <ReactionTimeUI
+                            prompt={prompt!}
+                            onSubmit={submitAnswer}
+                        />
+                    );
+                }
+
                 return (
                     <GamePlaying
                         prompt={prompt!}
@@ -55,6 +68,7 @@ export default function SoloGamePage() {
                         onSubmit={submitAnswer}
                     />
                 );
+            }
             case "inter_round":
                 return (
                     <div className="flex flex-col items-center justify-center min-h-[50vh] text-white">
