@@ -184,9 +184,7 @@ const About: React.FC = () => {
                                 <Badge
                                     className="text-xs font-medium rounded-full ring-2"
                                     color={
-                                        mod.type === "Major"
-                                            ? "red"
-                                            : "green"
+                                        mod.type === "Major" ? "red" : "green"
                                     }
                                 >
                                     {mod.type === "Major"
