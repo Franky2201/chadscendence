@@ -111,7 +111,9 @@ export class ReactionSessionGameAdapter extends DefaultSessionGameAdapter {
 
         if (res.tooEarly || res.earlyClick) return 0;
 
-        const time = (res.reactionTime ?? res.reactionTimeMs) as number | undefined;
+        const time = (res.reactionTime ?? res.reactionTimeMs) as
+            | number
+            | undefined;
         if (typeof time === "number") {
             if (time < 200) return 2;
             if (time < 400) return 1.5;

@@ -63,7 +63,7 @@ export default function RegisterModal({ isOpen, onClose }: RegisterModalProps) {
             const userResponse = await getMe();
             login(userResponse);
             onClose();
-        } catch (error: unknown) {
+        } catch {
             toast.error(t("home.identification.register.error"));
         }
     };

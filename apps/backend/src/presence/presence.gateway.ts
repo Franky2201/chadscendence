@@ -84,7 +84,7 @@ export class PresenceGateway
     }
 
     notifyUserBanned(userId: string) {
-        const clients = this.presenceService.getClients(userId);
+        const clients: string[] = this.presenceService.getUserClients(userId);
         if (clients && clients.length > 0) {
             this.server.to(clients).emit("banned");
             // Optionally force disconnect after a short delay

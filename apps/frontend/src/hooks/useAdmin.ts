@@ -29,7 +29,7 @@ export const useAdmin = (
     const [users, setUsers] = useState<UserListItem[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const { t } = useTranslation();
-    
+
     useEffect(() => {
         const loadData = async () => {
             setIsLoading(true);
@@ -57,7 +57,7 @@ export const useAdmin = (
         };
 
         void loadData();
-    }, [canManageRoles, canManageRanks, canManageUsers]);
+    }, [canManageRoles, canManageRanks, canManageUsers, t]);
 
     const handleCreateRole = async (name: string, perms: string[]) => {
         try {
