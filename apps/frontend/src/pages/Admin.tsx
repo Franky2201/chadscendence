@@ -11,13 +11,13 @@ import { useEffect } from "react";
 
 export default function AdminPage() {
     const { t } = useTranslation();
-    const { user } = useAuth();
+    const { user, isLoading: authLoading } = useAuth();
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState<"users" | "ranks" | "roles">(
         "users",
     );
     const hasPermissions =
-        user?.role?.permissions && user.role.permissions.length > 0;
+        (user?.role?.permissions && user.role.permissions.length > 0) ?? false;
 
     const canManageRanks =
         user?.role?.permissions?.some((p) => p.action === "MANAGE_RANKS") ??
@@ -42,12 +42,12 @@ export default function AdminPage() {
     } = useAdmin(canManageRoles, canManageRanks, canManageUsers);
 
     useEffect(() => {
-        if (!isLoading && !hasPermissions) {
+        if (!authLoading && !isLoading && !hasPermissions) {
             navigate("/");
         }
-    }, [hasPermissions, navigate, isLoading]);
+    }, [hasPermissions, navigate, authLoading, isLoading]);
 
-    if (isLoading || !user)
+    if (authLoading || isLoading || !user)
         return (
             <Window>
                 <div className="p-8 text-white font-bold text-center">
