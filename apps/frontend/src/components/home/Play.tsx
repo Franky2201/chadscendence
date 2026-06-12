@@ -24,13 +24,13 @@ export function Play({ className = "" }: { className?: string }) {
     return (
         <Card
             className={className}
-            contentClassName={`flex flex-col justify-center items-center gap-3`}
+            contentClassName="flex flex-col justify-start items-center gap-3 h-full"
             title={t("home.play.title")}
         >
             <Button
                 onClick={() => navigate("/games")}
                 color={theme}
-                className="w-full flex flex-col"
+                className="w-full flex flex-col items-center justify-center h-24 text-2xl font-bold"
             >
                 {t("home.play.title")}
             </Button>
