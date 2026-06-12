@@ -80,7 +80,7 @@ const About: React.FC = () => {
                 title="Who's is the Chad ?"
                 description="Back"
                 size="large"
-                onClick={() => navigate(-1)}
+                onClick={() => navigate("/")}
             >
                 <div className="flex flex-wrap gap-1 mb-3">
                     {badges.map((badge) => {

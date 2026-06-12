@@ -22,7 +22,7 @@ const PrivacyPolicy: React.FC = () => {
                 title="Privacy Policy"
                 description="Back"
                 size="large"
-                onClick={() => navigate(-1)}
+                onClick={() => navigate("/")}
             >
                 <div className="space-y-6">
                     <div>
@@ -122,7 +122,56 @@ const PrivacyPolicy: React.FC = () => {
                             <li>Request deletion</li>
                             <li>Restrict processing</li>
                             <li>Request data portability</li>
+                            <li>Lodge a complaint with the Belgian Data Protection Authority (APD/GBA)</li>
                         </ul>
+                    </div>
+
+                    <div>
+                        <h2 className="text-lg font-semibold uppercase tracking-widest">
+                            Exercising Your Rights
+                        </h2>
+                        <p className="text-sm mt-2 leading-relaxed">
+                            To exercise any of the rights listed above, including
+                            requesting deletion of your account and data, please contact
+                            us using the email address below or use the account deletion
+                            option in your profile settings, if available.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h2 className="text-lg font-semibold uppercase tracking-widest">
+                            Legal Basis for Processing
+                        </h2>
+                        <p className="text-sm mt-2 leading-relaxed">
+                            We process your personal data on the basis of contract
+                            performance (to provide you with access to the platform and
+                            its features) and legitimate interest (to maintain security,
+                            prevent abuse and improve the service).
+                        </p>
+                    </div>
+
+                    <div>
+                        <h2 className="text-lg font-semibold uppercase tracking-widest">
+                            Data Retention
+                        </h2>
+                        <p className="text-sm mt-2 leading-relaxed">
+                            We retain your personal data for as long as your account
+                            remains active. If you request account deletion, your
+                            personal data is permanently deleted within 30 days, except
+                            where retention is required to comply with legal obligations.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h2 className="text-lg font-semibold uppercase tracking-widest">
+                            Age Requirement
+                        </h2>
+                        <p className="text-sm mt-2 leading-relaxed">
+                            This platform is intended for users aged 16 and above, or the
+                            minimum age of digital consent in your country of residence.
+                            We do not knowingly collect personal data from individuals
+                            below this age.
+                        </p>
                     </div>
 
                     <div>

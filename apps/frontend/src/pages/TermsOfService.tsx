@@ -22,7 +22,7 @@ const TermsOfService: React.FC = () => {
                 title="Terms of Service"
                 description="Back"
                 size="large"
-                onClick={() => navigate(-1)}
+                onClick={() => navigate("/")}
             >
                 <div className="space-y-6">
                     <div>
@@ -52,6 +52,18 @@ const TermsOfService: React.FC = () => {
                             regulations.
                         </p>
                     </div>
+
+                    <div>
+                        <h2 className="text-lg font-semibold uppercase tracking-widest">
+                            Age Requirement
+                        </h2>
+                        <p className="text-sm mt-2 leading-relaxed">
+                            You must be at least 16 years old, or the minimum age of
+                            consent in your jurisdiction, to create an account and use
+                            Who's the Chad ?.
+                        </p>
+                    </div>
+
 
                     <div>
                         <h2 className="text-lg font-semibold uppercase tracking-widest">
@@ -170,6 +182,29 @@ const TermsOfService: React.FC = () => {
                         </p>
                     </div>
 
+                    <div>
+                        <h2 className="text-lg font-semibold uppercase tracking-widest">
+                            Changes to These Terms
+                        </h2>
+                        <p className="text-sm mt-2 leading-relaxed">
+                            We may update these Terms from time to time. Continued use of
+                            the platform after changes are published constitutes
+                            acceptance of the revised Terms. The "Last Updated" date above
+                            reflects the most recent revision.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h2 className="text-lg font-semibold uppercase tracking-widest">
+                            Severability
+                        </h2>
+                        <p className="text-sm mt-2 leading-relaxed">
+                            If any provision of these Terms is found to be unenforceable
+                            or invalid, that provision shall be limited or eliminated to
+                            the minimum extent necessary, and the remaining provisions
+                            shall remain in full force and effect.
+                        </p>
+                    </div>
                     <div>
                         <h2 className="text-lg font-semibold uppercase tracking-widest">
                             Governing Law
