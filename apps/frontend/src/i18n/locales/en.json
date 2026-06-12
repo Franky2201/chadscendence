@@ -36,7 +36,15 @@
 			"title": "Profile",
 			"friends": "Friends",
 			"admin": "Management",
-			"logout": "Logout"
+			"logout": "Logout",
+			"rank" : {
+				"wood" : "Wood",
+				"bronze" : "Bronze",
+				"silver" : "Silver",
+				"gold" : "Gold",
+				"platinum" : "Platinum",
+				"chad" : "Chad"
+			}
 		},
 		"leaderboard": "Leaderboard"
 	},

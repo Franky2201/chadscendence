@@ -38,7 +38,15 @@
       "title": "Profiel",
       "friends": "Vrienden",
       "admin": "Beheer",
-      "logout": "Uitloggen"
+      "logout": "Uitloggen",
+      "rank": {
+        "wood": "Hout",
+        "bronze": "Brons",
+        "silver": "Zilver",
+        "gold": "Goud",
+        "platinum": "Platina",
+        "chad": "Chad"
+      }
     },
     "leaderboard": "Ranglijst"
   },

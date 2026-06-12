@@ -36,7 +36,15 @@
 			"title": "Profil",
 			"friends": "Mes amis",
 			"admin": "Gestion",
-			"logout": "Déconnexion"
+			"logout": "Déconnexion",
+			"rank" : {
+				"wood" : "Bois",
+				"bronze" : "Bronze",
+				"silver" : "Argent",
+				"gold" : "Or",
+				"platinum" : "Platine",
+				"chad" : "Chad"
+			}
 		},
 		"leaderboard": "Classement"
 	},
