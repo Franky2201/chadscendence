@@ -22,8 +22,7 @@ export class SessionsService {
         { timeLimit: number; par: number }
     > = {
         math: { timeLimit: 10, par: 1 },
-        reaction: { timeLimit: 20, par: 1 },
-        clicker: { timeLimit: 10, par: 30 },
+        "reaction-time": { timeLimit: 10, par: 1 },
     };
 
     constructor(
@@ -133,7 +132,7 @@ export class SessionsService {
         const scoreObtained = adapter.extractScore(result);
         this.scoreAggregator.applyRoundScore(session, round, scoreObtained);
 
-        const isCompleted = gameId === "math" || gameId === "reaction";
+        const isCompleted = gameId === "math" || gameId === "reaction-time";
 
         return {
             addedScore: scoreObtained,

@@ -1,8 +1,7 @@
 import type { ReactNode } from "react";
 import { createContext, useContext, useState, useEffect } from "react";
 import { toast } from "sonner";
-import { logout as logoutAuth } from "../services/auth";
-import { getMe } from "../services/users";
+import { checkAuthStatus, logout as logoutAuth } from "../services/auth";
 import type { User } from "@chad/types";
 
 interface AuthContextType {
@@ -27,8 +26,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         const checkAuth = async () => {
             try {
-                const userData = await getMe();
-                setUser(userData);
+                const data = await checkAuthStatus();
+
+                if (data.isAuthenticated && data.user) {
+                    setUser(data.user);
+                } else {
+                    setUser(null);
+                }
             } catch {
                 setUser(null);
             } finally {

@@ -5,6 +5,11 @@ const backendUrl = import.meta.env.PROD
     ? "/api"
     : import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
 
+export const checkAuthStatus = async () => {
+    const res = await api.get("/auth/check");
+    return res.data;
+};
+
 export const register = async (
     data: RegisterPayload,
 ): Promise<AuthResponse> => {
