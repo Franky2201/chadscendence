@@ -151,6 +151,19 @@
         "loading": "...",
         "confirm": "Bevestigen"
       }
+    },
+    "notification": {
+      "loadingError": "Fout bij het laden van gegevens",
+      "roleCreated": "Rol aangemaakt",
+      "creationError": "Fout bij het aanmaken",
+      "roleUpdated": "Rol bijgewerkt",
+      "updateRoleError": "Fout bij het bijwerken van de rol",
+      "roleDeleted": "Rol verwijderd",
+      "deleteError": "Kan deze rol niet verwijderen",
+      "profileUpdated": "Profiel bijgewerkt",
+      "updateProfileError": "Kan het profiel niet bijwerken",
+      "statusUpdate": "Status bijgewerkt",
+      "statusUpdateError": "Kan deze actie niet uitvoeren"
     }
   },
 

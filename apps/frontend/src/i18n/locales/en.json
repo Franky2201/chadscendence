@@ -146,6 +146,19 @@
 				"loading": "...",
 				"confirm": "Confirm"
 			}
+		},
+		"notification": {
+			"loadingError": "Error loading data",
+			"roleCreated": "Role created",
+			"creationError": "Error during creation",
+			"roleUpdated": "Role updated",
+			"updateRoleError": "Error updating role",
+			"roleDeleted": "Role deleted",
+			"deleteError": "Unable to delete this role",
+			"profileUpdated": "Profile updated",
+			"updateProfileError": "Unable to update profile",
+			"statusUpdate": "Status updated",
+			"statusUpdateError": "Unable to perform this action"
 		}
 	},
 	"users": {

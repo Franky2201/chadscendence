@@ -25,7 +25,8 @@ export class IntraStrategy extends PassportStrategy(Strategy as any, "42") {
         super({
             clientID: clientID || "missing",
             clientSecret: clientSecret || "missing",
-            callbackURL: callbackURL || "http://localhost:3000/auth/42/callback",
+            callbackURL:
+                callbackURL || "http://localhost:3000/auth/42/callback",
             scope: ["public"],
         });
     }

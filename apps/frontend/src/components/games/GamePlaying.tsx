@@ -74,7 +74,7 @@ export function GamePlaying({ prompt, timeLeft, onSubmit }: GamePlayingProps) {
                             size="large"
                             className="w-full mt-4 text-xl py-4"
                         >
-                            {prompt.actionLabel || "RÉPONDRE"}
+                            {prompt.actionLabel || "⮕"}
                         </Button>
                     </form>
                 </Card>

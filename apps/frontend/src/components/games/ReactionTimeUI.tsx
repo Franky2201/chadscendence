@@ -62,9 +62,9 @@ export default function ReactionTimeUI({
                     </h2>
 
                     <div className="text-sm font-mono text-gray-500 uppercase tracking-widest h-4 mb-6">
-                        {isWaiting && "Prépare-toi..."}
-                        {isReady && "MAINTENANT !"}
-                        {phase === "clicked" && "Résultat"}
+                        {isWaiting && "Get Ready ..."}
+                        {isReady && "NOW !"}
+                        {phase === "clicked" && "Results"}
                         {phase === "failed" && "Oups !"}
                     </div>
 
@@ -83,25 +83,21 @@ export default function ReactionTimeUI({
                         ].join(" ")}
                     >
                         {isWaiting && "..."}
-                        {isReady && "CLIQUE !"}
-                        {phase === "failed" && "TROP TÔT"}
+                        {isReady && "Click !"}
+                        {phase === "failed" && "❌"}
                         {phase === "clicked" && `${reactionTime}ms`}
                     </button>
 
                     <div className="h-8 mt-8 flex items-center justify-center">
                         {isWaiting && (
-                            <p className="text-gray-400 text-sm font-mono">
-                                Attends que le cercle devienne vert...
-                            </p>
+                            <p className="text-gray-400 text-sm font-mono"></p>
                         )}
                         {phase === "failed" && (
-                            <p className="text-red-500 text-lg font-bold animate-in fade-in slide-in-from-top-2">
-                                Tu as cliqué trop tôt !
-                            </p>
+                            <p className="text-red-500 text-lg font-bold animate-in fade-in slide-in-from-top-2"></p>
                         )}
                         {phase === "clicked" && (
                             <p className="text-green-500 text-lg font-bold animate-in fade-in slide-in-from-top-2">
-                                Bien joué !
+                                Success !
                             </p>
                         )}
                     </div>

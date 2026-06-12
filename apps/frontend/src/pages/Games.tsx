@@ -1,4 +1,3 @@
-
 import { Window } from "../components/ui";
 import { useAuth } from "../contexts/AuthContext";
 import { useTranslation } from "react-i18next";
