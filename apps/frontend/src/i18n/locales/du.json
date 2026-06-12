@@ -35,7 +35,7 @@
                 "error": "Ongeldige inloggegevens",
                 "invalidEmail": "Voer een geldig e-mailadres in.",
                 "weakPassword": "Wachtwoord moet minimaal 8 tekens lang zijn en een hoofdletter, een kleine letter en een cijfer bevatten.",
-                "conflictEmail": "Dit e-mailadres is al bezet.",
+                "conflictEmail": "Dit e-mailadres is al in gebruik.",
                 "conflictUsername": "Deze gebruikersnaam is al bezet."
             }
         },
@@ -159,6 +159,19 @@
                 "loading": "...",
                 "confirm": "Bevestigen"
             }
+        },
+        "notification": {
+            "loadingError": "Fout bij het laden van gegevens",
+            "roleCreated": "Rol aangemaakt",
+            "creationError": "Fout bij het aanmaken",
+            "roleUpdated": "Rol bijgewerkt",
+            "updateRoleError": "Fout bij het bijwerken van de rol",
+            "roleDeleted": "Rol verwijderd",
+            "deleteError": "Kan deze rol niet verwijderen",
+            "profileUpdated": "Profiel bijgewerkt",
+            "updateProfileError": "Kan het profiel niet bijwerken",
+            "statusUpdate": "Status bijgewerkt",
+            "statusUpdateError": "Kan deze actie niet uitvoeren"
         }
     },
 
@@ -404,7 +417,7 @@
             "minor": "Nevenmodule"
         },
         "projectModules": [
-            "Gebruik een framework voor frontend en backend",
+            "Gebruik een framework for frontend en backend",
             "Laat gebruikers met elkaar interageren",
             "Standaard gebruikersbeheer en authenticatie",
             "Publieke API",

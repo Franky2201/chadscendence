@@ -33,7 +33,7 @@
                 "error": "Invalid credentials",
                 "invalidEmail": "Please enter a valid email address.",
                 "weakPassword": "Password must be at least 8 characters long and contain an uppercase letter, a lowercase letter, and a number.",
-                "conflictEmail": "This email address is already taken.",
+                "conflictEmail": "This email is already in use.",
                 "conflictUsername": "This username is already taken."
             }
         },
