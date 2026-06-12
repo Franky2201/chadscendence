@@ -181,7 +181,20 @@
 		"friend": "Friend",
 		"playersCount_zero": "0 players",
 		"playersCount_one": "1 player",
-		"playersCount_other": "{{count}} players"
+		"playersCount_other": "{{count}} players",
+		"allRanks": "All ranks",
+		"sort": {
+			"alphaAsc": "A-Z",
+			"alphaDesc": "Z-A",
+			"ratingAsc": "- Rating",
+			"ratingDesc": "+ Rating"
+		},
+		"noResults": "No player matches these criteria.",
+		"pagination": {
+			"previous": "Previous",
+			"next": "Next",
+			"page": "Page {{current}} / {{total}}"
+		}
 	},
 	"room": {
 		"error": {
