@@ -169,5 +169,195 @@
 			"label": "Players",
 			"host": "Host"
 		}
+	},
+
+	"privacyPolicy": {
+    "title": "Privacy Policy",
+    "back": "Back",
+    "lastUpdated": {
+      "title": "Last Updated",
+      "date": "June 2026"
+    },
+    "whoWeAre": {
+      "title": "Who We Are",
+      "content": "Who's the Chad ? is a gaming platform developed as part of the 42 Belgium curriculum. This Privacy Policy explains how we collect, use and protect personal information."
+    },
+    "informationWeCollect": {
+      "title": "Information We Collect",
+      "items": [
+        "Email address",
+        "Username",
+        "Password (hashed and never stored in plain text)",
+        "Profile picture (optional)",
+        "GitHub or 42 OAuth identifiers",
+        "Game statistics and rankings"
+      ]
+    },
+    "howWeUseYourData": {
+      "title": "How We Use Your Data",
+      "items": [
+        "Create and manage accounts",
+        "Authenticate users",
+        "Display rankings and statistics",
+        "Provide multiplayer features",
+        "Maintain platform security"
+      ]
+    },
+    "cookies": {
+      "title": "Cookies",
+      "content": "We use essential cookies exclusively for authentication, session management and security. We do not use advertising cookies or analytics cookies."
+    },
+    "publicInformation": {
+      "title": "Public Information",
+      "content": "Usernames, profile pictures, rankings, achievements and game statistics may be visible to other users of the platform."
+    },
+    "oauthProviders": {
+      "title": "OAuth Providers",
+      "content": "Users may authenticate using GitHub or 42. Authentication through these providers is subject to their own privacy policies and terms."
+    },
+    "gdprRights": {
+      "title": "GDPR Rights",
+      "items": [
+        "Access your data",
+        "Correct inaccurate information",
+        "Request deletion",
+        "Restrict processing",
+        "Request data portability",
+        "Lodge a complaint with the Belgian Data Protection Authority (APD/GBA)"
+      ]
+    },
+    "exercisingRights": {
+      "title": "Exercising Your Rights",
+      "content": "To exercise any of the rights listed above, including requesting deletion of your account and data, please contact us using the email address below or use the account deletion option in your profile settings, if available."
+    },
+    "legalBasis": {
+      "title": "Legal Basis for Processing",
+      "content": "We process your personal data on the basis of contract performance (to provide you with access to the platform and its features) and legitimate interest (to maintain security, prevent abuse and improve the service)."
+    },
+    "dataRetention": {
+      "title": "Data Retention",
+      "content": "We retain your personal data for as long as your account remains active. If you request account deletion, your personal data is permanently deleted within 30 days, except where retention is required to comply with legal obligations."
+    },
+    "ageRequirement": {
+      "title": "Age Requirement",
+      "content": "This platform is intended for users aged 16 and above, or the minimum age of digital consent in your country of residence. We do not knowingly collect personal data from individuals below this age."
+    },
+    "contact": {
+      "title": "Contact",
+      "email": "juhanse@student.42belgium.be"
+    }
+  },
+	  "termsOfService": {
+    "title": "Terms of Service",
+    "back": "Back",
+    "lastUpdated": {
+      "title": "Last Updated",
+      "date": "June 2026"
+    },
+    "acceptanceOfTerms": {
+      "title": "Acceptance of Terms",
+      "content": "By creating an account or using Who's the Chad ?, you agree to these Terms of Service."
+    },
+    "eligibility": {
+      "title": "Eligibility",
+      "content": "Users are responsible for ensuring that their use of the platform complies with applicable laws and regulations."
+    },
+    "ageRequirement": {
+      "title": "Age Requirement",
+      "content": "You must be at least 16 years old, or the minimum age of consent in your jurisdiction, to create an account and use Who's the Chad ?."
+    },
+    "userAccounts": {
+      "title": "User Accounts",
+      "items": [
+        "You are responsible for your account credentials.",
+        "You must not share your account with others.",
+        "You must provide accurate information when registering."
+      ]
+    },
+    "acceptableUse": {
+      "title": "Acceptable Use",
+      "items": [
+        "Do not attempt unauthorized access to the platform.",
+        "Do not exploit bugs or vulnerabilities.",
+        "Do not interfere with platform operation.",
+        "Do not impersonate another user.",
+        "Do not use automated systems to abuse the service.",
+        "Do not upload unlawful or offensive content."
+      ]
+    },
+    "rankingsAndStatistics": {
+      "title": "Rankings and Statistics",
+      "content": "Game results, rankings, achievements and statistics may be displayed publicly to other users of the platform."
+    },
+    "userContent": {
+      "title": "User Content",
+      "content": "Users retain ownership of profile pictures and other content they upload. By uploading content, users grant Who's the Chad ? a non-exclusive license to store, process and display such content for operation of the platform."
+    },
+    "intellectualProperty": {
+      "title": "Intellectual Property",
+      "content": "The platform, software, branding, design and related materials remain the property of the Who's the Chad ? team unless otherwise stated."
+    },
+    "accountSuspension": {
+      "title": "Account Suspension",
+      "content": "We reserve the right to suspend or terminate accounts that violate these Terms or that threaten the security or integrity of the platform."
+    },
+    "disclaimer": {
+      "title": "Disclaimer",
+      "content": "The service is provided on an \"as is\" and \"as available\" basis without warranties of any kind."
+    },
+    "limitationOfLiability": {
+      "title": "Limitation of Liability",
+      "content": "To the maximum extent permitted by law, Who's the Chad ? shall not be liable for indirect, incidental or consequential damages arising from use of the platform."
+    },
+    "changesToTerms": {
+      "title": "Changes to These Terms",
+      "content": "We may update these Terms from time to time. Continued use of the platform after changes are published constitutes acceptance of the revised Terms. The \"Last Updated\" date above reflects the most recent revision."
+    },
+    "severability": {
+      "title": "Severability",
+      "content": "If any provision of these Terms is found to be unenforceable or invalid, that provision shall be limited or eliminated to the minimum extent necessary, and the remaining provisions shall remain in full force and effect."
+    },
+    "governingLaw": {
+      "title": "Governing Law",
+      "content": "These Terms shall be governed by and interpreted in accordance with the laws of Belgium."
+    },
+    "contact": {
+      "title": "Contact",
+      "email": "juhanse@student.42belgium.be"
+    }
+  },
+	"about": {
+		"title": "Who's the Chad ?",
+		"back": "Back",
+		"description": "A web platform for primitive minigames built around knowledge and reflection. A fun way to learn things, train your brain, or compete with friends. Built by a team of 5 as part of the 42 curriculum.",
+		"team": "The Team",
+		"technologies": "Technologies Used",
+		"modules": "Project Modules",
+		"footer": "Made with ❤️ at 42 Belgium",
+		"stack": {
+			"frontend": "Frontend",
+			"backend": "Backend",
+			"others": "Others"
+		},
+		"moduleTypes": {
+			"major": "Major",
+			"minor": "Minor"
+		},
+		"projectModules": [
+			"Use a framework for both frontend and backend",
+			"Allow users to interact with other users",
+			"Standard user management and authentication",
+			"Public API",
+			"Advanced permissions system",
+			"Use an ORM for the database",
+			"Custom-made design system with reusable components",
+			"Remote authentication with OAuth 2.0",
+			"Support multiple languages (at least 3)",
+			"Support for additional browser",
+			"Game statistics and match history",
+			"Advanced chat features",
+			"Game customization",
+			"A gamification system to reward users for their actions"
+		]
 	}
 }

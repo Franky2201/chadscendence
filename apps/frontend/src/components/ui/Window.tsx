@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { type ItemColor } from "./unified";
 import AnimatedBackground from "./AnimatedBackground";
 import { useTheme } from "../../contexts/ThemeContext";
+import LanguageSwitcher from "../LanguageSwitcher";
 
 type WindowProps = {
     children: ReactNode;
@@ -51,6 +52,9 @@ export function Window({
                 angle={angle}
                 size={size}
             />
+            <div className="absolute top-4 right-4 z-50">
+                <LanguageSwitcher />
+            </div>
             <div className="relative z-10">
                 {children}
                 <footer className={footerClasses}>
