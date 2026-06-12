@@ -1,5 +1,12 @@
 {
-	"loading": "Chargement",
+	"loading": "Chargement ...",
+	"window": {
+		"footer":{
+			"privacyPolicy": "Politique de confidentialité",
+			"termsOFService": "Conditions d'utilisation",
+			"about": "À propos"
+		}
+	},
 	"home": {
 		"play": {
 			"title": "Jouer",
@@ -169,5 +176,194 @@
 			"label": "Joueurs",
 			"host": "Hôte"
 		}
+	},
+	"privacyPolicy": {
+		"title": "Politique de confidentialité",
+		"back": "Retour",
+		"lastUpdated": {
+			"title": "Dernière mise à jour",
+			"date": "Juin 2026"
+		},
+		"whoWeAre": {
+			"title": "Qui sommes-nous",
+			"content": "Who's the Chad ? est une plateforme de jeu développée dans le cadre du cursus de 42 Belgium. Cette politique de confidentialité explique comment nous collectons, utilisons et protégeons les informations personnelles."
+		},
+		"informationWeCollect": {
+			"title": "Informations que nous collectons",
+			"items": [
+				"Adresse e-mail",
+				"Nom d'utilisateur",
+				"Mot de passe (haché et jamais stocké en clair)",
+				"Photo de profil (optionnelle)",
+				"Identifiants OAuth GitHub ou 42",
+				"Statistiques et classements de jeu"
+			]
+		},
+		"howWeUseYourData": {
+			"title": "Comment nous utilisons vos données",
+			"items": [
+				"Créer et gérer les comptes",
+				"Authentifier les utilisateurs",
+				"Afficher les classements et statistiques",
+				"Fournir les fonctionnalités multijoueurs",
+				"Assurer la sécurité de la plateforme"
+			]
+		},
+		"cookies": {
+			"title": "Cookies",
+			"content": "Nous utilisons exclusivement des cookies essentiels pour l'authentification, la gestion des sessions et la sécurité. Nous n'utilisons ni cookies publicitaires ni cookies d'analyse."
+		},
+		"publicInformation": {
+			"title": "Informations publiques",
+			"content": "Les noms d'utilisateur, photos de profil, classements, succès et statistiques de jeu peuvent être visibles par les autres utilisateurs de la plateforme."
+		},
+		"oauthProviders": {
+			"title": "Fournisseurs OAuth",
+			"content": "Les utilisateurs peuvent s'authentifier via GitHub ou 42. L'authentification par ces fournisseurs est soumise à leurs propres politiques de confidentialité et conditions d'utilisation."
+		},
+		"gdprRights": {
+			"title": "Droits RGPD",
+			"items": [
+				"Accéder à vos données",
+				"Corriger des informations inexactes",
+				"Demander la suppression de vos données",
+				"Limiter le traitement de vos données",
+				"Demander la portabilité de vos données",
+				"Déposer une plainte auprès de l'Autorité de protection des données belge (APD/GBA)"
+			]
+		},
+		"exercisingRights": {
+			"title": "Exercer vos droits",
+			"content": "Pour exercer l'un des droits mentionnés ci-dessus, y compris demander la suppression de votre compte et de vos données, veuillez nous contacter à l'adresse e-mail ci-dessous ou utiliser l'option de suppression de compte dans les paramètres de votre profil, si elle est disponible."
+		},
+		"legalBasis": {
+			"title": "Base légale du traitement",
+			"content": "Nous traitons vos données personnelles sur la base de l'exécution du contrat (afin de vous fournir l'accès à la plateforme et à ses fonctionnalités) et de notre intérêt légitime (afin de maintenir la sécurité, prévenir les abus et améliorer le service)."
+		},
+		"dataRetention": {
+			"title": "Conservation des données",
+			"content": "Nous conservons vos données personnelles aussi longtemps que votre compte reste actif. Si vous demandez la suppression de votre compte, vos données personnelles seront définitivement supprimées dans un délai de 30 jours, sauf si leur conservation est requise pour respecter une obligation légale."
+		},
+		"ageRequirement": {
+			"title": "Condition d'âge",
+			"content": "Cette plateforme est destinée aux utilisateurs âgés de 16 ans ou plus, ou ayant atteint l'âge minimum du consentement numérique dans leur pays de résidence. Nous ne collectons pas sciemment de données personnelles concernant des personnes n'ayant pas atteint cet âge."
+		},
+		"contact": {
+			"title": "Contact",
+			"email": "juhanse@student.42belgium.be"
+		}
+	},
+	  "termsOfService": {
+    "title": "Conditions d'utilisation",
+    "back": "Retour",
+    "lastUpdated": {
+      "title": "Dernière mise à jour",
+      "date": "Juin 2026"
+    },
+    "acceptanceOfTerms": {
+      "title": "Acceptation des conditions",
+      "content": "En créant un compte ou en utilisant Who's the Chad ?, vous acceptez les présentes conditions d'utilisation."
+    },
+    "eligibility": {
+      "title": "Éligibilité",
+      "content": "Les utilisateurs sont responsables de s'assurer que leur utilisation de la plateforme est conforme aux lois et réglementations applicables."
+    },
+    "ageRequirement": {
+      "title": "Condition d'âge",
+      "content": "Vous devez avoir au moins 16 ans, ou avoir atteint l'âge minimum de consentement dans votre juridiction, pour créer un compte et utiliser Who's the Chad ?."
+    },
+    "userAccounts": {
+      "title": "Comptes utilisateurs",
+      "items": [
+        "Vous êtes responsable des identifiants de votre compte.",
+        "Vous ne devez pas partager votre compte avec d'autres personnes.",
+        "Vous devez fournir des informations exactes lors de l'inscription."
+      ]
+    },
+    "acceptableUse": {
+      "title": "Utilisation acceptable",
+      "items": [
+        "Ne tentez pas d'obtenir un accès non autorisé à la plateforme.",
+        "N'exploitez pas les bugs ou vulnérabilités.",
+        "Ne perturbez pas le fonctionnement de la plateforme.",
+        "N'usurpez pas l'identité d'un autre utilisateur.",
+        "N'utilisez pas de systèmes automatisés pour abuser du service.",
+        "Ne téléversez pas de contenu illégal ou offensant."
+      ]
+    },
+    "rankingsAndStatistics": {
+      "title": "Classements et statistiques",
+      "content": "Les résultats de jeu, classements, succès et statistiques peuvent être affichés publiquement aux autres utilisateurs de la plateforme."
+    },
+    "userContent": {
+      "title": "Contenu utilisateur",
+      "content": "Les utilisateurs conservent la propriété des photos de profil et des autres contenus qu'ils téléversent. En téléversant du contenu, les utilisateurs accordent à Who's the Chad ? une licence non exclusive lui permettant de stocker, traiter et afficher ce contenu pour le fonctionnement de la plateforme."
+    },
+    "intellectualProperty": {
+      "title": "Propriété intellectuelle",
+      "content": "La plateforme, le logiciel, l'identité visuelle, le design et les éléments associés demeurent la propriété de l'équipe Who's the Chad ?, sauf indication contraire."
+    },
+    "accountSuspension": {
+      "title": "Suspension de compte",
+      "content": "Nous nous réservons le droit de suspendre ou de supprimer les comptes qui enfreignent ces conditions ou qui menacent la sécurité ou l'intégrité de la plateforme."
+    },
+    "disclaimer": {
+      "title": "Clause de non-responsabilité",
+      "content": "Le service est fourni « tel quel » et « selon disponibilité », sans garantie d'aucune sorte."
+    },
+    "limitationOfLiability": {
+      "title": "Limitation de responsabilité",
+      "content": "Dans la mesure maximale autorisée par la loi, Who's the Chad ? ne pourra être tenu responsable des dommages indirects, accessoires ou consécutifs résultant de l'utilisation de la plateforme."
+    },
+    "changesToTerms": {
+      "title": "Modification des conditions",
+      "content": "Nous pouvons mettre à jour ces conditions de temps à autre. La poursuite de l'utilisation de la plateforme après la publication des modifications constitue une acceptation des conditions révisées. La date de « Dernière mise à jour » ci-dessus reflète la révision la plus récente."
+    },
+    "severability": {
+      "title": "Divisibilité",
+      "content": "Si une disposition des présentes conditions est jugée inapplicable ou invalide, cette disposition sera limitée ou supprimée dans la mesure minimale nécessaire, tandis que les autres dispositions resteront pleinement en vigueur."
+    },
+    "governingLaw": {
+      "title": "Droit applicable",
+      "content": "Les présentes conditions sont régies et interprétées conformément aux lois de la Belgique."
+    },
+    "contact": {
+      "title": "Contact",
+      "email": "juhanse@student.42belgium.be"
+    }
+  },
+	"about": {
+		"title": "Who's the Chad ?",
+		"back": "Retour",
+		"description": "Une plateforme web de mini-jeux centrés sur la connaissance et la réflexion. Une manière amusante d'apprendre, d'entraîner son cerveau ou de rivaliser avec ses amis. Réalisée par une équipe de 5 personnes dans le cadre du cursus 42.",
+		"team": "L'équipe",
+		"technologies": "Technologies utilisées",
+		"modules": "Modules du projet",
+		"footer": "Réalisé avec ❤️ à 42 Belgium",
+		"stack": {
+			"frontend": "Frontend",
+			"backend": "Backend",
+			"others": "Autres"
+		},
+		"moduleTypes": {
+			"major": "Majeur",
+			"minor": "Mineur"
+		},
+		"projectModules": [
+			"Utilisation d'un framework pour le frontend et le backend",
+			"Permettre aux utilisateurs d'interagir entre eux",
+			"Gestion standard des utilisateurs et authentification",
+			"API publique",
+			"Système avancé de gestion des permissions",
+			"Utilisation d'un ORM pour la base de données",
+			"Système de design personnalisé avec composants réutilisables",
+			"Authentification distante via OAuth 2.0",
+			"Prise en charge de plusieurs langues (au moins 3)",
+			"Compatibilité avec des navigateurs supplémentaires",
+			"Statistiques de jeu et historique des parties",
+			"Fonctionnalités de chat avancées",
+			"Personnalisation du jeu",
+			"Système de gamification récompensant les actions des utilisateurs"
+		]
 	}
 }

@@ -1,8 +1,10 @@
-import { type ReactNode } from "react";
+import React, { type ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { type ItemColor } from "./unified";
 import AnimatedBackground from "./AnimatedBackground";
 import { useTheme } from "../../contexts/ThemeContext";
+import LanguageSwitcher from "../LanguageSwitcher";
+import { useTranslation } from "react-i18next";
 
 type WindowProps = {
     children: ReactNode;
@@ -23,6 +25,21 @@ export function Window({
 }: WindowProps) {
     const { theme } = useTheme();
     const location = useLocation();
+    const { t } = useTranslation();
+    const links = [
+        location.pathname !== "/privacypolicy" && {
+            to: "/privacypolicy",
+            label: t("window.footer.privacyPolicy"),
+        },
+        location.pathname !== "/termsofservice" && {
+            to: "/termsofservice",
+            label: t("window.footer.termsOFService"),
+        },
+        location.pathname !== "/about" && {
+            to: "/about",
+            label: t("window.footer.about"),
+        },
+    ].filter((link): link is { to: string; label: string } => Boolean(link));
     const classes = `min-h-screen relative overflow-hidden font-sans p-8 transition-all \
 		duration-500 ease-in-out ${className}`;
     const footerClasses = `flex justify-center mt-4 items-center text-sm gap-1 \
@@ -37,24 +54,22 @@ export function Window({
                 angle={angle}
                 size={size}
             />
+            <div className="absolute top-4 right-4 z-50">
+                <LanguageSwitcher />
+            </div>
             <div className="relative z-10">
                 {children}
                 <footer className={footerClasses}>
-                    <a href="" className={linkClasses}>
-                        Privacy Policy
-                    </a>
-                    <span className={linkClasses}>|</span>
-                    <a href="" className={linkClasses}>
-                        Terms of Service
-                    </a>
-                    {location.pathname !== "/about" && (
-                        <>
-                            <span className={linkClasses}>|</span>
-                            <Link to="/about" className={linkClasses}>
-                                About Us
+                    {links.map((link, index) => (
+                        <React.Fragment key={link.to}>
+                            {index > 0 && (
+                                <span className={linkClasses}>|</span>
+                            )}
+                            <Link to={link.to} className={linkClasses}>
+                                {link.label}
                             </Link>
-                        </>
-                    )}
+                        </React.Fragment>
+                    ))}
                 </footer>
             </div>
         </div>
