@@ -41,7 +41,7 @@ export function History({ user }: HistoryProps) {
             <div className="flex flex-col gap-2">
                 <div className="grid grid-cols-4 gap-2 px-4">
                     <span className={commonClasses}>
-                        {t("profilePage.statistics.gameHistory.position")}
+                        {t("profilePage.statistics.gameHistory.rounds")}
                     </span>
                     <span className={commonClasses}>
                         {t("profilePage.statistics.gameHistory.score")}

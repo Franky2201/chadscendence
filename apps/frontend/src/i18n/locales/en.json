@@ -81,7 +81,7 @@
 		"statistics": {
 			"gameHistory": {
 				"title": "Game History",
-				"position": "Position",
+				"rounds": "Rounds",
 				"score": "Score",
 				"rating": "Rating",
 				"ratingGained": "Aura points Gained",

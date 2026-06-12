@@ -81,7 +81,7 @@
 		"statistics": {
 			"gameHistory": {
 				"title": "Historique des parties",
-				"position": "Position",
+				"rounds": "Tours",
 				"score": "Score",
 				"rating": "Classement",
 				"ratingGained": "Points d'aura gagnés",

@@ -17,10 +17,7 @@ import {
 import type { UserListItem, AdminUpdateDataPayload } from "@chad/types";
 import { useTranslation } from "react-i18next";
 
-export const useAdmin = (
-    canManageRoles: boolean,
-    canManageUsers: boolean,
-) => {
+export const useAdmin = (canManageRoles: boolean, canManageUsers: boolean) => {
     const [roles, setRoles] = useState<Role[]>([]);
     const [permissions, setPermissions] = useState<Permission[]>([]);
     const [users, setUsers] = useState<UserListItem[]>([]);
@@ -32,14 +29,13 @@ export const useAdmin = (
             setIsLoading(true);
 
             try {
-                const [rolesData, permsData, usersData] =
-                    await Promise.all([
-                        canManageRoles || canManageUsers
-                            ? getRoles()
-                            : Promise.resolve([]),
-                        canManageRoles ? getPermissions() : Promise.resolve([]),
-                        getAllUsers(),
-                    ]);
+                const [rolesData, permsData, usersData] = await Promise.all([
+                    canManageRoles || canManageUsers
+                        ? getRoles()
+                        : Promise.resolve([]),
+                    canManageRoles ? getPermissions() : Promise.resolve([]),
+                    getAllUsers(),
+                ]);
 
                 setRoles(rolesData);
                 setPermissions(permsData);

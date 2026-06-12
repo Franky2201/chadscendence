@@ -31,7 +31,7 @@ interface StatisticsProps {
 }
 
 export function Statistics({ user }: StatisticsProps) {
-    const [period, setPeriod] = useState<TimeRange>(0);
+    const [period, setPeriod] = useState<TimeRange>(7);
     const { theme } = useTheme();
     const { t } = useTranslation();
 

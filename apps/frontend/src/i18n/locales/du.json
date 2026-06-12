@@ -81,7 +81,7 @@
     "statistics": {
       "gameHistory": {
         "title": "Spelgeschiedenis",
-        "position": "Positie",
+        "rounds": "Rondes",
         "score": "Score",
         "rating": "Rating",
         "ratingGained": "Verdiende aurapunten",
