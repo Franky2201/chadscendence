@@ -6,4 +6,3 @@ export * from "./src/rank.js";
 export * from "./src/auth.js";
 export * from "./src/role.js";
 export * from "./src/session.js";
-export * from "./src/room.js";

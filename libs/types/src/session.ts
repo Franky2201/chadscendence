@@ -6,34 +6,32 @@ export interface SessionRoundPrompt {
 	kind: SessionInputKind;
 	prompt: string;
 	roundToken?: string;
-	actionLabel?: string;
-	actionValue?: string;
 }
 
-export interface RoomSessionPlayer {
-	id: string;
-	username: string;
-	totalScore: number;
-	scoresByRound: number[];
-}
-
-export interface RoomSessionRound {
+export interface GameSessionRound {
 	index: number;
 	game: Game;
-	scores: Record<string, number>;
+	score: number;
 	prompt: SessionRoundPrompt | null;
-	closedAt?: string | Date;
+	startedAt?: string | Date;
 	endsAt?: string | Date;
+	closedAt?: string | Date;
 }
 
-export interface RoomSession {
-	roomCode: string;
+export interface GameSession {
+	id: string;
+	userId: string;
 	status: "running" | "finished";
 	startedAt: string | Date;
 	endedAt?: string | Date;
 	currentRoundIndex: number;
+	totalScore: number;
+	ratingDelta?: number;
 	games: Game[];
-	rounds: RoomSessionRound[];
-	players: RoomSessionPlayer[];
-	scorePersistedAt?: string | Date;
+	rounds: GameSessionRound[];
+}
+
+export interface CreateGameSessionDto {
+	selectedGames: string[];
+	repetitions: number;
 }
