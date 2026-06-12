@@ -5,6 +5,7 @@ import { developers } from "../contexts/AboutContext";
 import { type ItemColor } from "../components/ui/unified";
 import { useTheme } from "../contexts/ThemeContext";
 import { useTranslation } from "react-i18next";
+import { Header } from "../components/Header";
 
 const badges: { name: string; link: string; requires42?: boolean }[] = [
     { name: "42 Belgium", link: "https://42belgium.be" },
@@ -67,6 +68,8 @@ const About: React.FC = () => {
 
     return (
         <Window className="relative min-h-screen w-full overflow-hidden bg-cover bg-center">
+            <Header />
+
             <Card
                 className="relative max-w-250 mx-auto p-6"
                 title={t("about.title")}
@@ -184,9 +187,7 @@ const About: React.FC = () => {
                                 <Badge
                                     className="text-xs font-medium rounded-full ring-2"
                                     color={
-                                        mod.type === "Major"
-                                            ? "red"
-                                            : "green"
+                                        mod.type === "Major" ? "red" : "green"
                                     }
                                 >
                                     {mod.type === "Major"

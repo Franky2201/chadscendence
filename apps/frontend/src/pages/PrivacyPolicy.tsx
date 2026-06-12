@@ -2,26 +2,24 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { Card, Window } from "../components/ui";
 import { useTranslation } from "react-i18next";
+import { Header } from "../components/Header";
 
 const PrivacyPolicy: React.FC = () => {
     const { t } = useTranslation();
     const { isLoading } = useAuth();
     const navigate = useNavigate();
 
-    const informationItems = t(
-        "privacyPolicy.informationWeCollect.items",
-        { returnObjects: true }
-    ) as string[];
+    const informationItems = t("privacyPolicy.informationWeCollect.items", {
+        returnObjects: true,
+    }) as string[];
 
-    const usageItems = t(
-        "privacyPolicy.howWeUseYourData.items",
-        { returnObjects: true }
-    ) as string[];
+    const usageItems = t("privacyPolicy.howWeUseYourData.items", {
+        returnObjects: true,
+    }) as string[];
 
-    const gdprItems = t(
-        "privacyPolicy.gdprRights.items",
-        { returnObjects: true }
-    ) as string[];
+    const gdprItems = t("privacyPolicy.gdprRights.items", {
+        returnObjects: true,
+    }) as string[];
 
     if (isLoading)
         return (
@@ -32,6 +30,8 @@ const PrivacyPolicy: React.FC = () => {
 
     return (
         <Window className="relative min-h-screen w-full overflow-hidden bg-cover bg-center">
+            <Header />
+
             <Card
                 className="relative max-w-250 mx-auto p-6"
                 title={t("privacyPolicy.title")}
