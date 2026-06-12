@@ -56,7 +56,7 @@ export function History({ user }: HistoryProps) {
 
                 {historyData.length === 0 ? (
                     <div className="text-center text-white/50 py-6 italic font-mono text-sm">
-                        Aucune partie jouée pour le moment.
+                        {t("profilePage.statistics.gameHistory.noData")}
                     </div>
                 ) : (
                     historyData.map((g) => (
