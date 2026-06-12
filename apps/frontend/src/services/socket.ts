@@ -9,10 +9,3 @@ export const socket = io(backendUrl, {
     autoConnect: false,
     transports: ["websocket"],
 });
-
-const roomsNamespaceUrl = backendUrl ? `${backendUrl}/rooms` : "/rooms";
-export const roomsSocket = io(roomsNamespaceUrl, {
-    withCredentials: true,
-    autoConnect: false,
-    transports: ["websocket"],
-});
