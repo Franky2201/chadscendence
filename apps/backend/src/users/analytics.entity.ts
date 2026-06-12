@@ -7,6 +7,7 @@ import {
     JoinColumn,
 } from "typeorm";
 import { User } from "./user.entity";
+import type { RoundDetail } from "@chad/types";
 
 @Entity("game_analytics")
 export class GameAnalytics {
@@ -30,7 +31,7 @@ export class GameAnalytics {
     newRating: number;
 
     @Column({ type: "json", nullable: true })
-    roundsDetails: Record<string, any>[];
+    roundsDetails: RoundDetail[];
 
     @CreateDateColumn({ name: "played_at" })
     playedAt: Date;

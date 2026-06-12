@@ -28,7 +28,7 @@ export class UsersService implements OnModuleInit {
         private readonly ranksService: RanksService,
         @InjectRepository(GameAnalytics)
         private readonly analyticsRepository: Repository<GameAnalytics>,
-    ) { }
+    ) {}
 
     async onModuleInit() {
         await this.seedAdmin();
@@ -308,7 +308,7 @@ export class UsersService implements OnModuleInit {
     async updateRating(userId: string, newRating: number) {
         const user = await this.userRepository.findOne({
             where: { id: userId },
-            relations: { "rank": true }
+            relations: { rank: true },
         });
 
         if (!user) {
