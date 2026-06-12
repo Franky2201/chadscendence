@@ -52,6 +52,7 @@ export default function ReactionTimeUI() {
             setScore={setScore}
             renderGame={(problem, status, lastResult, submitAnswer) => (
                 <ReactionTimeGame
+                    key={problem.id}
                     problem={problem}
                     status={status}
                     lastResult={lastResult}
@@ -80,7 +81,6 @@ function ReactionTimeGame({
     useEffect(() => {
         if (status !== "playing") return;
 
-        setPhase("waiting");
         signalTimeRef.current = null;
 
         timerRef.current = setTimeout(() => {
@@ -91,7 +91,7 @@ function ReactionTimeGame({
         return () => {
             if (timerRef.current) clearTimeout(timerRef.current);
         };
-    }, [problem.id, problem.delay, status]);
+    }, [problem.delay, status]);
 
     const handleClick = () => {
         if (status !== "playing") return;
