@@ -81,7 +81,25 @@
     "errorProfile": "Fout bij het bijwerken van profiel",
     "successAvatar": "Avatar succesvol bijgewerkt",
     "errorAvatar": "Fout bij het bijwerken van avatar",
-    "loading": "Laden ..."
+    "loading": "Laden ...",
+    "statistics": {
+      "gameHistory": {
+        "title": "Spelgeschiedenis",
+        "position": "Positie",
+        "score": "Score",
+        "rating": "Rating",
+        "ratingGained": "Verdiende aurapunten"
+      },
+      "stats": {
+        "title": "Statistieken",
+        "winRate": "Winstkans",
+        "answerRate": "Antwoorden",
+        "gamePlayed": "Gespeelde wedstrijden"
+      },
+			"achievements" : {
+				"title" : "Achievements"
+			}
+    }
   },
 
   "admin": {
@@ -184,7 +202,25 @@
       "host": "Host"
     }
   },
-
+  "game": {
+    "title": "Spel aanmaken",
+    "back": "Terug",
+    "selection": "Spelselectie",
+    "loading": "Spellen laden...",
+    "sequence": "Sequentie herhalingen",
+    "start": "Spel starten",
+    "needMoreGames": "Selecteer minstens één spel",
+    "session": {
+      "loading": "MAAK JE KLAAR",
+      "next": "VOLGENDE"
+    },
+    "podium": {
+      "end": "VOLTOOID",
+      "totalScore": "Totale score",
+      "rating": "Aura punten",
+      "back": "Terug naar start"
+    }
+  },
   "privacyPolicy": {
     "title": "Privacybeleid",
     "back": "Terug",

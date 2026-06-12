@@ -49,9 +49,9 @@ export function GameSetup({
             <Header />
             <Card className="mb-20 relative max-w-5xl mt-10 mx-auto flex flex-col p-8 gap-8">
                 <div className="flex justify-between items-center">
-                    <h1 className="text-3xl font-bold">Créer une partie</h1>
+                    <h1 className="text-3xl font-bold">{t("game.title")}</h1>
                     <Link to="/">
-                        <Button color="grey">Retour</Button>
+                        <Button color="grey">{t("game.back")}</Button>
                     </Link>
                 </div>
 
@@ -61,13 +61,13 @@ export function GameSetup({
                             {t("room.gameList.label") || "Mini-jeux"}
                         </p>
                         <h2 className="text-2xl font-bold">
-                            Sélection des jeux
+                            {t("game.selection")}
                         </h2>
                     </div>
 
                     {isLoading ? (
                         <div className="text-center py-10 text-gray-400 text-sm animate-pulse">
-                            Chargement des jeux...
+                            {t("game.loading")}
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -116,7 +116,7 @@ export function GameSetup({
                 <div className="flex flex-col gap-4 bg-slate-500/10 p-6 rounded-2xl border border-slate-500/20 mt-2">
                     <div className="flex justify-between items-center">
                         <label className="font-bold text-lg opacity-90">
-                            Répétitions de la séquence
+                            {t("game.sequence")}
                         </label>
                         <span className="text-xl font-black text-white-500 px-4 py-1 bg-white-500/10 rounded-lg">
                             x{repetitions}
@@ -144,8 +144,8 @@ export function GameSetup({
                         className="w-full"
                     >
                         {selectedGames.length > 0
-                            ? "Lancer la partie"
-                            : "Sélectionnez au moins un jeu"}
+                            ? t("game.start")
+                            : t("game.needMoreGames")}
                     </Button>
                 </div>
             </Card>
