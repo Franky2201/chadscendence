@@ -9,44 +9,44 @@ import { useTranslation } from "react-i18next";
 // TODO : Remove the following with calls to the database
 type TimeRange = 0 | 1 | 7 | 15 | 30 | 60;
 
-type WinRateEntry = {
-    name: "Wins" | "Losses" | "Draws";
-    value: number;
-    fill: string;
-};
+// type WinRateEntry = {
+//     name: "Wins" | "Losses" | "Draws";
+//     value: number;
+//     fill: string;
+// };
 
-const wrds: Record<TimeRange, WinRateEntry[]> = {
-    1: [
-        { name: "Wins", value: 0, fill: "var(--color-green)" },
-        { name: "Losses", value: 0, fill: "var(--color-red)" },
-        { name: "Draws", value: 0, fill: "var(--color-grey)" },
-    ],
-    7: [
-        { name: "Wins", value: 8, fill: "var(--color-green)" },
-        { name: "Losses", value: 5, fill: "var(--color-red)" },
-        { name: "Draws", value: 2, fill: "var(--color-grey)" },
-    ],
-    15: [
-        { name: "Wins", value: 17, fill: "var(--color-green)" },
-        { name: "Losses", value: 9, fill: "var(--color-red)" },
-        { name: "Draws", value: 4, fill: "var(--color-grey)" },
-    ],
-    30: [
-        { name: "Wins", value: 36, fill: "var(--color-green)" },
-        { name: "Losses", value: 18, fill: "var(--color-red)" },
-        { name: "Draws", value: 6, fill: "var(--color-grey)" },
-    ],
-    60: [
-        { name: "Wins", value: 74, fill: "var(--color-green)" },
-        { name: "Losses", value: 36, fill: "var(--color-red)" },
-        { name: "Draws", value: 10, fill: "var(--color-grey)" },
-    ],
-    0: [
-        { name: "Wins", value: 152, fill: "var(--color-green)" },
-        { name: "Losses", value: 72, fill: "var(--color-red)" },
-        { name: "Draws", value: 16, fill: "var(--color-grey)" },
-    ],
-};
+// const wrds: Record<TimeRange, WinRateEntry[]> = {
+//     1: [
+//         { name: "Wins", value: 0, fill: "var(--color-green)" },
+//         { name: "Losses", value: 0, fill: "var(--color-red)" },
+//         { name: "Draws", value: 0, fill: "var(--color-grey)" },
+//     ],
+//     7: [
+//         { name: "Wins", value: 8, fill: "var(--color-green)" },
+//         { name: "Losses", value: 5, fill: "var(--color-red)" },
+//         { name: "Draws", value: 2, fill: "var(--color-grey)" },
+//     ],
+//     15: [
+//         { name: "Wins", value: 17, fill: "var(--color-green)" },
+//         { name: "Losses", value: 9, fill: "var(--color-red)" },
+//         { name: "Draws", value: 4, fill: "var(--color-grey)" },
+//     ],
+//     30: [
+//         { name: "Wins", value: 36, fill: "var(--color-green)" },
+//         { name: "Losses", value: 18, fill: "var(--color-red)" },
+//         { name: "Draws", value: 6, fill: "var(--color-grey)" },
+//     ],
+//     60: [
+//         { name: "Wins", value: 74, fill: "var(--color-green)" },
+//         { name: "Losses", value: 36, fill: "var(--color-red)" },
+//         { name: "Draws", value: 10, fill: "var(--color-grey)" },
+//     ],
+//     0: [
+//         { name: "Wins", value: 152, fill: "var(--color-green)" },
+//         { name: "Losses", value: 72, fill: "var(--color-red)" },
+//         { name: "Draws", value: 16, fill: "var(--color-grey)" },
+//     ],
+// };
 
 type AnswerRateEntry = {
     name: "Correct" | "Incorrect" | "Time";
@@ -149,12 +149,12 @@ export function Statistics() {
         randomInt(1, 100),
     );
 
-    const win_ratio =
-        (wrds[period][0].value /
-            (wrds[period][0].value +
-                wrds[period][1].value +
-                wrds[period][2].value)) *
-        100;
+    // const win_ratio =
+    //     (wrds[period][0].value /
+    //         (wrds[period][0].value +
+    //             wrds[period][1].value +
+    //             wrds[period][2].value)) *
+    //     100;
 
     const answer_ratio =
         (ards[period][0].value /
@@ -162,9 +162,12 @@ export function Statistics() {
                 ards[period][1].value +
                 ards[period][2].value)) *
         100;
-    
+
     return (
-        <Card contentClassName="" title={t("profilePage.statistics.stats.title")}>
+        <Card
+            contentClassName=""
+            title={t("profilePage.statistics.stats.title")}
+        >
             <div className="flex flex-wrap w-full justify-center gap-2">
                 {periods.map((p) => (
                     <Button

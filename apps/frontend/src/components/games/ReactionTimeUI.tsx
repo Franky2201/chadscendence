@@ -90,13 +90,10 @@ export default function ReactionTimeUI({
 
                     <div className="h-8 mt-8 flex items-center justify-center">
                         {isWaiting && (
-                            <p className="text-gray-400 text-sm font-mono">
-                               
-                            </p>
+                            <p className="text-gray-400 text-sm font-mono"></p>
                         )}
                         {phase === "failed" && (
-                            <p className="text-red-500 text-lg font-bold animate-in fade-in slide-in-from-top-2">
-                            </p>
+                            <p className="text-red-500 text-lg font-bold animate-in fade-in slide-in-from-top-2"></p>
                         )}
                         {phase === "clicked" && (
                             <p className="text-green-500 text-lg font-bold animate-in fade-in slide-in-from-top-2">

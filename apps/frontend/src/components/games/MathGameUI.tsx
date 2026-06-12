@@ -58,12 +58,12 @@ export default function MathGameUI() {
 
                     {status === "wrong" && lastResult && (
                         <div className="mt-4 text-red-400 font-bold text-lg animate-bounce">
-                            ​❌​ {lastResult.correctAnswer}
+                            {lastResult.correctAnswer}
                         </div>
                     )}
                     {status === "expired" && (
                         <div className="mt-4 text-orange-400 font-bold text-lg animate-bounce">
-                            ​❌​
+                            X
                         </div>
                     )}
                     {status === "correct" && (

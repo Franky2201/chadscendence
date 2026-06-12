@@ -29,7 +29,7 @@ export const useAdmin = (
     const [users, setUsers] = useState<UserListItem[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const { t } = useTranslation();
-
+    
     useEffect(() => {
         const loadData = async () => {
             setIsLoading(true);
