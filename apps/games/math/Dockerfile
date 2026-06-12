@@ -49,4 +49,4 @@ COPY --from=build --chown=nestjs:nodejs /app/libs/types/package.json ./libs/type
 COPY --from=build --chown=nestjs:nodejs /app/libs/types/dist ./libs/types/dist
 
 EXPOSE 3001
-CMD ["node", "apps/games/math/dist/main"]
+CMD ["node", "apps/games/math/dist/src/main"]

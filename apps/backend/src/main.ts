@@ -2,6 +2,7 @@ import { NestFactory } from "@nestjs/core";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import { AppModule } from "./app.module";
 import { ValidationPipe } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import { join } from "path";
@@ -28,7 +29,9 @@ async function bootstrap() {
             next();
         },
     );
-    app.useStaticAssets(join(process.cwd(), "uploads"), { prefix: "/uploads" });
+    app.useStaticAssets(join(process.cwd(), "apps/backend/uploads"), {
+        prefix: "/uploads",
+    });
 
     app.useGlobalPipes(
         new ValidationPipe({
@@ -38,8 +41,16 @@ async function bootstrap() {
         }),
     );
 
+    const configService = app.get(ConfigService);
+    const frontendUrl: string =
+        configService.get<string>("FRONTEND_URL") ||
+        `https://${configService.get<string>("DOMAIN_NAME") || "localhost"}`;
+    const allowedOrigins: string[] = frontendUrl
+        .split(",")
+        .map((url: string) => url.trim());
+
     app.enableCors({
-        origin: process.env.FRONTEND_URL || "http://localhost:5173",
+        origin: allowedOrigins,
         credentials: true,
         methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
         allowedHeaders: "Content-Type, Accept, Authorization",

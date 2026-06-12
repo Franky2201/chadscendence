@@ -53,13 +53,13 @@ export class UsersService implements OnModuleInit {
 
         const frontendUrl =
             this.configService.get<string>("FRONTEND_URL") ||
-            "http://localhost:5173";
+            `https://${this.configService.get<string>("DOMAIN_NAME") || "localhost"}`;
 
         const adminUser = this.userRepository.create({
             email: adminEmail,
             username: adminUsername,
             password: hashedPassword,
-            avatarUrl: `${frontendUrl}/public/admin.png`,
+            avatarUrl: `${frontendUrl}/admin.png`,
             rating: 5000,
             rank: defaultRank,
             role: adminRole,
@@ -136,13 +136,9 @@ export class UsersService implements OnModuleInit {
     }
 
     async uploadAvatar(id: string, filename: string) {
-        const backendUrl =
-            this.configService.get<string>("BACKEND_URL") ||
-            "http://localhost:3000";
-
         await this.userRepository.save({
             id,
-            avatarUrl: `${backendUrl}/uploads/${filename}`,
+            avatarUrl: `/uploads/${filename}`,
         });
         return this.getUser(id);
     }

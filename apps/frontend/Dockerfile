@@ -20,7 +20,7 @@ FROM base AS development
 COPY . .
 # Ensure types are built within the container for the dev environment
 RUN npm run build -w @chad/types
-CMD ["npm", "run", "dev", "-w", "frontend", "--", "--host", "0.0.0.0"]
+CMD ["npm", "run", "dev", "-w", "frontend", "--", "--host", "0.0.0.0", "--port", "8443"]
 
 # 3. Build stage
 FROM base AS build
@@ -48,5 +48,5 @@ COPY --from=build /app/apps/frontend/dist /usr/share/nginx/html
 COPY --from=build /etc/nginx/tls /etc/nginx/tls
 COPY apps/frontend/nginx/nginx.conf.template /etc/nginx/templates/default.conf.template
 
-EXPOSE 80 443
+EXPOSE 80 443 8080 8443
 CMD ["nginx", "-g", "daemon off;"]

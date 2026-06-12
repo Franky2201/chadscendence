@@ -23,7 +23,7 @@ export default function HomePage() {
                 <board.Play />
                 {!user && <board.Identification />}
                 {user && <board.Profile />}
-                <board.Leaderboard count={10} className="row-span-2" />
+                <board.Leaderboard count={5} />
             </div>
         </Window>
     );

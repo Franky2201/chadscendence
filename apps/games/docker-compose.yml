@@ -5,7 +5,7 @@ services:
             context: ../../
             dockerfile: apps/games/math/Dockerfile
             #change target from development to final for production build
-            target: development
+            target: ${BUILD_TARGET:-development}
             #target: final
         env_file: ../../.env
         environment:

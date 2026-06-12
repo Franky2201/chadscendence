@@ -15,7 +15,8 @@ all: up
 
 help:
 	@printf "$(GREEN)Available targets:$(NO_COLOR)\n"
-	@printf "  all (default)  Start the project\n"
+	@printf "  all (default)  Start the project in development mode\n"
+	@printf "  prod           Start the project in production mode (Nginx, relative paths)\n"
 	@printf "  up             Start services (detached)\n"
 	@printf "  build          Build or rebuild images\n"
 	@printf "  down           Stop and remove containers\n"
@@ -34,24 +35,25 @@ check:
 	@test -f $(ENV_FILE) || cp .env.example $(ENV_FILE)
 	@mkdir -p $(BACKEND_UPLOADS_PATH)
 	@if command -v npm > /dev/null 2>&1; then \
-		if [ ! -d "node_modules" ]; then \
-			printf "$(GREEN)Installing local dependencies for host-side tooling...$(NO_COLOR)\n"; \
-			npm install --quiet; \
-		fi; \
-		if [ ! -d "libs/types/dist" ]; then \
-			printf "$(GREEN)Building shared types library for host-side tooling...$(NO_COLOR)\n"; \
-			npm run build -w @chad/types --quiet; \
-		fi; \
-		printf "$(GREEN)Proactively fixing linting errors (host-side)...$(NO_COLOR)\n"; \
-		npm run lint --workspaces --quiet || true; \
+		printf "$(GREEN)Syncing local dependencies...$(NO_COLOR)\n"; \
+		(npm install --quiet --no-fund --no-audit && \
+		 printf "$(GREEN)Building shared types library...$(NO_COLOR)\n" && \
+		 npm run build -w @chad/types --quiet && \
+		 printf "$(GREEN)Proactively fixing linting errors (host-side)...$(NO_COLOR)\n" && \
+		 npm run lint --workspaces --quiet) || \
+		 printf "$(RED)Warning: Host-side sync failed. IDE/Linting might be inaccurate but Docker services will still start.$(NO_COLOR)\n"; \
 	fi
 
 build: check
 	@$(COMPOSE) build
 
+# Production target: Start services with BUILD_TARGET=final
+prod: export BUILD_TARGET=final
+prod: up
+
 # Start services in detached mode with hot-reloading (Bind Volumes)
 up: check
-	@printf "$(GREEN)Starting services in detached mode...$(NO_COLOR)\n"
+	@printf "$(GREEN)Starting services (Mode: $${BUILD_TARGET:-development})...$(NO_COLOR)\n"
 	@$(COMPOSE) up -d --remove-orphans --build
 	@printf "$(GREEN)Services started. Use 'make logs' to follow output or 'make down' to stop.$(NO_COLOR)\n"
 
@@ -74,8 +76,13 @@ logs:
 	@$(COMPOSE) logs -f
 
 clean: down
+	@printf "$(GREEN)Cleaning host-side build artifacts...$(NO_COLOR)\n"
+	@rm -rf libs/types/dist apps/backend/dist apps/frontend/dist
+	@printf "$(GREEN)Cleanup complete.$(NO_COLOR)\n"
 
-fclean:
+fclean: clean
+	@printf "$(GREEN)Deep cleaning: removing node_modules...$(NO_COLOR)\n"
+	@find . -name "node_modules" -type d -prune -exec rm -rf {} +
 	@$(COMPOSE) down -v --rmi all --remove-orphans
 	@printf "$(GREEN)Docker environment cleaned (volumes and images removed).$(NO_COLOR)\n"
 

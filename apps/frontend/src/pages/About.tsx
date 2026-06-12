@@ -35,10 +35,20 @@ const stackLayers = [
 ];
 
 const modules = [
-    { name: "Framework on both frontend and backend", type: "Major" },
-    { name: "ORM for the database", type: "Minor" },
+    { name: "Use a framework for both frontend and backend", type: "Major" },
+    { name: "Allow users to interact with other users", type: "Major" },
+    { name: "Standard user management and authentication", type: "Major" },
+    { name: "Public API", type: "Major" },
+    { name: "Advanced permissions system", type: "Major" },
+    { name: "Use an ORM for the database", type: "Minor" },
+    { name: "Custom-made design system with reusable components", type: "Minor" },
     { name: "Remote authentication with OAuth 2.0", type: "Minor" },
-    { name: "Custom design system (10+ components)", type: "Minor" },
+    { name: "Support multiple languages (at least 3)", type: "Minor" },
+    { name: "Support for additional browser", type: "Minor" },
+    { name: "Game statistics and match history", type: "Minor" },
+    { name: "Advanced chat features", type: "Minor" },
+    { name: "Game customization", type: "Minor" },
+    { name: "A gamification system to reward users for their actions", type: "Minor" },
 ];
 
 const badges: { name: string; link: string; requires42?: boolean }[] = [
