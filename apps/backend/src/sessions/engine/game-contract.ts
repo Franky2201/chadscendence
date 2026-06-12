@@ -68,13 +68,57 @@ export class ClickerSessionGameAdapter extends DefaultSessionGameAdapter {
         return {
             kind: "action",
             prompt: "Click as fast as you can!",
-            actionLabel: "CLICK ME",
+            actionLabel: "CLICK ME!",
             actionValue: "click",
         };
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     override buildSubmitPayload(answer: unknown, prompt: SessionRoundPrompt) {
-        return { action: "click" };
+        return answer;
+    }
+
+    override extractScore(result: unknown): number {
+        if (!result || typeof result !== "object") return 0;
+        const res = result as Record<string, unknown>;
+
+        if (typeof res.totalClicks === "number") {
+            return res.totalClicks;
+        }
+        return 0;
+    }
+}
+
+export class ReactionSessionGameAdapter extends DefaultSessionGameAdapter {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    override normalizePrompt(problem: unknown): SessionRoundPrompt {
+        return {
+            kind: "action",
+            prompt: "Reaction Time!",
+            actionLabel: "WAIT...",
+            actionValue: "reaction",
+        };
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    override buildSubmitPayload(answer: unknown, prompt: SessionRoundPrompt) {
+        return answer;
+    }
+
+    override extractScore(result: unknown): number {
+        if (!result || typeof result !== "object") return 0;
+        const res = result as Record<string, unknown>;
+
+        if (res.earlyClick) return 0;
+
+        const time = res.reactionTimeMs;
+        if (typeof time === "number") {
+            if (time < 200) return 2;
+            if (time < 400) return 1.5;
+            if (time < 600) return 1;
+            return 0.5;
+        }
+
+        return 0;
     }
 }

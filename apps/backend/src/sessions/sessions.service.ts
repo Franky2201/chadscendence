@@ -23,6 +23,7 @@ export class SessionsService {
     > = {
             math: { timeLimit: 10, par: 1 },
             reaction: { timeLimit: 20, par: 1 },
+            clicker: { timeLimit: 10, par: 30 },
         };
 
     constructor(
