@@ -261,7 +261,12 @@ export class UsersService implements OnModuleInit {
     async findById(id: string) {
         return this.userRepository.findOne({
             where: { id },
-            relations: { rank: true },
+            relations: {
+                rank: true,
+                role: {
+                    permissions: true,
+                },
+            },
         });
     }
 
