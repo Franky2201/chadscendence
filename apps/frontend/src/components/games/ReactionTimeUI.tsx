@@ -17,10 +17,12 @@ export default function ReactionTimeUI() {
             <div className="flex flex-col items-center justify-center p-6 bg-slate-800/50 rounded-3xl border border-white/10 backdrop-blur-sm min-h-75 relative">
                 <div className="w-full max-w-sm flex flex-col items-center gap-8 text-center">
                     <div className="flex flex-col gap-2">
-                        <div className="text-2xl font-black text-white">Reaction Time</div>
+                        <div className="text-2xl font-black text-white">
+                            Reaction Time
+                        </div>
                         <div className="text-white/40 text-sm font-mono">
-                            Clique dès que le cercle devient vert.<br />
-                            5 rounds — bonne chance !
+                            Clique dès que le cercle devient vert.
+                            <br />
                         </div>
                     </div>
 
@@ -162,9 +164,7 @@ function ReactionTimeGame({
                         ].join(" ")}
                     >
                         {lastResult.rating ??
-                            (lastResult.success
-                                ? "Bien joué !"
-                                : "Oups ...")}
+                            (lastResult.success ? "Bien joué !" : "Oups ...")}
                     </div>
                     <div className="text-white/60 font-mono text-sm">
                         {lastResult.message}
