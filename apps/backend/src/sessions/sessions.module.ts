@@ -11,4 +11,4 @@ import { RatingModule } from "src/rating/rating.module";
     providers: [SessionsService],
     exports: [SessionsService],
 })
-export class SessionsModule { }
+export class SessionsModule {}
