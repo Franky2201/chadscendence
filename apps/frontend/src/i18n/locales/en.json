@@ -109,7 +109,21 @@
                 "allTime": "All Time"
             },
             "achievements": {
-                "title": "Achievements"
+                "title": "Achievements",
+                "list": {
+                    "network": {
+                        "title": "The Network",
+                        "description": "Have friends"
+                    },
+                    "player": {
+                        "title": "Player",
+                        "description": "Have played games"
+                    },
+                    "winner": {
+                        "title": "Winner",
+                        "description": "Win at least one game"
+                    }
+                }
             }
         }
     },
@@ -175,6 +189,10 @@
             "updateProfileError": "Unable to update profile",
             "statusUpdate": "Status updated",
             "statusUpdateError": "Unable to perform this action"
+        },
+        "ranks": {
+            "ratingMin": "Required aura",
+            "info": "Ranks are currently managed via the backend seeding process. Dynamic rank modification will be available in a future version."
         }
     },
     "users": {

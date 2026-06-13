@@ -42,8 +42,8 @@ export function useGameSession() {
 
             setViewState("preparing");
             setTimeout(() => void playNextRound(newSession, 0), 2000);
-        } catch (error) {
-            console.error("Erreur de lancement:", error);
+        } catch {
+            // Silently handle error
         } finally {
             setIsSubmitting(false);
         }
@@ -65,8 +65,8 @@ export function useGameSession() {
             setActiveRoundIndex(roundIndex);
             setViewState("playing");
             startLocalTimer(updatedSession, roundIndex, duration);
-        } catch (error) {
-            console.error("Erreur lancement round:", error);
+        } catch {
+            // Silently handle error
         }
     };
 
@@ -120,8 +120,8 @@ export function useGameSession() {
                     }, 1500);
                 }, 2500);
             }
-        } catch (error) {
-            console.error("Erreur fin de round:", error);
+        } catch {
+            // Silently handle error
         }
     };
 
@@ -145,8 +145,7 @@ export function useGameSession() {
                 success: res.addedScore > 0,
                 isCompleted: res.isCompleted,
             };
-        } catch (error) {
-            console.error("Erreur réponse:", error);
+        } catch {
             return { success: false, isCompleted: false };
         }
     };

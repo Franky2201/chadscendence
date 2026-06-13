@@ -3,19 +3,17 @@ import { Card, Badge, ProgressBar } from "../ui";
 import { getItemColorStyle, getItemMixedColorStyle } from "../ui/unified";
 import achievementsData from "./achievements.json";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "../../contexts/AuthContext";
+import { useFriends } from "../../contexts/FriendsContext";
 
 type UserStats = {
     gamesPlayed: number;
-    perfectAnswers: number;
-    peakRating: number;
-    daysPlayed: number;
-    playTime: number;
     numberOfFriends: number;
+    wins: number;
 };
 
 type Achievement = {
-    title: string;
-    description: string;
+    id: string;
     stat: keyof UserStats;
     tiers: number[];
 };
@@ -48,22 +46,26 @@ function computeTierProgress(value: number, tiers: number[]): ProgressResult {
         current: value,
         target: value,
         completed: true,
-        tierIndex: tiers.length - 1,
+        tierIndex: tiers.length,
     };
 }
 
 export function Achievements() {
     const { t } = useTranslation();
     const { theme } = useTheme();
+    const { user } = useAuth();
+    const { friends } = useFriends();
     const achievements = achievementsData as Achievement[];
 
+    const gamesPlayed = user?.analytics?.length || 0;
+    const wins =
+        user?.analytics?.filter((game) => game.ratingDelta > 0).length || 0;
+    const numberOfFriends = friends.length;
+
     const s: UserStats = {
-        gamesPlayed: 21,
-        perfectAnswers: 23,
-        peakRating: 4335.2,
-        daysPlayed: 101,
-        playTime: 1,
-        numberOfFriends: 0,
+        gamesPlayed,
+        numberOfFriends,
+        wins,
     };
 
     return (
@@ -75,7 +77,7 @@ export function Achievements() {
                     const completed = progress.completed;
                     return (
                         <Badge
-                            key={a.title}
+                            key={a.id}
                             className="w-78"
                             contentClassName="h-full flex flex-col justify-between"
                             freq="5"
@@ -101,11 +103,15 @@ export function Achievements() {
                                     </div>
                                 )}
                                 <span className="select-none text-md sm:text-lg font-mona-sans-title break-words pr-10">
-                                    {a.title}
+                                    {t(
+                                        `profilePage.statistics.achievements.list.${a.id}.title`,
+                                    )}
                                 </span>
 
                                 <span className="select-none font-mona-sans-light text-xs sm:text-sm">
-                                    {a.description}
+                                    {t(
+                                        `profilePage.statistics.achievements.list.${a.id}.description`,
+                                    )}
                                 </span>
                             </div>
                             <div className="my-1 w-full text-center">

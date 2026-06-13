@@ -6,12 +6,14 @@ import { ConfigService } from "@nestjs/config";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import { join } from "path";
+import { SilentAuthFilter } from "./common/filters/silent-auth.filter";
 
 import { Response } from "express";
 
 async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
+    app.useGlobalFilters(new SilentAuthFilter());
     app.use(
         helmet({
             crossOriginResourcePolicy: { policy: "cross-origin" },

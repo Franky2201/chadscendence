@@ -128,23 +128,33 @@ export class SessionsService {
         const prompt = round.prompt ?? { kind: "action", prompt: "Play" };
         const payload = adapter.buildSubmitPayload(answer, prompt);
 
-        const result = await this.gamesService.sendCommand<unknown, unknown>(
-            gameId,
-            adapter.submitAnswerCommand,
-            payload,
-        );
+        let result: unknown;
+        try {
+            result = await this.gamesService.sendCommand<unknown, unknown>(
+                gameId,
+                adapter.submitAnswerCommand,
+                payload,
+            );
+        } catch {
+            result = { success: false, message: "Error from game" };
+        }
 
         const scoreObtained = adapter.extractScore(result);
         this.scoreAggregator.applyRoundScore(session, round, scoreObtained);
 
         const isCompleted = gameId === "math" || gameId === "reaction-time";
 
-        return {
+        const response: Record<string, unknown> = {
             addedScore: scoreObtained,
             totalRoundScore: round.score,
             isCompleted,
-            result,
         };
+
+        if (typeof result === "object" && result !== null) {
+            Object.assign(response, { result });
+        }
+
+        return response;
     }
 
     closeRound(id: string, userId: string, roundIndex: number) {

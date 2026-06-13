@@ -11,14 +11,21 @@ import { getRanks } from "../services/ranks";
 import type { UserListItem, Rank } from "@chad/types";
 import { useTheme } from "../contexts/ThemeContext";
 
-const ITEMS_PER_PAGE = 2;
+const ITEMS_PER_PAGE = 12;
 type SortOption = "alpha_asc" | "alpha_desc" | "rating_desc" | "rating_asc";
 
 export default function UsersPage() {
     const { theme } = useTheme();
     const { t } = useTranslation();
     const { user: currentUser } = useAuth();
-    const { friends, sentRequests, sendRequest } = useFriends();
+    const {
+        friends,
+        sentRequests,
+        requests,
+        sendRequest,
+        acceptRequest,
+        declineRequest,
+    } = useFriends();
 
     const [users, setUsers] = useState<UserListItem[]>([]);
     const [ranks, setRanks] = useState<Rank[]>([]);
@@ -218,6 +225,12 @@ export default function UsersPage() {
                                                               r.addresseeId ===
                                                               user.id,
                                                       );
+                                                  const isRequestReceived =
+                                                      requests.find(
+                                                          (r) =>
+                                                              r.requesterId ===
+                                                              user.id,
+                                                      );
 
                                                   if (isFriend) {
                                                       return (
@@ -230,6 +243,35 @@ export default function UsersPage() {
                                                                   "users.friend",
                                                               )}
                                                           </Button>
+                                                      );
+                                                  }
+
+                                                  if (isRequestReceived) {
+                                                      return (
+                                                          <div className="flex gap-2 w-full">
+                                                              <Button
+                                                                  color="green"
+                                                                  className="flex-1"
+                                                                  onClick={() =>
+                                                                      acceptRequest(
+                                                                          isRequestReceived.friendshipId,
+                                                                      )
+                                                                  }
+                                                              >
+                                                                  ✓
+                                                              </Button>
+                                                              <Button
+                                                                  color="red"
+                                                                  className="flex-1"
+                                                                  onClick={() =>
+                                                                      declineRequest(
+                                                                          isRequestReceived.friendshipId,
+                                                                      )
+                                                                  }
+                                                              >
+                                                                  ✕
+                                                              </Button>
+                                                          </div>
                                                       );
                                                   }
 

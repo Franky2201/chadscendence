@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import { Card } from "../ui";
 import { Header } from "../Header";
 import type { SessionRoundPrompt } from "@chad/types";
 
@@ -57,13 +56,13 @@ export default function ReactionTimeUI({
     return (
         <>
             <Header />
-            <div className="flex flex-col items-center justify-center min-h-[calc(100vh-120px)] w-full px-4">
-                <Card className="max-w-2xl w-full flex flex-col items-center p-10 text-center shadow-2xl">
-                    <h2 className="text-4xl font-black mb-8">
+            <div className="flex-1 flex flex-col items-center justify-center px-4">
+                <div className="flex flex-col items-center gap-6 p-10 text-center rounded-3xl bg-white/5 backdrop-blur-[8px] border border-white/20 shadow-2xl w-full max-w-md">
+                    <h2 className="text-4xl font-black">
                         {prompt.prompt || "Reaction Time"}
                     </h2>
 
-                    <div className="text-sm font-mono text-gray-500 uppercase tracking-widest h-4 mb-6">
+                    <div className="text-3xl font-bold text-white mb-8 h-10 flex items-center justify-center tracking-wide uppercase">
                         {isWaiting && "Get Ready ..."}
                         {isReady && "NOW !"}
                         {phase === "clicked" && "Results"}
@@ -90,7 +89,7 @@ export default function ReactionTimeUI({
                         {phase === "clicked" && `${reactionTime}ms`}
                     </button>
 
-                    <div className="h-8 mt-8 flex items-center justify-center">
+                    <div className="h-8 flex items-center justify-center">
                         {isWaiting && (
                             <p className="text-gray-400 text-sm font-mono"></p>
                         )}
@@ -103,7 +102,7 @@ export default function ReactionTimeUI({
                             </p>
                         )}
                     </div>
-                </Card>
+                </div>
             </div>
         </>
     );

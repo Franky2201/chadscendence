@@ -63,11 +63,9 @@ export function Summary() {
                     <div className="flex flex-col items-center text-center gap-1 mt-2">
                         <h2 className="text-2xl font-black flex items-center gap-2">
                             #{user?.leaderboardRank ?? "..."}
-                            {user?.role?.name === "Admin" && (
-                                <Badge color="black" className="text-xs">
-                                    {t("profilePage.admin")}
-                                </Badge>
-                            )}
+                            <Badge color="black" className="text-xs">
+                                {user?.role.name}
+                            </Badge>
                         </h2>
                         <p className="text-sm font-medium text-white/50 mb-1">
                             {user?.email}

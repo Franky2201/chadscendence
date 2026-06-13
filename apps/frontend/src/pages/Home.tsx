@@ -19,7 +19,7 @@ export default function HomePage() {
         <Window>
             <Header />
             <div
-                className={`grid w-full max-w-300 justify-self-center grid-cols-1 
+                className={`grid w-full max-w-300 mx-auto grid-cols-1
 					md:grid-cols-3 "lg:grid-cols-3" gap-3`}
             >
                 <board.Play />

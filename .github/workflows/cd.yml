@@ -1,0 +1,59 @@
+name: CD pipeline
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+jobs:
+  deploy:
+    # Only run if the PR was merged (not just closed)
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Copy files to Oracle VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          # CRITICAL: Exclude 'apps/backend/uploads' so we don't delete user avatars on every deploy
+          source: ".,!node_modules,!**/node_modules,!dist,!**/dist,!.git,!.github,!apps/backend/uploads"
+          target: "~/chadscendence"
+          # rm: true ensures a clean slate for the code, but be careful with persistent data
+          rm: true
+
+      - name: Execute build and start commands
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            cd ~/chadscendence
+
+            # Inject production environment variables
+            echo "${{ secrets.PROD_ENV }}" > .env
+
+            # Dynamically set the FRONTEND_URL and OAuth callbacks so they work in production
+            echo "FRONTEND_URL=https://${{ secrets.VPS_HOST }}:8443" >> .env
+            echo "INTRA_CALLBACK_URL=https://${{ secrets.VPS_HOST }}:8443/api/auth/42/callback" >> .env
+            echo "GITHUB_CALLBACK_URL=https://${{ secrets.VPS_HOST }}:8443/api/auth/github/callback" >> .env
+
+            # --- FIX FOR AVATARS ---
+            # 1. Create the directory if it doesn't exist
+            mkdir -p apps/backend/uploads
+            # 2. Grant ownership to user 1001 (the 'nestjs' user inside the container)
+            # This allows the backend to write uploaded files to the host disk
+            sudo chown -R 1001:1001 apps/backend/uploads
+            # -----------------------
+
+            # Run 'make prod' but skip the host-side 'npm install/lint' checks.
+            PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" make prod
+
+            # Cleanup
+            docker image prune -f

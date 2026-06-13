@@ -84,7 +84,9 @@ export function GameSetup({
                                         className="h-20"
                                         onClick={() => onToggleGame(g.id)}
                                         disabled={isSubmitting || isLoading}
-                                    />
+                                    >
+                                        {g.description}
+                                    </Checkbox>
                                 );
                             })}
                         </div>

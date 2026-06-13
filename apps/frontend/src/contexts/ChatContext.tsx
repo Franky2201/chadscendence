@@ -56,7 +56,11 @@ export function ChatProvider({ children }: { children: ReactNode }) {
             return;
         }
 
-        getUnreadCounts().then(setUnreadCounts).catch(console.error);
+        getUnreadCounts()
+            .then(setUnreadCounts)
+            .catch(() => {
+                /* Silent */
+            });
     }, [user]);
 
     const fetchMessages = useCallback(
@@ -68,8 +72,8 @@ export function ChatProvider({ children }: { children: ReactNode }) {
 
                 setMessages((prev) => (append ? [...prev, ...data] : data));
                 await markAsRead(friendId);
-            } catch (error) {
-                console.error(error);
+            } catch {
+                // Silently handle error
             } finally {
                 setIsLoading(false);
             }
@@ -118,8 +122,8 @@ export function ChatProvider({ children }: { children: ReactNode }) {
         try {
             const newMessage = await apiSendMessage(activeChat.id, content);
             setMessages((prev) => [newMessage, ...prev]);
-        } catch (error) {
-            console.error(error);
+        } catch {
+            // Silently handle error
         }
     };
 
@@ -129,7 +133,9 @@ export function ChatProvider({ children }: { children: ReactNode }) {
         const handleNewMessage = (message: Message) => {
             if (activeChat && message.sender.id === activeChat.id) {
                 setMessages((prev) => [message, ...prev]);
-                markAsRead(activeChat.id).catch(console.error);
+                markAsRead(activeChat.id).catch(() => {
+                    /* Silent */
+                });
             } else {
                 setUnreadCounts((prev) => ({
                     ...prev,

@@ -1,8 +1,11 @@
 import { useState } from "react";
 import GameContainer from "./GameContainer";
+import { Button } from "../ui";
+import { useTheme } from "../../contexts/ThemeContext";
 import type { MathProblem, MathValidationResult } from "@chad/types";
 
 export default function MathGameUI() {
+    const { theme } = useTheme();
     const [score, setScore] = useState(0);
     const [answer, setAnswer] = useState("");
 
@@ -47,13 +50,15 @@ export default function MathGameUI() {
                             }`}
                             placeholder="?"
                         />
-                        <button
+                        <Button
                             type="submit"
                             disabled={status !== "playing"}
-                            className="w-full bg-pink-600 hover:bg-pink-700 disabled:opacity-50 text-white rounded-2xl py-4 text-xl font-black transition-all shadow-lg shadow-pink-600/20"
+                            color={theme}
+                            size="large"
+                            className="w-full text-xl"
                         >
                             ⮕
-                        </button>
+                        </Button>
                     </form>
 
                     {status === "wrong" && lastResult && (

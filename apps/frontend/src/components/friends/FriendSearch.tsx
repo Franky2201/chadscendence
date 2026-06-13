@@ -11,7 +11,14 @@ interface FriendSearchProps {
 }
 
 export default function FriendSearch({ onSearchActive }: FriendSearchProps) {
-    const { sendRequest, friends, sentRequests } = useFriends();
+    const {
+        sendRequest,
+        friends,
+        sentRequests,
+        requests,
+        acceptRequest,
+        declineRequest,
+    } = useFriends();
     const { theme } = useTheme();
     const { t } = useTranslation();
     const [query, setQuery] = useState("");
@@ -77,6 +84,9 @@ export default function FriendSearch({ onSearchActive }: FriendSearchProps) {
                             const isRequestSent = sentRequests.some(
                                 (req) => req.addresseeId === user.id,
                             );
+                            const isRequestReceived = requests.find(
+                                (req) => req.requesterId === user.id,
+                            );
 
                             return (
                                 <div
@@ -102,6 +112,31 @@ export default function FriendSearch({ onSearchActive }: FriendSearchProps) {
                                         >
                                             {t("friends.friend")}
                                         </Button>
+                                    ) : isRequestReceived ? (
+                                        <div className="flex gap-2">
+                                            <Button
+                                                onClick={() =>
+                                                    acceptRequest(
+                                                        isRequestReceived.friendshipId,
+                                                    )
+                                                }
+                                                size="small"
+                                                className="!bg-green-500/20 !text-green-400 hover:!bg-green-500/30 !rounded-lg"
+                                            >
+                                                ✓
+                                            </Button>
+                                            <Button
+                                                onClick={() =>
+                                                    declineRequest(
+                                                        isRequestReceived.friendshipId,
+                                                    )
+                                                }
+                                                size="small"
+                                                className="!bg-red-500/20 !text-red-400 hover:!bg-red-500/30 !rounded-lg"
+                                            >
+                                                ✕
+                                            </Button>
+                                        </div>
                                     ) : isRequestSent ? (
                                         <Button
                                             disabled

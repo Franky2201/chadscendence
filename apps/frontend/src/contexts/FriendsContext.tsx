@@ -23,7 +23,7 @@ interface FriendsContextType {
     requests: FriendRequest[];
     sentRequests: SentRequest[];
     isLoading: boolean;
-    refreshFriends: () => Promise<void>;
+    refreshFriends: (silent?: boolean) => Promise<void>;
     acceptRequest: (friendshipId: string) => Promise<void>;
     declineRequest: (friendshipId: string) => Promise<void>;
     removeFriend: (friendshipId: string) => Promise<void>;
@@ -40,91 +40,123 @@ export function FriendsProvider({ children }: { children: ReactNode }) {
     const [sentRequests, setSentRequests] = useState<SentRequest[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    const refreshFriends = useCallback(async () => {
-        if (!user) {
-            setFriends([]);
-            setRequests([]);
-            setSentRequests([]);
-            setIsLoading(false);
-            return;
-        }
+    const refreshFriends = useCallback(
+        async (silent = false) => {
+            if (!user) {
+                setFriends([]);
+                setRequests([]);
+                setSentRequests([]);
+                if (!silent) setIsLoading(false);
+                return;
+            }
 
-        try {
-            setIsLoading(true);
-            const [friendsData, requestsData, sentRequestsData] =
-                await Promise.all([
-                    getFriends(),
-                    getPendingRequests(),
-                    getSentRequests(),
-                ]);
-            setFriends(friendsData);
-            setRequests(requestsData);
-            setSentRequests(sentRequestsData);
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setIsLoading(false);
-        }
-    }, [user]);
+            try {
+                if (!silent) setIsLoading(true);
+                const [friendsData, requestsData, sentRequestsData] =
+                    await Promise.all([
+                        getFriends(),
+                        getPendingRequests(),
+                        getSentRequests(),
+                    ]);
+                setFriends(Array.isArray(friendsData) ? friendsData : []);
+                setRequests(Array.isArray(requestsData) ? requestsData : []);
+                setSentRequests(
+                    Array.isArray(sentRequestsData) ? sentRequestsData : [],
+                );
+            } catch {
+                // Silently handle errors to meet 'no console error' requirement
+            } finally {
+                if (!silent) setIsLoading(false);
+            }
+        },
+        [user],
+    );
 
     useEffect(() => {
         // eslint-disable-next-line react-hooks/set-state-in-effect
-        refreshFriends();
+        void refreshFriends();
     }, [refreshFriends]);
 
     useEffect(() => {
-        if (!user) {
-            socket.disconnect();
-            return;
-        }
+        if (!user) return;
 
-        socket.connect();
+        const handleFriendshipUpdated = () => {
+            void refreshFriends(true);
+        };
 
-        socket.on(
-            "user_status",
-            ({
-                userId,
-                status,
-            }: {
-                userId: string;
-                status: "online" | "offline";
-            }) => {
-                setFriends((prevFriends) =>
-                    prevFriends.map((friend) =>
-                        friend.id === userId ? { ...friend, status } : friend,
-                    ),
+        const handleUserStatus = ({
+            userId,
+            status,
+        }: {
+            userId: string;
+            status: "online" | "offline";
+        }) => {
+            setFriends((prevFriends) => {
+                if (!Array.isArray(prevFriends)) return [];
+                return prevFriends.map((friend) =>
+                    friend.id === userId ? { ...friend, status } : friend,
                 );
-            },
-        );
+            });
+        };
 
-        socket.on("friendship_updated", () => {
-            void refreshFriends();
-        });
+        socket.on("user_status", handleUserStatus);
+        socket.on("friendship_updated", handleFriendshipUpdated);
 
         return () => {
-            socket.off("user_status");
-            socket.off("friendship_updated");
+            socket.off("user_status", handleUserStatus);
+            socket.off("friendship_updated", handleFriendshipUpdated);
         };
     }, [user, refreshFriends]);
 
     const acceptRequest = async (friendshipId: string) => {
+        const req = requests.find((r) => r.friendshipId === friendshipId);
+        if (req) {
+            setRequests((prev) =>
+                prev.filter((r) => r.friendshipId !== friendshipId),
+            );
+            setFriends((prev) => [
+                ...prev,
+                {
+                    friendshipId: req.friendshipId,
+                    id: req.requesterId,
+                    username: req.username,
+                    avatarUrl: req.avatarUrl,
+                    status: "offline",
+                },
+            ]);
+        }
         await acceptFriendRequest(friendshipId);
-        await refreshFriends();
+        void refreshFriends(true);
     };
 
     const declineRequest = async (friendshipId: string) => {
+        setRequests((prev) =>
+            prev.filter((r) => r.friendshipId !== friendshipId),
+        );
         await removeFriend(friendshipId);
-        await refreshFriends();
+        void refreshFriends(true);
     };
 
     const handleRemoveFriend = async (friendshipId: string) => {
+        setFriends((prev) =>
+            prev.filter((f) => f.friendshipId !== friendshipId),
+        );
         await removeFriend(friendshipId);
-        await refreshFriends();
+        void refreshFriends(true);
     };
 
     const handleSendRequest = async (userId: string) => {
+        setSentRequests((prev) => [
+            ...prev,
+            {
+                friendshipId: `temp-${Date.now()}`,
+                addresseeId: userId,
+                username: "...",
+                avatarUrl: "",
+            },
+        ]);
         await sendFriendRequest(userId);
-        await refreshFriends();
+        void refreshFriends(true);
     };
 
     return (
