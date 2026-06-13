@@ -5,6 +5,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { Button, Input, Card } from "../ui/index";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
+import { useTheme } from "../../contexts/ThemeContext";
 
 interface LoginModalProps {
     isOpen: boolean;
@@ -13,6 +14,7 @@ interface LoginModalProps {
 
 export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
     const { login } = useAuth();
+    const { theme } = useTheme();
     const { t } = useTranslation();
     const [identifier, setIdentifier] = useState("");
     const [password, setPassword] = useState("");
@@ -39,7 +41,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
 
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70"
             onClick={onClose}
         >
             <Card
@@ -67,7 +69,12 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                         size="large"
                         required
                     />
-                    <Button type="submit" className="w-full" size="large">
+                    <Button
+                        color={theme}
+                        type="submit"
+                        className="w-full"
+                        size="large"
+                    >
                         {t("home.identification.login.login")}
                     </Button>
                 </form>
