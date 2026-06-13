@@ -36,8 +36,8 @@ RUN npm prune --omit=dev
 FROM node:22-alpine AS final
 WORKDIR /app
 
-# Security: Create a non-root user
-RUN addgroup -S nodejs && adduser -S nestjs -G nodejs
+# Security: Create a non-root user with explicit UID/GID 1001
+RUN addgroup -g 1001 -S nodejs && adduser -u 1001 -S nestjs -G nodejs
 USER nestjs
 
 # Copy artifacts from build stage with correct ownership
