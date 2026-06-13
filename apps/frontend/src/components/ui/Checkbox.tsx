@@ -1,13 +1,12 @@
 import type { InputHTMLAttributes, ReactNode } from "react";
 import { useId } from "react";
-
-type InputSize = "small" | "medium" | "large";
+import { type ItemSize } from "./unified";
 
 type CheckboxProps = Omit<
     InputHTMLAttributes<HTMLInputElement>,
     "type" | "size"
 > & {
-    size?: InputSize;
+    size?: ItemSize;
     label?: ReactNode;
     containerClassName?: string;
     labelClassName?: string;
@@ -40,13 +39,13 @@ const stateClasses =
 	peer-disabled:cursor-not-allowed \
 	peer-disabled:opacity-60";
 
-const sizeClasses: Record<InputSize, string> = {
+const sizeClasses: Record<ItemSize, string> = {
     small: "px-4 py-2 text-sm",
     medium: "px-6 py-3 text-base",
     large: "px-8 py-4 text-lg",
 };
 
-const iconInsetClasses: Record<InputSize, string> = {
+const iconInsetClasses: Record<ItemSize, string> = {
     small: "pl-10 pr-10",
     medium: "pl-12 pr-12",
     large: "pl-14 pr-14",
@@ -55,7 +54,7 @@ const iconInsetClasses: Record<InputSize, string> = {
 const iconWrapperBaseClasses =
     "absolute inline-flex items-center justify-center";
 
-const iconWrapperSizeClasses: Record<InputSize, string> = {
+const iconWrapperSizeClasses: Record<ItemSize, string> = {
     small: "h-5 w-5 left-2",
     medium: "h-6 w-6 left-3",
     large: "h-7 w-7 left-4",

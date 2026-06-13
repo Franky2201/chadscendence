@@ -109,19 +109,22 @@ export default function UsersPage() {
                     />
 
                     <div className="flex flex-wrap gap-4 items-center justify-between">
-                        <div className="flex gap-4 w-full sm:w-auto">
+                        <div className="flex gap-4 w-full sm:w-auto items-center">
                             <Select
                                 value={selectedRank}
                                 onChange={(e) =>
                                     handleRankChange(e.target.value)
                                 }
-                                className="text-white border border-white/20 rounded-xl pl-4 pr-12 py-2 outline-none"
                             >
-                                <option value="ALL">
+                                <option value="ALL" className="text-black">
                                     {t("users.allRanks")}
                                 </option>
                                 {ranks.map((rank) => (
-                                    <option key={rank.id} value={rank.name}>
+                                    <option
+                                        key={rank.id}
+                                        value={rank.name}
+                                        className="text-black"
+                                    >
                                         {rank.name}
                                     </option>
                                 ))}

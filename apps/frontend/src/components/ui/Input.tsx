@@ -20,21 +20,19 @@ export function Input({
     style,
     ...props
 }: InputProps) {
-    const inputClasses = [
-        "relative inline-flex items-center justify-center rounded-xl font-bold \
-        text-center focus-visible:outline-none disabled:cursor-not-allowed \
-        focus-visible:ring-2 translate-y-[-2px] active:scale-95 \
-        transition-all duration-100 ease-in-out select-none hover:ring-1 \
-        bg-[color:var(--ui-color)]/50 ring-[color:var(--ui-color)]",
-        sizeClasses[size],
-        className,
-    ]
-        .filter(Boolean)
-        .join(" ");
     return (
         <input
             type={type}
-            className={inputClasses}
+            className={`appearance-none  pr-12 rounded-xl
+					font-bold font-mona-sans-light
+					bg-[var(--ui-color)]/20 bg-white/10 border-white/20
+					text-white ring-white
+					hover:cursor-pointer hover:ring-1
+					focus-visible:outline-none focus-visible:ring-2
+					active:scale-95 transition-all duration-200 ease-in-out
+            		${className}
+					${sizeClasses[size]}
+        		`}
             style={{
                 ...style,
                 ...getItemColorStyle(color),
