@@ -73,7 +73,7 @@ export default function MathGameUI() {
                     )}
                     {status === "correct" && (
                         <div className="mt-4 text-green-400 font-bold text-lg animate-bounce">
-                            ✅
+                            ✓
                         </div>
                     )}
                 </div>

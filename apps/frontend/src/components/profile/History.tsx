@@ -8,9 +8,12 @@ interface HistoryProps {
     user: User | null;
 }
 
+const PAGE_SIZE = 10;
+
 export function History({ user }: HistoryProps) {
     const { t } = useTranslation();
     const [openId, setOpenId] = useState<string | null>(null);
+    const [page, setPage] = useState(0);
 
     const historyData: (GameHistory & { id: string })[] = useMemo(() => {
         if (!user?.analytics) return [];
@@ -33,8 +36,18 @@ export function History({ user }: HistoryProps) {
             }));
     }, [user]);
 
+    const totalPages = Math.ceil(historyData.length / PAGE_SIZE);
+
+    const paginatedData = useMemo(() => {
+        const start = page * PAGE_SIZE;
+        return historyData.slice(start, start + PAGE_SIZE);
+    }, [historyData, page]);
+
     const commonClasses =
         "select-none flex justify-self-center font-mona-sans-ligh text-xs sm:text-md";
+
+    const goToPrev = () => setPage((p) => Math.max(0, p - 1));
+    const goToNext = () => setPage((p) => Math.min(totalPages - 1, p + 1));
 
     return (
         <Card title={t("profilePage.statistics.gameHistory.title")}>
@@ -59,7 +72,7 @@ export function History({ user }: HistoryProps) {
                         {t("profilePage.statistics.gameHistory.noData")}
                     </div>
                 ) : (
-                    historyData.map((g) => (
+                    paginatedData.map((g) => (
                         <GameHistoryCard
                             key={g.id}
                             game={g}
@@ -69,6 +82,28 @@ export function History({ user }: HistoryProps) {
                             }
                         />
                     ))
+                )}
+
+                {totalPages > 1 && (
+                    <div className="flex items-center justify-center gap-4 pt-4">
+                        <button
+                            onClick={goToPrev}
+                            disabled={page === 0}
+                            className="px-3 py-1 rounded-md text-sm select-none disabled:opacity-30 disabled:cursor-not-allowed hover:bg-white/10 transition-colors"
+                        >
+                            {t("profilePage.statistics.gameHistory.next", "Next")}
+                        </button>
+                        <span className="text-xs sm:text-sm text-white/70 select-none">
+                            {page + 1} / {totalPages}
+                        </span>
+                        <button
+                            onClick={goToNext}
+                            disabled={page === totalPages - 1}
+                            className="px-3 py-1 rounded-md text-sm select-none disabled:opacity-30 disabled:cursor-not-allowed hover:bg-white/10 transition-colors"
+                        >
+                            {t("profilePage.statistics.gameHistory.previous", "Previous")}
+                        </button>
+                    </div>
                 )}
             </div>
         </Card>

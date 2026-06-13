@@ -99,12 +99,12 @@ export function GamePlaying({ prompt, timeLeft, onSubmit }: GamePlayingProps) {
 
                     {status === "correct" && (
                         <div className="mt-4 text-green-400 font-bold text-2xl animate-bounce">
-                            ✅
+                            ✓
                         </div>
                     )}
                     {status === "wrong" && (
                         <div className="mt-4 text-red-400 font-bold text-2xl animate-bounce">
-                            ❌
+                            X
                         </div>
                     )}
                 </div>
