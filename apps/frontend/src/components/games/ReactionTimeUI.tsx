@@ -63,9 +63,9 @@ export default function ReactionTimeUI({
                     </h2>
 
                     <div className="text-3xl font-bold text-white mb-8 h-10 flex items-center justify-center tracking-wide uppercase">
-                        {isWaiting && "Get Ready ..."}
-                        {isReady && "NOW !"}
-                        {phase === "clicked" && "Results"}
+                        {isWaiting && "..."}
+                        {isReady && "Click !"}
+                        {phase === "clicked" && ""}
                         {phase === "failed" && "Oups !"}
                     </div>
 
@@ -94,11 +94,13 @@ export default function ReactionTimeUI({
                             <p className="text-gray-400 text-sm font-mono"></p>
                         )}
                         {phase === "failed" && (
-                            <p className="text-red-500 text-lg font-bold animate-in fade-in slide-in-from-top-2"></p>
+                            <p className="text-red-500 text-lg font-bold animate-in fade-in slide-in-from-top-2">
+                                X
+                            </p>
                         )}
                         {phase === "clicked" && (
                             <p className="text-green-500 text-lg font-bold animate-in fade-in slide-in-from-top-2">
-                                Success !
+                                ✓
                             </p>
                         )}
                     </div>
