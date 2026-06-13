@@ -8,6 +8,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { Link } from "react-router-dom";
 import type { Role } from "@chad/types";
 import { useTranslation } from "react-i18next";
+import { getItemColorStyle } from "../ui/unified";
 import { useTheme } from "../../contexts/ThemeContext";
 
 type ActiveModal =
@@ -67,17 +68,18 @@ export default function UserManager({
                 {t("admin.usersManager.title")}
             </Title>
 
-            <div className="flex flex-col md:flex-row items-stretch gap-4 w-full">
+            <div className="flex flex-col md:flex-row items-stretch gap-4 w-full items-center">
                 <Input
                     placeholder={t("admin.usersManager.search")}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="flex-1 !bg-white/10 !border-white/20 !text-white !text-left !font-normal placeholder:!text-white/40 !text-lg !py-3"
+                    size="large"
+                    className="flex-1 !bg-white/10 !border-white/20 !text-white !text-left !font-normal placeholder:!text-white/40 !text-lg"
                 />
                 <Select
+                    customSize="large"
                     value={roleFilter}
                     onChange={(e) => setRoleFilter(e.target.value)}
-                    className="flex-1 !bg-white/10 !border-white/20 !text-white !text-left !font-normal !text-lg !py-3 !px-3 !rounded-xl"
                 >
                     <option value="ALL" className="text-black">
                         {t("admin.usersManager.allRoles")}
@@ -116,7 +118,10 @@ export default function UserManager({
                             </Link>
                             <div className="flex flex-col items-start gap-1">
                                 <Link to={`/users/${user.username}`}>
-                                    <span className="font-bold text-white text-lg hover:text-pink-400 transition-colors">
+                                    <span
+                                        className="font-bold text-white text-lg hover:text-[var(--ui-color)] transition-colors"
+                                        style={{ ...getItemColorStyle(theme) }}
+                                    >
                                         {user.username}
                                     </span>
                                 </Link>
@@ -174,7 +179,7 @@ export default function UserManager({
                                 <Button
                                     color={
                                         user.accountStatus ===
-                                        AccountStatus.BANNED
+                                            AccountStatus.BANNED
                                             ? "orange"
                                             : "red"
                                     }

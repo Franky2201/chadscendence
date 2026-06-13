@@ -95,6 +95,7 @@ export default function RoleManager({
                                         {permissions.map((p) => (
                                             <Checkbox
                                                 key={p.id}
+                                                color={theme}
                                                 label={p.action}
                                                 checked={editPerms.includes(
                                                     p.action,
@@ -185,8 +186,8 @@ export default function RoleManager({
                                         setNewPerms((prev) =>
                                             prev.includes(p.action)
                                                 ? prev.filter(
-                                                      (x) => x !== p.action,
-                                                  )
+                                                    (x) => x !== p.action,
+                                                )
                                                 : [...prev, p.action],
                                         )
                                     }

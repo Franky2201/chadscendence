@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Card, Button } from "../ui";
+import { Card, Button, Checkbox } from "../ui";
 import { Header } from "../Header";
 import { useTheme } from "../../contexts/ThemeContext";
 import type { Game } from "../../services/games";
@@ -76,37 +76,17 @@ export function GameSetup({
                                 const isSelected = selectedGames.includes(g.id);
 
                                 return (
-                                    <div
+                                    <Checkbox
                                         key={g.id}
-                                        className={`transition-all duration-200 ${
-                                            isSelected
-                                                ? "rounded-2xl transform scale-[1.02]"
-                                                : "opacity-80 grayscale-[20%]"
-                                        }`}
+                                        color={color}
+                                        label={g.name}
+                                        checked={isSelected}
+                                        className="h-20"
+                                        onClick={() => onToggleGame(g.id)}
+                                        disabled={isSubmitting || isLoading}
                                     >
-                                        <Button
-                                            color={color}
-                                            onClick={() => onToggleGame(g.id)}
-                                            className="h-full w-full min-h-[120px]"
-                                            disabled={isSubmitting || isLoading}
-                                        >
-                                            <div className="flex flex-col items-start w-full p-2">
-                                                <div className="flex justify-between items-center w-full mb-2">
-                                                    <span className="text-xl font-bold">
-                                                        {g.name}
-                                                    </span>
-                                                    <span
-                                                        className={`flex-shrink-0 ml-2 w-6 h-6 bg-white/30 rounded-full flex items-center justify-center text-white text-sm shadow-sm transition-opacity duration-200 ${isSelected ? "opacity-100" : "opacity-0"}`}
-                                                    >
-                                                        ✓
-                                                    </span>
-                                                </div>
-                                                <p className="text-sm font-normal opacity-90 text-left line-clamp-3 leading-tight whitespace-normal break-words">
-                                                    {g.description}
-                                                </p>
-                                            </div>
-                                        </Button>
-                                    </div>
+                                        {g.description}
+                                    </Checkbox>
                                 );
                             })}
                         </div>
