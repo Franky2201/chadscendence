@@ -75,9 +75,7 @@ export default function RankManager({ ranks }: RankManagerProps) {
                     </svg>
                 </div>
                 <p className="text-sm text-blue-300 leading-relaxed">
-                    Les rangs sont actuellement gérés via le processus de
-                    seeding du backend. La modification dynamique des rangs sera
-                    disponible dans une prochaine version.
+                    {t("admin.ranks.info")}
                 </p>
             </div>
         </div>

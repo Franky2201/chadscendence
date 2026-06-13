@@ -177,7 +177,8 @@
             "statusUpdateError": "Impossible d'effectuer cette action"
         },
         "ranks": {
-            "ratingMin": "Aura requise"
+            "ratingMin": "Aura requise",
+            "info": "Les rangs sont actuellement gérés via le processus de seeding du backend. La modification dynamique des rangs sera disponible dans une prochaine version."
         }
     },
     "users": {

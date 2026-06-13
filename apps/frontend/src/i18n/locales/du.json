@@ -177,7 +177,8 @@
             "statusUpdateError": "Kan deze actie niet uitvoeren"
         },
         "ranks": {
-            "ratingMin": "Vereiste aura"
+            "ratingMin": "Vereiste aura",
+            "info": "Rangen worden momenteel beheerd via het backend seedingproces. Dynamische rangwijziging zal beschikbaar zijn in een toekomstige versie."
         }
     },
     "users": {

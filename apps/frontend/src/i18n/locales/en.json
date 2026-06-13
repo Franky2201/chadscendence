@@ -177,7 +177,8 @@
             "statusUpdateError": "Unable to perform this action"
         },
         "ranks": {
-            "ratingMin": "Required aura"
+            "ratingMin": "Required aura",
+            "info": "Ranks are currently managed via the backend seeding process. Dynamic rank modification will be available in a future version."
         }
     },
     "users": {
