@@ -175,6 +175,9 @@
             "updateProfileError": "Kan het profiel niet bijwerken",
             "statusUpdate": "Status bijgewerkt",
             "statusUpdateError": "Kan deze actie niet uitvoeren"
+        },
+        "ranks": {
+            "ratingMin": "Vereiste aura"
         }
     },
     "users": {

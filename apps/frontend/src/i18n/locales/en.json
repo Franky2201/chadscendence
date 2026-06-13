@@ -175,6 +175,9 @@
             "updateProfileError": "Unable to update profile",
             "statusUpdate": "Status updated",
             "statusUpdateError": "Unable to perform this action"
+        },
+        "ranks": {
+            "ratingMin": "Required aura"
         }
     },
     "users": {
