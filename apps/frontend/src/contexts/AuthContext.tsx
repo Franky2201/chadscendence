@@ -68,7 +68,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         };
 
         void initAuth();
-    }, []);
+    }, [t]);
 
     const login = (userData: User) => {
         if (userData && userData.id && userData.username) {
