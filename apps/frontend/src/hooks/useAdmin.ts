@@ -107,10 +107,27 @@ export const useAdmin = (
         avatarFile?: File | null,
     ) => {
         try {
+            const oldUser = users.find((u) => u.id === id);
+            
             if (avatarFile) {
                 await uploadAvatarForUser(id, avatarFile);
             }
             const updated = await adminUpdateUser(id, data);
+            
+            if (oldUser && oldUser.role.id !== updated.role.id) {
+                setRoles((prev) =>
+                    prev.map((r) => {
+                        if (r.id === oldUser.role.id) {
+                            return { ...r, userCount: Math.max(0, (r.userCount || 0) - 1) };
+                        }
+                        if (r.id === updated.role.id) {
+                            return { ...r, userCount: (r.userCount || 0) + 1 };
+                        }
+                        return r;
+                    }),
+                );
+            }
+
             setUsers((prev) => prev.map((u) => (u.id === id ? updated : u)));
             toast.success(t("admin.notification.profileUpdated"));
         } catch {
