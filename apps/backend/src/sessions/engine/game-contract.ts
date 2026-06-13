@@ -60,6 +60,13 @@ export class MathSessionGameAdapter extends DefaultSessionGameAdapter {
             answer: typeof answer === "number" ? Math.trunc(answer) : 0,
         };
     }
+
+    override extractScore(result: unknown): number {
+        if (!result || typeof result !== "object") return 0;
+        const res = result as Record<string, unknown>;
+        if (res.success === true) return 1;
+        return 0;
+    }
 }
 
 export class ClickerSessionGameAdapter extends DefaultSessionGameAdapter {
@@ -101,34 +108,36 @@ export class ReactionSessionGameAdapter extends DefaultSessionGameAdapter {
         };
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     override buildSubmitPayload(answer: unknown, prompt: SessionRoundPrompt) {
-        return answer;
+        if (!answer || typeof answer !== "object") {
+            return {
+                id: prompt.roundToken,
+                reactionTime: 0,
+                tooEarly: true,
+            };
+        }
+        const obj = answer as Record<string, unknown>;
+        return {
+            id: prompt.roundToken,
+            reactionTime:
+                typeof obj.reactionTimeMs === "number" ? obj.reactionTimeMs : 0,
+            tooEarly: obj.earlyClick === true,
+        };
     }
 
     override extractScore(result: unknown): number {
         if (!result || typeof result !== "object") return 0;
         const res = result as Record<string, unknown>;
 
-        if (res.tooEarly || res.earlyClick) {
-            console.log("[Scoring] Reaction Time: Too early!");
-            return 0;
-        }
+        if (res.success !== true) return 0;
 
-        const time = (res.reactionTime ?? res.reactionTimeMs) as
-            | number
-            | undefined;
-
-        console.log(`[Scoring] Reaction Time: ${time}ms`);
-
+        const time = res.reactionTime;
         if (typeof time === "number") {
             if (time < 200) return 2;
             if (time < 400) return 1.5;
             if (time < 600) return 1;
             return 0.5;
         }
-
-        if (res.success === true) return 1;
 
         return 0;
     }

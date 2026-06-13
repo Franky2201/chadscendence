@@ -21,7 +21,7 @@ export class GameAnalytics {
     @Column({ name: "user_id" })
     userId: string;
 
-    @Column({ type: "int", default: 0 })
+    @Column({ type: "numeric", precision: 10, scale: 2, default: 0 })
     totalScore: number;
 
     @Column({ type: "int", default: 0 })

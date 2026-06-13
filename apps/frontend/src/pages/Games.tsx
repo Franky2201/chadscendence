@@ -18,7 +18,7 @@ export default function SoloGamePage() {
         viewState,
         timeLeft,
         isSubmitting,
-        lastResult,
+        activeRoundIndex,
         launchGame,
         submitAnswer,
     } = useGameSession();
@@ -41,6 +41,7 @@ export default function SoloGamePage() {
 
     const renderView = () => {
         switch (viewState) {
+            case "loading_next":
             case "preparing":
                 return (
                     <div className="flex flex-col items-center justify-center min-h-[50vh] text-white">
@@ -50,25 +51,24 @@ export default function SoloGamePage() {
                     </div>
                 );
             case "playing": {
-                const gameId =
-                    session?.rounds[session.currentRoundIndex]?.game.id;
+                const gameId = session?.rounds[activeRoundIndex]?.game.id;
 
                 if (gameId === "reaction-time") {
                     return (
                         <ReactionTimeUI
+                            key={activeRoundIndex}
                             prompt={prompt!}
                             onSubmit={submitAnswer}
-                            lastResult={lastResult}
                         />
                     );
                 }
 
                 return (
                     <GamePlaying
+                        key={activeRoundIndex}
                         prompt={prompt!}
                         timeLeft={timeLeft}
                         onSubmit={submitAnswer}
-                        lastResult={lastResult}
                     />
                 );
             }
