@@ -97,12 +97,12 @@ export default function UserManager({
                     <Card
                         key={user.id}
                         className="w-full"
-                        contentClassName="w-full flex flex-row items-center justify-between"
+                        contentClassName="w-full flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
                     >
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-4 min-w-0">
                             <Link
                                 to={`/users/${user.username}`}
-                                className="relative group"
+                                className="relative group shrink-0"
                             >
                                 {user.avatarUrl ? (
                                     <img
@@ -111,15 +111,15 @@ export default function UserManager({
                                         className="w-12 h-12 rounded-full object-cover border-2 border-slate-600 transition-transform group-hover:scale-105"
                                     />
                                 ) : (
-                                    <div className="w-12 h-12 rounded-full bg-slate-600 flex items-center justify-center text-xl font-bold text-white transition-transform group-hover:scale-105">
+                                    <div className="w-12 h-12 rounded-full bg-slate-600 flex items-center justify-center text-xl font-bold text-white transition-transform group-hover:scale-105 shrink-0">
                                         {user.username[0].toUpperCase()}
                                     </div>
                                 )}
                             </Link>
-                            <div className="flex flex-col items-start gap-1">
-                                <Link to={`/users/${user.username}`}>
+                            <div className="flex flex-col items-start gap-1 min-w-0">
+                                <Link to={`/users/${user.username}`} className="max-w-full">
                                     <span
-                                        className="font-bold text-white text-lg hover:text-[var(--ui-color)] transition-colors"
+                                        className="font-bold text-white text-lg hover:text-[var(--ui-color)] transition-colors break-all"
                                         style={{ ...getItemColorStyle(theme) }}
                                     >
                                         {user.username}
@@ -132,7 +132,7 @@ export default function UserManager({
                                 )}
                             </div>
                         </div>
-                        <div className="flex flex-wrap items-center gap-4">
+                        <div className="flex flex-wrap items-center gap-3 sm:justify-end">
                             {canEditUser && currentUser?.id !== user.id && (
                                 <>
                                     <Select
