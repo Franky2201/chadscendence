@@ -271,7 +271,7 @@ export class UsersService implements OnModuleInit {
         const user = await this.userRepository.findOne({ where: { id } });
         if (!user) throw new NotFoundException("User not found");
 
-        const { roleId, ...rest } = dto;
+        const { roleId, rating, ...rest } = dto;
 
         const role = roleId
             ? await this.rolesService.findOne(roleId)
@@ -288,6 +288,9 @@ export class UsersService implements OnModuleInit {
         };
 
         await this.userRepository.save(updatedUser);
+				if (rating) {
+					await this.updateRating(id, rating);
+				}
 
         return this.getUser(id);
     }

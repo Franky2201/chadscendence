@@ -8,6 +8,7 @@ import "./index.css";
 import "./i18n/config";
 import { ModalProvider } from "./contexts/ModalContext";
 import { FriendsProvider } from "./contexts/FriendsContext";
+import { PresenceProvider } from "./contexts/PresenceContext";
 import { ChatProvider } from "./contexts/ChatContext";
 import { Toaster } from "sonner";
 
@@ -16,12 +17,14 @@ createRoot(document.getElementById("root")!).render(
         <ThemeProvider>
             <AuthProvider>
                 <ModalProvider>
-                    <FriendsProvider>
-                        <ChatProvider>
-                            <RouterProvider router={router} />
-                            <Toaster richColors position="top-right" />
-                        </ChatProvider>
-                    </FriendsProvider>
+                    <PresenceProvider>
+                        <FriendsProvider>
+                            <ChatProvider>
+                                <RouterProvider router={router} />
+                                <Toaster richColors position="top-right" />
+                            </ChatProvider>
+                        </FriendsProvider>
+                    </PresenceProvider>
                 </ModalProvider>
             </AuthProvider>
         </ThemeProvider>
