@@ -1,442 +1,452 @@
 {
-	"loading": "Chargement...",
-	"window": {
-		"footer": {
-			"privacyPolicy": "Politique de confidentialité",
-			"termsOFService": "Conditions d'utilisation",
-			"about": "À propos"
-		}
-	},
-	"home": {
-		"play": {
-			"title": "Jouer",
-			"solo": "Solo",
-			"multiplayer": "Multijoueur",
-			"colorTheme": "Personnalisation"
-		},
-		"identification": {
-			"title": "Identification",
-			"login": {
-				"title": "Connexion",
-				"emailOrUsername": "Email ou nom d'utilisateur",
-				"password": "Mot de passe",
-				"login": "Se connecter",
-				"error": "Identifiants invalides"
-			},
-			"register": {
-				"title": "Création de compte",
-				"email": "Email",
-				"username": "Nom d'utilisateur",
-				"password": "Mot de passe",
-				"register": "S'inscrire",
-				"error": "Identifiants invalides"
-			}
-		},
-		"profile": {
-			"title": "Profil",
-			"friends": "Mes amis",
-			"admin": "Gestion",
-			"logout": "Déconnexion"
-		},
-		"leaderboard": "Classement"
-	},
-	"friends": {
-		"title": "Mes amis",
-		"search": "Rechercher un joueur",
-		"blank": "Vous n'avez pas encore d'amis.",
-		"noResults": "Aucun joueur trouvé.",
-		"message": "Votre message",
-		"send": "Envoyer",
-		"remove": "Retirer",
-		"add": "Ajouter",
-		"friend": "Ami",
-		"pendingRequests": "Demandes en attente",
-		"waiting": "En attente",
-		"close": "Fermer",
-		"back": "Retour",
-		"settings": "Paramètres"
-	},
-	"profilePage": {
-		"title": "Profil",
-		"back": "Retour",
-		"modify": "Modifier",
-		"admin": "Admin",
-		"rating": "Rating",
-		"username": "Nom d'utilisateur",
-		"bio": "Bio",
-		"bioPlaceholder": "Une petite bio...",
-		"changePassword": "Changer de mot de passe",
-		"hide": "Cacher",
-		"show": "Afficher",
-		"oldPassword": "Ancien mot de passe",
-		"newPassword": "Nouveau mot de passe",
-		"save": "Enregistrer les modifications",
-		"saving": "Sauvegarde...",
-		"errorBothPasswords": "Veuillez remplir l'ancien ET le nouveau mot de passe.",
-		"successProfile": "Profil mis à jour avec succès",
-		"errorProfile": "Erreur lors de la mise à jour du profil",
-		"successAvatar": "Avatar mis à jour avec succès",
-		"errorAvatar": "Erreur lors de la mise à jour de l'avatar",
-		"loading": "Chargement ...",
-		"statistics": {
-			"gameHistory": {
-				"title": "Historique des parties",
-				"rounds": "Tours",
-				"score": "Score",
-				"rating": "Classement",
-				"ratingGained": "Points d'aura gagnés",
-				"noData": "Aucune partie jouée pour le moment."
-			},
-			"stats": {
-				"title": "Statistiques",
-				"winRate": "Taux de victoire",
-				"answerRate": "Taux de réponses",
-				"gamePlayed": "Parties jouées",
-				"noData": "Aucune donnée pour cette période.",
-				"progression": "Progression",
-				"exportCSV": "Export CSV"
-			},
-			"periods": {
-				"today": "Aujourd'hui",
-				"7days": "7 Jours",
-				"30days": "30 Jours",
-				"allTime": "Toujours"
-			},
-			"achievements": {
-				"title": "Succès"
-			}
-		}
-	},
-	"admin": {
-		"title": "Administration",
-		"loading": "Chargement...",
-		"tabs": {
-			"users": "Utilisateurs",
-			"ranks": "Gestion des ranks",
-			"roles": "Rôles"
-		},
-		"roles": {
-			"title": "Gestion des Rôles",
-			"editTitle": "Modification du rôle",
-			"modify": "Modifier",
-			"delete": "Supprimer",
-			"newRole": "Nouveau rôle",
-			"roleName": "Nom du rôle",
-			"create": "Créer",
-			"cancel": "Annuler",
-			"addRole": "Ajouter un rôle",
-			"validate": "Valider"
-		},
-		"usersManager": {
-			"title": "Gestion des Utilisateurs",
-			"search": "Rechercher un joueur...",
-			"allRoles": "Tous les rôles",
-			"noPlayers": "Aucun joueur trouvé.",
-			"selectRole": "Sélectionner un rôle",
-			"modify": "Modifier",
-			"unban": "Débannir",
-			"ban": "Bannir",
-			"editModal": {
-				"title": "Modifier",
-				"avatar": "Avatar",
-				"username": "Pseudo",
-				"bio": "Bio",
-				"rating": "Rating",
-				"cancel": "Annuler",
-				"saving": "Enregistrement...",
-				"save": "Enregistrer"
-			},
-			"banModal": {
-				"unbanTitle": "Débannir le joueur",
-				"banTitle": "Bannir le joueur",
-				"unban": "Débannir",
-				"ban": "Bannir",
-				"warning": "Le joueur ne pourra plus se connecter.",
-				"cancel": "Annuler",
-				"loading": "...",
-				"confirm": "Confirmer"
-			}
-		},
-		"notification": {
-			"loadingError": "Erreur de chargement des données",
-			"roleCreated": "Rôle créé",
-			"creationError": "Erreur lors de la création",
-			"roleUpdated": "Rôle mis à jour",
-			"updateRoleError": "Erreur lors de la mise à jour",
-			"roleDeleted": "Rôle supprimé",
-			"deleteError": "Impossible de supprimer ce rôle",
-			"profileUpdated": "Profil mis à jour",
-			"updateProfileError": "Impossible de modifier le profil",
-			"statusUpdate": "Statut mis à jour",
-			"statusUpdateError": "Impossible d'effectuer cette action"
-		}
-	},
-	"users": {
-		"title": "Joueurs",
-		"search": "Rechercher un joueur...",
-		"loading": "Chargement...",
-		"error": "Impossible de charger la liste des joueurs.",
-		"addFriend": "Demander en ami",
-		"pending": "En attente",
-		"friend": "Ami",
-		"playersCount_zero": "0 joueur",
-		"playersCount_one": "1 joueur",
-		"playersCount_other": "{{count}} joueurs",
-		"allRanks": "Tous les grades",
-		"sort": {
-			"alphaAsc": "A-Z",
-			"alphaDesc": "Z-A",
-			"ratingAsc": "- Rating",
-			"ratingDesc": "+ Rating"
-		},
-		"noResults": "Aucun joueur ne correspond à ces critères.",
-		"pagination": {
-			"previous": "Précédent",
-			"next": "Suivant",
-			"page": "Page {{current}} / {{total}}"
-		}
-	},
-	"room": {
-		"error": {
-			"load": "Impossible de charger cette salle.",
-			"updateGames": "Impossible de mettre à jour les mini-jeux.",
-			"leave": "Impossible de quitter la salle."
-		},
-		"denied": {
-			"title": "Accès refusé",
-			"message": "Veuillez vous connecter pour lancer une partie.",
-			"back": "Retour à l'accueil"
-		},
-		"noCode": {
-			"title": "Aucun code de salle fourni",
-			"message": "Utilisez le bouton multijoueur sur la page d'accueil pour créer ou rejoindre une salle.",
-			"back": "Retour à l'accueil"
-		},
-		"loading": "Chargement de la salle...",
-		"notFound": "Salle introuvable.",
-		"codeLabel": "Code de la salle",
-		"copyLink": "Copier",
-		"leaveRoom": "Quitter la salle",
-		"startGame": "Lancer la partie",
-		"selectOneGame": "Sélectionnez au moins un jeu",
-		"waitingHost": "En attente de l'hôte...",
-		"gameList": {
-			"label": "Mini-jeux",
-			"title": "Choisissez la liste",
-			"loading": "Chargement des jeux...",
-			"selectedOrder": "Ordre des jeux sélectionnés"
-		},
-		"playerList": {
-			"label": "Joueurs",
-			"host": "Hôte"
-		}
-	},
-	"game": {
-		"title": "Créer une partie",
-		"back": "Retour",
-		"selection": "Sélection des jeux",
-		"loading": "Chargement des jeux...",
-		"sequence": "Répétitions de la séquence",
-		"start": "Lancer la partie",
-		"needMoreGames": "Sélectionnez au moins un jeu",
-		"session": {
-			"loading": "PRÉPAREZ-VOUS",
-			"next": "SUIVANT"
-		},
-		"podium": {
-			"end": "TERMINÉ",
-			"totalScore": "Score total",
-			"rating": "Points d'aura",
-			"back": "Retour à l'accueil"
-		}
-	},
-	"privacyPolicy": {
-		"title": "Politique de confidentialité",
-		"back": "Retour",
-		"lastUpdated": {
-			"title": "Dernière mise à jour",
-			"date": "Juin 2026"
-		},
-		"whoWeAre": {
-			"title": "Qui sommes-nous",
-			"content": "Who's the Chad ? est une plateforme de jeu développée dans le cadre du cursus de 42 Belgium. Cette politique de confidentialité explique comment nous collectons, utilisons et protégeons les informations personnelles."
-		},
-		"informationWeCollect": {
-			"title": "Informations que nous collectons",
-			"items": [
-				"Adresse e-mail",
-				"Nom d'utilisateur",
-				"Mot de passe (haché et jamais stocké en clair)",
-				"Photo de profil (optionnelle)",
-				"Identifiants OAuth GitHub ou 42",
-				"Statistiques et classements de jeu"
-			]
-		},
-		"howWeUseYourData": {
-			"title": "Comment nous utilisons vos données",
-			"items": [
-				"Créer et gérer les comptes",
-				"Authentifier les utilisateurs",
-				"Afficher les classements et statistiques",
-				"Fournir les fonctionnalités multijoueurs",
-				"Assurer la sécurité de la plateforme"
-			]
-		},
-		"cookies": {
-			"title": "Cookies",
-			"content": "Nous utilisons exclusivement des cookies essentiels pour l'authentification, la gestion des sessions et la sécurité. Nous n'utilisons ni cookies publicitaires ni cookies d'analyse."
-		},
-		"publicInformation": {
-			"title": "Informations publiques",
-			"content": "Les noms d'utilisateur, photos de profil, classements, succès et statistiques de jeu peuvent être visibles par les autres utilisateurs de la plateforme."
-		},
-		"oauthProviders": {
-			"title": "Fournisseurs OAuth",
-			"content": "Les utilisateurs peuvent s'authentifier via GitHub ou 42. L'authentification par ces fournisseurs est soumise à leurs propres politiques de confidentialité et conditions d'utilisation."
-		},
-		"gdprRights": {
-			"title": "Droits RGPD",
-			"items": [
-				"Accéder à vos données",
-				"Corriger des informations inexactes",
-				"Demander la suppression de vos données",
-				"Limiter le traitement de vos données",
-				"Demander la portabilité de vos données",
-				"Déposer une plainte auprès de l'Autorité de protection des données belge (APD/GBA)"
-			]
-		},
-		"exercisingRights": {
-			"title": "Exercer vos droits",
-			"content": "Pour exercer l'un des droits mentionnés ci-dessus, y compris demander la suppression de votre compte et de vos données, veuillez nous contacter à l'adresse e-mail ci-dessous ou utiliser l'option de suppression de compte dans les paramètres de votre profil, si elle est disponible."
-		},
-		"legalBasis": {
-			"title": "Base légale du traitement",
-			"content": "Nous traitons vos données personnelles sur la base de l'exécution du contrat (afin de vous fournir l'accès à la plateforme et à ses fonctionnalités) et de notre intérêt légitime (afin de maintenir la sécurité, prévenir les abus et améliorer le service)."
-		},
-		"dataRetention": {
-			"title": "Conservation des données",
-			"content": "Nous conservons vos données personnelles aussi longtemps que votre compte reste actif. Si vous demandez la suppression de votre compte, vos données personnelles seront définitivement supprimées dans un délai de 30 jours, sauf si leur conservation est requise pour respecter une obligation légale."
-		},
-		"ageRequirement": {
-			"title": "Condition d'âge",
-			"content": "Cette plateforme est destinée aux utilisateurs âgés de 16 ans ou plus, ou ayant atteint l'âge minimum du consentement numérique dans leur pays de résidence. Nous ne collectons pas sciemment de données personnelles concernant des personnes n'ayant pas atteint cet âge."
-		},
-		"contact": {
-			"title": "Contact",
-			"email": "juhanse@student.42belgium.be"
-		}
-	},
-	"termsOfService": {
-		"title": "Conditions d'utilisation",
-		"back": "Retour",
-		"lastUpdated": {
-			"title": "Dernière mise à jour",
-			"date": "Juin 2026"
-		},
-		"acceptanceOfTerms": {
-			"title": "Acceptation des conditions",
-			"content": "En créant un compte ou en utilisant Who's the Chad ?, vous acceptez les présentes conditions d'utilisation."
-		},
-		"eligibility": {
-			"title": "Éligibilité",
-			"content": "Les utilisateurs sont responsables de s'assurer que leur utilisation de la plateforme est conforme aux lois et réglementations applicables."
-		},
-		"ageRequirement": {
-			"title": "Condition d'âge",
-			"content": "Vous devez avoir au moins 16 ans, ou avoir atteint l'âge minimum de consentement dans votre juridiction, pour créer un compte et utiliser Who's the Chad ?."
-		},
-		"userAccounts": {
-			"title": "Comptes utilisateurs",
-			"items": [
-				"Vous êtes responsable des identifiants de votre compte.",
-				"Vous ne devez pas partager votre compte avec d'autres personnes.",
-				"Vous devez fournir des informations exactes lors de l'inscription."
-			]
-		},
-		"acceptableUse": {
-			"title": "Utilisation acceptable",
-			"items": [
-				"Ne tentez pas d'obtenir un accès non autorisé à la plateforme.",
-				"N'exploitez pas les bugs ou vulnérabilités.",
-				"Ne perturbez pas le fonctionnement de la plateforme.",
-				"N'usurpez pas l'identité d'un autre utilisateur.",
-				"N'utilisez pas de systèmes automatisés pour abuser du service.",
-				"Ne téléversez pas de contenu illégal ou offensant."
-			]
-		},
-		"rankingsAndStatistics": {
-			"title": "Classements et statistiques",
-			"content": "Les résultats de jeu, classements, succès et statistiques peuvent être affichés publiquement aux autres utilisateurs de la plateforme."
-		},
-		"userContent": {
-			"title": "Contenu utilisateur",
-			"content": "Les utilisateurs conservent la propriété des photos de profil et des autres contenus qu'ils téléversent. En téléversant du contenu, les utilisateurs accordent à Who's the Chad ? une licence non exclusive lui permettant de stocker, traiter et afficher ce contenu pour le fonctionnement de la plateforme."
-		},
-		"intellectualProperty": {
-			"title": "Propriété intellectuelle",
-			"content": "La plateforme, le logiciel, l'identité visuelle, le design et les éléments associés demeurent la propriété de l'équipe Who's the Chad ?, sauf indication contraire."
-		},
-		"accountSuspension": {
-			"title": "Suspension de compte",
-			"content": "Nous nous réservons le droit de suspendre ou de supprimer les comptes qui enfreignent ces conditions ou qui menacent la sécurité ou l'intégrité de la plateforme."
-		},
-		"disclaimer": {
-			"title": "Clause de non-responsabilité",
-			"content": "Le service est fourni « tel quel » et « selon disponibilité », sans garantie d'aucune sorte."
-		},
-		"limitationOfLiability": {
-			"title": "Limitation de responsabilité",
-			"content": "Dans la mesure maximale autorisée par la loi, Who's the Chad ? ne pourra être tenu responsable des dommages indirects, accessoires ou consécutifs résultant de l'utilisation de la plateforme."
-		},
-		"changesToTerms": {
-			"title": "Modification des conditions",
-			"content": "Nous pouvons mettre à jour ces conditions de temps à autre. La poursuite de l'utilisation de la plateforme après la publication des modifications constitue une acceptation des conditions révisées. La date de « Dernière mise à jour » ci-dessus reflète la révision la plus récente."
-		},
-		"severability": {
-			"title": "Divisibilité",
-			"content": "Si une disposition des présentes conditions est jugée inapplicable ou invalide, cette disposition sera limitée ou supprimée dans la mesure minimale nécessaire, tandis que les autres dispositions resteront pleinement en vigueur."
-		},
-		"governingLaw": {
-			"title": "Droit applicable",
-			"content": "Les présentes conditions sont régies et interprétées conformément aux lois de la Belgique."
-		},
-		"contact": {
-			"title": "Contact",
-			"email": "juhanse@student.42belgium.be"
-		}
-	},
-	"about": {
-		"title": "Who's the Chad ?",
-		"back": "Retour",
-		"description": "Une plateforme web de mini-jeux centrés sur la connaissance et la réflexion. Une manière amusante d'apprendre, d'entraîner son cerveau ou de rivaliser avec ses amis. Réalisée par une équipe de 5 personnes dans le cadre du cursus 42.",
-		"team": "L'équipe",
-		"technologies": "Technologies utilisées",
-		"modules": "Modules du projet",
-		"footer": "Réalisé avec ❤️ à 42 Belgium",
-		"stack": {
-			"frontend": "Frontend",
-			"backend": "Backend",
-			"others": "Autres"
-		},
-		"moduleTypes": {
-			"major": "Majeur",
-			"minor": "Mineur"
-		},
-		"projectModules": [
-			"Utilisation d'un framework pour le frontend et le backend",
-			"Permettre aux utilisateurs d'interagir entre eux",
-			"Gestion standard des utilisateurs et authentification",
-			"API publique",
-			"Système avancé de gestion des permissions",
-			"Utilisation d'un ORM pour la base de données",
-			"Système de design personnalisé avec composants réutilisables",
-			"Authentification distante via OAuth 2.0",
-			"Prise en charge de plusieurs langues (au moins 3)",
-			"Compatibilité avec des navigateurs supplémentaires",
-			"Statistiques de jeu et historique des parties",
-			"Fonctionnalités de chat avancées",
-			"Personnalisation du jeu",
-			"Système de gamification récompensant les actions des utilisateurs"
-		]
-	}
+    "loading": "Chargement...",
+    "window": {
+        "footer": {
+            "privacyPolicy": "Politique de confidentialité",
+            "termsOFService": "Conditions d'utilisation",
+            "about": "À propos"
+        }
+    },
+    "home": {
+        "play": {
+            "title": "Jouer",
+            "solo": "Solo",
+            "multiplayer": "Multijoueur",
+            "colorTheme": "Personnalisation"
+        },
+        "identification": {
+            "title": "Identification",
+            "login": {
+                "title": "Connexion",
+                "emailOrUsername": "Email ou nom d'utilisateur",
+                "password": "Mot de passe",
+                "login": "Se connecter",
+                "error": "Identifiants invalides",
+                "banned": "Votre compte a été banni."
+            },
+            "register": {
+                "title": "Création de compte",
+                "email": "Email",
+                "username": "Nom d'utilisateur",
+                "password": "Mot de passe",
+                "register": "S'inscrire",
+                "error": "Identifiants invalides",
+                "conflictEmail": "Cette adresse email est déjà utilisée.",
+                "conflictUsername": "Ce nom d'utilisateur est déjà utilisé.",
+                "invalidEmail": "Veuillez entrer une adresse email valide.",
+                "weakPassword": "Le mot de passe doit faire au moins 8 caractères et contenir une majuscule, une minuscule et un chiffre."
+            }
+        },
+        "profile": {
+            "title": "Profil",
+            "friends": "Mes amis",
+            "admin": "Gestion",
+            "logout": "Déconnexion"
+        },
+        "leaderboard": "Classement"
+    },
+    "friends": {
+        "title": "Mes amis",
+        "search": "Rechercher un joueur",
+        "blank": "Vous n'avez pas encore d'amis.",
+        "noResults": "Aucun joueur trouvé.",
+        "message": "Votre message",
+        "send": "Envoyer",
+        "remove": "Retirer",
+        "add": "Ajouter",
+        "friend": "Ami",
+        "pendingRequests": "Demandes en attente",
+        "waiting": "En attente",
+        "close": "Fermer",
+        "back": "Retour",
+        "settings": "Paramètres"
+    },
+    "profilePage": {
+        "title": "Profil",
+        "back": "Retour",
+        "modify": "Modifier",
+        "admin": "Admin",
+        "rating": "Rating",
+        "username": "Nom d'utilisateur",
+        "bio": "Bio",
+        "bioPlaceholder": "Une petite bio...",
+        "changePassword": "Changer de mot de passe",
+        "hide": "Cacher",
+        "show": "Afficher",
+        "oldPassword": "Ancien mot de passe",
+        "newPassword": "Nouveau mot de passe",
+        "save": "Enregistrer les modifications",
+        "saving": "Sauvegarde...",
+        "errorBothPasswords": "Veuillez remplir l'ancien ET le nouveau mot de passe.",
+        "successProfile": "Profil mis à jour avec succès",
+        "errorProfile": "Erreur lors de la mise à jour du profil",
+        "successAvatar": "Avatar mis à jour avec succès",
+        "errorAvatar": "Erreur lors de la mise à jour de l'avatar",
+        "loading": "Chargement ...",
+        "statistics": {
+            "gameHistory": {
+                "title": "Historique des parties",
+                "rounds": "Tours",
+                "position": "Position",
+                "score": "Score",
+                "rating": "Classement",
+                "ratingGained": "Points d'aura gagnés",
+                "noData": "Aucune partie jouée pour le moment."
+            },
+            "stats": {
+                "title": "Statistiques",
+                "winRate": "Taux de victoire",
+                "answerRate": "Taux de réponses",
+                "gamePlayed": "Parties jouées",
+                "noData": "Aucune donnée pour cette période.",
+                "progression": "Progression",
+                "exportCSV": "Export CSV"
+            },
+            "periods": {
+                "today": "Aujourd'hui",
+                "7days": "7 Jours",
+                "30days": "30 Jours",
+                "allTime": "Toujours"
+            },
+            "achievements": {
+                "title": "Succès"
+            }
+        }
+    },
+    "admin": {
+        "title": "Administration",
+        "loading": "Chargement...",
+        "tabs": {
+            "users": "Utilisateurs",
+            "ranks": "Gestion des ranks",
+            "roles": "Rôles"
+        },
+        "roles": {
+            "title": "Gestion des Rôles",
+            "editTitle": "Modification du rôle",
+            "modify": "Modifier",
+            "delete": "Supprimer",
+            "newRole": "Nouveau rôle",
+            "roleName": "Nom du rôle",
+            "create": "Créer",
+            "cancel": "Annuler",
+            "addRole": "Ajouter un rôle",
+            "validate": "Valider"
+        },
+        "usersManager": {
+            "title": "Gestion des Utilisateurs",
+            "search": "Rechercher un joueur...",
+            "allRoles": "Tous les rôles",
+            "noPlayers": "Aucun joueur trouvé.",
+            "selectRole": "Sélectionner un rôle",
+            "modify": "Modifier",
+            "unban": "Débannir",
+            "ban": "Bannir",
+            "editModal": {
+                "title": "Modifier",
+                "avatar": "Avatar",
+                "username": "Pseudo",
+                "bio": "Bio",
+                "rating": "Rating",
+                "cancel": "Annuler",
+                "saving": "Enregistrement...",
+                "save": "Enregistrer"
+            },
+            "banModal": {
+                "unbanTitle": "Débannir le joueur",
+                "banTitle": "Bannir le joueur",
+                "unban": "Débannir",
+                "ban": "Bannir",
+                "warning": "Le joueur ne pourra plus se connecter.",
+                "cancel": "Annuler",
+                "loading": "...",
+                "confirm": "Confirmer"
+            }
+        },
+        "notification": {
+            "loadingError": "Erreur de chargement des données",
+            "roleCreated": "Rôle créé",
+            "creationError": "Erreur lors de la création",
+            "roleUpdated": "Rôle mis à jour",
+            "updateRoleError": "Erreur lors de la mise à jour",
+            "roleDeleted": "Rôle supprimé",
+            "deleteError": "Impossible de supprimer ce rôle",
+            "profileUpdated": "Profil mis à jour",
+            "updateProfileError": "Impossible de modifier le profil",
+            "statusUpdate": "Statut mis à jour",
+            "statusUpdateError": "Impossible d'effectuer cette action"
+        }
+    },
+    "users": {
+        "title": "Joueurs",
+        "search": "Rechercher un joueur...",
+        "loading": "Chargement...",
+        "error": "Impossible de charger la liste des joueurs.",
+        "addFriend": "Demander en ami",
+        "pending": "En attente",
+        "friend": "Ami",
+        "playersCount_zero": "0 joueur",
+        "playersCount_one": "1 joueur",
+        "playersCount_other": "{{count}} joueurs",
+        "allRanks": "Tous les grades",
+        "sort": {
+            "alphaAsc": "A-Z",
+            "alphaDesc": "Z-A",
+            "ratingAsc": "- Rating",
+            "ratingDesc": "+ Rating"
+        },
+        "noResults": "Aucun joueur ne correspond à ces critères.",
+        "pagination": {
+            "previous": "Précédent",
+            "next": "Suivant",
+            "page": "Page {{current}} / {{total}}"
+        }
+    },
+    "room": {
+        "error": {
+            "load": "Impossible de charger cette salle.",
+            "updateGames": "Impossible de mettre à jour les mini-jeux.",
+            "leave": "Impossible de quitter la salle."
+        },
+        "denied": {
+            "title": "Accès refusé",
+            "message": "Veuillez vous connecter pour lancer une partie.",
+            "back": "Retour à l'accueil"
+        },
+        "noCode": {
+            "title": "Aucun code de salle fourni",
+            "message": "Utilisez le bouton multijoueur sur la page d'accueil pour créer ou rejoindre une salle.",
+            "back": "Retour à l'accueil"
+        },
+        "loading": "Chargement de la salle...",
+        "notFound": "Salle introuvable.",
+        "codeLabel": "Code de la salle",
+        "copyLink": "Copier",
+        "leaveRoom": "Quitter la salle",
+        "startGame": "Lancer la partie",
+        "selectOneGame": "Sélectionnez au moins un jeu",
+        "waitingHost": "En attente de l'hôte...",
+        "gameList": {
+            "label": "Mini-jeux",
+            "title": "Choisissez la liste",
+            "loading": "Chargement des jeux...",
+            "selectedOrder": "Ordre des jeux sélectionnés"
+        },
+        "playerList": {
+            "label": "Joueurs",
+            "host": "Hôte"
+        }
+    },
+    "game": {
+        "title": "Créer une partie",
+        "back": "Retour",
+        "selection": "Sélection des jeux",
+        "loading": "Chargement des jeux...",
+        "sequence": "Répétitions de la séquence",
+        "start": "Lancer la partie",
+        "needMoreGames": "Sélectionnez au moins un jeu",
+        "session": {
+            "loading": "PRÉPAREZ-VOUS",
+            "next": "SUIVANT"
+        },
+        "podium": {
+            "end": "TERMINÉ",
+            "totalScore": "Score total",
+            "rating": "Points d'aura",
+            "back": "Retour à l'accueil"
+        }
+    },
+    "privacyPolicy": {
+        "title": "Politique de confidentialité",
+        "back": "Retour",
+        "lastUpdated": {
+            "title": "Dernière mise à jour",
+            "date": "Juin 2026"
+        },
+        "whoWeAre": {
+            "title": "Qui sommes-nous",
+            "content": "Who's the Chad ? est une plateforme de jeu développée dans le cadre du cursus de 42 Belgium. Cette politique de confidentialité explique comment nous collectons, utilisons et protégeons les informations personnelles."
+        },
+        "informationWeCollect": {
+            "title": "Informations que nous collectons",
+            "items": [
+                "Adresse e-mail",
+                "Nom d'utilisateur",
+                "Mot de passe (haché et jamais stocké en clair)",
+                "Photo de profil (optionnelle)",
+                "Identifiants OAuth GitHub ou 42",
+                "Statistiques et classements de jeu"
+            ]
+        },
+        "howWeUseYourData": {
+            "title": "Comment nous utilisons vos données",
+            "items": [
+                "Créer et gérer les comptes",
+                "Authentifier les utilisateurs",
+                "Afficher les classements et statistiques",
+                "Fournir les fonctionnalités multijoueurs",
+                "Assurer la sécurité de la plateforme"
+            ]
+        },
+        "cookies": {
+            "title": "Cookies",
+            "content": "Nous utilisons exclusivement des cookies essentiels pour l'authentification, la gestion des sessions et la sécurité. Nous n'utilisons ni cookies publicitaires ni cookies d'analyse."
+        },
+        "publicInformation": {
+            "title": "Informations publiques",
+            "content": "Les noms d'utilisateur, photos de profil, classements, succès et statistiques de jeu peuvent être visibles par les autres utilisateurs de la plateforme."
+        },
+        "oauthProviders": {
+            "title": "Fournisseurs OAuth",
+            "content": "Les utilisateurs peuvent s'authentifier via GitHub ou 42. L'authentification par ces fournisseurs est soumise à leurs propres politiques de confidentialité et conditions d'utilisation."
+        },
+        "gdprRights": {
+            "title": "Droits RGPD",
+            "items": [
+                "Accéder à vos données",
+                "Corriger des informations inexactes",
+                "Demander la suppression de vos données",
+                "Limiter le traitement de vos données",
+                "Demander la portabilité de vos données",
+                "Déposer une plainte auprès de l'Autorité de protection des données belge (APD/GBA)"
+            ]
+        },
+        "exercisingRights": {
+            "title": "Exercer vos droits",
+            "content": "Pour exercer l'un des droits mentionnés ci-dessus, y compris demander la suppression de votre compte et de vos données, veuillez nous contacter à l'adresse e-mail ci-dessous ou utiliser l'option de suppression de compte dans les paramètres de votre profil, si elle est disponible."
+        },
+        "legalBasis": {
+            "title": "Base légale du traitement",
+            "content": "Nous traitons vos données personnelles sur la base de l'exécution du contrat (afin de vous fournir l'accès à la plateforme et à ses fonctionnalités) et de notre intérêt légitime (afin de maintenir la sécurité, prévenir les abus et améliorer le service)."
+        },
+        "dataRetention": {
+            "title": "Conservation des données",
+            "content": "Nous conservons vos données personnelles aussi longtemps que votre compte reste actif. Si vous demandez la suppression de votre compte, vos données personnelles seront définitivement supprimées dans un délai de 30 jours, sauf si leur conservation est requise pour respecter une obligation légale."
+        },
+        "ageRequirement": {
+            "title": "Condition d'âge",
+            "content": "Cette plateforme est destinée aux utilisateurs âgés de 16 ans ou plus, ou ayant atteint l'âge minimum du consentement numérique dans leur pays de résidence. Nous ne collectons pas sciemment de données personnelles concernant des personnes n'ayant pas atteint cet âge."
+        },
+        "contact": {
+            "title": "Contact",
+            "email": "juhanse@student.42belgium.be"
+        }
+    },
+    "termsOfService": {
+        "title": "Conditions d'utilisation",
+        "back": "Retour",
+        "lastUpdated": {
+            "title": "Dernière mise à jour",
+            "date": "Juin 2026"
+        },
+        "acceptanceOfTerms": {
+            "title": "Acceptation des conditions",
+            "content": "En créant un compte ou en utilisant Who's the Chad ?, vous acceptez les présentes conditions d'utilisation."
+        },
+        "eligibility": {
+            "title": "Éligibilité",
+            "content": "Les utilisateurs sont responsables de s'assurer que leur utilisation de la plateforme est conforme aux lois et réglementations applicables."
+        },
+        "ageRequirement": {
+            "title": "Condition d'âge",
+            "content": "Vous devez avoir au moins 16 ans, ou avoir atteint l'âge minimum de consentement dans votre juridiction, pour créer un compte et utiliser Who's the Chad ?."
+        },
+        "userAccounts": {
+            "title": "Comptes utilisateurs",
+            "items": [
+                "Vous êtes responsable des identifiants de votre compte.",
+                "Vous ne devez pas partager votre compte avec d'autres personnes.",
+                "Vous devez fournir des informations exactes lors de l'inscription."
+            ]
+        },
+        "acceptableUse": {
+            "title": "Utilisation acceptable",
+            "items": [
+                "Ne tentez pas d'obtenir un accès non autorisé à la plateforme.",
+                "N'exploitez pas les bugs ou vulnérabilités.",
+                "Ne perturbez pas le fonctionnement de la plateforme.",
+                "N'usurpez pas l'identité d'un autre utilisateur.",
+                "N'utilisez pas de systèmes automatisés pour abuser du service.",
+                "Ne téléversez pas de contenu illégal ou offensant."
+            ]
+        },
+        "rankingsAndStatistics": {
+            "title": "Classements et statistiques",
+            "content": "Les résultats de jeu, classements, succès et statistiques peuvent être affichés publiquement aux autres utilisateurs de la plateforme."
+        },
+        "userContent": {
+            "title": "Contenu utilisateur",
+            "content": "Les utilisateurs conservent la propriété des photos de profil et des autres contenus qu'ils téléversent. En téléversant du contenu, les utilisateurs accordent à Who's the Chad ? une licence non exclusive lui permettant de stocker, traiter et afficher ce contenu pour le fonctionnement de la plateforme."
+        },
+        "intellectualProperty": {
+            "title": "Propriété intellectuelle",
+            "content": "La plateforme, le logiciel, l'identité visuelle, le design et les éléments associés demeurent la propriété de l'équipe Who's the Chad ?, sauf indication contraire."
+        },
+        "accountSuspension": {
+            "title": "Suspension de compte",
+            "content": "Nous nous réservons le droit de suspendre ou de supprimer les comptes qui enfreignent ces conditions ou qui menacent la sécurité ou l'intégrité de la plateforme."
+        },
+        "disclaimer": {
+            "title": "Clause de non-responsabilité",
+            "content": "Le service est fourni « tel quel » et « selon disponibilité », sans garantie d'aucune sorte."
+        },
+        "limitationOfLiability": {
+            "title": "Limitation de responsabilité",
+            "content": "Dans la mesure maximale autorisée par la loi, Who's the Chad ? ne pourra être tenu responsable des dommages indirects, accessoires ou consécutifs résultant de l'utilisation de la plateforme."
+        },
+        "changesToTerms": {
+            "title": "Modification des conditions",
+            "content": "Nous pouvons mettre à jour ces conditions de temps à autre. La poursuite de l'utilisation de la plateforme après la publication des modifications constitue une acceptation des conditions révisées. La date de « Dernière mise à jour » ci-dessus reflète la révision la plus récente."
+        },
+        "severability": {
+            "title": "Divisibilité",
+            "content": "Si une disposition des présentes conditions est jugée inapplicable ou invalide, cette disposition sera limitée ou supprimée dans la mesure minimale nécessaire, tandis que les autres dispositions resteront pleinement en vigueur."
+        },
+        "governingLaw": {
+            "title": "Droit applicable",
+            "content": "Les présentes conditions sont régies et interprétées conformément aux lois de la Belgique."
+        },
+        "contact": {
+            "title": "Contact",
+            "email": "juhanse@student.42belgium.be"
+        }
+    },
+    "about": {
+        "title": "Who's the Chad ?",
+        "back": "Retour",
+        "description": "Une plateforme web de mini-jeux centrés sur la connaissance et la réflexion. Une manière amusante d'apprendre, d'entraîner son cerveau ou de rivaliser avec ses amis. Réalisée par une équipe de 5 personnes dans le cadre du cursus 42.",
+        "team": "L'équipe",
+        "technologies": "Technologies utilisées",
+        "modules": "Modules du projet",
+        "footer": "Réalisé avec ❤️ à 42 Belgium",
+        "stack": {
+            "frontend": "Frontend",
+            "backend": "Backend",
+            "others": "Autres"
+        },
+        "moduleTypes": {
+            "major": "Majeur",
+            "minor": "Mineur"
+        },
+        "projectModules": [
+            "Utilisation d'un framework pour le frontend et le backend",
+            "Permettre aux utilisateurs d'interagir entre eux",
+            "Gestion standard des utilisateurs et authentification",
+            "API publique",
+            "Système avancé de gestion des permissions",
+            "Utilisation d'un ORM pour la base de données",
+            "Système de design personnalisé avec composants réutilisables",
+            "Authentification distante via OAuth 2.0",
+            "Prise en charge de plusieurs langues (au moins 3)",
+            "Compatibilité avec des navigateurs supplémentaires",
+            "Statistiques de jeu et historique des parties",
+            "Fonctionnalités de chat avancées",
+            "Personnalisation du jeu",
+            "Système de gamification récompensant les actions des utilisateurs"
+        ]
+    },
+    "banned": {
+        "title": "Compte banni",
+        "message": "Vous avez été banni."
+    }
 }

@@ -7,6 +7,7 @@ import PublicProfile from "./pages/PublicProfile";
 import About from "./pages/About";
 import Users from "./pages/Users";
 import Admin from "./pages/Admin";
+import Banned from "./pages/Banned";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 
@@ -50,6 +51,10 @@ export const router = createBrowserRouter([
             {
                 path: "admin",
                 element: <Admin />,
+            },
+            {
+                path: "banned",
+                element: <Banned />,
             },
         ],
     },

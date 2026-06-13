@@ -11,14 +11,17 @@ import { useEffect } from "react";
 
 export default function AdminPage() {
     const { t } = useTranslation();
-    const { user } = useAuth();
+    const { user, isLoading: authLoading } = useAuth();
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState<"users" | "ranks" | "roles">(
         "users",
     );
     const hasPermissions =
-        user?.role?.permissions && user.role.permissions.length > 0;
+        (user?.role?.permissions && user.role.permissions.length > 0) ?? false;
 
+    const canManageRanks =
+        user?.role?.permissions?.some((p) => p.action === "MANAGE_RANKS") ??
+        false;
     const canManageRoles =
         user?.role?.permissions?.some((p) => p.action === "MANAGE_ROLES") ??
         false;
@@ -29,6 +32,7 @@ export default function AdminPage() {
     const {
         roles,
         permissions,
+        ranks,
         users,
         isLoading,
         handleCreateRole,
@@ -36,17 +40,15 @@ export default function AdminPage() {
         handleDeleteRole,
         handleUpdateUser,
         handleBanUser,
-    } = useAdmin(canManageRoles, canManageUsers);
+    } = useAdmin(canManageRoles, canManageRanks, canManageUsers);
 
     useEffect(() => {
-        if (!hasPermissions) {
+        if (!authLoading && !isLoading && !hasPermissions) {
             navigate("/");
         }
-    }, [hasPermissions, navigate]);
+    }, [hasPermissions, navigate, authLoading, isLoading]);
 
-    if (!hasPermissions) return null;
-
-    if (isLoading)
+    if (authLoading || isLoading || !user)
         return (
             <Window>
                 <div className="p-8 text-white font-bold text-center">
@@ -54,6 +56,8 @@ export default function AdminPage() {
                 </div>
             </Window>
         );
+
+    if (!hasPermissions) return null;
 
     return (
         <Window>
@@ -70,6 +74,14 @@ export default function AdminPage() {
                     >
                         {t("admin.tabs.users")}
                     </Button>
+                    {canManageRanks && (
+                        <Button
+                            color={activeTab === "ranks" ? "pink" : "grey"}
+                            onClick={() => setActiveTab("ranks")}
+                        >
+                            {t("admin.tabs.ranks")}
+                        </Button>
+                    )}
                     {canManageRoles && (
                         <Button
                             color={activeTab === "roles" ? "pink" : "grey"}
@@ -88,6 +100,17 @@ export default function AdminPage() {
                         onUpdate={handleUpdateRole}
                         onDelete={handleDeleteRole}
                     />
+                )}
+
+                {activeTab === "ranks" && canManageRanks && (
+                    <div className="text-white flex flex-col gap-4">
+                        <div className="text-white/50 italic">
+                            Composant RankManager à insérer ici
+                        </div>
+                        <pre className="text-xs bg-black/20 p-4 rounded border border-white/10 overflow-auto">
+                            {JSON.stringify(ranks, null, 2)}
+                        </pre>
+                    </div>
                 )}
 
                 {activeTab === "users" && (

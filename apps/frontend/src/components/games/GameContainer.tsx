@@ -48,6 +48,7 @@ export default function GameContainer<
                 );
                 if (!data) throw new Error("No data received from server");
                 setProblem(data);
+                setLastResult(null); // Clear result for new problem
                 setStatus("playing");
             } catch (err: unknown) {
                 console.error(`Failed to fetch ${gameId} problem:`, err);
@@ -81,13 +82,13 @@ export default function GameContainer<
                 setStatus("correct");
                 setScore((s) => s + 1);
                 if (onSuccess) onSuccess(result);
-                setTimeout(() => void fetchProblem(true), 1000);
+                setTimeout(() => void fetchProblem(false), 5000);
             } else if (result.message?.includes("expired")) {
                 setStatus("expired");
-                setTimeout(() => void fetchProblem(true), 2000);
+                setTimeout(() => void fetchProblem(false), 5000);
             } else {
                 setStatus("wrong");
-                setTimeout(() => void fetchProblem(true), 2000);
+                setTimeout(() => void fetchProblem(false), 5000);
             }
         } catch (err: unknown) {
             console.error(`Failed to submit ${gameId} answer:`, err);

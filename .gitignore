@@ -16,6 +16,9 @@ data/
 .env.*.local
 .env.local
 
+# Local test cookies
+cookies.txt
+
 # Ignore the specific uploads folder used by the backend
 apps/backend/uploads/
 
