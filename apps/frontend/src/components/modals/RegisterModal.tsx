@@ -77,7 +77,11 @@ export default function RegisterModal({ isOpen, onClose }: RegisterModalProps) {
                 className="max-w-md w-full"
                 title={t("home.identification.register.title")}
             >
-                <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                <form
+                    onSubmit={handleSubmit}
+                    className="flex flex-col gap-4"
+                    noValidate
+                >
                     <Input
                         size="large"
                         type="email"
