@@ -7,6 +7,8 @@ import { GameSetup } from "../components/games/GameSetup";
 import { GamePlaying } from "../components/games/GamePlaying";
 import { GamePodium } from "../components/games/GamePodium";
 import ReactionTimeUI from "../components/games/ReactionTimeUI";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function SoloGamePage() {
     const { t } = useTranslation();
@@ -22,6 +24,13 @@ export default function SoloGamePage() {
         launchGame,
         submitAnswer,
     } = useGameSession();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!authLoading && !user) {
+            navigate("/");
+        }
+    }, [user, authLoading, navigate]);
 
     if (authLoading) {
         return (
@@ -32,11 +41,7 @@ export default function SoloGamePage() {
     }
 
     if (!user) {
-        return (
-            <div className="min-h-screen flex items-center justify-center bg-slate-900 text-white">
-                <h1 className="text-3xl font-bold">{t("room.denied.title")}</h1>
-            </div>
-        );
+        return null;
     }
 
     const renderView = () => {

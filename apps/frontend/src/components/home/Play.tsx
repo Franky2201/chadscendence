@@ -3,6 +3,8 @@ import { useTheme } from "../../contexts/ThemeContext";
 import { getItemColorStyle, type ItemColor } from "../ui/unified";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
+import { useModal } from "../../contexts/ModalContext";
 
 const colorThemes: { name: ItemColor }[] = [
     { name: "grey" },
@@ -20,6 +22,8 @@ export function Play({ className = "" }: { className?: string }) {
     const { theme, setTheme } = useTheme();
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const { user } = useAuth();
+    const { openModal } = useModal();
 
     return (
         <Card
@@ -28,7 +32,13 @@ export function Play({ className = "" }: { className?: string }) {
             title={t("home.play.title")}
         >
             <Button
-                onClick={() => navigate("/games")}
+                onClick={() => {
+                    if (!user) {
+                        openModal("LOGIN");
+                    } else {
+                        navigate("/games");
+                    }
+                }}
                 color={theme}
                 className="w-full flex flex-col items-center justify-center h-24 text-2xl font-bold"
             >
