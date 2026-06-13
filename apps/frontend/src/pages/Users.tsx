@@ -102,7 +102,7 @@ export default function UsersPage() {
     return (
         <Window>
             <Header />
-            <div className="max-w-6xl mx-auto flex flex-col gap-8 w-full p-8">
+            <div className="max-w-6xl mx-auto flex flex-col gap-8 w-full p-4 sm:p-8">
                 <Title color="white" className="text-3xl text-left">
                     {t("users.title")}
                 </Title>
@@ -115,8 +115,8 @@ export default function UsersPage() {
                         className="w-full !bg-black/20 !border-white/20 !text-white !text-left !font-normal placeholder:!text-white/40 !text-lg !py-3"
                     />
 
-                    <div className="flex flex-wrap gap-4 items-center justify-between">
-                        <div className="flex gap-4 w-full sm:w-auto items-center">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
                             <Select
                                 value={selectedRank}
                                 onChange={(e) =>
@@ -137,7 +137,7 @@ export default function UsersPage() {
                                 ))}
                             </Select>
 
-                            <div className="flex gap-2 p-2 rounded-xl border border-white/10">
+                            <div className="flex flex-wrap gap-2 p-2 rounded-xl border border-white/10">
                                 <Button
                                     color={
                                         sortBy === "alpha_asc" ? theme : "grey"
@@ -187,7 +187,7 @@ export default function UsersPage() {
                             </div>
                         </div>
 
-                        <p className="text-slate-400 text-sm font-mono">
+                        <p className="text-slate-400 text-sm font-mono shrink-0">
                             {isLoading
                                 ? t("users.loading")
                                 : t("users.playersCount", {
