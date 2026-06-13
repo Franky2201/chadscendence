@@ -7,7 +7,7 @@ import {
     ConflictException,
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { MoreThan, Repository } from "typeorm";
+import { MoreThan, LessThan, Repository } from "typeorm";
 import { User } from "./user.entity";
 import { AccountStatus, UserListItem, UserSearchResult } from "@chad/types";
 import { UpdateAdminUserDto, UpdateUserDto } from "./users.dto";
@@ -31,7 +31,7 @@ export class UsersService implements OnModuleInit {
         private readonly presenceGateway: PresenceGateway,
         @InjectRepository(GameAnalytics)
         private readonly analyticsRepository: Repository<GameAnalytics>,
-    ) {}
+    ) { }
 
     async onModuleInit() {
         await this.seedAdmin();
@@ -82,7 +82,10 @@ export class UsersService implements OnModuleInit {
         }
 
         const above = await this.userRepository.count({
-            where: { rating: MoreThan(user.rating) },
+            where: [
+                { rating: MoreThan(user.rating) },
+                { rating: user.rating, username: LessThan(user.username) }
+            ]
         });
 
         const analytics = await this.analyticsRepository.find({
@@ -288,9 +291,9 @@ export class UsersService implements OnModuleInit {
         };
 
         await this.userRepository.save(updatedUser);
-				if (rating) {
-					await this.updateRating(id, rating);
-				}
+        if (rating) {
+            await this.updateRating(id, rating);
+        }
 
         return this.getUser(id);
     }
@@ -318,7 +321,10 @@ export class UsersService implements OnModuleInit {
         }
 
         const above = await this.userRepository.count({
-            where: { rating: MoreThan(user.rating) },
+            where: [
+                { rating: MoreThan(user.rating) },
+                { rating: user.rating, username: LessThan(user.username) }
+            ]
         });
 
         return {
