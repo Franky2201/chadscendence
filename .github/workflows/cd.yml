@@ -39,9 +39,10 @@ jobs:
             # Inject production environment variables
             echo "${{ secrets.PROD_ENV }}" > .env
 
-            # Dynamically set the FRONTEND_URL so generated links (like avatars) work
-            # We use the VPS_HOST secret and the 8443 port we're using for production
+            # Dynamically set the FRONTEND_URL and OAuth callbacks so they work in production
             echo "FRONTEND_URL=https://${{ secrets.VPS_HOST }}:8443" >> .env
+            echo "INTRA_CALLBACK_URL=https://${{ secrets.VPS_HOST }}:8443/api/auth/42/callback" >> .env
+            echo "GITHUB_CALLBACK_URL=https://${{ secrets.VPS_HOST }}:8443/api/auth/github/callback" >> .env
 
             # --- FIX FOR AVATARS ---
             # 1. Create the directory if it doesn't exist
