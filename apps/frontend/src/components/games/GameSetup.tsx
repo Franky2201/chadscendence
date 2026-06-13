@@ -95,11 +95,11 @@ export function GameSetup({
                                                     <span className="text-xl font-bold">
                                                         {g.name}
                                                     </span>
-                                                    {isSelected && (
-                                                        <span className="w-6 h-6 bg-white/30 rounded-full flex items-center justify-center text-white text-sm shadow-sm">
-                                                            ✓
-                                                        </span>
-                                                    )}
+                                                    <span
+                                                        className={`flex-shrink-0 ml-2 w-6 h-6 bg-white/30 rounded-full flex items-center justify-center text-white text-sm shadow-sm transition-opacity duration-200 ${isSelected ? "opacity-100" : "opacity-0"}`}
+                                                    >
+                                                        ✓
+                                                    </span>
                                                 </div>
                                                 <p className="text-sm font-normal opacity-90 text-left line-clamp-3 leading-tight whitespace-normal break-words">
                                                     {g.description}
