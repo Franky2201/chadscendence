@@ -8,25 +8,32 @@ const api = axios.create({
 api.interceptors.response.use(
     (response) => response,
     (error) => {
+        const status = error.response?.status;
+        const message = error.response?.data?.message?.toLowerCase() || "";
+
         const isBanned =
-            error.response?.status === 403 ||
-            (error.response?.status === 401 &&
-                error.response.data?.message?.toLowerCase().includes("banned"));
+            status === 403 ||
+            (status === 401 && message.includes("banned"));
 
         if (isBanned) {
             if (window.location.pathname !== "/banned") {
                 window.location.href = "/banned";
             }
-            // Return a resolved promise to suppress the red error in the console
-            // for these "controlled" situations.
             return Promise.resolve({
                 data: { success: false, banned: true },
                 status: 200,
-                statusText: "OK",
-                headers: {},
-                config: error.config,
             });
         }
+
+        // Handle other 401s silently (session expired or unauthorized)
+        if (status === 401) {
+            // If we are already on banned, just stop there
+            if (window.location.pathname === "/banned") {
+                return Promise.resolve({ data: {}, status: 200 });
+            }
+            return Promise.resolve({ data: { success: false }, status: 200 });
+        }
+
         return Promise.reject(error);
     },
 );

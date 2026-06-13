@@ -6,7 +6,7 @@ import {
     submitRoundAnswer,
     closeRound,
 } from "../services/sessions";
-import type { GameSession, SessionRoundPrompt, RoundResult } from "@chad/types";
+import type { GameSession, SessionRoundPrompt } from "@chad/types";
 import { useAuth } from "../contexts/AuthContext";
 
 export type SessionViewState =
@@ -14,6 +14,7 @@ export type SessionViewState =
     | "preparing"
     | "playing"
     | "inter_round"
+    | "loading_next"
     | "podium";
 
 export function useGameSession() {
@@ -21,10 +22,9 @@ export function useGameSession() {
     const [session, setSession] = useState<GameSession | null>(null);
     const [prompt, setPrompt] = useState<SessionRoundPrompt | null>(null);
     const [viewState, setViewState] = useState<SessionViewState>("setup");
-
+    const [activeRoundIndex, setActiveRoundIndex] = useState<number>(0);
     const [timeLeft, setTimeLeft] = useState<number>(0);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [lastResult, setLastResult] = useState<RoundResult | null>(null);
 
     const timerRef = useRef<number | null>(null);
 
@@ -53,6 +53,7 @@ export function useGameSession() {
         currentSession: GameSession,
         roundIndex: number,
     ) => {
+        setViewState("loading_next");
         try {
             const { session: updatedSession, duration } = await startRound(
                 currentSession.id,
@@ -61,7 +62,7 @@ export function useGameSession() {
 
             setSession(updatedSession);
             setPrompt(updatedSession.rounds[roundIndex]?.prompt || null);
-            setLastResult(null);
+            setActiveRoundIndex(roundIndex);
             setViewState("playing");
             startLocalTimer(updatedSession, roundIndex, duration);
         } catch (error) {
@@ -107,42 +108,46 @@ export function useGameSession() {
                 const finalSession = await finishGame(updatedSession.id);
                 setSession(finalSession);
                 await refreshUser();
-                setViewState("podium");
+                setTimeout(() => {
+                    setViewState("podium");
+                }, 1500);
             } else {
                 setSession(updatedSession);
-                setViewState("inter_round");
-                setTimeout(
-                    () => void playNextRound(updatedSession, roundIndex + 1),
-                    1500,
-                );
+                setTimeout(() => {
+                    setViewState("inter_round");
+                    setTimeout(() => {
+                        void playNextRound(updatedSession, roundIndex + 1);
+                    }, 1500);
+                }, 2500);
             }
         } catch (error) {
             console.error("Erreur fin de round:", error);
         }
     };
 
-    const submitAnswer = async (answer: unknown) => {
-        if (!session || viewState !== "playing") return;
-
+    const submitAnswer = async (
+        answer: unknown,
+    ): Promise<{ success: boolean; isCompleted: boolean }> => {
+        if (!session || viewState !== "playing")
+            return { success: false, isCompleted: false };
         try {
             const res = await submitRoundAnswer(
                 session.id,
-                session.currentRoundIndex,
+                activeRoundIndex,
                 answer,
             );
 
-            setLastResult(res.result);
-
             if (res.isCompleted) {
-                if (timerRef.current) window.clearInterval(timerRef.current);
-                setTimeout(
-                    () =>
-                        void handleRoundEnd(session, session.currentRoundIndex),
-                    5000,
-                );
+                await handleRoundEnd(session, activeRoundIndex);
             }
+
+            return {
+                success: res.addedScore > 0,
+                isCompleted: res.isCompleted,
+            };
         } catch (error) {
             console.error("Erreur réponse:", error);
+            return { success: false, isCompleted: false };
         }
     };
 
@@ -152,7 +157,7 @@ export function useGameSession() {
         viewState,
         timeLeft,
         isSubmitting,
-        lastResult,
+        activeRoundIndex,
         launchGame,
         submitAnswer,
     };

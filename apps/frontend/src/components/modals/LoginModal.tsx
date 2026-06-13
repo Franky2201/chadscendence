@@ -25,12 +25,21 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
         try {
             await loginAuth({ identifier, password });
             const userResponse = await getMe();
+
+            if (userResponse.accountStatus === "banned") {
+                window.location.href = "/banned";
+                return;
+            }
+
             login(userResponse);
             onClose();
         } catch (error: unknown) {
             const err = error as { response?: { status: number } };
+            // If the interceptor already redirected or handled it, this might not be needed
+            // but we keep a fallback toast if redirection didn't happen.
             if (err.response?.status === 403) {
                 toast.error(t("home.identification.login.banned"));
+                window.location.href = "/banned";
             } else {
                 toast.error(t("home.identification.login.error"));
             }

@@ -1,20 +1,20 @@
 import { useState, useEffect, useRef } from "react";
 import { Card } from "../ui";
 import { Header } from "../Header";
-import type { SessionRoundPrompt, RoundResult } from "@chad/types";
+import type { SessionRoundPrompt } from "@chad/types";
 
 type Phase = "waiting" | "ready" | "clicked" | "failed";
 
 interface ReactionTimeUIProps {
     prompt: SessionRoundPrompt;
-    onSubmit: (answer: unknown) => Promise<void>;
-    lastResult?: RoundResult | null;
+    onSubmit: (
+        answer: unknown,
+    ) => Promise<{ success: boolean; isCompleted: boolean }>;
 }
 
 export default function ReactionTimeUI({
     prompt,
     onSubmit,
-    lastResult,
 }: ReactionTimeUIProps) {
     const [phase, setPhase] = useState<Phase>("waiting");
     const [reactionTime, setReactionTime] = useState<number | null>(null);
@@ -39,11 +39,7 @@ export default function ReactionTimeUI({
         if (phase === "waiting") {
             if (timerRef.current) window.clearTimeout(timerRef.current);
             setPhase("failed");
-            await onSubmit({
-                id: prompt.roundToken,
-                tooEarly: true,
-                reactionTime: 0,
-            });
+            await onSubmit({ earlyClick: true });
             return;
         }
 
@@ -51,11 +47,7 @@ export default function ReactionTimeUI({
             const timeTaken = Date.now() - signalTimeRef.current;
             setPhase("clicked");
             setReactionTime(timeTaken);
-            await onSubmit({
-                id: prompt.roundToken,
-                reactionTime: timeTaken,
-                tooEarly: false,
-            });
+            await onSubmit({ reactionTimeMs: timeTaken });
         }
     };
 
@@ -102,20 +94,14 @@ export default function ReactionTimeUI({
                         {isWaiting && (
                             <p className="text-gray-400 text-sm font-mono"></p>
                         )}
-                        {(phase === "failed" ||
-                            (lastResult && lastResult.success === false)) && (
-                            <p className="text-red-500 text-lg font-bold animate-in fade-in slide-in-from-top-2">
-                                {(lastResult && lastResult.message) ||
-                                    "Too early !"}
+                        {phase === "failed" && (
+                            <p className="text-red-500 text-lg font-bold animate-in fade-in slide-in-from-top-2"></p>
+                        )}
+                        {phase === "clicked" && (
+                            <p className="text-green-500 text-lg font-bold animate-in fade-in slide-in-from-top-2">
+                                Success !
                             </p>
                         )}
-                        {phase === "clicked" &&
-                            lastResult &&
-                            lastResult.success === true && (
-                                <p className="text-green-500 text-lg font-bold animate-in fade-in slide-in-from-top-2">
-                                    {lastResult.message || "Success !"}
-                                </p>
-                            )}
                     </div>
                 </Card>
             </div>

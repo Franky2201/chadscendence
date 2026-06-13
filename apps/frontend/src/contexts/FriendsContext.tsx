@@ -57,9 +57,11 @@ export function FriendsProvider({ children }: { children: ReactNode }) {
                     getPendingRequests(),
                     getSentRequests(),
                 ]);
-            setFriends(friendsData);
-            setRequests(requestsData);
-            setSentRequests(sentRequestsData);
+            setFriends(Array.isArray(friendsData) ? friendsData : []);
+            setRequests(Array.isArray(requestsData) ? requestsData : []);
+            setSentRequests(
+                Array.isArray(sentRequestsData) ? sentRequestsData : [],
+            );
         } catch (error) {
             console.error(error);
         } finally {
@@ -89,11 +91,12 @@ export function FriendsProvider({ children }: { children: ReactNode }) {
                 userId: string;
                 status: "online" | "offline";
             }) => {
-                setFriends((prevFriends) =>
-                    prevFriends.map((friend) =>
+                setFriends((prevFriends) => {
+                    if (!Array.isArray(prevFriends)) return [];
+                    return prevFriends.map((friend) =>
                         friend.id === userId ? { ...friend, status } : friend,
-                    ),
-                );
+                    );
+                });
             },
         );
 
