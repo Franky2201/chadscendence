@@ -117,7 +117,10 @@ export default function UserManager({
                                 )}
                             </Link>
                             <div className="flex flex-col items-start gap-1 min-w-0">
-                                <Link to={`/users/${user.username}`} className="max-w-full">
+                                <Link
+                                    to={`/users/${user.username}`}
+                                    className="max-w-full"
+                                >
                                     <span
                                         className="font-bold text-white text-lg hover:text-[var(--ui-color)] transition-colors break-all"
                                         style={{ ...getItemColorStyle(theme) }}
