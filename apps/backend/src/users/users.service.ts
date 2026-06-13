@@ -288,9 +288,9 @@ export class UsersService implements OnModuleInit {
         };
 
         await this.userRepository.save(updatedUser);
-				if (rating) {
-					await this.updateRating(id, rating);
-				}
+        if (rating) {
+            await this.updateRating(id, rating);
+        }
 
         return this.getUser(id);
     }
