@@ -166,6 +166,7 @@
             "editModal": {
                 "title": "Modifier",
                 "avatar": "Avatar",
+                "modify": "Modifier",
                 "username": "Pseudo",
                 "bio": "Bio",
                 "rating": "Rating",

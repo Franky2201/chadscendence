@@ -159,6 +159,7 @@
             "editModal": {
                 "title": "Bewerken",
                 "avatar": "Avatar",
+                "modify": "Wijzigen",
                 "username": "Gebruikersnaam",
                 "bio": "Bio",
                 "rating": "Beoordeling",
