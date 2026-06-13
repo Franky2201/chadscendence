@@ -39,9 +39,9 @@ export function Window({
             label: t("window.footer.about"),
         },
     ].filter((link): link is { to: string; label: string } => Boolean(link));
-    const classes = `min-h-screen relative overflow-hidden font-sans p-8 transition-all \
+    const classes = `min-h-screen flex flex-col relative overflow-hidden font-sans p-8 transition-all \
 		duration-500 ease-in-out ${className}`;
-    const footerClasses = `flex justify-center mt-4 items-center text-sm gap-1 \
+    const footerClasses = `flex justify-center mt-auto pt-4 items-center text-sm gap-1 \
 		transition-colors duration-50 ease-in-out`;
     const linkClasses = `select-none transition-all duration-300 ease-in-out \
 		uppercase text-center hover:font-bold`;
@@ -53,7 +53,7 @@ export function Window({
                 angle={angle}
                 size={size}
             />
-            <div className="relative z-10">
+            <div className="relative z-10 flex-1 flex flex-col">
                 {children}
                 <footer className={footerClasses}>
                     {links.map((link, index) => (

@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { Button, Input } from "../ui";
 import type { UserListItem, AdminUpdateDataPayload } from "@chad/types";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "../../contexts/AuthContext";
 
 interface EditUserModalProps {
     user: UserListItem;
@@ -19,6 +20,7 @@ export function EditUserModal({
     onUpdateUser,
 }: EditUserModalProps) {
     const { t } = useTranslation();
+    const { refreshUser } = useAuth();
     const [username, setUsername] = useState(user.username);
     const [avatarPreview, setAvatarPreview] = useState(user.avatarUrl ?? "");
     const [avatarFile, setAvatarFile] = useState<File | null>(null);
@@ -47,6 +49,7 @@ export function EditUserModal({
                 },
                 avatarFile,
             );
+            refreshUser();
             onClose();
         } catch {
             // error handled in useAdmin
