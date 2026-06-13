@@ -109,7 +109,21 @@
                 "allTime": "Toujours"
             },
             "achievements": {
-                "title": "Succès"
+                "title": "Succès",
+                "list": {
+                    "network": {
+                        "title": "Le Réseau",
+                        "description": "Avoir des amis"
+                    },
+                    "player": {
+                        "title": "Joueur",
+                        "description": "Avoir joué des parties"
+                    },
+                    "winner": {
+                        "title": "Vainqueur",
+                        "description": "Gagner au moins une partie"
+                    }
+                }
             }
         }
     },
