@@ -66,7 +66,6 @@ export default function SoloGamePage() {
                 return (
                     <GamePlaying
                         key={activeRoundIndex}
-                        gameId={gameId!}
                         prompt={prompt!}
                         timeLeft={timeLeft}
                         onSubmit={submitAnswer}
