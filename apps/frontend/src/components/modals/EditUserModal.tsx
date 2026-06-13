@@ -20,7 +20,7 @@ export function EditUserModal({
     onUpdateUser,
 }: EditUserModalProps) {
     const { t } = useTranslation();
-		const { refreshUser } = useAuth();
+    const { refreshUser } = useAuth();
     const [username, setUsername] = useState(user.username);
     const [avatarPreview, setAvatarPreview] = useState(user.avatarUrl ?? "");
     const [avatarFile, setAvatarFile] = useState<File | null>(null);
@@ -49,7 +49,7 @@ export function EditUserModal({
                 },
                 avatarFile,
             );
-						refreshUser();
+            refreshUser();
             onClose();
         } catch {
             // error handled in useAdmin
