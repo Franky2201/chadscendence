@@ -144,13 +144,17 @@ export class SessionsService {
 
         const isCompleted = gameId === "math" || gameId === "reaction-time";
 
-        return {
+        const response: Record<string, unknown> = {
             addedScore: scoreObtained,
             totalRoundScore: round.score,
             isCompleted,
-
-            result,
         };
+
+        if (typeof result === "object" && result !== null) {
+            Object.assign(response, { result });
+        }
+
+        return response;
     }
 
     closeRound(id: string, userId: string, roundIndex: number) {
