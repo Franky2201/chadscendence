@@ -62,7 +62,7 @@ export default function ReactionTimeUI({
                         {prompt.prompt || "Reaction Time"}
                     </h2>
 
-                    <div className="text-sm font-mono text-gray-500 uppercase tracking-widest h-4 mb-6">
+                    <div className="text-3xl font-bold text-white mb-8 h-10 flex items-center justify-center tracking-wide uppercase">
                         {isWaiting && "Get Ready ..."}
                         {isReady && "NOW !"}
                         {phase === "clicked" && "Results"}

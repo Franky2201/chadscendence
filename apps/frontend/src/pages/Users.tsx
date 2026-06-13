@@ -11,7 +11,7 @@ import { getRanks } from "../services/ranks";
 import type { UserListItem, Rank } from "@chad/types";
 import { useTheme } from "../contexts/ThemeContext";
 
-const ITEMS_PER_PAGE = 2;
+const ITEMS_PER_PAGE = 12;
 type SortOption = "alpha_asc" | "alpha_desc" | "rating_desc" | "rating_asc";
 
 export default function UsersPage() {

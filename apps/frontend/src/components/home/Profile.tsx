@@ -45,7 +45,7 @@ export function Profile({ className = "" }: { className?: string }) {
                             </p>
                         </div>
                     </Link>
-                    {user?.rank.icon} {user?.rank.name} - {user?.rating}
+                    {user?.rank?.icon} {user?.rank?.name} - {user?.rating}
                 </div>
             </div>
             <div className="flex flex-col gap-3 w-full">

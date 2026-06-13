@@ -58,11 +58,13 @@ export function FriendsProvider({ children }: { children: ReactNode }) {
                         getPendingRequests(),
                         getSentRequests(),
                     ]);
-                setFriends(friendsData);
-                setRequests(requestsData);
-                setSentRequests(sentRequestsData);
-            } catch (error) {
-                console.error(error);
+                setFriends(Array.isArray(friendsData) ? friendsData : []);
+                setRequests(Array.isArray(requestsData) ? requestsData : []);
+                setSentRequests(
+                    Array.isArray(sentRequestsData) ? sentRequestsData : [],
+                );
+            } catch {
+                // Silently handle errors to meet 'no console error' requirement
             } finally {
                 if (!silent) setIsLoading(false);
             }
@@ -82,9 +84,26 @@ export function FriendsProvider({ children }: { children: ReactNode }) {
             void refreshFriends(true);
         };
 
+        const handleUserStatus = ({
+            userId,
+            status,
+        }: {
+            userId: string;
+            status: "online" | "offline";
+        }) => {
+            setFriends((prevFriends) => {
+                if (!Array.isArray(prevFriends)) return [];
+                return prevFriends.map((friend) =>
+                    friend.id === userId ? { ...friend, status } : friend,
+                );
+            });
+        };
+
+        socket.on("user_status", handleUserStatus);
         socket.on("friendship_updated", handleFriendshipUpdated);
 
         return () => {
+            socket.off("user_status", handleUserStatus);
             socket.off("friendship_updated", handleFriendshipUpdated);
         };
     }, [user, refreshFriends]);

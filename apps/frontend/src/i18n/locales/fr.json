@@ -25,7 +25,7 @@
                 "banned": "Votre compte a été banni."
             },
             "register": {
-                "title": "Création de compte",
+                "title": "Créer un compte",
                 "email": "Email",
                 "username": "Nom d'utilisateur",
                 "password": "Mot de passe",
@@ -175,6 +175,10 @@
             "updateProfileError": "Impossible de modifier le profil",
             "statusUpdate": "Statut mis à jour",
             "statusUpdateError": "Impossible d'effectuer cette action"
+        },
+        "ranks": {
+            "ratingMin": "Aura requise",
+            "info": "Les rangs sont actuellement gérés via le processus de seeding du backend. La modification dynamique des rangs sera disponible dans une prochaine version."
         }
     },
     "users": {

@@ -44,14 +44,14 @@ export class SessionsController {
     @Post(":id/rounds/:roundIndex/answer")
     submitRoundAnswer(
         @Param("id") id: string,
-        @Param("roundIndex", ParseIntPipe) roundIndex: number,
+        @Param("roundIndex") roundIndex: string,
         @GetUser() user: JwtPayload,
         @Body() body: { answer: unknown },
     ) {
         return this.sessionsService.submitRoundAnswer(
             id,
             user.sub,
-            roundIndex,
+            Number(roundIndex),
             body.answer,
         );
     }

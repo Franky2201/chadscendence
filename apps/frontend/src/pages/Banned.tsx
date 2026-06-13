@@ -22,12 +22,12 @@ export default function Banned() {
     };
 
     return (
-        <Window className="relative flex items-center justify-center">
-            <div className="absolute top-8 right-8">
+        <Window className="relative flex flex-col items-center justify-center p-4">
+            <div className="flex justify-end w-full max-w-lg mb-8">
                 <LanguageSwitcher />
             </div>
 
-            <Card className="max-w-lg w-full p-12 text-center border-red-500/50">
+            <Card className="max-w-lg w-full p-8 md:p-12 text-center border-red-500/50 shadow-2xl shadow-red-500/10">
                 <div className="flex flex-col items-center gap-6">
                     <div className="w-24 h-24 bg-red-500/20 rounded-full flex items-center justify-center border-2 border-red-500/50 animate-pulse">
                         <svg

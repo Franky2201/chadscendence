@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAdmin } from "../hooks/useAdmin";
 import RoleManager from "../components/admin/RoleManager";
 import UserManager from "../components/admin/UserManager";
+import RankManager from "../components/admin/RankManager";
 import { Window, Title, Button } from "../components/ui";
 import { Header } from "../components/Header";
 import { useTranslation } from "react-i18next";
@@ -103,14 +104,7 @@ export default function AdminPage() {
                 )}
 
                 {activeTab === "ranks" && canManageRanks && (
-                    <div className="text-white flex flex-col gap-4">
-                        <div className="text-white/50 italic">
-                            Composant RankManager à insérer ici
-                        </div>
-                        <pre className="text-xs bg-black/20 p-4 rounded border border-white/10 overflow-auto">
-                            {JSON.stringify(ranks, null, 2)}
-                        </pre>
-                    </div>
+                    <RankManager ranks={ranks} />
                 )}
 
                 {activeTab === "users" && (

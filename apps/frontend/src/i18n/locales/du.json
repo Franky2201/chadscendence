@@ -175,6 +175,10 @@
             "updateProfileError": "Kan het profiel niet bijwerken",
             "statusUpdate": "Status bijgewerkt",
             "statusUpdateError": "Kan deze actie niet uitvoeren"
+        },
+        "ranks": {
+            "ratingMin": "Vereiste aura",
+            "info": "Rangen worden momenteel beheerd via het backend seedingproces. Dynamische rangwijziging zal beschikbaar zijn in een toekomstige versie."
         }
     },
     "users": {
