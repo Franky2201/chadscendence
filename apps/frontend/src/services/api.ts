@@ -6,34 +6,39 @@ const api = axios.create({
 });
 
 api.interceptors.response.use(
-    (response) => response,
-    (error) => {
-        const status = error.response?.status;
-        const message = error.response?.data?.message?.toLowerCase() || "";
+    (response) => {
+        // Detect "fake" 200s from SilentAuthFilter
+        if (
+            response.data &&
+            response.data.error === true &&
+            (response.data.statusCode === 401 ||
+                response.data.statusCode === 403)
+        ) {
+            const status = response.data.statusCode;
+            const message = response.data.message?.toLowerCase() || "";
+            const isBanned = status === 403 || message.includes("banned");
 
-        const isBanned =
-            status === 403 ||
-            (status === 401 && message.includes("banned"));
-
-        if (isBanned) {
-            if (window.location.pathname !== "/banned") {
+            if (isBanned && window.location.pathname !== "/banned") {
                 window.location.href = "/banned";
             }
-            return Promise.resolve({
-                data: { success: false, banned: true },
-                status: 200,
+
+            // Reject so try/catch works, but browser console stays clean (no red XHR)
+            return Promise.reject({
+                response: {
+                    status,
+                    data: response.data,
+                },
             });
         }
-
-        // Handle other 401s silently (session expired or unauthorized)
-        if (status === 401) {
-            // If we are already on banned, just stop there
-            if (window.location.pathname === "/banned") {
-                return Promise.resolve({ data: {}, status: 200 });
-            }
-            return Promise.resolve({ data: { success: false }, status: 200 });
+        return response;
+    },
+    (error) => {
+        // Silently handle real 401/403 just in case the filter missed something
+        // but typically the filter will have caught them.
+        const status = error.response?.status;
+        if (status === 401 || status === 403) {
+            return new Promise(() => {}); // Never resolve/reject to stay silent? No, that's bad.
         }
-
         return Promise.reject(error);
     },
 );

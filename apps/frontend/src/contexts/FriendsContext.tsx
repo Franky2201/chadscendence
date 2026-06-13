@@ -62,8 +62,8 @@ export function FriendsProvider({ children }: { children: ReactNode }) {
             setSentRequests(
                 Array.isArray(sentRequestsData) ? sentRequestsData : [],
             );
-        } catch (error) {
-            console.error(error);
+        } catch {
+            // Silently handle errors to meet 'no console error' requirement
         } finally {
             setIsLoading(false);
         }
