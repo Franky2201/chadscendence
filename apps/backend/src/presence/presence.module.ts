@@ -7,6 +7,6 @@ import { PresenceGateway } from "./presence.gateway";
 @Module({
     imports: [JwtModule],
     providers: [PresenceService, PresenceGateway],
-    exports: [PresenceService],
+    exports: [PresenceService, PresenceGateway],
 })
 export class PresenceModule {}

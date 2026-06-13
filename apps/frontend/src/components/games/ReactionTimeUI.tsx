@@ -6,7 +6,9 @@ type Phase = "waiting" | "ready" | "clicked" | "failed";
 
 interface ReactionTimeUIProps {
     prompt: SessionRoundPrompt;
-    onSubmit: (answer: unknown) => Promise<void>;
+    onSubmit: (
+        answer: unknown,
+    ) => Promise<{ success: boolean; isCompleted: boolean }>;
 }
 
 export default function ReactionTimeUI({
@@ -60,12 +62,12 @@ export default function ReactionTimeUI({
                         {prompt.prompt || "Reaction Time"}
                     </h2>
 
-                    <p className="text-sm font-mono text-gray-400 uppercase tracking-widest min-h-4">
-                        {isWaiting && "Prépare-toi..."}
-                        {isReady && "MAINTENANT !"}
-                        {phase === "clicked" && "Résultat"}
+                    <div className="text-sm font-mono text-gray-500 uppercase tracking-widest h-4 mb-6">
+                        {isWaiting && "Get Ready ..."}
+                        {isReady && "NOW !"}
+                        {phase === "clicked" && "Results"}
                         {phase === "failed" && "Oups !"}
-                    </p>
+                    </div>
 
                     <button
                         onClick={() => void handleClick()}
@@ -82,25 +84,21 @@ export default function ReactionTimeUI({
                         ].join(" ")}
                     >
                         {isWaiting && "..."}
-                        {isReady && "CLIQUE !"}
-                        {phase === "failed" && "TROP TÔT"}
+                        {isReady && "Click !"}
+                        {phase === "failed" && "❌"}
                         {phase === "clicked" && `${reactionTime}ms`}
                     </button>
 
                     <div className="h-8 flex items-center justify-center">
                         {isWaiting && (
-                            <p className="text-gray-400 text-sm font-mono">
-                                Attends que le cercle devienne vert...
-                            </p>
+                            <p className="text-gray-400 text-sm font-mono"></p>
                         )}
                         {phase === "failed" && (
-                            <p className="text-red-500 text-lg font-bold animate-in fade-in slide-in-from-top-2">
-                                Tu as cliqué trop tôt !
-                            </p>
+                            <p className="text-red-500 text-lg font-bold animate-in fade-in slide-in-from-top-2"></p>
                         )}
                         {phase === "clicked" && (
                             <p className="text-green-500 text-lg font-bold animate-in fade-in slide-in-from-top-2">
-                                Bien joué !
+                                Success !
                             </p>
                         )}
                     </div>

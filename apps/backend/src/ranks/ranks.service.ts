@@ -7,7 +7,6 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Rank } from "./rank.entity";
 import { OnModuleInit } from "@nestjs/common";
-import { CreateRankDto, UpdateRankDto } from "./ranks.dto";
 
 @Injectable()
 export class RanksService implements OnModuleInit {
@@ -67,21 +66,5 @@ export class RanksService implements OnModuleInit {
         }
 
         return rank;
-    }
-
-    async createRank(body: CreateRankDto) {
-        const newRank = this.rankRepository.create(body);
-        return this.rankRepository.save(newRank);
-    }
-
-    async updateRank(id: string, body: UpdateRankDto) {
-        const rank = await this.getRank(id);
-        Object.assign(rank, body);
-        return this.rankRepository.save(rank);
-    }
-
-    async deleteRank(id: string) {
-        const rank = await this.getRank(id);
-        await this.rankRepository.remove(rank);
     }
 }

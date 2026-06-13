@@ -15,6 +15,8 @@ import { RanksService } from "../ranks/ranks.service";
 import { ConfigService } from "@nestjs/config";
 import { PresenceService } from "../presence/presence.service";
 import { RolesService } from "src/roles/roles.service";
+import { PresenceGateway } from "../presence/presence.gateway";
+import { GameAnalytics } from "src/users/analytics.entity";
 
 @Injectable()
 export class UsersService implements OnModuleInit {
@@ -25,6 +27,9 @@ export class UsersService implements OnModuleInit {
         private readonly rolesService: RolesService,
         private readonly presenceService: PresenceService,
         private readonly ranksService: RanksService,
+        private readonly presenceGateway: PresenceGateway,
+        @InjectRepository(GameAnalytics)
+        private readonly analyticsRepository: Repository<GameAnalytics>,
     ) {}
 
     async onModuleInit() {
@@ -79,11 +84,17 @@ export class UsersService implements OnModuleInit {
             where: { rating: MoreThan(user.rating) },
         });
 
+        const analytics = await this.analyticsRepository.find({
+            where: { userId: user.id },
+            order: { playedAt: "DESC" },
+        });
+
         return {
             ...user,
             leaderboardRank: above + 1,
             rank: user.rank!,
             role: user.role,
+            analytics,
         };
     }
 
@@ -230,6 +241,11 @@ export class UsersService implements OnModuleInit {
                 : AccountStatus.BANNED;
 
         await this.userRepository.save(user);
+
+        if (user.accountStatus === AccountStatus.BANNED) {
+            this.presenceGateway.notifyUserBanned(user.id);
+        }
+
         return { accountStatus: user.accountStatus };
     }
 
@@ -237,7 +253,7 @@ export class UsersService implements OnModuleInit {
         const user = await this.userRepository.findOne({ where: { id } });
         if (!user) throw new NotFoundException("User not found");
 
-        const { roleId, ...rest } = dto;
+        const { roleId, rating, ...rest } = dto;
 
         const role = roleId
             ? await this.rolesService.findOne(roleId)
@@ -254,6 +270,9 @@ export class UsersService implements OnModuleInit {
         };
 
         await this.userRepository.save(updatedUser);
+				if (rating) {
+					await this.updateRating(id, rating);
+				}
 
         return this.getUser(id);
     }
@@ -297,9 +316,20 @@ export class UsersService implements OnModuleInit {
     }
 
     async updateRating(userId: string, newRating: number) {
-        await this.userRepository.update(userId, {
-            rating: Math.round(newRating),
+        const user = await this.userRepository.findOne({
+            where: { id: userId },
+            relations: { rank: true },
         });
-        return this.userRepository.findOneBy({ id: userId });
+
+        if (!user) {
+            throw new NotFoundException("Utilisateur introuvable");
+        }
+
+        const newRank = await this.ranksService.getRankForRating(newRating);
+
+        user.rating = newRating;
+        user.rank = newRank;
+
+        return this.userRepository.save(user);
     }
 }

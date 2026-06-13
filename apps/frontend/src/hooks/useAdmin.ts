@@ -16,6 +16,7 @@ import {
     uploadAvatarForUser,
 } from "../services/users";
 import type { UserListItem, AdminUpdateDataPayload } from "@chad/types";
+import { useTranslation } from "react-i18next";
 
 export const useAdmin = (
     canManageRoles: boolean,
@@ -27,6 +28,7 @@ export const useAdmin = (
     const [ranks, setRanks] = useState<Rank[]>([]);
     const [users, setUsers] = useState<UserListItem[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const { t } = useTranslation();
 
     useEffect(() => {
         const loadData = async () => {
@@ -48,14 +50,14 @@ export const useAdmin = (
                 setRanks(ranksData);
                 setUsers(usersData);
             } catch {
-                toast.error("Erreur de chargement des données");
+                toast.error(t("admin.notification.loadingError"));
             } finally {
                 setIsLoading(false);
             }
         };
 
         void loadData();
-    }, [canManageRoles, canManageRanks, canManageUsers]);
+    }, [t, canManageRoles, canManageRanks, canManageUsers]);
 
     const handleCreateRole = async (name: string, perms: string[]) => {
         try {
@@ -64,9 +66,9 @@ export const useAdmin = (
                 permissions: perms as PermissionAction[],
             });
             setRoles((prev) => [...prev, { ...newRole, userCount: 0 }]);
-            toast.success("Rôle créé");
+            toast.success(t("admin.notification.roleCreated"));
         } catch {
-            toast.error("Erreur lors de la création");
+            toast.error(t("admin.notification.creationError"));
         }
     };
 
@@ -83,9 +85,9 @@ export const useAdmin = (
             setRoles((prev) =>
                 prev.map((r) => (r.id === id ? { ...r, ...updated } : r)),
             );
-            toast.success("Rôle mis à jour");
+            toast.success(t("admin.notification.roleUpdated"));
         } catch {
-            toast.error("Erreur lors de la mise à jour");
+            toast.error(t("admin.notification.updateRoleError"));
         }
     };
 
@@ -93,9 +95,9 @@ export const useAdmin = (
         try {
             await deleteRole(id);
             setRoles((prev) => prev.filter((r) => r.id !== id));
-            toast.success("Rôle supprimé");
+            toast.success(t("admin.notification.roleDeleted"));
         } catch {
-            toast.error("Impossible de supprimer ce rôle");
+            toast.error(t("admin.notification.deletedError"));
         }
     };
 
@@ -110,9 +112,9 @@ export const useAdmin = (
             }
             const updated = await adminUpdateUser(id, data);
             setUsers((prev) => prev.map((u) => (u.id === id ? updated : u)));
-            toast.success("Profil mis à jour");
+            toast.success(t("admin.notification.profileUpdated"));
         } catch {
-            toast.error("Impossible de modifier le profil");
+            toast.error(t("admin.notification.updateProfileError"));
             throw new Error("Update failed");
         }
     };
@@ -127,9 +129,9 @@ export const useAdmin = (
                         : u,
                 ),
             );
-            toast.success("Statut mis à jour");
+            toast.success(t("admin.notification.statusUpdate"));
         } catch {
-            toast.error("Impossible d'effectuer cette action");
+            toast.error(t("admin.notification.statusUpdateError"));
             throw new Error("Ban failed");
         }
     };

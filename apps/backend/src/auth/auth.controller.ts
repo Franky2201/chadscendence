@@ -43,7 +43,7 @@ export class AuthController {
                     secret: this.configService.get<string>("JWT_SECRET") || "",
                 },
             );
-            const user = await this.usersService.findById(payload.sub);
+            const user = await this.usersService.getUser(payload.sub);
 
             return { isAuthenticated: true, user };
         } catch {
@@ -56,16 +56,26 @@ export class AuthController {
         @Body() body: CreateUserDto,
         @Res({ passthrough: true }) res: Response,
     ): Promise<AuthResponse> {
-        const token = await this.authService.register({ authregister: body });
+        try {
+            const token = await this.authService.register({
+                authregister: body,
+            });
 
-        res.cookie("access_token", token.access_token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "lax",
-            maxAge: 24 * 60 * 60 * 1000, // 1 day
-        });
+            res.cookie("access_token", token.access_token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "lax",
+                maxAge: 24 * 60 * 60 * 1000, // 1 day
+            });
 
-        return { success: true };
+            return { success: true };
+        } catch (error: unknown) {
+            const err = error as { status: number; message: string };
+            if (err.status === 409) {
+                return { success: false, message: err.message };
+            }
+            throw error;
+        }
     }
 
     @Post("login")

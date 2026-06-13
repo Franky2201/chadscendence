@@ -27,8 +27,8 @@ export class AppModule
     async onApplicationBootstrap() {
         const gameData: Game = {
             id: this.gameId,
-            name: "Temps de réaction",
-            description: "T'as les réflexes d'un Giga Chad toi ?",
+            name: "Fast and Furchad",
+            description: "",
             port: Number(process.env.PORT ?? 3000),
         };
 

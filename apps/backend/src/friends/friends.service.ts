@@ -8,6 +8,7 @@ import { Repository } from "typeorm";
 import { Friendship } from "./friendship.entity";
 import { User } from "../users/user.entity";
 import { PresenceService } from "../presence/presence.service";
+import { PresenceGateway } from "../presence/presence.gateway";
 import {
     Friend,
     FriendRequest,
@@ -24,6 +25,7 @@ export class FriendsService {
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
         private readonly presenceService: PresenceService,
+        private readonly presenceGateway: PresenceGateway,
     ) {}
 
     async getFriends(userId: string): Promise<Friend[]> {
@@ -133,6 +135,13 @@ export class FriendsService {
         });
 
         await this.friendshipRepository.save(friendship);
+
+        // Notify addressee
+        const clients = this.presenceService.getUserClients(addresseeId);
+        if (clients.length > 0) {
+            this.presenceGateway.server.to(clients).emit("friendship_updated");
+        }
+
         return { message: "Friend request sent" };
     }
 
@@ -146,7 +155,7 @@ export class FriendsService {
                 addressee: { id: userId },
                 status: FriendshipStatus.PENDING,
             },
-            relations: { requester: true },
+            relations: { requester: true, addressee: true },
         });
 
         if (!friendship) {
@@ -155,6 +164,25 @@ export class FriendsService {
 
         friendship.status = FriendshipStatus.ACCEPTED;
         await this.friendshipRepository.save(friendship);
+
+        // Notify both users
+        const requesterClients = this.presenceService.getUserClients(
+            friendship.requester.id,
+        );
+        const addresseeClients = this.presenceService.getUserClients(
+            friendship.addressee.id,
+        );
+
+        if (requesterClients.length > 0) {
+            this.presenceGateway.server
+                .to(requesterClients)
+                .emit("friendship_updated");
+        }
+        if (addresseeClients.length > 0) {
+            this.presenceGateway.server
+                .to(addresseeClients)
+                .emit("friendship_updated");
+        }
 
         return { message: "Friend request accepted" };
     }
@@ -168,13 +196,33 @@ export class FriendsService {
                 { id: friendshipId, requester: { id: userId } },
                 { id: friendshipId, addressee: { id: userId } },
             ],
+            relations: { requester: true, addressee: true },
         });
 
         if (!friendship) {
             throw new NotFoundException("Friendship not found");
         }
 
+        const rId = friendship.requester.id;
+        const aId = friendship.addressee.id;
+
         await this.friendshipRepository.remove(friendship);
+
+        // Notify both
+        const requesterClients = this.presenceService.getUserClients(rId);
+        const addresseeClients = this.presenceService.getUserClients(aId);
+
+        if (requesterClients.length > 0) {
+            this.presenceGateway.server
+                .to(requesterClients)
+                .emit("friendship_updated");
+        }
+        if (addresseeClients.length > 0) {
+            this.presenceGateway.server
+                .to(addresseeClients)
+                .emit("friendship_updated");
+        }
+
         return { message: "Friend removed" };
     }
 }

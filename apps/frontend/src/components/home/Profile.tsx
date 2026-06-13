@@ -28,7 +28,7 @@ export function Profile({ className = "" }: { className?: string }) {
             <div className="flex flex-wrap mb-2 w-full">
                 <Link to="/profile">
                     <img
-                        className="rounded-xl w-20 h-20 border"
+                        className="rounded-xl w-20 h-20 border object-cover"
                         src={user ? user.avatarUrl : "/avatar.jpg"}
                     />
                 </Link>

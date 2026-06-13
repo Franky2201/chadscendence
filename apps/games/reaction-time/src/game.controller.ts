@@ -41,7 +41,10 @@ export class GameController {
             .get(`reaction-time:session:${data.id}`);
 
         if (!exists) {
-            return { success: false, message: "Session expirée, recommence !" };
+            return {
+                success: false,
+                message: "Session expired, please try again!",
+            };
         }
 
         await this.redisService
@@ -51,12 +54,12 @@ export class GameController {
         if (data.tooEarly) {
             return {
                 success: false,
-                message: "Hep hep hep faux départ! Attends le signal 🔴",
+                message: "Too early! Wait for the signal 🔴",
             };
         }
 
         if (data.reactionTime < 50 || data.reactionTime > 2000) {
-            return { success: false, message: "Temps invalide" };
+            return { success: false, message: "Invalid reaction time" };
         }
 
         const { rating, message } = this.appService.getRating(

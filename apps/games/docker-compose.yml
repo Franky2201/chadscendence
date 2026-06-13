@@ -17,7 +17,9 @@ services:
                 condition: service_healthy
         volumes:
             - ../../apps/games/math/src:/app/apps/games/math/src
-            - ../../libs/types/src:/app/libs/types/src
+            - ../../libs/types:/app/libs/types
+            - /app/libs/types/node_modules
+            - /app/libs/types/dist
         networks:
             - ft_network
         restart: unless-stopped
@@ -37,8 +39,9 @@ services:
                 condition: service_healthy
         volumes:
             - ../../apps/games/reaction-time/src:/app/apps/games/reaction-time/src
-            - ../../libs/types/src:/app/libs/types/src
+            - ../../libs/types:/app/libs/types
+            - /app/libs/types/node_modules
+            - /app/libs/types/dist
         networks:
             - ft_network
         restart: unless-stopped
-

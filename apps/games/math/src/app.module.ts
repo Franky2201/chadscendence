@@ -27,8 +27,8 @@ export class AppModule
     async onApplicationBootstrap() {
         const gameData: Game = {
             id: this.gameId,
-            name: "Math",
-            description: "C'est du calcul mental frangin",
+            name: "Chadmathics",
+            description: "",
             port: Number(process.env.PORT ?? 3001),
         };
 

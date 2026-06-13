@@ -7,15 +7,21 @@ import type { SessionRoundPrompt } from "@chad/types";
 interface GamePlayingProps {
     prompt: SessionRoundPrompt;
     timeLeft: number;
-    onSubmit: (answer: unknown) => Promise<void>;
+    onSubmit: (
+        answer: unknown,
+    ) => Promise<{ success: boolean; isCompleted: boolean }>;
 }
 
 export function GamePlaying({ prompt, timeLeft, onSubmit }: GamePlayingProps) {
     const { theme } = useTheme();
     const [answer, setAnswer] = useState<string>("");
+    const [status, setStatus] = useState<"playing" | "correct" | "wrong">(
+        "playing",
+    );
 
     const handleSubmit = async (e?: React.FormEvent) => {
         e?.preventDefault();
+        if (status !== "playing") return;
 
         const finalAnswer =
             prompt.kind === "number"
@@ -24,8 +30,20 @@ export function GamePlaying({ prompt, timeLeft, onSubmit }: GamePlayingProps) {
                   ? prompt.actionValue
                   : answer;
 
-        await onSubmit(finalAnswer);
-        setAnswer("");
+        try {
+            const result = await onSubmit(finalAnswer);
+            if (result.success) {
+                setStatus("correct");
+                setTimeout(() => setAnswer(""), 1000);
+            } else {
+                setStatus("wrong");
+                setTimeout(() => setAnswer(""), 2000);
+            }
+        } catch (err) {
+            console.error("Error submitting answer:", err);
+            setStatus("wrong");
+            setTimeout(() => setAnswer(""), 2000);
+        }
     };
 
     return (
@@ -37,9 +55,7 @@ export function GamePlaying({ prompt, timeLeft, onSubmit }: GamePlayingProps) {
                         {timeLeft}
                     </div>
 
-                    <h2 className="text-4xl font-black">
-                        {prompt.prompt}
-                    </h2>
+                    <h2 className="text-4xl font-black">{prompt.prompt}</h2>
 
                     <form
                         onSubmit={(e) => void handleSubmit(e)}
@@ -50,10 +66,11 @@ export function GamePlaying({ prompt, timeLeft, onSubmit }: GamePlayingProps) {
                                 type="number"
                                 autoFocus
                                 required
+                                disabled={status !== "playing"}
                                 value={answer}
                                 onChange={(e) => setAnswer(e.target.value)}
                                 placeholder="?"
-                                className="w-full text-4xl py-6 font-bold text-center"
+                                className="w-full text-4xl py-6 font-bold text-center disabled:opacity-60 disabled:cursor-not-allowed"
                             />
                         )}
                         {prompt.kind === "text" && (
@@ -61,22 +78,35 @@ export function GamePlaying({ prompt, timeLeft, onSubmit }: GamePlayingProps) {
                                 type="text"
                                 autoFocus
                                 required
+                                disabled={status !== "playing"}
                                 value={answer}
                                 onChange={(e) => setAnswer(e.target.value)}
                                 placeholder="..."
-                                className="w-full text-2xl py-4 text-center"
+                                className="w-full text-2xl py-4 text-center disabled:opacity-60 disabled:cursor-not-allowed"
                             />
                         )}
 
                         <Button
                             type="submit"
+                            disabled={status !== "playing"}
                             color={theme}
                             size="large"
                             className="w-full mt-4 text-xl py-4"
                         >
-                            {prompt.actionLabel || "RÉPONDRE"}
+                            {prompt.actionLabel || "⮕"}
                         </Button>
                     </form>
+
+                    {status === "correct" && (
+                        <div className="mt-4 text-green-400 font-bold text-2xl animate-bounce">
+                            ✅
+                        </div>
+                    )}
+                    {status === "wrong" && (
+                        <div className="mt-4 text-red-400 font-bold text-2xl animate-bounce">
+                            ❌
+                        </div>
+                    )}
                 </div>
             </div>
         </>
