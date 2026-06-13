@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { Role, Permission } from "@chad/types";
 import { Card, Button, Input, Checkbox, Badge, Title } from "../ui";
 import { useTranslation } from "react-i18next";
+import { useTheme } from "../../contexts/ThemeContext";
 
 interface RoleManagerProps {
     roles: Role[];
@@ -19,6 +20,7 @@ export default function RoleManager({
     onDelete,
 }: RoleManagerProps) {
     const { t } = useTranslation();
+    const { theme } = useTheme();
     const [editingId, setEditingId] = useState<string | null>(null);
     const [editName, setEditName] = useState("");
     const [editPerms, setEditPerms] = useState<string[]>([]);
@@ -105,7 +107,7 @@ export default function RoleManager({
                                     </div>
                                     <div className="flex gap-4 w-full">
                                         <Button
-                                            color="pink"
+                                            color={theme}
                                             className="flex-1"
                                             onClick={submitEdit}
                                         >
@@ -126,7 +128,7 @@ export default function RoleManager({
                                         {role.permissions.map((p) => (
                                             <Badge
                                                 key={p.id}
-                                                color="pink"
+                                                color={theme}
                                                 color2="white"
                                             >
                                                 {p.action}
@@ -136,7 +138,7 @@ export default function RoleManager({
                                     {!isImmutable && (
                                         <div className="flex gap-4 w-full mt-2">
                                             <Button
-                                                color="blue"
+                                                color={theme}
                                                 className="flex-1"
                                                 onClick={() => startEdit(role)}
                                             >
@@ -161,9 +163,9 @@ export default function RoleManager({
             </div>
 
             {isCreating ? (
-                <Card className="w-full mt-4" color="pink">
+                <Card className="w-full mt-4" color={theme}>
                     <div className="flex flex-col gap-4">
-                        <Title color="pink" className="text-xl">
+                        <Title color={theme} className="text-xl">
                             {t("admin.roles.newRole")}
                         </Title>
                         <Input
@@ -183,8 +185,8 @@ export default function RoleManager({
                                         setNewPerms((prev) =>
                                             prev.includes(p.action)
                                                 ? prev.filter(
-                                                      (x) => x !== p.action,
-                                                  )
+                                                    (x) => x !== p.action,
+                                                )
                                                 : [...prev, p.action],
                                         )
                                     }
@@ -193,7 +195,7 @@ export default function RoleManager({
                         </div>
                         <div className="flex gap-4 w-full mt-4">
                             <Button
-                                color="pink"
+                                color={theme}
                                 className="flex-1"
                                 onClick={submitCreate}
                             >
@@ -216,7 +218,7 @@ export default function RoleManager({
             ) : (
                 <div className="flex justify-center mt-6 w-full">
                     <Button
-                        color="pink"
+                        color={theme}
                         size="large"
                         className="w-full"
                         onClick={() => setIsCreating(true)}

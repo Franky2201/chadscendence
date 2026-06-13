@@ -8,6 +8,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { Link } from "react-router-dom";
 import type { Role } from "@chad/types";
 import { useTranslation } from "react-i18next";
+import { useTheme } from "../../contexts/ThemeContext";
 
 type ActiveModal =
     | { type: "edit"; user: UserListItem }
@@ -32,6 +33,7 @@ export default function UserManager({
     onBanUser,
 }: UserManagerProps) {
     const { t } = useTranslation();
+    const { theme } = useTheme();
     const { user: currentUser } = useAuth();
     const [searchQuery, setSearchQuery] = useState("");
     const [roleFilter, setRoleFilter] = useState("ALL");
@@ -119,7 +121,7 @@ export default function UserManager({
                                     </span>
                                 </Link>
                                 {user.role && (
-                                    <Badge color="blue">{user.role.name}</Badge>
+                                    <Badge color={theme}>{user.role.name}</Badge>
                                 )}
                             </div>
                         </div>
@@ -134,7 +136,7 @@ export default function UserManager({
                                                 roleId,
                                             });
                                         }}
-                                        className="!bg-blue-500/20 !border-blue-500/50 hover:!bg-blue-500/30 text-blue-400 font-bold"
+                                        className="font-bold"
                                     >
                                         <option
                                             value=""
@@ -154,7 +156,7 @@ export default function UserManager({
                                         ))}
                                     </Select>
                                     <Button
-                                        color="blue"
+                                        color={theme}
                                         onClick={() =>
                                             setActiveModal({
                                                 type: "edit",
@@ -170,7 +172,7 @@ export default function UserManager({
                                 <Button
                                     color={
                                         user.accountStatus ===
-                                        AccountStatus.BANNED
+                                            AccountStatus.BANNED
                                             ? "orange"
                                             : "red"
                                     }

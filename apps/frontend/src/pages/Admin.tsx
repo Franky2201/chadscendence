@@ -9,9 +9,11 @@ import { useTranslation } from "react-i18next";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { useTheme } from "../contexts/ThemeContext";
 
 export default function AdminPage() {
     const { t } = useTranslation();
+    const { theme } = useTheme();
     const { user, isLoading: authLoading } = useAuth();
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState<"users" | "ranks" | "roles">(
@@ -70,14 +72,14 @@ export default function AdminPage() {
 
                 <div className="flex gap-4 border-b border-white/10 pb-4">
                     <Button
-                        color={activeTab === "users" ? "pink" : "grey"}
+                        color={activeTab === "users" ? theme : "grey"}
                         onClick={() => setActiveTab("users")}
                     >
                         {t("admin.tabs.users")}
                     </Button>
                     {canManageRanks && (
                         <Button
-                            color={activeTab === "ranks" ? "pink" : "grey"}
+                            color={activeTab === "ranks" ? theme : "grey"}
                             onClick={() => setActiveTab("ranks")}
                         >
                             {t("admin.tabs.ranks")}
@@ -85,7 +87,7 @@ export default function AdminPage() {
                     )}
                     {canManageRoles && (
                         <Button
-                            color={activeTab === "roles" ? "pink" : "grey"}
+                            color={activeTab === "roles" ? theme : "grey"}
                             onClick={() => setActiveTab("roles")}
                         >
                             {t("admin.tabs.roles")}
