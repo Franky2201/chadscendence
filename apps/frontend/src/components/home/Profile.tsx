@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 export function Profile({ className = "" }: { className?: string }) {
     const { t } = useTranslation();
     const { user, logout } = useAuth();
-    const { openPanel } = useChat();
+    const { openPanel, unreadCounts } = useChat();
     const navigate = useNavigate();
 
     const handleLogout = async () => {
@@ -17,6 +17,11 @@ export function Profile({ className = "" }: { className?: string }) {
 
     const hasAdminAccess =
         user?.role?.permissions && user.role.permissions.length > 0;
+
+    const totalUnread = Object.values(unreadCounts).reduce(
+        (acc, count) => acc + count,
+        0,
+    );
 
     return (
         <Card
@@ -45,7 +50,14 @@ export function Profile({ className = "" }: { className?: string }) {
             </div>
             <div className="flex flex-col gap-3 w-full">
                 <Button color="green" onClick={openPanel}>
-                    {t("home.profile.friends")}
+                    <div className="flex items-center justify-center gap-2">
+                        {t("home.profile.friends")}
+                        {totalUnread > 0 && (
+                            <span className="flex items-center justify-center min-w-[24px] h-[24px] bg-red-500 rounded-full px-2 text-white text-xs font-bold">
+                                {totalUnread > 99 ? "99+" : totalUnread}
+                            </span>
+                        )}
+                    </div>
                 </Button>
                 {hasAdminAccess && (
                     <Button color="blue" onClick={() => navigate("/admin")}>

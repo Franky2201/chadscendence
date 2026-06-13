@@ -1,5 +1,6 @@
 import { useFriends } from "../../contexts/FriendsContext";
 import { useChat } from "../../contexts/ChatContext";
+import { usePresence } from "../../contexts/PresenceContext";
 import { useTranslation } from "react-i18next";
 
 export default function FriendList() {
@@ -13,6 +14,7 @@ export default function FriendList() {
         declineRequest,
     } = useFriends();
     const { openChat, unreadCounts } = useChat();
+    const { onlineUsers } = usePresence();
 
     if (isLoading)
         return <p className="text-white/60 text-[16px]">{t("loading")}</p>;
@@ -93,6 +95,11 @@ export default function FriendList() {
                 ) : (
                     friends.map((friend) => {
                         const unreadCount = unreadCounts[friend.id] || 0;
+                        const isOnline =
+                            onlineUsers[friend.id] !== undefined
+                                ? onlineUsers[friend.id] === "online"
+                                : friend.status === "online";
+
                         return (
                             <div
                                 key={friend.friendshipId}
@@ -111,12 +118,12 @@ export default function FriendList() {
                                             src={friend.avatarUrl}
                                             alt={friend.username}
                                             className={`w-[50px] h-[50px] rounded-full object-cover border-2 transition-colors ${
-                                                friend.status === "online"
+                                                isOnline
                                                     ? "border-green-500"
                                                     : "border-transparent"
                                             }`}
                                         />
-                                        {friend.status === "online" && (
+                                        {isOnline && (
                                             <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-[#1E1E1E] rounded-full"></span>
                                         )}
                                     </div>
