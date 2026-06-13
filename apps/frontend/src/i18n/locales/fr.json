@@ -15,7 +15,7 @@
             "colorTheme": "Personnalisation"
         },
         "identification": {
-            "title": "Identification",
+            "title": "Compte",
             "login": {
                 "title": "Connexion",
                 "emailOrUsername": "Email ou nom d'utilisateur",
@@ -52,7 +52,7 @@
         "noResults": "Aucun joueur trouvé.",
         "message": "Votre message",
         "send": "Envoyer",
-        "remove": "Retirer",
+        "remove": "Retirer l'ami",
         "add": "Ajouter",
         "friend": "Ami",
         "pendingRequests": "Demandes en attente",
@@ -126,6 +126,13 @@
                 }
             }
         }
+    },
+    "auth": {
+        "title": "Identification",
+        "description": "Trouve d'autres Chads",
+        "login": "Connexion via 42",
+        "google": "Continuer avec Google",
+        "bannedError": "Vous ne pouvez pas vous connecter."
     },
     "admin": {
         "title": "Administration",

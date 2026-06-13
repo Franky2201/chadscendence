@@ -15,7 +15,7 @@
             "colorTheme": "Aanpassing"
         },
         "identification": {
-            "title": "Identificatie",
+            "title": "Account",
             "login": {
                 "title": "Inloggen",
                 "emailOrUsername": "E-mailadres of gebruikersnaam",
@@ -52,7 +52,7 @@
         "noResults": "Geen speler gevonden.",
         "message": "Jouw bericht",
         "send": "Verzenden",
-        "remove": "Verwijderen",
+        "remove": "Vriend verwijderen",
         "add": "Toevoegen",
         "friend": "Vriend",
         "pendingRequests": "Openstaande verzoeken",
@@ -466,5 +466,8 @@
     "banned": {
         "title": "Account verbannen",
         "message": "Je bent verbannen."
+    },
+    "auth": {
+        "bannedError": "U kunt niet inloggen."
     }
 }

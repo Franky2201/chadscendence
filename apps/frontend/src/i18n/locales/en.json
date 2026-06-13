@@ -15,7 +15,7 @@
             "colorTheme": "Customization"
         },
         "identification": {
-            "title": "Identification",
+            "title": "Account",
             "login": {
                 "title": "Login",
                 "emailOrUsername": "Email or username",
@@ -52,7 +52,7 @@
         "noResults": "No player found.",
         "message": "Your message",
         "send": "Send",
-        "remove": "Remove",
+        "remove": "Remove friend",
         "add": "Add",
         "friend": "Friend",
         "pendingRequests": "Pending requests",
@@ -466,5 +466,8 @@
     "banned": {
         "title": "Account Banned",
         "message": "You have been banned."
+    },
+    "auth": {
+        "bannedError": "You cannot log in."
     }
 }
