@@ -8,7 +8,7 @@ import { Button } from "./index";
 
 type CheckboxProps = Omit<
     ButtonHTMLAttributes<HTMLButtonElement>,
-    "onChange"
+    "onChange" | "color"
 > & {
     size?: ItemSize;
     color?: ItemColor;
