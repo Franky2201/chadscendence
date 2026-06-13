@@ -4,6 +4,7 @@ import {
     NotFoundException,
     BadRequestException,
     UnauthorizedException,
+    ConflictException,
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { MoreThan, Repository } from "typeorm";
@@ -138,7 +139,24 @@ export class UsersService implements OnModuleInit {
             dataToUpdate.password = await hash(password, 10);
         }
 
-        await this.userRepository.save({ id, ...dataToUpdate });
+        try {
+            await this.userRepository.save({ id, ...dataToUpdate });
+        } catch (error) {
+            const err = error as { code?: string; detail?: string };
+            if (err.code === "23505") {
+                if (err.detail?.includes("username")) {
+                    throw new ConflictException(
+                        "This username is already taken.",
+                    );
+                }
+                if (err.detail?.includes("email")) {
+                    throw new ConflictException(
+                        "This email address is already taken.",
+                    );
+                }
+            }
+            throw error;
+        }
 
         return this.getUser(id);
     }
