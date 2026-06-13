@@ -121,7 +121,9 @@ export default function UserManager({
                                     </span>
                                 </Link>
                                 {user.role && (
-                                    <Badge color={theme}>{user.role.name}</Badge>
+                                    <Badge color={theme}>
+                                        {user.role.name}
+                                    </Badge>
                                 )}
                             </div>
                         </div>
@@ -172,7 +174,7 @@ export default function UserManager({
                                 <Button
                                     color={
                                         user.accountStatus ===
-                                            AccountStatus.BANNED
+                                        AccountStatus.BANNED
                                             ? "orange"
                                             : "red"
                                     }

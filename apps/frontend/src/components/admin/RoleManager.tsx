@@ -185,8 +185,8 @@ export default function RoleManager({
                                         setNewPerms((prev) =>
                                             prev.includes(p.action)
                                                 ? prev.filter(
-                                                    (x) => x !== p.action,
-                                                )
+                                                      (x) => x !== p.action,
+                                                  )
                                                 : [...prev, p.action],
                                         )
                                     }
