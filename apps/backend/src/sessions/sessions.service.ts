@@ -128,7 +128,7 @@ export class SessionsService {
         const prompt = round.prompt ?? { kind: "action", prompt: "Play" };
         const payload = adapter.buildSubmitPayload(answer, prompt);
 
-        let result: any;
+        let result: unknown;
         try {
             result = await this.gamesService.sendCommand<unknown, unknown>(
                 gameId,
@@ -148,6 +148,7 @@ export class SessionsService {
             addedScore: scoreObtained,
             totalRoundScore: round.score,
             isCompleted,
+
             result,
         };
     }
