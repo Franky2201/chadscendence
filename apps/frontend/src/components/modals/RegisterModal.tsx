@@ -5,6 +5,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { Button, Input, Card } from "../ui/index";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
+import { useTheme } from "../../contexts/ThemeContext";
 
 interface RegisterModalProps {
     isOpen: boolean;
@@ -16,6 +17,7 @@ export default function RegisterModal({ isOpen, onClose }: RegisterModalProps) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const { login } = useAuth();
+    const { theme } = useTheme();
     const { t } = useTranslation();
 
     if (!isOpen) return null;
@@ -70,7 +72,7 @@ export default function RegisterModal({ isOpen, onClose }: RegisterModalProps) {
 
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70"
             onMouseDown={onClose}
         >
             <Card
@@ -109,7 +111,12 @@ export default function RegisterModal({ isOpen, onClose }: RegisterModalProps) {
                         className="w-full"
                         required
                     />
-                    <Button type="submit" className="w-full" size="large">
+                    <Button
+                        color={theme}
+                        type="submit"
+                        className="w-full"
+                        size="large"
+                    >
                         {t("home.identification.register.register")}
                     </Button>
                 </form>
