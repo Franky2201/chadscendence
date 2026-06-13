@@ -7,6 +7,8 @@ import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import { join } from "path";
 
+import { Response } from "express";
+
 async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
@@ -18,19 +20,14 @@ async function bootstrap() {
     );
     app.use(cookieParser());
 
-    app.use(
-        "/uploads",
-        (
-            _req: unknown,
-            res: { setHeader: (k: string, v: string) => void },
-            next: () => void,
-        ) => {
-            res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
-            next();
-        },
-    );
-    app.useStaticAssets(join(process.cwd(), "apps/backend/uploads"), {
+    const uploadsPath = join(__dirname, "..", "..", "uploads");
+    console.log(`[Backend] Serving static assets from: ${uploadsPath}`);
+
+    app.useStaticAssets(uploadsPath, {
         prefix: "/uploads",
+        setHeaders: (res: Response) => {
+            res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
+        },
     });
 
     app.useGlobalPipes(

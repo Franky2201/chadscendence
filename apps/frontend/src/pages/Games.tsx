@@ -19,6 +19,7 @@ export default function SoloGamePage() {
         timeLeft,
         isSubmitting,
         activeRoundIndex,
+        lastResult,
         launchGame,
         submitAnswer,
     } = useGameSession();
@@ -59,6 +60,7 @@ export default function SoloGamePage() {
                             key={activeRoundIndex}
                             prompt={prompt!}
                             onSubmit={submitAnswer}
+                            lastResult={lastResult}
                         />
                     );
                 }
@@ -69,6 +71,7 @@ export default function SoloGamePage() {
                         prompt={prompt!}
                         timeLeft={timeLeft}
                         onSubmit={submitAnswer}
+                        lastResult={lastResult}
                     />
                 );
             }

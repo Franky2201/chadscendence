@@ -27,8 +27,13 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
             const userResponse = await getMe();
             login(userResponse);
             onClose();
-        } catch {
-            toast.error(t("home.identification.login.error"));
+        } catch (error: unknown) {
+            const err = error as { response?: { status: number } };
+            if (err.response?.status === 403) {
+                toast.error(t("home.identification.login.banned"));
+            } else {
+                toast.error(t("home.identification.login.error"));
+            }
         }
     };
 

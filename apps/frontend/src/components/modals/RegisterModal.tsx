@@ -23,8 +23,42 @@ export default function RegisterModal({ isOpen, onClose }: RegisterModalProps) {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        // Basic frontend validation
+        if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+            toast.error(t("home.identification.register.invalidEmail"));
+            return;
+        }
+
+        if (
+            !password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/) ||
+            password.length < 8
+        ) {
+            toast.error(t("home.identification.register.weakPassword"));
+            return;
+        }
+
         try {
-            await register({ email, username, password });
+            const response = (await register({
+                email,
+                username,
+                password,
+            })) as { success: boolean; message?: string };
+
+            if (response.success === false) {
+                const message = response.message || "";
+                if (message.toLowerCase().includes("email")) {
+                    toast.error(
+                        t("home.identification.register.conflictEmail"),
+                    );
+                } else if (message.toLowerCase().includes("username")) {
+                    toast.error(
+                        t("home.identification.register.conflictUsername"),
+                    );
+                } else {
+                    toast.error(t("home.identification.register.error"));
+                }
+                return;
+            }
 
             const userResponse = await getMe();
             login(userResponse);

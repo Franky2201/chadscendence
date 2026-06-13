@@ -10,6 +10,14 @@ export interface SessionRoundPrompt {
 	actionValue?: string;
 }
 
+export interface RoundResult {
+	success: boolean;
+	correctAnswer?: number;
+	message?: string;
+	reactionTime?: number;
+	rating?: string;
+}
+
 export interface GameSessionRound {
 	index: number;
 	game: Game;

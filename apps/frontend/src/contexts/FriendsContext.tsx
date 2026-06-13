@@ -97,10 +97,15 @@ export function FriendsProvider({ children }: { children: ReactNode }) {
             },
         );
 
+        socket.on("friendship_updated", () => {
+            void refreshFriends();
+        });
+
         return () => {
             socket.off("user_status");
+            socket.off("friendship_updated");
         };
-    }, [user]);
+    }, [user, refreshFriends]);
 
     const acceptRequest = async (friendshipId: string) => {
         await acceptFriendRequest(friendshipId);

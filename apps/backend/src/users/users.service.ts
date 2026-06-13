@@ -15,6 +15,7 @@ import { RanksService } from "../ranks/ranks.service";
 import { ConfigService } from "@nestjs/config";
 import { PresenceService } from "../presence/presence.service";
 import { RolesService } from "src/roles/roles.service";
+import { PresenceGateway } from "../presence/presence.gateway";
 import { GameAnalytics } from "src/users/analytics.entity";
 
 @Injectable()
@@ -26,6 +27,7 @@ export class UsersService implements OnModuleInit {
         private readonly rolesService: RolesService,
         private readonly presenceService: PresenceService,
         private readonly ranksService: RanksService,
+        private readonly presenceGateway: PresenceGateway,
         @InjectRepository(GameAnalytics)
         private readonly analyticsRepository: Repository<GameAnalytics>,
     ) {}
@@ -239,6 +241,11 @@ export class UsersService implements OnModuleInit {
                 : AccountStatus.BANNED;
 
         await this.userRepository.save(user);
+
+        if (user.accountStatus === AccountStatus.BANNED) {
+            this.presenceGateway.notifyUserBanned(user.id);
+        }
+
         return { accountStatus: user.accountStatus };
     }
 
