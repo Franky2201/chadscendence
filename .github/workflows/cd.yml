@@ -21,8 +21,8 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_SSH_KEY }}
-          # Exclude heavy or sensitive folders that shouldn't be copied
-          source: ".,!node_modules,!**/node_modules,!dist,!**/dist,!.git,!.github"
+          # CRITICAL: Exclude 'apps/backend/uploads' so we don't delete user avatars on every deploy
+          source: ".,!node_modules,!**/node_modules,!dist,!**/dist,!.git,!.github,!apps/backend/uploads"
           target: "~/chadscendence"
           # rm: true ensures a clean slate for the code, but be careful with persistent data
           rm: true
@@ -36,13 +36,23 @@ jobs:
           script: |
             cd ~/chadscendence
 
-            # Inject production environment variables from GitHub Secrets
-            # This ensures 'make prod' uses your real production config
+            # Inject production environment variables
             echo "${{ secrets.PROD_ENV }}" > .env
 
-            # Use the project's Makefile to start the production environment
-            # This automatically handles BUILD_TARGET=final and directory creation
-            make prod
+            # Dynamically set the FRONTEND_URL so generated links (like avatars) work
+            # We use the VPS_HOST secret and the 8443 port we're using for production
+            echo "FRONTEND_URL=https://${{ secrets.VPS_HOST }}:8443" >> .env
 
-            # Cleanup dangling images to save disk space on the VPS
+            # --- FIX FOR AVATARS ---
+            # 1. Create the directory if it doesn't exist
+            mkdir -p apps/backend/uploads
+            # 2. Grant ownership to user 1001 (the 'nestjs' user inside the container)
+            # This allows the backend to write uploaded files to the host disk
+            sudo chown -R 1001:1001 apps/backend/uploads
+            # -----------------------
+
+            # Run 'make prod' but skip the host-side 'npm install/lint' checks.
+            PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" make prod
+
+            # Cleanup
             docker image prune -f
