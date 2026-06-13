@@ -27,7 +27,7 @@ export function Profile({ className = "" }: { className?: string }) {
         <Card
             className={className}
             contentClassName="flex flex-col justify-center items-center gap-3"
-            title="Profile"
+            title={t("home.profile.title")}
             href="/profile"
         >
             <div className="flex flex-wrap mb-2 w-full">

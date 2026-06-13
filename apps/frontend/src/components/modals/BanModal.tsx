@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Button } from "../ui";
+import { Button, Card } from "../ui";
+import { useTheme } from "../../contexts/ThemeContext";
 import { AccountStatus } from "@chad/types";
 import type { UserListItem } from "@chad/types";
 import { useTranslation } from "react-i18next";
@@ -12,6 +13,7 @@ interface BanModalProps {
 
 export function BanModal({ user, onClose, onBanUser }: BanModalProps) {
     const { t } = useTranslation();
+    const { theme } = useTheme();
     const [isLoading, setIsLoading] = useState(false);
 
     const isBanned = user.accountStatus === AccountStatus.BANNED;
@@ -29,13 +31,17 @@ export function BanModal({ user, onClose, onBanUser }: BanModalProps) {
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-            <div className="bg-slate-800 border border-slate-700 rounded-3xl p-10 w-full max-w-lg shadow-2xl flex flex-col gap-6">
-                <h2 className="text-2xl font-bold text-white">
-                    {isBanned
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+            <Card
+                color={theme}
+                className="w-full max-w-lg"
+                title={
+                    isBanned
                         ? t("admin.usersManager.banModal.unbanTitle")
-                        : t("admin.usersManager.banModal.banTitle")}
-                </h2>
+                        : t("admin.usersManager.banModal.banTitle")
+                }
+                contentClassName="flex flex-col gap-6"
+            >
                 <p className="text-slate-300 text-base">
                     {isBanned
                         ? t("admin.usersManager.banModal.unban")
@@ -65,7 +71,7 @@ export function BanModal({ user, onClose, onBanUser }: BanModalProps) {
                             : t("admin.usersManager.banModal.confirm")}
                     </Button>
                 </div>
-            </div>
+            </Card>
         </div>
     );
 }

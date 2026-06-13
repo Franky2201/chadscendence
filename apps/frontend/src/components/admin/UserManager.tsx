@@ -34,11 +34,11 @@ export default function UserManager({
     onBanUser,
 }: UserManagerProps) {
     const { t } = useTranslation();
+    const { theme } = useTheme();
     const { user: currentUser } = useAuth();
     const [searchQuery, setSearchQuery] = useState("");
     const [roleFilter, setRoleFilter] = useState("ALL");
     const [activeModal, setActiveModal] = useState<ActiveModal>(null);
-    const { theme } = useTheme();
 
     const uniqueRoles = useMemo(() => {
         const rolesNames = new Set(
@@ -117,7 +117,10 @@ export default function UserManager({
                                 )}
                             </Link>
                             <div className="flex flex-col items-start gap-1 min-w-0">
-                                <Link to={`/users/${user.username}`} className="max-w-full">
+                                <Link
+                                    to={`/users/${user.username}`}
+                                    className="max-w-full"
+                                >
                                     <span
                                         className="font-bold text-white text-lg hover:text-[var(--ui-color)] transition-colors break-all"
                                         style={{ ...getItemColorStyle(theme) }}
@@ -126,7 +129,9 @@ export default function UserManager({
                                     </span>
                                 </Link>
                                 {user.role && (
-                                    <Badge color="blue">{user.role.name}</Badge>
+                                    <Badge color={theme}>
+                                        {user.role.name}
+                                    </Badge>
                                 )}
                             </div>
                         </div>
@@ -141,7 +146,7 @@ export default function UserManager({
                                                 roleId,
                                             });
                                         }}
-                                        className="!bg-blue-500/20 !border-blue-500/50 hover:!bg-blue-500/30 text-blue-400 font-bold"
+                                        className="font-bold"
                                     >
                                         <option
                                             value=""
@@ -161,7 +166,7 @@ export default function UserManager({
                                         ))}
                                     </Select>
                                     <Button
-                                        color="purple"
+                                        color={theme}
                                         onClick={() =>
                                             setActiveModal({
                                                 type: "edit",

@@ -1,6 +1,8 @@
 import { useTranslation } from "react-i18next";
 import { Card, Title } from "../ui";
 import type { Rank } from "@chad/types";
+import { getItemColorStyle } from "../ui/unified";
+import { useTheme } from "../../contexts/ThemeContext";
 
 interface RankManagerProps {
     ranks: Rank[];
@@ -8,6 +10,7 @@ interface RankManagerProps {
 
 export default function RankManager({ ranks }: RankManagerProps) {
     const { t } = useTranslation();
+    const { theme } = useTheme();
 
     return (
         <div className="flex flex-col gap-6">
@@ -23,7 +26,7 @@ export default function RankManager({ ranks }: RankManagerProps) {
                         key={rank.id}
                         className="flex flex-col gap-4 border-white/10 hover:border-white/20 transition-colors"
                     >
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-4 mb-4">
                             <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center text-4xl border border-white/10">
                                 {rank.icon || "🏅"}
                             </div>
@@ -45,9 +48,10 @@ export default function RankManager({ ranks }: RankManagerProps) {
                             </div>
                             <div className="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
                                 <div
-                                    className="h-full bg-pink-500"
+                                    className="h-full bg-[var(--ui-color)]"
                                     style={{
                                         width: `${Math.min(100, (rank.ratingMin / 5000) * 100)}%`,
+                                        ...getItemColorStyle(theme),
                                     }}
                                 />
                             </div>

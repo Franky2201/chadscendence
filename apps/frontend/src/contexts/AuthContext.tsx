@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { createContext, useContext, useState, useEffect } from "react";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 import { checkAuthStatus, logout as logoutAuth } from "../services/auth";
 import type { User } from "@chad/types";
 import { socket } from "../services/socket";
@@ -16,6 +17,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+    const { t } = useTranslation();
     const [user, setUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -56,7 +58,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         if (params.get("error") === "banned") {
-            toast.error("Vous ne pouvez pas vous connecter.");
+            toast.error(t("auth.bannedError"));
             window.history.replaceState({}, "", window.location.pathname);
         }
 
@@ -66,7 +68,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         };
 
         void initAuth();
-    }, []);
+    }, [t]);
 
     const login = (userData: User) => {
         if (userData && userData.id && userData.username) {

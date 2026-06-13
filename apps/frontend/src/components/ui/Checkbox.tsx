@@ -8,7 +8,7 @@ import { Button } from "./index";
 
 type CheckboxProps = Omit<
     ButtonHTMLAttributes<HTMLButtonElement>,
-    "onChange"
+    "onChange" | "color"
 > & {
     size?: ItemSize;
     color?: ItemColor;
@@ -49,7 +49,7 @@ export function Checkbox({
                             ...getItemMixedColorStyle(color, "--ui-color", 60),
                         }}
                     >
-                        {checked ? "✓" : "🗶"}
+                        {checked ? "✓" : ""}
                     </span>
 
                     <span className="text-xl font-bold">{label}</span>
