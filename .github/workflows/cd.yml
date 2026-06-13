@@ -1,0 +1,48 @@
+name: CD pipeline
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+jobs:
+  deploy:
+    # Only run if the PR was merged (not just closed)
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Copy files to Oracle VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          # Exclude heavy or sensitive folders that shouldn't be copied
+          source: ".,!node_modules,!**/node_modules,!dist,!**/dist,!.git,!.github"
+          target: "~/chadscendence"
+          # rm: true ensures a clean slate for the code, but be careful with persistent data
+          rm: true
+
+      - name: Execute build and start commands
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            cd ~/chadscendence
+
+            # Inject production environment variables from GitHub Secrets
+            # This ensures 'make prod' uses your real production config
+            echo "${{ secrets.PROD_ENV }}" > .env
+
+            # Use the project's Makefile to start the production environment
+            # This automatically handles BUILD_TARGET=final and directory creation
+            make prod
+
+            # Cleanup dangling images to save disk space on the VPS
+            docker image prune -f
