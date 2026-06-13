@@ -1,6 +1,7 @@
 import { useModal } from "../../contexts/ModalContext";
 import LoginModal from "./LoginModal";
 import RegisterModal from "./RegisterModal";
+import MultiplayerModal from "./GameModal";
 
 export default function ModalRoot() {
     const { activeModal, modalProps, closeModal } = useModal();
@@ -11,6 +12,12 @@ export default function ModalRoot() {
         <>
             {activeModal === "LOGIN" && (
                 <LoginModal isOpen={true} onClose={closeModal} />
+            )}
+            {activeModal === "MULTI" && (
+                <MultiplayerModal
+                    isOpen={true}
+                    onClose={closeModal}
+                />
             )}
             {activeModal === "REGISTER" && (
                 <RegisterModal

@@ -69,7 +69,7 @@ export function Badge({
                         via-[var(--bg-color2)]
                         to-[var(--bg-color)]
                         rotate-320
-                        scale-500
+                        scale-565
                         `}
                     style={{
                         animation: `translation ${freq}s linear infinite`,

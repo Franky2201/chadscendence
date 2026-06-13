@@ -6,9 +6,11 @@ import { useTranslation } from "react-i18next";
 
 interface GamePodiumProps {
     session: GameSession;
+    returnTo?: string;
+    hardRefresh?: boolean;
 }
 
-export function GamePodium({ session }: GamePodiumProps) {
+export function GamePodium({ session , returnTo = "/", hardRefresh = false}: GamePodiumProps) {
     const { t } = useTranslation();
     return (
         <>
@@ -43,8 +45,8 @@ export function GamePodium({ session }: GamePodiumProps) {
                     )}
                 </div>
 
-                <Link to="/">
-                    <Button size="large" color="grey">
+                <Link to={returnTo}>
+                    <Button size="large" color="grey" onClick={hardRefresh ? () => { window.location.href = returnTo } : undefined}>
                         {t("game.podium.back")}
                     </Button>
                 </Link>

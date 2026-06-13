@@ -46,3 +46,9 @@ export class CreateOAuthUserDto {
     @IsOptional()
     avatarUrl?: string;
 }
+
+export interface JwtPayload {
+    sub: string;
+    username: string;
+    email: string;
+}

@@ -5,6 +5,7 @@ export type ModalRegistry = {
     REGISTER: undefined;
     GAME: { gameMode?: string };
     PLAY: undefined;
+    MULTI: undefined;
 };
 
 export type ModalType = keyof ModalRegistry;

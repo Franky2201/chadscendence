@@ -13,6 +13,7 @@ import { MessagesModule } from "./messages/messages.module";
 import { RolesModule } from "./roles/roles.module";
 import { RatingModule } from "./rating/rating.module";
 import { SessionsModule } from "./sessions/sessions.module";
+import { RoomsModule } from "./rooms/rooms.module";
 
 @Module({
     imports: [
@@ -42,6 +43,7 @@ import { SessionsModule } from "./sessions/sessions.module";
         MessagesModule,
         RatingModule,
         SessionsModule,
+        RoomsModule,
     ],
     controllers: [AppController],
     providers: [AppService],

@@ -42,7 +42,21 @@ export function Play({ className = "" }: { className?: string }) {
                 color={theme}
                 className="w-full flex flex-col items-center justify-center h-24 text-2xl font-bold"
             >
-                {t("home.play.title")}
+                Solo
+            </Button>
+
+            <Button
+                onClick={() => {
+                    if (!user) {
+                        openModal("LOGIN");
+                    } else {
+                        openModal("MULTI");
+                    }
+                }}
+                color={theme}
+                className="w-full flex flex-col items-center justify-center h-24 text-2xl font-bold"
+            >
+                Multi
             </Button>
             <p className="text-xs uppercase text-center">
                 {t("home.play.colorTheme")}

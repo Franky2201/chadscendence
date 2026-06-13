@@ -10,6 +10,7 @@ import Admin from "./pages/Admin";
 import Banned from "./pages/Banned";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
+import Room from "./pages/Room";
 
 export const router = createBrowserRouter([
     {
@@ -55,6 +56,14 @@ export const router = createBrowserRouter([
             {
                 path: "banned",
                 element: <Banned />,
+            },
+                        {
+                path: "room",
+                element: <Room />,
+            },
+            {
+                path: "room/:code",
+                element: <Room />,
             },
         ],
     },
