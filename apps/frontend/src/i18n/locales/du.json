@@ -109,7 +109,21 @@
                 "allTime": "Altijd"
             },
             "achievements": {
-                "title": "Achievements"
+                "title": "Achievements",
+                "list": {
+                    "network": {
+                        "title": "Het Netwerk",
+                        "description": "Vrienden hebben"
+                    },
+                    "player": {
+                        "title": "Speler",
+                        "description": "Wedstrijden gespeeld hebben"
+                    },
+                    "winner": {
+                        "title": "Winnaar",
+                        "description": "Win minstens één spel"
+                    }
+                }
             }
         }
     },
