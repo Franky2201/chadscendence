@@ -128,11 +128,16 @@ export class SessionsService {
         const prompt = round.prompt ?? { kind: "action", prompt: "Play" };
         const payload = adapter.buildSubmitPayload(answer, prompt);
 
-        const result = await this.gamesService.sendCommand<unknown, unknown>(
-            gameId,
-            adapter.submitAnswerCommand,
-            payload,
-        );
+        let result: any;
+        try {
+            result = await this.gamesService.sendCommand<unknown, unknown>(
+                gameId,
+                adapter.submitAnswerCommand,
+                payload,
+            );
+        } catch {
+            result = { success: false, message: "Error from game" };
+        }
 
         const scoreObtained = adapter.extractScore(result);
         this.scoreAggregator.applyRoundScore(session, round, scoreObtained);
