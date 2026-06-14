@@ -15,6 +15,7 @@ import {
 import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
 import { extname, join } from "path";
+import { existsSync, mkdirSync } from "fs";
 import { UsersService } from "./users.service";
 import { JwtAuthGuard } from "../common/guards/jwt.guard";
 import { UpdateAdminUserDto, UpdateUserDto } from "./users.dto";
@@ -35,7 +36,17 @@ import type {
 
 const avatarUploadOptions = {
     storage: diskStorage({
-        destination: join(__dirname, "..", "..", "..", "uploads"),
+        destination: (
+            _req: Express.Request,
+            _file: Express.Multer.File,
+            cb: (err: Error | null, destination: string) => void,
+        ) => {
+            const uploadDir = join(process.cwd(), "uploads");
+            if (!existsSync(uploadDir)) {
+                mkdirSync(uploadDir, { recursive: true });
+            }
+            cb(null, uploadDir);
+        },
         filename: (
             _req: Express.Request,
             file: Express.Multer.File,

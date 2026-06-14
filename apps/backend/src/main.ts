@@ -6,7 +6,7 @@ import { ConfigService } from "@nestjs/config";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import { join } from "path";
-import { existsSync, readFileSync } from "fs";
+import { existsSync, mkdirSync, readFileSync } from "fs";
 import { SilentAuthFilter } from "./common/filters/silent-auth.filter";
 
 import { Response } from "express";
@@ -41,7 +41,11 @@ async function bootstrap() {
     );
     app.use(cookieParser());
 
-    const uploadsPath = join(__dirname, "..", "..", "uploads");
+    const uploadsPath = join(process.cwd(), "uploads");
+    if (!existsSync(uploadsPath)) {
+        console.log(`[Backend] Creating uploads directory at: ${uploadsPath}`);
+        mkdirSync(uploadsPath, { recursive: true });
+    }
     console.log(`[Backend] Serving static assets from: ${uploadsPath}`);
 
     app.useStaticAssets(uploadsPath, {

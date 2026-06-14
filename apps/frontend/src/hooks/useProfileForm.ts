@@ -64,8 +64,13 @@ export const useProfileForm = () => {
             setNewPassword("");
             setIsChangingPassword(false);
             toast.success(t("profilePage.successProfile"));
-        } catch {
-            toast.error(t("profilePage.errorProfile"));
+        } catch (err) {
+            const error = err as { response?: { status?: number } };
+            if (error.response?.status === 409) {
+                toast.error(t("profilePage.conflictUsername"));
+            } else {
+                toast.error(t("profilePage.errorProfile"));
+            }
         } finally {
             setIsSaving(false);
         }
