@@ -3,10 +3,15 @@ import eslint from "@eslint/js";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
 import globals from "globals";
 import tseslint from "typescript-eslint";
+import { fileURLToPath } from "node:url";
+import { dirname } from "node:path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 export default tseslint.config(
     {
-        ignores: ["eslint.config.mjs", "UI.template.tsx"],
+        ignores: ["dist/**", "eslint.config.mjs"],
     },
     eslint.configs.recommended,
     ...tseslint.configs.recommendedTypeChecked,
@@ -22,7 +27,7 @@ export default tseslint.config(
                 projectService: {
                     allowDefaultProject: ["*.config.*", "*.mjs"],
                 },
-                tsconfigRootDir: import.meta.dirname,
+                tsconfigRootDir: __dirname,
             },
         },
     },

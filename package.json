@@ -1,32 +1,32 @@
 {
-  "name": "chadscendence",
-  "private": true,
-  "workspaces": [
-    "apps/backend",
-    "apps/frontend",
-    "apps/games/*",
-    "libs/*"
-  ],
-  "scripts": {
-    "backend:dev": "npm run start:dev -w backend",
-    "frontend:dev": "npm run dev -w frontend",
-    "math:dev": "npm run start:dev -w math",
-    "build": "npm run build -ws",
-    "lint": "npm run lint -ws",
-    "test": "npm run test -ws",
-    "reaction-time:dev": "npm run start:dev -w reaction-time"
-  },
-  "dependencies": {
-    "react": "^19.2.6",
-    "react-dom": "^19.2.6",
-    "react-i18next": "^17.0.8",
-    "sonner": "^2.0.7"
-  },
-  "devDependencies": {
-    "@types/jest": "^30.0.0",
-    "@types/react": "^19.2.15",
-    "@types/react-dom": "^19.2.3",
-    "@types/react-i18next": "^7.8.3",
-    "typescript": "^6.0.3"
-  }
+    "name": "chadscendence",
+    "private": true,
+    "workspaces": [
+        "apps/backend",
+        "apps/frontend",
+        "apps/games/*",
+        "libs/*"
+    ],
+    "scripts": {
+        "backend:dev": "npm run start:dev -w backend",
+        "frontend:dev": "npm run dev -w frontend",
+        "math:dev": "npm run start:dev -w math",
+        "build": "npm run build -ws",
+        "lint": "npm run build -w @chad/types && npm run lint -ws",
+        "test": "npm run test -ws",
+        "reaction-time:dev": "npm run start:dev -w reaction-time"
+    },
+    "dependencies": {
+        "react": "^19.2.6",
+        "react-dom": "^19.2.6",
+        "react-i18next": "^17.0.8",
+        "sonner": "^2.0.7"
+    },
+    "devDependencies": {
+        "@types/jest": "^30.0.0",
+        "@types/react": "^19.2.15",
+        "@types/react-dom": "^19.2.3",
+        "@types/react-i18next": "^7.8.3",
+        "typescript": "^6.0.3"
+    }
 }
