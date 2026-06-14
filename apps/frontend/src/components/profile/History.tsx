@@ -91,7 +91,10 @@ export function History({ user }: HistoryProps) {
                             disabled={page === 0}
                             className="px-3 py-1 rounded-md text-sm select-none disabled:opacity-30 disabled:cursor-not-allowed hover:bg-white/10 transition-colors"
                         >
-                            {t("profilePage.statistics.gameHistory.previous", "⬅")}
+                            {t(
+                                "profilePage.statistics.gameHistory.previous",
+                                "⬅",
+                            )}
                         </button>
                         <span className="text-xs sm:text-sm text-white/70 select-none">
                             {page + 1} / {totalPages}

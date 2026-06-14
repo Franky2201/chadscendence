@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { checkAuthStatus, logout as logoutAuth } from "../services/auth";
 import type { User } from "@chad/types";
 import { socket } from "../services/socket";
+import { useCallback } from "react";
 
 interface AuthContextType {
     user: User | null;
@@ -21,20 +22,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
-    const refreshUser = async () => {
+    const login = (userData: User) => {
+        if (userData && userData.id && userData.username) {
+            setUser(userData);
+        }
+    };
+
+    const logout = useCallback(async () => {
+        try {
+            await logoutAuth();
+            setUser(null);
+        } catch (error) {
+            console.error("Erreur lors de la déconnexion", error);
+        }
+    }, []);
+
+    const refreshUser = useCallback(async () => {
         try {
             const data = await checkAuthStatus();
             if (data.isAuthenticated && data.user) {
                 setUser(data.user);
                 if (data.user.accountStatus === "banned") {
-                    // return ;
+                    await logout();
                     if (window.location.pathname !== "/banned") {
                         window.location.href = "/banned";
                     }
                     // // Stop socket if banned
                     // if (socket.connected)
                     //     socket.disconnect();
-                    logout();
                 } else if (!socket.connected) {
                     socket.connect();
                 }
@@ -46,7 +61,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             setUser(null);
             socket.disconnect();
         }
-    };
+    }, [logout]);
 
     useEffect(() => {
         socket.on("banned", () => {
@@ -72,22 +87,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         };
 
         void initAuth();
-    }, [t]);
-
-    const login = (userData: User) => {
-        if (userData && userData.id && userData.username) {
-            setUser(userData);
-        }
-    };
-
-    const logout = async () => {
-        try {
-            await logoutAuth();
-            setUser(null);
-        } catch (error) {
-            console.error("Erreur lors de la déconnexion", error);
-        }
-    };
+    }, [t, refreshUser]);
 
     return (
         <AuthContext.Provider
