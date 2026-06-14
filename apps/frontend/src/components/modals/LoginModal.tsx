@@ -24,6 +24,11 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        if (!identifier.trim() || !password.trim()) {
+            toast.error(t("home.identification.login.error"));
+            return;
+        }
+
         try {
             await loginAuth({ identifier, password });
             const userResponse = await getMe();
