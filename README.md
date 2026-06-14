@@ -64,7 +64,7 @@ This command will:
 **Access the application:**
 
 - Frontend: `https://localhost` (Nginx)
-- Backend API: `http://localhost:3000` (NestJS)
+- Backend API: `https://localhost:3000` (NestJS)
 
 ### Useful Commands
 
@@ -347,7 +347,12 @@ The following models exist in the application but are **not** persisted in the p
 - Supported debugging accross various application features.
 
 ### `gde-win`
-<!-- TODO -->
+- Architected the project and containerized backend, frontend, and microservices.
+- Developed a game microservice template and generation script (`generate-game.sh`), implemented a real-time game registry using Redis.
+- Developed the *ChadMathics* minigame.
+- Built the CI/CD pipeline
+- Wrote the Makefile for managing the project lifecycle (build, run, test, lint).
+- Resolved environment, build, lint issues along the project's development.
 
 ### `juhanse`
 - Developing standard and remote (OAuth 2.0) authentication with strict server-side and client-side validation.
