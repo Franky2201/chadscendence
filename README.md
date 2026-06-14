@@ -340,7 +340,11 @@ The following models exist in the application but are **not** persisted in the p
 <!-- TODO : Any challenge faced and how they were overcome -->
 
 ### `ade-woel`
-<!-- TODO -->
+- Built the profile page, including inline editing of username, biography, and avatar upload via file picker.
+- Implemented password management on the profile page.
+- Developed the admin user management dashboard, allowing administrators to edit user info (username, biography, avatar, rating) and ban users, gated by RBAC permissions.
+- Developed the *Fast and FurChad* minigame — a reaction time test with randomized signal delay, early-click detection, and performance scoring.
+- Supported debugging accross various application features.
 
 ### `gde-win`
 <!-- TODO -->
