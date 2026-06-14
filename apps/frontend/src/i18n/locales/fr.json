@@ -80,6 +80,7 @@
         "errorBothPasswords": "Veuillez remplir l'ancien ET le nouveau mot de passe.",
         "successProfile": "Profil mis à jour avec succès",
         "errorProfile": "Erreur lors de la mise à jour du profil",
+        "conflictUsername": "Ce nom d'utilisateur est déjà utilisé.",
         "successAvatar": "Avatar mis à jour avec succès",
         "errorAvatar": "Erreur lors de la mise à jour de l'avatar",
         "loading": "Chargement ...",

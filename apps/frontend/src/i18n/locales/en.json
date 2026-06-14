@@ -80,6 +80,7 @@
         "errorBothPasswords": "Please fill in both the old and new password.",
         "successProfile": "Profile updated successfully",
         "errorProfile": "Error updating profile",
+        "conflictUsername": "This username is already taken.",
         "successAvatar": "Avatar updated successfully",
         "errorAvatar": "Error updating avatar",
         "loading": "Loading ...",

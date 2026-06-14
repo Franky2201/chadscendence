@@ -80,6 +80,7 @@
         "errorBothPasswords": "Vul zowel het oude als het nieuwe wachtwoord in.",
         "successProfile": "Profiel succesvol bijgewerkt",
         "errorProfile": "Fout bij het bijwerken van profiel",
+        "conflictUsername": "Deze gebruikersnaam is al in gebruik.",
         "successAvatar": "Avatar succesvol bijgewerkt",
         "errorAvatar": "Fout bij het bijwerken van avatar",
         "loading": "Laden ...",
