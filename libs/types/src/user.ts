@@ -47,6 +47,7 @@ export interface User {
 
 export interface UpdateMePayload {
     username?: string;
+    email?: string;
     oldPassword?: string;
     password?: string;
     avatarUrl?: string;
@@ -55,6 +56,7 @@ export interface UpdateMePayload {
 
 export interface AdminUpdateDataPayload {
     username?: string;
+    email?: string;
     avatarUrl?: string;
     bio?: string | null;
     rating?: number;

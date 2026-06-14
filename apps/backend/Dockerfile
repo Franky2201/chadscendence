@@ -60,6 +60,7 @@ RUN mkdir -p /etc/backend/tls && chown -R nestjs:nodejs /etc/backend/tls
 USER nestjs
 
 # Copy artifacts from build stage with correct ownership
+COPY --from=build --chown=nestjs:nodejs /app/package*.json ./
 COPY --from=build --chown=nestjs:nodejs /app/node_modules ./node_modules
 COPY --from=build --chown=nestjs:nodejs /app/apps/backend/dist ./apps/backend/dist
 COPY --from=build --chown=nestjs:nodejs /app/apps/backend/package.json ./apps/backend/package.json

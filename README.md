@@ -6,36 +6,36 @@ _This project has been created as part of the 42 curriculum by ade-woel, gde-win
 
 - [Description](#description)
 - [Instruction](#instruction)
-	- [Prerequisites](#prerequisites)
-	- [Installation \& Execution](#installation--execution)
-	- [Useful Commands](#useful-commands)
-	- [Environment variables](#environment-variables)
+    - [Prerequisites](#prerequisites)
+    - [Installation \& Execution](#installation--execution)
+    - [Useful Commands](#useful-commands)
+    - [Environment variables](#environment-variables)
 - [Ressources](#ressources)
-	- [References](#references)
-	- [Usage of AI](#usage-of-ai)
+    - [References](#references)
+    - [Usage of AI](#usage-of-ai)
 - [Team information](#team-information)
 - [Project management](#project-management)
-	- [Development](#development)
-	- [Tools and infrastructure](#tools-and-infrastructure)
-	- [Communication channels](#communication-channels)
+    - [Development](#development)
+    - [Tools and infrastructure](#tools-and-infrastructure)
+    - [Communication channels](#communication-channels)
 - [Technical stack](#technical-stack)
 - [Database schema](#database-schema)
-	- [Entity-Relationship Diagram](#entity-relationship-diagram)
-	- [Transient Data (Non-DB)](#transient-data-non-db)
+    - [Entity-Relationship Diagram](#entity-relationship-diagram)
+    - [Transient Data (Non-DB)](#transient-data-non-db)
 - [Feature list](#feature-list)
 - [Modules](#modules)
 - [Individual contribution](#individual-contribution)
-	- [`ade-woel`](#ade-woel)
-	- [`gde-win`](#gde-win)
-	- [`juhanse`](#juhanse)
-	- [`mmichele`](#mmichele)
-	- [`sdemey`](#sdemey)
+    - [`ade-woel`](#ade-woel)
+    - [`gde-win`](#gde-win)
+    - [`juhanse`](#juhanse)
+    - [`mmichele`](#mmichele)
+    - [`sdemey`](#sdemey)
 
 ## Description
 
 <p align="center"><img src="apps/frontend/public/game_banner.png"/></p>
 
-**Who's the Chad ?** is an interactive social platform, that allows users to 
+**Who's the Chad ?** is an interactive social platform, that allows users to
 discuss and play primitive minigames, around knowledge and reflection.
 
 ## Instruction
@@ -65,14 +65,17 @@ This command will:
 
 - Frontend: `https://localhost:8443` (Nginx)
 - Backend API: `https://localhost:8443/api` (NestJS)
+- VPS hosted: `https://130.61.215.244:8443`
 
 ### Useful Commands
 
 | Command        | Description                              |
 | -------------- | ---------------------------------------- |
 | `make help`    | Show available commands.                 |
-| `make`         | Start the project (alias for `make up`). |
-| `make up`      | Start services in detached mode.         |
+| `make`         | Start the project in production mode.    |
+| `make prod`    | Alias for `make` (production mode).      |
+| `make dev`     | Start the project in development mode.   |
+| `make up`      | Start services in the current mode.      |
 | `make build`   | Build or rebuild images.                 |
 | `make down`    | Stop and remove containers.              |
 | `make start`   | Start stopped containers.                |
@@ -84,7 +87,6 @@ This command will:
 | `make fclean`  | Deep clean (removes images and volumes). |
 | `make sprune`  | Deep clean and system prune.             |
 | `make ci`      | Run local CI checks (lint, test, build). |
-
 
 ### Environment variables
 
@@ -270,47 +272,48 @@ The following models exist in the application but are **not** persisted in the p
 
 <!-- TODO -->
 
-| Role          | Feature                 | Details                                      | Contributors                               |
-| ------------- | ----------------------- | -------------------------------------------- | ------------------------------------------ |
-| Visitor       | Display language        | French                                       | [sdemey](#sdemey)                          |
-| Visitor       | Display language        | English                                      | [sdemey](#sdemey)                          |
-| Visitor       | Display language        | Dutch                                        | [sdemey](#sdemey)                          |
-| Visitor       | About page              | Explains project objectives and contributors | [mmichele](#mmichele), [sdemey](#sdemey)   |
-| Visitor       | Privacy Policy          | Explains privacy policy and terms of service | [sdemey](#sdemey)   |
-| Visitor       | Home page               |                                              | [mmichele](#mmichele)                      |
-| Visitor       | Register                | Create an account on the site                | [juhanse](#juhanse)                        |
-| Visitor       | Login                   | Sign in to the site                          | [juhanse](#juhanse)                        |
-| Visitor       | Authentication          | Login / Register with 42 OAuth               | [juhanse](#juhanse)                        |
-| Visitor       | Authentication          | Login / Register with GitHub OAuth           | [sdemey](#sdemey)                          |
-| Visitor       | Leaderboard             | View the global leaderboard                  | [mmichele](#mmichele)                      |
-| Visitor       | Theme                   | Change the website color theme               | [mmichele](#mmichele)                      |
-| User          | Social                  | See friends online in real time              | [juhanse](#juhanse)                        |
-| User          | Social                  | Send private messages to friends             | [juhanse](#juhanse)                        |
-| User          | Social                  | Search users and send friend requests        | [juhanse](#juhanse)                        |
-| User          | Minigame                | ChadMathics (speed math calculations)        | [gde-win](#gde-win)                        |
-| User          | Minigame                | Fast and FurChad (reaction time test)        | [ade-woel](#ade-woel)                      |
-| User          | Minigame                | Create a minigame sequence                   | [sdemey](#sdemey)                          |
-| User          | Ranking                 | Have a rank based on a rating                | [juhanse](#juhanse), [mmichele](#mmichele) |
-| User          | Profile                 | User information                             | [ade-woel](#ade-woel)                      |
-| User          | Profile                 | Game history                                 | [juhanse](#juhanse), [mmichele](#mmichele) |
-| User          | Profile                 | Game statistics                              | [juhanse](#juhanse), [mmichele](#mmichele) |
-| User          | Profile                 | Game statistics with filter presets          | [juhanse](#juhanse), [mmichele](#mmichele) |
-| User          | Profile                 | Achievements                                 | [juhanse](#juhanse), [mmichele](#mmichele) |
-| User          | Edit Profile            | Profile picture                              | [ade-woel](#ade-woel)                      |
-| User          | Edit Profile            | Username                                     | [ade-woel](#ade-woel)                      |
-| User          | Edit Profile            | Biography                                    | [ade-woel](#ade-woel)                      |
-| User          | Edit Profile            | Password                                     | [ade-woel](#ade-woel)                      |
-| User          | Profile                 | Visit other users profile                    | [juhanse](#juhanse)                        |
-| Administrator | User Management         | Edit username                                | [ade-woel](#ade-woel)                      |
-| Administrator | User Management         | Edit biography                               | [ade-woel](#ade-woel)                      |
-| Administrator | User Management         | Edit rating                                  | [ade-woel](#ade-woel)                      |
-| Administrator | User Management         | Edit profile picture                         | [ade-woel](#ade-woel)                      |
-| Administrator | User Management         | Ban a user                                   | [ade-woel](#ade-woel)                      |
-| Administrator | User Management         | Display all users                            | [juhanse](#juhanse)                        |
-| Administrator | User Management         | Filter user search results                   | [juhanse](#juhanse)                        |
-| Administrator | Roles & Permissions     | Create roles and associated permissions      | [juhanse](#juhanse)                        |
+| Role          | Feature             | Details                                      | Contributors                               |
+| ------------- | ------------------- | -------------------------------------------- | ------------------------------------------ |
+| Visitor       | Display language    | French                                       | [sdemey](#sdemey)                          |
+| Visitor       | Display language    | English                                      | [sdemey](#sdemey)                          |
+| Visitor       | Display language    | Dutch                                        | [sdemey](#sdemey)                          |
+| Visitor       | About page          | Explains project objectives and contributors | [mmichele](#mmichele), [sdemey](#sdemey)   |
+| Visitor       | Privacy Policy      | Explains privacy policy and terms of service | [sdemey](#sdemey)                          |
+| Visitor       | Home page           |                                              | [mmichele](#mmichele)                      |
+| Visitor       | Register            | Create an account on the site                | [juhanse](#juhanse)                        |
+| Visitor       | Login               | Sign in to the site                          | [juhanse](#juhanse)                        |
+| Visitor       | Authentication      | Login / Register with 42 OAuth               | [juhanse](#juhanse)                        |
+| Visitor       | Authentication      | Login / Register with GitHub OAuth           | [sdemey](#sdemey)                          |
+| Visitor       | Leaderboard         | View the global leaderboard                  | [mmichele](#mmichele)                      |
+| Visitor       | Theme               | Change the website color theme               | [mmichele](#mmichele)                      |
+| User          | Social              | See friends online in real time              | [juhanse](#juhanse)                        |
+| User          | Social              | Send private messages to friends             | [juhanse](#juhanse)                        |
+| User          | Social              | Search users and send friend requests        | [juhanse](#juhanse)                        |
+| User          | Minigame            | ChadMathics (speed math calculations)        | [gde-win](#gde-win)                        |
+| User          | Minigame            | Fast and FurChad (reaction time test)        | [ade-woel](#ade-woel)                      |
+| User          | Minigame            | Create a minigame sequence                   | [sdemey](#sdemey)                          |
+| User          | Ranking             | Have a rank based on a rating                | [juhanse](#juhanse), [mmichele](#mmichele) |
+| User          | Profile             | User information                             | [ade-woel](#ade-woel)                      |
+| User          | Profile             | Game history                                 | [juhanse](#juhanse), [mmichele](#mmichele) |
+| User          | Profile             | Game statistics                              | [juhanse](#juhanse), [mmichele](#mmichele) |
+| User          | Profile             | Game statistics with filter presets          | [juhanse](#juhanse), [mmichele](#mmichele) |
+| User          | Profile             | Achievements                                 | [juhanse](#juhanse), [mmichele](#mmichele) |
+| User          | Edit Profile        | Profile picture                              | [ade-woel](#ade-woel)                      |
+| User          | Edit Profile        | Username                                     | [ade-woel](#ade-woel)                      |
+| User          | Edit Profile        | Biography                                    | [ade-woel](#ade-woel)                      |
+| User          | Edit Profile        | Password                                     | [ade-woel](#ade-woel)                      |
+| User          | Profile             | Visit other users profile                    | [juhanse](#juhanse)                        |
+| Administrator | User Management     | Edit username                                | [ade-woel](#ade-woel)                      |
+| Administrator | User Management     | Edit biography                               | [ade-woel](#ade-woel)                      |
+| Administrator | User Management     | Edit rating                                  | [ade-woel](#ade-woel)                      |
+| Administrator | User Management     | Edit profile picture                         | [ade-woel](#ade-woel)                      |
+| Administrator | User Management     | Ban a user                                   | [ade-woel](#ade-woel)                      |
+| Administrator | User Management     | Display all users                            | [juhanse](#juhanse)                        |
+| Administrator | User Management     | Filter user search results                   | [juhanse](#juhanse)                        |
+| Administrator | Roles & Permissions | Create roles and associated permissions      | [juhanse](#juhanse)                        |
 
 ## Modules
+
 | Module                                                                                       | Points | Justifications                                                                                               | How it has been implemented                                                                                                                                                                                                                                                                                                                                                                                                                                                        | Contributors                                                                                              |
 | -------------------------------------------------------------------------------------------- | ------ | ------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
 | Use a framework for both the frontend and backend.                                           | Major  | Reduce development time, once the knowledge acquired and better architectural pattern.                       | With NPM inside the dockers.                                                                                                                                                                                                                                                                                                                                                                                                                                                       | [ade-woel](#ade-woel), [gde-win](#gde-win), [juhanse](#juhanse), [mmichele](#mmichele), [sdemey](#sdemey) |
@@ -325,7 +328,7 @@ The following models exist in the application but are **not** persisted in the p
 | Remote authentication with OAuth 2.0                                                         | Minor  | Third-party authentication for 42 users and GitHub users, improving user convenience through single sign-on. | OAuth 2.0 authentication is integrated with GitHub and 42. Users can securely sign in using third-party providers without creating a separate password for the platform. Integrated via Passport.js and external OAuth providers.                                                                                                                                                                                                                                                  | [juhanse](#juhanse), [sdemey](#sdemey)                                                                    |
 | Advanced permissions system                                                                  | Major  | Easy moderation / staff team management.                                                                     | A role-based access control system manages permissions for administrators and more. Access to features and moderation tools is restricted according to assigned roles.                                                                                                                                                                                                                                                                                                             | [ade-woel](#ade-woel), [juhanse](#juhanse)                                                                |
 | User activity analytics and insights dashboard                                               | Minor  | As a user, this is a great way to track progression and improve user retention.                              | [Charts](/apps/frontend/src/components/profile/stats/) are programmed in TypeScript using the Recharts library.                                                                                                                                                                                                                                                                                                                                                                    | [juhanse](#juhanse), [mmichele](#mmichele)                                                                |
-| A gamification system to reward users for their actions                                      | Minor  | Increase user engagement and motivation.                                                                     | Users are rewarded by gaining *aura* points, aka [rating](/apps/backend/src/rating/).                                                                                                                                                                                                                                                                                                                                                                                              | [juhanse](#juhanse), [mmichele](#mmichele), [sdemey](#sdemey)                                             |
+| A gamification system to reward users for their actions                                      | Minor  | Increase user engagement and motivation.                                                                     | Users are rewarded by gaining _aura_ points, aka [rating](/apps/backend/src/rating/).                                                                                                                                                                                                                                                                                                                                                                                              | [juhanse](#juhanse), [mmichele](#mmichele), [sdemey](#sdemey)                                             |
 | Backend as microservices                                                                     | Major  | Better scalability and management of unavailable services.                                                   | The backend is split into multiple independent services, for the games management. Services communicate through APIs while remaining deployable and scalable independently.                                                                                                                                                                                                                                                                                                        | [gde-win](#gde-win)                                                                                       |
 |                                                                                              |        |                                                                                                              |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |                                                                                                           |
 | **TOTAL** (14 or 19+)                                                                        | **20** |                                                                                                              |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |                                                                                                           |
@@ -340,28 +343,30 @@ The following models exist in the application but are **not** persisted in the p
 <!-- TODO : Any challenge faced and how they were overcome -->
 
 ### `ade-woel`
+
 - Built the profile page, including inline editing of username, biography, and avatar upload via file picker.
 - Implemented password management on the profile page.
 - Developed the admin user management dashboard, allowing administrators to edit user info (username, biography, avatar, rating) and ban users, gated by RBAC permissions.
-- Developed the *Fast and FurChad* minigame — a reaction time test with randomized signal delay, early-click detection, and performance scoring.
+- Developed the _Fast and FurChad_ minigame — a reaction time test with randomized signal delay, early-click detection, and performance scoring.
 - Supported debugging accross various application features.
 
 ### `gde-win`
+
 - Architected the project, containerized backend, frontend, and microservices, and set up dev and prod environments.
 - Developed a game microservice template and generation script (`generate-game.sh`), implemented a real-time game registry using Redis.
-- Developed the *ChadMathics* minigame.
+- Developed the _ChadMathics_ minigame.
 - Built the CI/CD pipeline
 - Wrote the Makefile for managing the project lifecycle (build, run, test, lint).
 - Resolved environment, build, lint issues along the project's development.
 
 ### `juhanse`
+
 - Developing standard and remote (OAuth 2.0) authentication with strict server-side and client-side validation.
 - Building the advanced user search functionality with dynamic filtering, sorting, and pagination.
 - Creating the advanced role-based access control (RBAC) and dynamic permissions management system.
 - Implementing the comprehensive game analytics module, including automated rating updates and CSV exports.
 - Integrating social features across the application, including the friendship system and connection statuses.
 - Implementing the complete authentication flow using JWT, secure HTTP-only cookies, and interactive frontend modals.
-
 
 ### `mmichele`
 
@@ -373,6 +378,7 @@ The following models exist in the application but are **not** persisted in the p
 - Being able to change website color theme.
 
 ### `sdemey`
+
 - Created the About, Privacy Policy, and Terms of Service pages
 - Implemented multilingual support in English, French, and Dutch
 - Integrated OAuth 2.0 authentication for GitHub users
