@@ -448,20 +448,22 @@
             "minor": "Nevenmodule"
         },
         "projectModules": [
-            "Gebruik een framework voor frontend en backend",
-            "Laat gebruikers met elkaar interageren",
+            "Een framework gebruiken voor zowel frontend als backend",
+            "Realtime functionaliteiten implementeren",
+            "Backend als microservices",
+            "Gebruikers met elkaar laten interageren",
             "Standaard gebruikersbeheer en authenticatie",
-            "Publieke API",
             "Geavanceerd machtigingssysteem",
-            "Gebruik een ORM for de database",
-            "Zelfgemaakt designsysteem met herbruikbare componenten",
+            "Een ORM gebruiken voor de database",
+            "Aangepast designsysteem met herbruikbare componenten",
             "Externe authenticatie via OAuth 2.0",
-            "Ondersteuning voor minstens 3 talen",
+            "Ondersteuning voor meerdere talen (minstens 3)",
             "Ondersteuning voor extra browsers",
-            "Spelstatistieken en matchgeschiedenis",
-            "Geavanceerde chatfuncties",
-            "Spelaanpassing",
-            "Gamificatiesysteem om gebruikers te belonen"
+            "Spelstatistieken en wedstrijdgeschiedenis",
+            "Geavanceerde chatfunctionaliteiten",
+            "Spelaanpassingen",
+            "Een gamificatiesysteem om gebruikers te belonen voor hun acties",
+            "Geavanceerde zoekfunctionaliteit"
         ]
     },
     "banned": {
