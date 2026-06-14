@@ -42,7 +42,7 @@ export function useRoom(code: string | undefined) {
 
     const isHost = room?.hostId === user?.id;
     const launchedAtRef = useRef<string | null>(
-        sessionStorage.getItem(`room_launched_${code}`) 
+        sessionStorage.getItem(`room_launched_${code}`),
     );
 
     const loadRoom = useCallback(
@@ -116,7 +116,6 @@ export function useRoom(code: string | undefined) {
         sessionStorage.setItem(`room_launched_${code}`, room.startedAt);
         void launchGame(room.selectedGames, room.repetitions);
     }, [room, launchGame]);
-
 
     const toggleGame = async (id: string) => {
         if (!room || room.hostId !== user?.id) return;

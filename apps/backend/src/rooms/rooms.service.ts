@@ -106,15 +106,11 @@ export class RoomsService {
         const room = this.getRoomOrThrow(code);
 
         if (room.hostId !== userId) {
-            throw new ForbiddenException(
-                "Seul l'hôte peut lancer la partie.",
-            );
+            throw new ForbiddenException("Seul l'hôte peut lancer la partie.");
         }
 
         if (selectedGames.length === 0) {
-            throw new ForbiddenException(
-                "Aucun mini-jeu sélectionné.",
-            );
+            throw new ForbiddenException("Aucun mini-jeu sélectionné.");
         }
 
         room.selectedGames = this.normalizeGames(selectedGames);

@@ -57,7 +57,7 @@ export const router = createBrowserRouter([
                 path: "banned",
                 element: <Banned />,
             },
-                        {
+            {
                 path: "room",
                 element: <Room />,
             },

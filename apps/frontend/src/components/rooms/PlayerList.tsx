@@ -19,8 +19,7 @@ export function PlayerList({ players, maxPlayers }: PlayerListProps) {
                     <p className="text-xs font-semibold uppercase tracking-widest mb-2">
                         {t("room.playerList.label")}
                     </p>
-                    <div className="text-sm">
-                    </div>
+                    <div className="text-sm"></div>
                 </div>
             </div>
 
@@ -63,8 +62,9 @@ export function PlayerList({ players, maxPlayers }: PlayerListProps) {
                                     </span>
                                 )}
                             </div>
-                            <span className="font-semibold text-sm">{player.score}</span>
-
+                            <span className="font-semibold text-sm">
+                                {player.score}
+                            </span>
                         </div>
                     </Badge>
                 ))}

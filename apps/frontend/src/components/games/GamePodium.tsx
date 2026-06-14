@@ -10,7 +10,11 @@ interface GamePodiumProps {
     hardRefresh?: boolean;
 }
 
-export function GamePodium({ session , returnTo = "/", hardRefresh = false}: GamePodiumProps) {
+export function GamePodium({
+    session,
+    returnTo = "/",
+    hardRefresh = false,
+}: GamePodiumProps) {
     const { t } = useTranslation();
     return (
         <>
@@ -46,7 +50,17 @@ export function GamePodium({ session , returnTo = "/", hardRefresh = false}: Gam
                 </div>
 
                 <Link to={returnTo}>
-                    <Button size="large" color="grey" onClick={hardRefresh ? () => { window.location.href = returnTo } : undefined}>
+                    <Button
+                        size="large"
+                        color="grey"
+                        onClick={
+                            hardRefresh
+                                ? () => {
+                                      window.location.href = returnTo;
+                                  }
+                                : undefined
+                        }
+                    >
                         {t("game.podium.back")}
                     </Button>
                 </Link>

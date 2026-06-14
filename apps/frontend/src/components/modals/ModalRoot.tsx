@@ -14,10 +14,7 @@ export default function ModalRoot() {
                 <LoginModal isOpen={true} onClose={closeModal} />
             )}
             {activeModal === "MULTI" && (
-                <MultiplayerModal
-                    isOpen={true}
-                    onClose={closeModal}
-                />
+                <MultiplayerModal isOpen={true} onClose={closeModal} />
             )}
             {activeModal === "REGISTER" && (
                 <RegisterModal

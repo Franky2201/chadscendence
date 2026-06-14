@@ -84,5 +84,4 @@ export class RoomsController {
     // heartBeat(@GetUser() user: JwtPayload, @Param("code") code: string) {
     //     return this.roomsService.heartbeat(code, user.sub)
     // }
-
 }

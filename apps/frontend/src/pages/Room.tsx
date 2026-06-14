@@ -122,8 +122,8 @@ export default function LobbyCreator() {
             case "podium":
                 return (
                     <Window>
-                        <GamePodium 
-                            session={session!} 
+                        <GamePodium
+                            session={session!}
                             returnTo={`/room/${code}`}
                             hardRefresh
                         />

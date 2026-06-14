@@ -11,10 +11,7 @@ interface LoginModalProps {
     onClose: () => void;
 }
 
-export default function MultiplayerModal({
-    isOpen,
-    onClose,
-}: LoginModalProps) {
+export default function MultiplayerModal({ isOpen, onClose }: LoginModalProps) {
     const { user } = useAuth();
     const { openModal } = useModal();
     const { theme } = useTheme();
@@ -26,7 +23,6 @@ export default function MultiplayerModal({
     const navigate = useNavigate();
 
     if (!isOpen) return null;
-
 
     const handleJoin = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -80,12 +76,11 @@ export default function MultiplayerModal({
     };
 
     return (
-    <div
-        className="fixed inset-0 z-50 flex items-center justify-center bg-black/70"
-        onClick={onClose}
-    >
-        <Card className="max-w-md w-full" title="Multijoueur"
+        <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70"
+            onClick={onClose}
         >
+            <Card className="max-w-md w-full" title="Multijoueur">
                 <form
                     className="flex flex-col gap-3 mb-2"
                     onSubmit={handleJoin}
@@ -98,15 +93,11 @@ export default function MultiplayerModal({
                         className="w-full"
                         required
                     />
-                    <Button
-                        color={theme}
-                        type="submit"
-                        disabled={isSubmitting}
-                    >
+                    <Button color={theme} type="submit" disabled={isSubmitting}>
                         Rejoindre la salle
                     </Button>
                 </form>
-                
+
                 <span className="flex justify-self-center mb-3 font-mona-sans-light text-sm text-white/50">
                     OR
                 </span>
@@ -121,7 +112,7 @@ export default function MultiplayerModal({
                         Créer une salle
                     </Button>
                 </div>
-        </Card>
-      </div>
-  );
+            </Card>
+        </div>
+    );
 }

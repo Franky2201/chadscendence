@@ -69,5 +69,5 @@ export const leaveRoom = async (code: string): Promise<{ message: string }> => {
 };
 
 export const heartbeatRoom = async (code: string): Promise<void> => {
-    await api.post(`/rooms/${code}/heartbeat`)
-}
+    await api.post(`/rooms/${code}/heartbeat`);
+};
