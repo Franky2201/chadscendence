@@ -5,9 +5,14 @@ import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
 import { defineConfig, globalIgnores } from "eslint/config";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
+import { fileURLToPath } from "node:url";
+import { dirname } from "node:path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 export default defineConfig([
-    globalIgnores(["dist"]),
+    globalIgnores(["dist/**"]),
     {
         files: ["**/*.{ts,tsx}"],
         extends: [
@@ -20,7 +25,7 @@ export default defineConfig([
             globals: globals.browser,
             parserOptions: {
                 projectService: true,
-                tsconfigRootDir: import.meta.dirname,
+                tsconfigRootDir: __dirname,
             },
         },
     },
