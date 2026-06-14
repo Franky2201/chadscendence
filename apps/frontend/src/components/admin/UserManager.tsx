@@ -8,6 +8,8 @@ import { useAuth } from "../../contexts/AuthContext";
 import { Link } from "react-router-dom";
 import type { Role } from "@chad/types";
 import { useTranslation } from "react-i18next";
+import { getItemColorStyle } from "../ui/unified";
+import { useTheme } from "../../contexts/ThemeContext";
 
 type ActiveModal =
     | { type: "edit"; user: UserListItem }
@@ -32,6 +34,7 @@ export default function UserManager({
     onBanUser,
 }: UserManagerProps) {
     const { t } = useTranslation();
+    const { theme } = useTheme();
     const { user: currentUser } = useAuth();
     const [searchQuery, setSearchQuery] = useState("");
     const [roleFilter, setRoleFilter] = useState("ALL");
@@ -65,17 +68,18 @@ export default function UserManager({
                 {t("admin.usersManager.title")}
             </Title>
 
-            <div className="flex flex-col md:flex-row items-stretch gap-4 w-full">
+            <div className="flex flex-col md:flex-row items-stretch gap-4 w-full items-center">
                 <Input
                     placeholder={t("admin.usersManager.search")}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="flex-1 !bg-white/10 !border-white/20 !text-white !text-left !font-normal placeholder:!text-white/40 !text-lg !py-3"
+                    size="large"
+                    className="flex-1 !bg-white/10 !border-white/20 !text-white !text-left !font-normal placeholder:!text-white/40 !text-lg"
                 />
                 <Select
+                    customSize="large"
                     value={roleFilter}
                     onChange={(e) => setRoleFilter(e.target.value)}
-                    className="flex-1 !bg-white/10 !border-white/20 !text-white !text-left !font-normal !text-lg !py-3 !px-3 !rounded-xl"
                 >
                     <option value="ALL" className="text-black">
                         {t("admin.usersManager.allRoles")}
@@ -93,12 +97,12 @@ export default function UserManager({
                     <Card
                         key={user.id}
                         className="w-full"
-                        contentClassName="w-full flex flex-row items-center justify-between"
+                        contentClassName="w-full flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
                     >
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-4 min-w-0">
                             <Link
                                 to={`/users/${user.username}`}
-                                className="relative group"
+                                className="relative group shrink-0"
                             >
                                 {user.avatarUrl ? (
                                     <img
@@ -107,23 +111,31 @@ export default function UserManager({
                                         className="w-12 h-12 rounded-full object-cover border-2 border-slate-600 transition-transform group-hover:scale-105"
                                     />
                                 ) : (
-                                    <div className="w-12 h-12 rounded-full bg-slate-600 flex items-center justify-center text-xl font-bold text-white transition-transform group-hover:scale-105">
+                                    <div className="w-12 h-12 rounded-full bg-slate-600 flex items-center justify-center text-xl font-bold text-white transition-transform group-hover:scale-105 shrink-0">
                                         {user.username[0].toUpperCase()}
                                     </div>
                                 )}
                             </Link>
-                            <div className="flex flex-col items-start gap-1">
-                                <Link to={`/users/${user.username}`}>
-                                    <span className="font-bold text-white text-lg hover:text-pink-400 transition-colors">
+                            <div className="flex flex-col items-start gap-1 min-w-0">
+                                <Link
+                                    to={`/users/${user.username}`}
+                                    className="max-w-full"
+                                >
+                                    <span
+                                        className="font-bold text-white text-lg hover:text-[var(--ui-color)] transition-colors break-all"
+                                        style={{ ...getItemColorStyle(theme) }}
+                                    >
                                         {user.username}
                                     </span>
                                 </Link>
                                 {user.role && (
-                                    <Badge color="blue">{user.role.name}</Badge>
+                                    <Badge color={theme}>
+                                        {user.role.name}
+                                    </Badge>
                                 )}
                             </div>
                         </div>
-                        <div className="flex flex-wrap items-center gap-4">
+                        <div className="flex flex-wrap items-center gap-3 sm:justify-end">
                             {canEditUser && currentUser?.id !== user.id && (
                                 <>
                                     <Select
@@ -134,7 +146,7 @@ export default function UserManager({
                                                 roleId,
                                             });
                                         }}
-                                        className="!bg-blue-500/20 !border-blue-500/50 hover:!bg-blue-500/30 text-blue-400 font-bold"
+                                        className="font-bold"
                                     >
                                         <option
                                             value=""
@@ -154,7 +166,7 @@ export default function UserManager({
                                         ))}
                                     </Select>
                                     <Button
-                                        color="blue"
+                                        color={theme}
                                         onClick={() =>
                                             setActiveModal({
                                                 type: "edit",

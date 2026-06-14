@@ -15,7 +15,7 @@
             "colorTheme": "Personnalisation"
         },
         "identification": {
-            "title": "Identification",
+            "title": "Compte",
             "login": {
                 "title": "Connexion",
                 "emailOrUsername": "Email ou nom d'utilisateur",
@@ -52,7 +52,7 @@
         "noResults": "Aucun joueur trouvé.",
         "message": "Votre message",
         "send": "Envoyer",
-        "remove": "Retirer",
+        "remove": "Retirer l'ami",
         "add": "Ajouter",
         "friend": "Ami",
         "pendingRequests": "Demandes en attente",
@@ -109,9 +109,30 @@
                 "allTime": "Toujours"
             },
             "achievements": {
-                "title": "Succès"
+                "title": "Succès",
+                "list": {
+                    "network": {
+                        "title": "Le Réseau",
+                        "description": "Avoir des amis"
+                    },
+                    "player": {
+                        "title": "Joueur",
+                        "description": "Avoir joué des parties"
+                    },
+                    "winner": {
+                        "title": "Vainqueur",
+                        "description": "Gagner au moins une partie"
+                    }
+                }
             }
         }
+    },
+    "auth": {
+        "title": "Identification",
+        "description": "Trouve d'autres Chads",
+        "login": "Connexion via 42",
+        "google": "Continuer avec Google",
+        "bannedError": "Vous ne pouvez pas vous connecter."
     },
     "admin": {
         "title": "Administration",
@@ -145,6 +166,7 @@
             "editModal": {
                 "title": "Modifier",
                 "avatar": "Avatar",
+                "modify": "Modifier",
                 "username": "Pseudo",
                 "bio": "Bio",
                 "rating": "Rating",
@@ -250,7 +272,7 @@
         "start": "Lancer la partie",
         "needMoreGames": "Sélectionnez au moins un jeu",
         "session": {
-            "loading": "PRÉPAREZ-VOUS",
+            "loading": "PRÉPARE-TOI",
             "next": "SUIVANT"
         },
         "podium": {

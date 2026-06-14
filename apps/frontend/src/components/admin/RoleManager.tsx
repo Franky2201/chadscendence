@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { Role, Permission } from "@chad/types";
 import { Card, Button, Input, Checkbox, Badge, Title } from "../ui";
 import { useTranslation } from "react-i18next";
+import { useTheme } from "../../contexts/ThemeContext";
 
 interface RoleManagerProps {
     roles: Role[];
@@ -19,6 +20,7 @@ export default function RoleManager({
     onDelete,
 }: RoleManagerProps) {
     const { t } = useTranslation();
+    const { theme } = useTheme();
     const [editingId, setEditingId] = useState<string | null>(null);
     const [editName, setEditName] = useState("");
     const [editPerms, setEditPerms] = useState<string[]>([]);
@@ -93,6 +95,7 @@ export default function RoleManager({
                                         {permissions.map((p) => (
                                             <Checkbox
                                                 key={p.id}
+                                                color={theme}
                                                 label={p.action}
                                                 checked={editPerms.includes(
                                                     p.action,
@@ -105,7 +108,7 @@ export default function RoleManager({
                                     </div>
                                     <div className="flex gap-4 w-full">
                                         <Button
-                                            color="pink"
+                                            color={theme}
                                             className="flex-1"
                                             onClick={submitEdit}
                                         >
@@ -126,7 +129,7 @@ export default function RoleManager({
                                         {role.permissions.map((p) => (
                                             <Badge
                                                 key={p.id}
-                                                color="pink"
+                                                color={theme}
                                                 color2="white"
                                             >
                                                 {p.action}
@@ -136,7 +139,7 @@ export default function RoleManager({
                                     {!isImmutable && (
                                         <div className="flex gap-4 w-full mt-2">
                                             <Button
-                                                color="blue"
+                                                color={theme}
                                                 className="flex-1"
                                                 onClick={() => startEdit(role)}
                                             >
@@ -161,62 +164,56 @@ export default function RoleManager({
             </div>
 
             {isCreating ? (
-                <Card className="w-full mt-4" color="pink">
-                    <div className="flex flex-col gap-4">
-                        <Title color="pink" className="text-xl">
-                            {t("admin.roles.newRole")}
-                        </Title>
-                        <Input
-                            placeholder={t("admin.roles.roleName")}
-                            value={newName}
-                            onChange={(e) => setNewName(e.target.value)}
-                            color="white"
-                            className="!text-left"
-                        />
-                        <div className="flex flex-wrap gap-2 mt-2">
-                            {permissions.map((p) => (
-                                <Checkbox
-                                    key={p.id}
-                                    label={p.action}
-                                    checked={newPerms.includes(p.action)}
-                                    onChange={() =>
-                                        setNewPerms((prev) =>
-                                            prev.includes(p.action)
-                                                ? prev.filter(
-                                                      (x) => x !== p.action,
-                                                  )
-                                                : [...prev, p.action],
-                                        )
-                                    }
-                                />
-                            ))}
-                        </div>
-                        <div className="flex gap-4 w-full mt-4">
-                            <Button
-                                color="pink"
-                                className="flex-1"
-                                onClick={submitCreate}
-                            >
-                                {t("admin.roles.create")}
-                            </Button>
-                            <Button
-                                color="grey"
-                                className="flex-1"
-                                onClick={() => {
-                                    setIsCreating(false);
-                                    setNewName("");
-                                    setNewPerms([]);
-                                }}
-                            >
-                                {t("admin.roles.cancel")}
-                            </Button>
-                        </div>
+                <Card title={t("admin.roles.newRole")} className="w-full mt-4">
+                    <Input
+                        placeholder={t("admin.roles.roleName")}
+                        value={newName}
+                        onChange={(e) => setNewName(e.target.value)}
+                        color="white"
+                        className="!text-left w-full mb-4"
+                    />
+                    <div className="flex flex-wrap gap-2">
+                        {permissions.map((p) => (
+                            <Checkbox
+                                key={p.id}
+                                color={theme}
+                                label={p.action}
+                                checked={newPerms.includes(p.action)}
+                                onChange={() =>
+                                    setNewPerms((prev) =>
+                                        prev.includes(p.action)
+                                            ? prev.filter((x) => x !== p.action)
+                                            : [...prev, p.action],
+                                    )
+                                }
+                            />
+                        ))}
+                    </div>
+                    <div className="flex gap-4 w-full mt-4">
+                        <Button
+                            color={theme}
+                            className="flex-1"
+                            onClick={submitCreate}
+                        >
+                            {t("admin.roles.create")}
+                        </Button>
+                        <Button
+                            color="grey"
+                            className="flex-1"
+                            onClick={() => {
+                                setIsCreating(false);
+                                setNewName("");
+                                setNewPerms([]);
+                            }}
+                        >
+                            {t("admin.roles.cancel")}
+                        </Button>
                     </div>
                 </Card>
             ) : (
                 <div className="flex justify-center mt-6 w-full">
                     <Button
-                        color="pink"
+                        color={theme}
                         size="large"
                         className="w-full"
                         onClick={() => setIsCreating(true)}

@@ -25,9 +25,11 @@ export default function RegisterModal({ isOpen, onClose }: RegisterModalProps) {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Basic frontend validation
-        if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-            toast.error(t("home.identification.register.invalidEmail"));
+        const genericErrorMsg = t("home.identification.register.error");
+
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!email.match(emailRegex)) {
+            toast.error(genericErrorMsg);
             return;
         }
 
@@ -35,38 +37,22 @@ export default function RegisterModal({ isOpen, onClose }: RegisterModalProps) {
             !password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/) ||
             password.length < 8
         ) {
-            toast.error(t("home.identification.register.weakPassword"));
+            toast.error(genericErrorMsg);
             return;
         }
 
         try {
-            const response = (await register({
+            await register({
                 email,
                 username,
                 password,
-            })) as { success: boolean; message?: string };
-
-            if (response.success === false) {
-                const message = response.message || "";
-                if (message.toLowerCase().includes("email")) {
-                    toast.error(
-                        t("home.identification.register.conflictEmail"),
-                    );
-                } else if (message.toLowerCase().includes("username")) {
-                    toast.error(
-                        t("home.identification.register.conflictUsername"),
-                    );
-                } else {
-                    toast.error(t("home.identification.register.error"));
-                }
-                return;
-            }
+            });
 
             const userResponse = await getMe();
             login(userResponse);
             onClose();
         } catch {
-            toast.error(t("home.identification.register.error"));
+            toast.error(genericErrorMsg);
         }
     };
 

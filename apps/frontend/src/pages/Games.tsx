@@ -51,7 +51,7 @@ export default function SoloGamePage() {
                 return (
                     <div className="flex flex-col items-center justify-center min-h-[50vh] text-white">
                         <h1 className="text-6xl font-bold animate-bounce text-yellow-400">
-                            {t("game.session.loading")} !
+                            {t("game.session.loading")}...
                         </h1>
                     </div>
                 );

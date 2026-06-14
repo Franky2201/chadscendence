@@ -15,7 +15,7 @@
             "colorTheme": "Customization"
         },
         "identification": {
-            "title": "Identification",
+            "title": "Account",
             "login": {
                 "title": "Login",
                 "emailOrUsername": "Email or username",
@@ -52,7 +52,7 @@
         "noResults": "No player found.",
         "message": "Your message",
         "send": "Send",
-        "remove": "Remove",
+        "remove": "Remove friend",
         "add": "Add",
         "friend": "Friend",
         "pendingRequests": "Pending requests",
@@ -109,7 +109,21 @@
                 "allTime": "All Time"
             },
             "achievements": {
-                "title": "Achievements"
+                "title": "Achievements",
+                "list": {
+                    "network": {
+                        "title": "The Network",
+                        "description": "Have friends"
+                    },
+                    "player": {
+                        "title": "Player",
+                        "description": "Have played games"
+                    },
+                    "winner": {
+                        "title": "Winner",
+                        "description": "Win at least one game"
+                    }
+                }
             }
         }
     },
@@ -139,12 +153,13 @@
             "allRoles": "All roles",
             "noPlayers": "No player found.",
             "selectRole": "Select a role",
-            "modify": "Edit",
+            "modify": "Modify",
             "unban": "Unban",
             "ban": "Ban",
             "editModal": {
                 "title": "Edit",
                 "avatar": "Avatar",
+                "modify": "Change",
                 "username": "Username",
                 "bio": "Bio",
                 "rating": "Rating",
@@ -452,5 +467,8 @@
     "banned": {
         "title": "Account Banned",
         "message": "You have been banned."
+    },
+    "auth": {
+        "bannedError": "You cannot log in."
     }
 }
