@@ -28,6 +28,9 @@ export default function MathGameUI() {
                     <form
                         onSubmit={(e) => {
                             e.preventDefault();
+                            if (!answer.trim() || isNaN(parseInt(answer, 10)))
+                                return;
+
                             void submitAnswer({
                                 id: problem.id,
                                 answer: parseInt(answer, 10),

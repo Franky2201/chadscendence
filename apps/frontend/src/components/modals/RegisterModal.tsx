@@ -27,6 +27,11 @@ export default function RegisterModal({ isOpen, onClose }: RegisterModalProps) {
 
         const genericErrorMsg = t("home.identification.register.error");
 
+        if (!username.trim() || username.trim().length < 3) {
+            toast.error(genericErrorMsg);
+            return;
+        }
+
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         if (!email.match(emailRegex)) {
             toast.error(t("home.identification.register.invalidEmail"));

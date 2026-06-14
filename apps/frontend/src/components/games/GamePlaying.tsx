@@ -23,6 +23,12 @@ export function GamePlaying({ prompt, timeLeft, onSubmit }: GamePlayingProps) {
         e?.preventDefault();
         if (status !== "playing") return;
 
+        if (!answer.trim()) return;
+
+        if (prompt.kind === "number" && isNaN(Number(answer))) {
+            return;
+        }
+
         const finalAnswer =
             prompt.kind === "number"
                 ? Number(answer)

@@ -456,20 +456,22 @@
             "minor": "Mineur"
         },
         "projectModules": [
-            "Utilisation d'un framework pour le frontend et le backend",
-            "Permettre aux utilisateurs d'interagir entre eux",
-            "Gestion standard des utilisateurs et authentification",
-            "API publique",
+            "Utiliser un framework pour le frontend et le backend",
+            "Implémenter des fonctionnalités en temps réel",
+            "Backend sous forme de microservices",
+            "Permettre aux utilisateurs d’interagir entre eux",
+            "Gestion des utilisateurs et authentification standard",
             "Système avancé de gestion des permissions",
-            "Utilisation d'un ORM pour la base de données",
-            "Système de design personnalisé avec composants réutilisables",
+            "Utiliser un ORM pour la base de données",
+            "Système de design personnalisé avec des composants réutilisables",
             "Authentification distante via OAuth 2.0",
             "Prise en charge de plusieurs langues (au moins 3)",
-            "Compatibilité avec des navigateurs supplémentaires",
-            "Statistiques de jeu et historique des parties",
+            "Prise en charge de navigateurs supplémentaires",
+            "Statistiques de jeu et historique des matchs",
             "Fonctionnalités de chat avancées",
             "Personnalisation du jeu",
-            "Système de gamification récompensant les actions des utilisateurs"
+            "Système de gamification pour récompenser les utilisateurs pour leurs actions",
+            "Fonctionnalité de recherche avancée"
         ]
     },
     "banned": {
