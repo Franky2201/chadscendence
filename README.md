@@ -347,7 +347,7 @@ The following models exist in the application but are **not** persisted in the p
 - Supported debugging accross various application features.
 
 ### `gde-win`
-- Architected the project and containerized backend, frontend, and microservices.
+- Architected the project, containerized backend, frontend, and microservices, and set up dev and prod environments.
 - Developed a game microservice template and generation script (`generate-game.sh`), implemented a real-time game registry using Redis.
 - Developed the *ChadMathics* minigame.
 - Built the CI/CD pipeline
