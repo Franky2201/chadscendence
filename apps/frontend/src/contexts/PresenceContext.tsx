@@ -7,6 +7,7 @@ import {
 } from "react";
 import { useAuth } from "./AuthContext";
 import { socket } from "../services/socket";
+import { stopCoverageInsideWorker } from "vitest/internal/browser";
 
 interface PresenceContextType {
     onlineUsers: Record<string, "online" | "offline">;
@@ -25,7 +26,8 @@ export function PresenceProvider({ children }: { children: ReactNode }) {
 
     useEffect(() => {
         if (!user) {
-            socket.disconnect();
+            if (socket.connected)
+                socket.disconnect();
             return;
         }
 

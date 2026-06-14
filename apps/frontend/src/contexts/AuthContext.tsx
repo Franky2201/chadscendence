@@ -27,12 +27,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             if (data.isAuthenticated && data.user) {
                 setUser(data.user);
                 if (data.user.accountStatus === "banned") {
+                    // return ;
                     if (window.location.pathname !== "/banned") {
                         window.location.href = "/banned";
                     }
-                    // Stop socket if banned
-                    if (socket.connected)
-                        socket.disconnect();
+                    // // Stop socket if banned
+                    // if (socket.connected)
+                    //     socket.disconnect();
+                    logout();
                 } else if (!socket.connected) {
                     socket.connect();
                 }
