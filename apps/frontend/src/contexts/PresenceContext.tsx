@@ -25,7 +25,7 @@ export function PresenceProvider({ children }: { children: ReactNode }) {
 
     useEffect(() => {
         if (!user) {
-            socket.disconnect();
+            if (socket.connected) socket.disconnect();
             return;
         }
 
