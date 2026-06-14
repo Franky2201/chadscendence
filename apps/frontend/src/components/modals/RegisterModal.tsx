@@ -29,7 +29,7 @@ export default function RegisterModal({ isOpen, onClose }: RegisterModalProps) {
 
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         if (!email.match(emailRegex)) {
-            toast.error(genericErrorMsg);
+            toast.error(t("home.identification.register.invalidEmail"));
             return;
         }
 
@@ -37,22 +37,49 @@ export default function RegisterModal({ isOpen, onClose }: RegisterModalProps) {
             !password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/) ||
             password.length < 8
         ) {
-            toast.error(genericErrorMsg);
+            toast.error(t("home.identification.register.weakPassword"));
             return;
         }
 
         try {
-            await register({
+            const response = await register({
                 email,
                 username,
                 password,
             });
 
-            const userResponse = await getMe();
-            login(userResponse);
-            onClose();
-        } catch {
-            toast.error(genericErrorMsg);
+            if (response.success) {
+                const userResponse = await getMe();
+                login(userResponse);
+                onClose();
+            } else {
+                if (response.message === "Email already exists") {
+                    toast.error(
+                        t("home.identification.register.conflictEmail"),
+                    );
+                } else if (response.message === "Username already exists") {
+                    toast.error(
+                        t("home.identification.register.conflictUsername"),
+                    );
+                } else {
+                    toast.error(genericErrorMsg);
+                }
+            }
+        } catch (err) {
+            const error = err as {
+                response?: { data?: { message?: string | string[] } };
+            };
+            const message = error.response?.data?.message;
+            if (message === "Email already exists") {
+                toast.error(t("home.identification.register.conflictEmail"));
+            } else if (message === "Username already exists") {
+                toast.error(t("home.identification.register.conflictUsername"));
+            } else if (Array.isArray(message)) {
+                // Handle validation pipe errors
+                toast.error(message[0]);
+            } else {
+                toast.error(genericErrorMsg);
+            }
         }
     };
 
