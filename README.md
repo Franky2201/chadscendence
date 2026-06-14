@@ -59,12 +59,12 @@ This command will:
 
 1. Copy `.env.example` to `.env` if it doesn't exist.
 2. Build the Docker images.
-3. Start the application in a development environment with hot-reloading (via bind mounts).
+3. Start the application.
 
 **Access the application:**
 
-- Frontend: `https://localhost` (Nginx)
-- Backend API: `https://localhost:3000` (NestJS)
+- Frontend: `https://localhost:8443` (Nginx)
+- Backend API: `https://localhost:8443/api` (NestJS)
 
 ### Useful Commands
 

@@ -6,6 +6,7 @@ BACKEND_UPLOADS_PATH ?= ./apps/backend/uploads
 
 export COMPOSE_BAKE := true
 export DOCKER_BUILDKIT := 1
+export BUILD_TARGET := final
 
 GREEN    := \033[0;32m
 RED      := \033[0;31m
@@ -47,9 +48,9 @@ check:
 build: check
 	@$(COMPOSE) build
 
-# Production target: Start services with BUILD_TARGET=final
-prod: export BUILD_TARGET=final
-prod: up
+# development target: Start services with BUILD_TARGET=development
+dev: export BUILD_TARGET=development
+dev: up
 
 # Start services in detached mode with hot-reloading (Bind Volumes)
 up: check
