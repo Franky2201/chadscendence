@@ -53,7 +53,9 @@ export function useGameSession() {
         currentSession: GameSession,
         roundIndex: number,
     ) => {
-        setViewState("loading_next");
+        if (viewState !== "inter_round" && viewState !== "preparing") {
+            setViewState("loading_next");
+        }
         try {
             const { session: updatedSession, duration } = await startRound(
                 currentSession.id,
