@@ -56,7 +56,7 @@ const About: React.FC = () => {
         t("about.projectModules", { returnObjects: true }) as string[]
     ).map((name, index) => ({
         name,
-        type: index < 5 ? "Major" : "Minor",
+        type: index < 6 ? "Major" : "Minor",
     }));
 
     if (isLoading)

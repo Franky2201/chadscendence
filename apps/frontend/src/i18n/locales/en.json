@@ -449,9 +449,10 @@
         },
         "projectModules": [
             "Use a framework for both frontend and backend",
+            "Implement real-time features",
+            "Backend as microservices",
             "Allow users to interact with other users",
             "Standard user management and authentication",
-            "Public API",
             "Advanced permissions system",
             "Use an ORM for the database",
             "Custom-made design system with reusable components",
@@ -461,7 +462,8 @@
             "Game statistics and match history",
             "Advanced chat features",
             "Game customization",
-            "A gamification system to reward users for their actions"
+            "A gamification system to reward users for their actions",
+            "Advanced search functionality"
         ]
     },
     "banned": {
