@@ -6,17 +6,28 @@
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
+            rel="preload"
+            as="style"
+            href="https://fonts.googleapis.com/css2?family=Mona+Sans:ital,wght@0,200..900;1,200..900&display=swap"
+        />
+        <link
             href="https://fonts.googleapis.com/css2?family=Mona+Sans:ital,wght@0,200..900;1,200..900&display=swap"
             rel="stylesheet"
+            media="print"
+            onload="this.media='all'"
         />
+        <noscript>
+            <link
+                href="https://fonts.googleapis.com/css2?family=Mona+Sans:ital,wght@0,200..900;1,200..900&display=swap"
+                rel="stylesheet"
+            />
+        </noscript>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Who's the Chad ?</title>
         <script>
             (function () {
-                try {
-                    var theme = localStorage.getItem("theme") || "grey";
-                    document.documentElement.dataset.theme = theme;
-                } catch (e) {}
+                var theme = localStorage.getItem("theme") || "grey";
+                document.documentElement.setAttribute("data-theme", theme);
             })();
         </script>
     </head>

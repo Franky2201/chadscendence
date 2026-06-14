@@ -103,8 +103,31 @@ export class UsersService implements OnModuleInit {
     }
 
     async updateUser(id: string, updateUserDto: UpdateUserDto) {
-        const { password, oldPassword, ...rest } = updateUserDto;
+        const { password, oldPassword, username, email, ...rest } =
+            updateUserDto;
         const dataToUpdate: Partial<User> = { ...rest };
+
+        if (username) {
+            const existingUsername = await this.userRepository.findOne({
+                where: { username },
+            });
+            if (existingUsername && existingUsername.id !== id) {
+                throw new ConflictException("This username is already taken.");
+            }
+            dataToUpdate.username = username;
+        }
+
+        if (email) {
+            const existingEmail = await this.userRepository.findOne({
+                where: { email },
+            });
+            if (existingEmail && existingEmail.id !== id) {
+                throw new ConflictException(
+                    "This email address is already taken.",
+                );
+            }
+            dataToUpdate.email = email;
+        }
 
         if ("bio" in updateUserDto) {
             dataToUpdate.bio = updateUserDto.bio;

@@ -8,6 +8,10 @@ export class UpdateUserDto implements UpdateMePayload {
 
     @IsString()
     @IsOptional()
+    email?: string;
+
+    @IsString()
+    @IsOptional()
     oldPassword?: string;
 
     @IsString()
@@ -28,6 +32,10 @@ export class UpdateAdminUserDto implements AdminUpdateDataPayload {
     @IsString()
     @IsOptional()
     username?: string;
+
+    @IsString()
+    @IsOptional()
+    email?: string;
 
     @IsString()
     @IsOptional()

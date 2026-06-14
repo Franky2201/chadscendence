@@ -47,9 +47,7 @@ services:
         build:
             context: .
             dockerfile: apps/backend/Dockerfile
-            #change target from development to final for production build
-            target: ${BUILD_TARGET:-development}
-            #target: final
+            target: ${BUILD_TARGET:-final}
             args:
                 DOMAIN_NAME: ${DOMAIN_NAME}
         env_file: .env
@@ -76,9 +74,7 @@ services:
         build:
             context: .
             dockerfile: apps/frontend/Dockerfile
-            #change target from development to final for production build
-            target: ${BUILD_TARGET:-development}
-            #target: final
+            target: ${BUILD_TARGET:-final}
             args:
                 DOMAIN_NAME: ${DOMAIN_NAME}
         env_file: .env

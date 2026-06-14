@@ -15,10 +15,10 @@ export class SilentAuthFilter implements ExceptionFilter {
         const status = Number(exception.getStatus());
         const msg: unknown = exception.getResponse();
 
-        // If it's a 401 or 403, return 200 but with the error info
+        // If it's a 401, 403 or 409, return 200 but with the error info
         // This avoids red console logs in the browser while letting the frontend know what happened.
-        if (status === 401 || status === 403) {
-            let message = "Unauthorized";
+        if (status === 401 || status === 403 || status === 409) {
+            let message = "Error";
 
             if (typeof msg === "string") {
                 message = msg;

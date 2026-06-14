@@ -12,7 +12,8 @@ api.interceptors.response.use(
             response.data &&
             response.data.error === true &&
             (response.data.statusCode === 401 ||
-                response.data.statusCode === 403)
+                response.data.statusCode === 403 ||
+                response.data.statusCode === 409)
         ) {
             const status = response.data.statusCode;
             const message = response.data.message?.toLowerCase() || "";

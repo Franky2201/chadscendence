@@ -6,17 +6,19 @@ BACKEND_UPLOADS_PATH ?= ./apps/backend/uploads
 
 export COMPOSE_BAKE := true
 export DOCKER_BUILDKIT := 1
+export BUILD_TARGET := final
 
 GREEN    := \033[0;32m
 RED      := \033[0;31m
 NO_COLOR := \033[0m
 
-all: up
+all: prod
 
 help:
 	@printf "$(GREEN)Available targets:$(NO_COLOR)\n"
-	@printf "  all (default)  Start the project in development mode\n"
-	@printf "  prod           Start the project in production mode (Nginx, relative paths)\n"
+	@printf "  all (default)  Start the project in production mode\n"
+	@printf "  dev            Start the project in development mode\n"
+	@printf "  prod           Start the project in production mode\n"
 	@printf "  up             Start services (detached)\n"
 	@printf "  build          Build or rebuild images\n"
 	@printf "  down           Stop and remove containers\n"
@@ -47,13 +49,17 @@ check:
 build: check
 	@$(COMPOSE) build
 
-# Production target: Start services with BUILD_TARGET=final
+# development target: Start services with BUILD_TARGET=development
+dev: export BUILD_TARGET=development
+dev: up
+
+# production target: Start services with BUILD_TARGET=final
 prod: export BUILD_TARGET=final
 prod: up
 
 # Start services in detached mode with hot-reloading (Bind Volumes)
 up: check
-	@printf "$(GREEN)Starting services (Mode: $${BUILD_TARGET:-development})...$(NO_COLOR)\n"
+	@printf "$(GREEN)Starting services (Mode: $${BUILD_TARGET})...$(NO_COLOR)\n"
 	@$(COMPOSE) up -d --remove-orphans --build
 	@printf "$(GREEN)Services started. Use 'make logs' to follow output or 'make down' to stop.$(NO_COLOR)\n"
 
@@ -92,6 +98,7 @@ sprune: fclean
 
 re: fclean all
 
+ci: export BUILD_TARGET=development
 ci: check
 	@printf "$(GREEN)--- Local CI ---$(NO_COLOR)\n"
 	@printf "$(GREEN)Step 1: Docker Build & Up$(NO_COLOR)\n"
