@@ -48,7 +48,7 @@ export default function ChatPanel() {
 
     const handleSend = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!inputValue.trim()) return;
+        if (!inputValue.trim() || inputValue.length > 500) return;
         const content = inputValue;
         setInputValue("");
         await sendMessage(content);
