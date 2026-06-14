@@ -15,17 +15,20 @@ export default defineConfig({
         },
         proxy: {
             "/api": {
-                target: "http://backend:3000",
+                target: "https://backend:3000",
+                secure: false,
                 changeOrigin: true,
                 rewrite: (path) => path.replace(/^\/api/, ""),
             },
             "/socket.io": {
-                target: "http://backend:3000",
+                target: "https://backend:3000",
                 ws: true,
+                secure: false,
                 changeOrigin: true,
             },
             "/uploads": {
-                target: "http://backend:3000",
+                target: "https://backend:3000",
+                secure: false,
                 changeOrigin: true,
             },
         },

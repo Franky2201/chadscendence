@@ -6,12 +6,31 @@ import { ConfigService } from "@nestjs/config";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import { join } from "path";
+import { existsSync, readFileSync } from "fs";
 import { SilentAuthFilter } from "./common/filters/silent-auth.filter";
 
 import { Response } from "express";
 
 async function bootstrap() {
-    const app = await NestFactory.create<NestExpressApplication>(AppModule);
+    const certPath = "/etc/backend/tls/server.crt";
+    const keyPath = "/etc/backend/tls/server.key";
+
+    let httpsOptions: { cert: Buffer; key: Buffer } | undefined = undefined;
+    if (existsSync(certPath) && existsSync(keyPath)) {
+        httpsOptions = {
+            cert: readFileSync(certPath),
+            key: readFileSync(keyPath),
+        };
+        console.log("[Backend] HTTPS enabled");
+    } else {
+        console.warn(
+            "[Backend] HTTPS certificates not found, falling back to HTTP",
+        );
+    }
+
+    const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+        httpsOptions,
+    });
 
     app.useGlobalFilters(new SilentAuthFilter());
     app.use(
