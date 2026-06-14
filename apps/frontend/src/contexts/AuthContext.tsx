@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 import { checkAuthStatus, logout as logoutAuth } from "../services/auth";
 import type { User } from "@chad/types";
 import { socket } from "../services/socket";
-import { stopCoverageInsideWorker } from "vitest/internal/browser";
 
 interface AuthContextType {
     user: User | null;
