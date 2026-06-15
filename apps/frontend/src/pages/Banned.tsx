@@ -11,7 +11,7 @@ export default function Banned() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (user && user.accountStatus !== "banned") {
+        if (!user || user.accountStatus !== "banned") {
             navigate("/");
         }
     }, [user, navigate]);
