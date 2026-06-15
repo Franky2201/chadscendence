@@ -21,11 +21,6 @@ async function bootstrap() {
             cert: readFileSync(certPath),
             key: readFileSync(keyPath),
         };
-        console.log("[Backend] HTTPS enabled");
-    } else {
-        console.warn(
-            "[Backend] HTTPS certificates not found, falling back to HTTP",
-        );
     }
 
     const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -43,10 +38,8 @@ async function bootstrap() {
 
     const uploadsPath = join(process.cwd(), "uploads");
     if (!existsSync(uploadsPath)) {
-        console.log(`[Backend] Creating uploads directory at: ${uploadsPath}`);
         mkdirSync(uploadsPath, { recursive: true });
     }
-    console.log(`[Backend] Serving static assets from: ${uploadsPath}`);
 
     app.useStaticAssets(uploadsPath, {
         prefix: "/uploads",
