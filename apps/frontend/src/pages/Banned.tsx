@@ -6,15 +6,17 @@ import { useNavigate } from "react-router-dom";
 import LanguageSwitcher from "../components/LanguageSwitcher";
 
 export default function Banned() {
-    const { user, logout } = useAuth();
+    const { user, logout, isLoading } = useAuth();
     const { t } = useTranslation();
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!user || user.accountStatus !== "banned") {
-            navigate("/");
+        if (!isLoading) {
+            if (!user || user.accountStatus !== "banned") {
+                navigate("/");
+            }
         }
-    }, [user, navigate]);
+    }, [user, isLoading, navigate]);
 
     const handleLogout = async () => {
         await logout();
