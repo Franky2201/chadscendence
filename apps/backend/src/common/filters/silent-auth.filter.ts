@@ -7,34 +7,35 @@ import {
 } from "@nestjs/common";
 import { Response } from "express";
 
-@Catch(HttpException)
+@Catch()
 export class SilentAuthFilter implements ExceptionFilter {
-    catch(exception: HttpException, host: ArgumentsHost) {
+    catch(exception: unknown, host: ArgumentsHost) {
         const ctx = host.switchToHttp();
         const response = ctx.getResponse<Response>();
-        const status = Number(exception.getStatus());
-        const msg: unknown = exception.getResponse();
 
-        // If it's a 401, 403 or 409, return 200 but with the error info
-        // This avoids red console logs in the browser while letting the frontend know what happened.
-        if (status === 401 || status === 403 || status === 409) {
-            let message = "Error";
+        let status = HttpStatus.INTERNAL_SERVER_ERROR;
+        let message = "Internal Server Error";
 
-            if (typeof msg === "string") {
-                message = msg;
-            } else if (this.isMessageObject(msg)) {
-                message = String(msg.message);
+        if (exception instanceof HttpException) {
+            status = exception.getStatus();
+            const res = exception.getResponse();
+            if (typeof res === "string") {
+                message = res;
+            } else if (this.isMessageObject(res)) {
+                message = String(res.message);
             }
-
-            return response.status(HttpStatus.OK).json({
-                success: false,
-                statusCode: status,
-                message,
-                error: true,
-            });
+        } else if (exception instanceof Error) {
+            message = exception.message;
         }
 
-        response.status(status).json(msg);
+        // Return 200 but with the error info
+        // This avoids red console logs in the browser while letting the frontend know what happened.
+        return response.status(HttpStatus.OK).json({
+            success: false,
+            statusCode: status,
+            message,
+            error: true,
+        });
     }
 
     private isMessageObject(obj: unknown): obj is { message: unknown } {
