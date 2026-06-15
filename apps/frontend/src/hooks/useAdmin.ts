@@ -133,9 +133,20 @@ export const useAdmin = (
 
             setUsers((prev) => prev.map((u) => (u.id === id ? updated : u)));
             toast.success(t("admin.notification.profileUpdated"));
-        } catch {
-            toast.error(t("admin.notification.updateProfileError"));
-            throw new Error("Update failed");
+        } catch (err: unknown) {
+            const error = err as {
+                response?: { data?: { message?: string }; status?: number };
+            };
+            let message =
+                error?.response?.data?.message ||
+                t("admin.notification.updateProfileError");
+
+            if (error?.response?.status === 409) {
+                message = t("home.identification.register.conflictUsername");
+            }
+
+            toast.error(message);
+            throw new Error("Update failed", { cause: err });
         }
     };
 
