@@ -33,7 +33,6 @@ export class RanksService implements OnModuleInit {
         ];
 
         await this.rankRepository.save(defaultRanks);
-        console.log("Ranks table seeded successfully!");
     }
 
     async getRankForRating(rating: number): Promise<Rank> {

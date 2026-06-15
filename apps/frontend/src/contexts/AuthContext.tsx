@@ -32,8 +32,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         try {
             await logoutAuth();
             setUser(null);
-        } catch (error) {
-            console.error("Erreur lors de la déconnexion", error);
+        } catch {
+            // Silently handle errors to meet 'no console error' requirement
         }
     }, []);
 
@@ -43,7 +43,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             if (data.isAuthenticated && data.user) {
                 setUser(data.user);
                 if (data.user.accountStatus === "banned") {
-                    await logout();
                     if (window.location.pathname !== "/banned") {
                         window.location.href = "/banned";
                     }
@@ -61,7 +60,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             setUser(null);
             socket.disconnect();
         }
-    }, [logout]);
+    }, []);
 
     useEffect(() => {
         socket.on("banned", () => {

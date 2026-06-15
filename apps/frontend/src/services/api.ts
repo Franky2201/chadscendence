@@ -8,14 +8,8 @@ const api = axios.create({
 api.interceptors.response.use(
     (response) => {
         // Detect "fake" 200s from SilentAuthFilter
-        if (
-            response.data &&
-            response.data.error === true &&
-            (response.data.statusCode === 401 ||
-                response.data.statusCode === 403 ||
-                response.data.statusCode === 409)
-        ) {
-            const status = response.data.statusCode;
+        if (response.data && response.data.error === true) {
+            const status = response.data.statusCode || 500;
             const message = response.data.message?.toLowerCase() || "";
             const isBanned = status === 403 || message.includes("banned");
 
@@ -34,12 +28,9 @@ api.interceptors.response.use(
         return response;
     },
     (error) => {
-        // Silently handle real 401/403 just in case the filter missed something
-        // but typically the filter will have caught them.
-        const status = error.response?.status;
-        if (status === 401 || status === 403) {
-            return new Promise(() => {}); // Never resolve/reject to stay silent? No, that's bad.
-        }
+        // This handler should ideally not be reached for most API calls
+        // because SilentAuthFilter turns them into 200s.
+        // But for network errors or if the filter is bypassed:
         return Promise.reject(error);
     },
 );

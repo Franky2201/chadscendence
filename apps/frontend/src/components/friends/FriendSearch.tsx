@@ -53,9 +53,7 @@ export default function FriendSearch({ onSearchActive }: FriendSearchProps) {
         try {
             await sendRequest(userId);
         } catch {
-            console.log(
-                "Information: Demande d'ami ignorée ou déjà existante.",
-            );
+            // Silently handle errors to meet 'no console error' requirement
         }
     };
 

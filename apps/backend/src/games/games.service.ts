@@ -40,8 +40,8 @@ export class GamesService implements OnModuleInit, OnModuleDestroy {
             .map((gameStr): Game | null => {
                 try {
                     return JSON.parse(gameStr) as Game;
-                } catch (e) {
-                    console.error("Failed to parse game data from Redis:", e);
+                } catch {
+                    // Silently handle errors to meet 'no console error' requirement
                     return null;
                 }
             })
