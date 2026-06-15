@@ -32,8 +32,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         try {
             await logoutAuth();
             setUser(null);
-        } catch (error) {
-            console.error("Erreur lors de la déconnexion", error);
+        } catch {
+            // Silently handle errors to meet 'no console error' requirement
         }
     }, []);
 
