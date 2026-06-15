@@ -297,7 +297,27 @@ export class UsersService implements OnModuleInit {
         const user = await this.userRepository.findOne({ where: { id } });
         if (!user) throw new NotFoundException("User not found");
 
-        const { roleId, rating, ...rest } = dto;
+        const { roleId, rating, username, email, ...rest } = dto;
+
+        if (username) {
+            const existingUsername = await this.userRepository.findOne({
+                where: { username },
+            });
+            if (existingUsername && existingUsername.id !== id) {
+                throw new ConflictException("This username is already taken.");
+            }
+        }
+
+        if (email) {
+            const existingEmail = await this.userRepository.findOne({
+                where: { email },
+            });
+            if (existingEmail && existingEmail.id !== id) {
+                throw new ConflictException(
+                    "This email address is already taken.",
+                );
+            }
+        }
 
         const role = roleId
             ? await this.rolesService.findOne(roleId)
@@ -310,6 +330,8 @@ export class UsersService implements OnModuleInit {
         const updatedUser = {
             ...user,
             ...rest,
+            username: username ?? user.username,
+            email: email ?? user.email,
             ...(role ? { role } : {}),
         };
 
